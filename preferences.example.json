@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "scope": "project",
+  "display": {
+    "group_cues": ["color", "text", "shape", "pattern"],
+    "surface_intensity": "subdued",
+    "contrast": "standard",
+    "text_scale": 1.125,
+    "line_height": 1.6,
+    "accessibility_theme_override": null
+  },
+  "layout": {
+    "density": "comfortable",
+    "view": "overview",
+    "multiple_sections_open": true
+  },
+  "sensory": {
+    "reduce_motion": true,
+    "autoplay": false,
+    "sounds": false
+  },
+  "attention": {
+    "optional_notifications": "batched",
+    "live_updates": "manual"
+  },
+  "support": {
+    "return_summary": true,
+    "step_guidance": null,
+    "larger_targets": true,
+    "help_detail": "expanded"
+  },
+  "retention": {
+    "remember_location": true,
+    "retain_drafts": null
+  }
+}

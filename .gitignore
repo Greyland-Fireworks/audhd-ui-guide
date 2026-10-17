@@ -1,0 +1,17 @@
+# Optional personal preferences; keep the fictional example versioned.
+audhd-preferences.local.json
+audhd-preferences.local.json.*
+
+# Local environment and credential files.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Machine-specific files.
+.DS_Store
+Thumbs.db
+Desktop.ini
