@@ -41,6 +41,7 @@ Start with the [quick review](GUIDE.md#quick-review), then select applicable AUD
 | Dashboard priorities, metrics, alerts, panels or navigation levels | [Dashboard organization](GUIDE.md#dashboard-organization-and-hierarchy) |
 | Tabs, sub-tabs, accordion sections or hidden validation errors | [Pattern selection, context and accessible operation](GUIDE.md#tabs-sub-tabs-and-accordion-sections) |
 | Color/group cues, display comfort or individual customization | [Color and redundant group cues](GUIDE.md#color-and-redundant-group-cues) and [preferences](PREFERENCES.md) |
+| Meaning and example value of each JSON configuration field | [JSON field reference](README_JSON.md); use PREFERENCES.md for authoritative format and storage rules |
 | Contextual help, unfamiliar meaning or returning without context | [AUDHD-09](GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision), plus AUDHD-01 and AUDHD-10 |
 | Layout, typography, controls, selection, focus or theme | [UI visual standard](GUIDE.md#visual-standard) |
 | Concrete wording, recovery patterns or UI/UX tradeoffs | [Worked examples](EXAMPLES.md); fictional illustrations, not mandatory components or tested findings |

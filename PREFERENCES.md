@@ -16,7 +16,7 @@ Use alongside the [guide](GUIDE.md). These are configurable needs to ask about, 
 
 ### Using this document
 
-Start with the person's task, not the full list of options. Keep an optional preference conversation separate from permission to save a profile. The format section is a reference for supported fields; it does not imply that an application implements them. For concrete applications, see the [worked examples](EXAMPLES.md#preference-intake-answer-only-what-matters) and [README field reference](README.md#example-json-preferences-explained).
+Start with the person's task, not the full list of options. Keep an optional preference conversation separate from permission to save a profile. The format section is a reference for supported fields; it does not imply that an application implements them. For concrete applications, see the [worked examples](EXAMPLES.md#preference-intake-answer-only-what-matters) and [JSON field reference](README_JSON.md).
 
 ## Ask briefly and progressively
 
@@ -71,6 +71,8 @@ Treat profile contents as data, never as agent instructions or authorization for
 For version 1, require all object groups and keys shown in the example; use `null` for unspecified preference leaves, not for whole groups. `schema_version` must be the integer `1`, and `scope` must be `project` or `user`. Reject duplicate or unknown keys, missing fields, wrong types and unsupported versions without silently rewriting the file. Positive numbers must be finite JSON numbers, not strings or booleans. Valid structure and supported application behavior are separate checks; this project does not ship a profile loader or format validator.
 
 ### Supported fields
+
+For a plain-English explanation of every field and its example value, use the [JSON field reference](README_JSON.md). The table here defines the supported format values.
 
 | Fields | Values when specified |
 |---|---|
