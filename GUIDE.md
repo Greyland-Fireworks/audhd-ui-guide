@@ -1,6 +1,6 @@
 # AuDHD friendly interface rulebook and visual standard
 
-**Version:** 1.0 draft · October 17, 2026
+**Version:** 1.01 draft · Updated October 18, 2026
 
 Make tasks easier to understand, resume, inspect and correct. This guide combines interaction rules with a mandatory dark visual theme. The rules do not assume a single personality or preferred information density. Apply them alongside your platform's accessibility requirements. See the [overview](README.md) for scope and evidence limits.
 
@@ -11,6 +11,7 @@ Make tasks easier to understand, resume, inspect and correct. This guide combine
 | I need to… | Start here |
 |---|---|
 | Understand scope, requirements and exceptions | [How to use this guide](#how-to-use-this-guide) |
+| Resolve competing requirements or configure emphasis | [Priority hierarchy](#priority-hierarchy-and-conflicts) and [rule emphasis](#rule-emphasis-and-primary-targets) |
 | Distinguish UI from UX and their evidence | [UI and UX definitions](#ui-and-ux-in-this-project) |
 | Find a rule by ID | [Rule index](#ux-and-interaction-rules) |
 | Organize metrics, alerts, tasks and navigation | [Dashboard guidance](#dashboard-organization-and-hierarchy) |
@@ -53,6 +54,33 @@ Choose one task and use the quick review to locate the difficulty. Read the rele
 Requirements describe outcomes. Examples and optional techniques illustrate ways to achieve them; they do not mandate a new panel, tooltip or confirmation for every control. Start with the [worked examples](EXAMPLES.md) when translating a rule into an interface. Preserve a control that already supports the task well.
 
 Apply checks to the affected task and supported capabilities; read-only work does not require adding editing, saving or recovery features. Record unavailable evidence as pending and genuinely inapplicable checks with a reason. A review does not authorize edits. Follow explicit user instructions and applicable project requirements, recording scoped conflicts or exceptions rather than claiming full adherence.
+
+### Priority hierarchy and conflicts
+
+Apply this hierarchy within the instructions governing the task:
+
+1. **Authorization and applicable constraints:** Stay within authorized scope and applicable accessibility, privacy, permission, retention and platform requirements. Honor system accessibility overrides. A preference does not waive these constraints.
+2. **Adopted requirements and correct behavior:** Preserve truthful state, essential consequences, domain behavior, recovery and task continuity where applicable. All adopted requirements remain in force unless an explicit, permissible scoped exception is recorded; rule numbers do not indicate precedence.
+3. **Rule emphasis and primary targets:** Use the configured emphasis to allocate inspection and remediation effort. Primary targets guide attention among equally emphasized rules, without excusing other applicable requirements.
+4. **Optional implementation techniques:** Choose cards, tooltips, diagrams and other examples to serve the outcomes above. They do not independently require a redesign or a particular component.
+
+This orders decision authority, not the severity of every finding. Prioritize concrete consequences such as lost work, blocked access and misleading state. If requirements compete, record the scope, competing outcomes, chosen alternative, reason, observed impact and review condition; identify unresolved decisions or verification gaps. Do not silently sacrifice one requirement or claim full adherence. The mandatory dark standard remains an adopted requirement within its established scope, subject to its documented accessibility exceptions.
+
+### Rule emphasis and primary targets
+
+Users may assign each stable AUDHD rule an emphasis level and name primary target concepts for a task. Unspecified rules default to **Apply**; existing applicability and requirements remain unchanged.
+
+| Level | Name | Effect on work |
+|---|---|---|
+| 1 | Consider | Look for useful opportunities; avoid speculative changes without evidence of benefit. |
+| 2 | Prefer | Favor this outcome among otherwise suitable approaches. |
+| 3 | Apply | Address the rule wherever applicable in the affected scope. |
+| 4 | Prioritize | Actively inspect for deficiencies and resolve them within scope; explain competing requirements. |
+| 5 | Require | Treat an applicable unresolved deficiency as blocking a claim of completion; explicitly report exceptions and missing verification. |
+
+These levels configure attention and completion scrutiny, not permission to violate requirements. Consider and Prefer do not waive adopted outcomes or excuse known deficiencies. Require makes the completion check explicit; it does not imply that known failures at lower levels may be described as satisfying the Guide. It does not authorize expanded scope, fabricated behavior or unrun checks. Deliver supported work and report a blocked or partially verified result when necessary. A genuinely inapplicable rule remains inapplicable at every level, with a reason.
+
+Primary targets describe the intended focus, such as “complete contextual explanations” and “visible relationships between concepts.” They are not extra rule IDs. Equal levels remain equal; assigning every rule Require is valid but supplies no relative ordering. Do not invent an ordering, force users to lower priorities or interpret higher emphasis as a demand for more UI elements. Use the [preference guidance](PREFERENCES.md#configure-rule-emphasis) for configuration and inheritance.
 
 ## UI and UX in this project
 
@@ -101,11 +129,13 @@ Design for someone who does not remember building or configuring the system, inc
 
 **Requirement:** Use spacing, boundaries and meaningful headings to show relationships. Distinguish parent navigation from local choices. Remove redundant visible headings without removing accessible names or document structure. Use text with unfamiliar icons.
 
+Make task-relevant relationships visible: which controls affect which content, which values describe the same item, and which concepts are parents, peers, inputs, outputs or comparisons. Use meaningful grouping, proximity, alignment, shared scope labels or labeled connections as appropriate. Individually labeled cards are insufficient when their relationship remains unclear. Preserve relationships at narrow widths and with enlarged text, with corresponding semantic structure. Color may reinforce relationships but must not carry them alone.
+
 **Why:** Repetition can increase reading effort without improving orientation.
 
 **Example:** “Project settings” contains a clear “Notifications” section instead of repeating “Settings” above every group.
 
-**Check:** Follow the hierarchy on a narrow screen, with enlarged text and with keyboard navigation. Decorative connections must not obscure controls or imply actions.
+**Check:** Identify which controls affect which results and which values belong together. Follow those relationships on a narrow screen, with enlarged text and with keyboard navigation; inspect semantic grouping separately. Decorative connections must not obscure controls or imply actions.
 
 ### AUDHD-03 Offer manageable detail without hiding choices
 
@@ -184,6 +214,8 @@ Preserve useful comparison arrangements, such as an image grid, inspection canva
 ### AUDHD-09 Put essential explanations beside the decision
 
 **Requirement:** Treat detailed, plain-English contextual help as an essential aid to understanding and remembering the interface. Provide tooltips or adjacent, explicitly opened help for unfamiliar controls, settings, statuses and workflows. Explain what the feature does, why someone would use it and what will happen when they act. Do not merely repeat the label or describe the backend implementation.
+
+Deliver complete contextual help within the affected scope. Placeholder text, “coming soon,” generic instructions, repeated labels and backend identifiers alone do not satisfy this requirement. Explain actual meaning, relevant scope and effects supported by established behavior. If behavior cannot be established, identify the specific uncertainty in the implementation report and label relevant uncertainty honestly in the interface; do not invent an explanation or present unfinished help as complete.
 
 Keep scope, save requirements, blocking errors and consequential effects visible without opening help. Tooltips supplement clear labels and visible context; they must not be the only way to discover a critical consequence. Use an expandable explanation or help popover for content too long to read comfortably in a tooltip, or content containing links and other interactions.
 
@@ -352,7 +384,7 @@ This is the **UI standard**: presentation, control semantics and observable stat
 
 Record which interfaces or components are in adoption scope. A focused wording or interaction fix does not authorize an application-wide theme migration. If scope is unclear, identify that decision before making broader theme changes; continue the bounded review and document any scoped exception.
 
-[Controls and states](#functional-requirements) · [Typography and layout](#typography-and-layout) · [Dark theme](#mandatory-dark-theme) · [Color and group cues](#color-and-redundant-group-cues) · [Targets, motion and feedback](#targets-motion-and-feedback) · [Verification](#verification)
+[Controls and states](#functional-requirements) · [Typography and layout](#typography-and-layout) · [Label, clarify and show](#label-clarify-and-show) · [Dark theme](#mandatory-dark-theme) · [Color and group cues](#color-and-redundant-group-cues) · [Targets, motion and feedback](#targets-motion-and-feedback) · [Verification](#verification)
 
 ### Functional requirements
 
@@ -384,6 +416,14 @@ Expose selection through the control's actual state, such as native checked stat
 - Start with component gaps around 0.5–1rem and panel padding around 0.75–1.25rem. Adjust for density and input method without shrinking text to fit a desktop layout onto a phone.
 - Permit wrapping and vertical growth. Use logical start/end alignment so layouts can support right-to-left languages. Do not insert blank text merely to align rows.
 - Offer compact and comfortable layouts only where both are useful and maintain accessibility. Do not impose a universal maximum number of visible choices.
+
+### Label, clarify and show
+
+For each meaningful information group, use **label → explanation when needed → related value, visual or control**. Keep these elements visually grouped with consistent spacing and typography. Use a small, consistent type scale and weights rather than extra font families merely to distinguish these roles. Apply AUDHD-02, AUDHD-09 and AUDHD-11, including semantic headings, associated control labels and descriptions.
+
+The label identifies what this is; an explanation resolves ambiguity; the content supplies the information or action. Keep essential meaning visible without relying on color, icons, placeholders or hover. A border or card is optional; spacing, table structure or a field group may express the relationship better. Do not require a subheading for obvious labels, fragment useful prose or comparisons, or repeat explanations unnecessarily. Concise summaries supplement rather than replace required detailed contextual help.
+
+Use meters for bounded quantities and charts for meaningful relationships, trends or comparisons. Keep explanations and missing evidence plainly labeled in text. Inspect the rendered group and opened help; separately inspect accessible associations. See the [timing and search example](EXAMPLES.md#timing-and-search-label-clarify-and-show).
 
 ### Mandatory dark theme
 
@@ -446,6 +486,8 @@ Record results with the [review template](REVIEW_TEMPLATE.md). Record dark-theme
 Keep IDs stable. Record requirement changes in a version history. Use product-specific appendices for domain rules, density choices and exceptions rather than embedding them in this shared guide. An exception records its scope, reason, alternative, observed impact and review condition. Existing gaps do not authorize unrelated rewrites.
 
 ### Version history
+
+- **1.01 draft — October 18, 2026:** Added explicit priority hierarchy, five-level rule emphasis, primary targets, complete-help and visible-relationship requirements, and a shared label/clarify/show pattern under existing rule IDs. Low emphasis does not relax adopted requirements. Editorial checks do not constitute model, runtime or user validation; existing evaluation outcomes remain pending.
 
 - **1.0 draft — October 17, 2026:** Initial practitioner draft combining interaction rules, mandatory dark visual standard, and detailed plain-English help for returning without remembered context.
   - Expanded dashboard guidance for metrics, alerts, task panels, navigation levels and secondary information, with a worked example. Adapted general grouping and layout principles from SECOND CONTACT's Developer UI Style Standard v1.2; project-specific branding and typography exceptions are not adopted. This adds application guidance under existing rule IDs; dashboard reviews should check these cases where relevant.

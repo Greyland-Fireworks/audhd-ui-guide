@@ -8,7 +8,7 @@ Practical guidance for interfaces that are easier to understand, use, pause, res
 
 [Read the guide](GUIDE.md) · [Try a review](#try-one-small-review) · [Use the skill](#use-with-an-llm) · [Configure preferences](#personalize-the-interface)
 
-**Status:** Version 1.0 draft · Updated October 17, 2026
+**Status:** Version 1.01 draft · Updated October 18, 2026
 
 ## On this page
 
@@ -123,7 +123,7 @@ AuDHD commonly refers to the co-occurrence of autism and ADHD. Some people want 
 
 This is a practitioner guide, not a clinical intervention or certification. Its specific patterns have not been established here through research with a representative group of AuDHD users. The mandatory dark theme is a design choice, not a claim that every AuDHD person prefers it.
 
-The project is a **v1.0 draft**. Its 26 prepared model-evaluation scenarios remain unrun, with testing [deferred to v1.1](SKILL_EVALUATIONS.md#planned-for-v11-model-testing). Those evaluations are not required for ordinary use or feedback, and successful text reviews would not prove real-interface usability.
+The project is a **v1.01 draft**. Its 26 prepared model-evaluation scenarios remain unrun, with testing [deferred to v1.1](SKILL_EVALUATIONS.md#planned-for-v11-model-testing). Those evaluations are not required for ordinary use or feedback, and successful text reviews would not prove real-interface usability.
 
 > [!NOTE]
 > **Why I developed this guide**
@@ -176,6 +176,8 @@ This standalone guide combines 13 interaction rules and a visual standard, inclu
 This repository includes the [license scope and attribution](LICENSE_SCOPE.md) and [contribution terms](CONTRIBUTING.md#contribution-terms-and-attribution). This practitioner draft retains the evidence limits described above.
 
 ### Version history
+
+- **1.01 draft — October 18, 2026:** Strengthened contextual help and visible relationships; added explicit priority hierarchy, configurable rule emphasis and primary targets, with matching Skill instructions and examples. Existing requirements and version-1 JSON profiles remain intact.
 
 - **1.0 draft — October 17, 2026:** Combined project-independent guide, mandatory dark theme, contribution guidance and reusable review template. README includes project artwork, direct task links and a short review checklist.
 

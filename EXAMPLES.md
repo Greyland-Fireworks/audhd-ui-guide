@@ -1,6 +1,6 @@
 # Worked interface examples
 
-**Version:** 1.0 draft. These fictional examples illustrate the [guide](GUIDE.md); they are not tested product findings or additional rules. They use the mandatory dark default unless an explicit accessibility exception or system override is described. Adapt the wording to verified product behavior.
+**Version:** 1.01 draft. These fictional examples illustrate the [guide](GUIDE.md); they are not tested product findings or additional rules. They use the mandatory dark default unless an explicit accessibility exception or system override is described. Adapt the wording to verified product behavior.
 
 Use the guide's [UI and UX definitions](GUIDE.md#ui-and-ux-in-this-project). The examples identify both aspects: UI covers presentation, semantics and control operation; UX covers task understanding, effort, predictability, recovery and return. These aspects overlap, but require distinct evidence. The checks below are proposals, not performed tests. Identify the implementation layer separately; a UI label change does not establish correct persistence or recovery.
 
@@ -206,6 +206,36 @@ Pair the message with an appropriate action and visible context. Do not erase in
 | Extended reference | Procedures, unusual cases and optional technical mechanisms | Making ordinary operation depend on reading source code |
 
 A useful writing pattern is **what it does → when to use it → what it affects → example or recovery**. Include only the parts needed to resolve uncertainty. Apply the guide's [help-format guidance](GUIDE.md#choose-the-help-format) to choose between brief definitions, persistent explanations and interactive reference content.
+
+## Timing and search: label, clarify and show
+
+In this fictional recording interface, simulation time and real execution time differ, measured execution duration includes recorded pauses, and the recording is dated January 15, 2026. Verify the corresponding facts before using the wording in a real product.
+
+**Before:** Three isolated cards show “EST,” “42 min” and “58 min.” Tooltips say “Time information” or “More information coming soon.” A distant search box says only “Search…” and its scope is unclear.
+
+**After:** Place related values in a named **Timing** group, retaining a useful side-by-side comparison:
+
+| Label | Explanation | Value |
+|---|---|---|
+| Time zone | Used for recording timestamps | America/New_York · UTC−05:00 |
+| Simulation duration | Time elapsed inside the simulation | 42 min |
+| Execution time | Real elapsed time, including recorded pauses | 58 min |
+
+Place **Find a recording** beside the results it filters, followed by “Search by test name, date, map, seed or ID” and the search control. Associate its visible label and description programmatically; its placeholder is supplementary. Do not add a repeated subheading to an already clear field such as “Recording ID.” Keep detailed help available for unfamiliar simulation semantics rather than squeezing it into the short summary.
+
+Show the time-zone offset applicable to the recording date; do not use a fixed abbreviation or the viewer's current offset for every recording.
+
+**UI checks:** Inspect the grouping, opened help, label associations, no-color interpretation and narrow/enlarged layout. **UX checks:** Ask someone to distinguish the two durations, identify the time zone and predict which results search affects; verify the stated clock and search behavior. Mark unperformed checks pending. Accurate individual labels alone do not establish clear relationships. Relevant rules: AUDHD-02, 04, 07, 09, 11, 12.
+
+## Emphasis changes attention, not requirements
+
+**Configuration:** “Primary targets: complete contextual explanations; visible relationships between concepts. AUDHD-09 Require; AUDHD-02 Prioritize; AUDHD-05 Consider; other rules Apply.” This is a fictional task configuration, not permission to save a profile.
+
+**Application:** Inspect every unfamiliar control and status in the affected recording workflow for substantive help, and inspect relationships among timing values, filters and results. Preserve focus and selection even though AUDHD-05 has lower emphasis. Grouping changes must preserve keyboard focus and the selected recording.
+
+**Unresolved behavior:** If pause accounting cannot be established, report that specific uncertainty and leave behavior verification pending; do not copy the fictional claim above. Report the applicable Require-level gap as blocking full completion while delivering supported changes. A review reports the finding without edits. If every rule is Require, retain equal emphasis and use primary targets for attention without silently dropping other requirements. A read-only screen still does not require inventing save controls.
+
+**Checks:** Inspect the effective task/project/user configuration and confirm that lower levels did not waive requirements, unknown behavior was not invented, no unrequested profile was saved, and completion claims match the available evidence. Editorial inspection is not model or user validation.
 
 ## When guidance becomes an obstacle
 

@@ -8,6 +8,7 @@ Use alongside the [guide](GUIDE.md). These are configurable needs to ask about, 
 |---|---|
 | Offer a brief intake or let someone skip questions | [Ask briefly and progressively](#ask-briefly-and-progressively) |
 | Explore possible display and interaction adjustments | [Customizations to prepare](#customizations-to-prepare) |
+| Set rule emphasis and primary targets | [Configure rule emphasis](#configure-rule-emphasis) |
 | Save or update agreed choices privately | [Save an optional JSON profile](#save-an-optional-json-profile) |
 | Check the complete version-1 structure and supported values | [Format and precedence](#format-and-precedence) |
 | Resolve null, false, temporary choices, inheritance or resets | [Precedence and accessibility constraints](#precedence-and-accessibility-constraints) and [updates and clearing](#updates-and-clearing) |
@@ -49,6 +50,14 @@ Ask follow-ups only for relevant uncertainty. Offer concrete alternatives or a p
 These options are design candidates to validate, not a clinical inventory. W3C's [personalization guidance](https://www.w3.org/WAI/WCAG2/supplemental/objectives/o8-personalization/) supports adaptable interfaces; its [focus guidance](https://www.w3.org/WAI/WCAG2/supplemental/objectives/o5-user-focus/) discusses distraction. Neither establishes that a particular configuration benefits every AuDHD person.
 
 This table includes possible product capabilities beyond the version-1 profile, such as font choice, accent saturation and timeout controls. The format below stores only its listed fields. Do not invent extra JSON keys or claim that every candidate is supported; discuss extensions separately when needed.
+
+## Configure rule emphasis
+
+Use the Guide's [five emphasis levels and primary targets](GUIDE.md#rule-emphasis-and-primary-targets) to configure how the Guide/Skill focuses its work. Accept a task instruction or an agreed project/user configuration in prose, for example: “Primary targets: complete contextual explanations; visible relationships between concepts. AUDHD-09 Require; AUDHD-02 Prioritize; other rules Apply.” This is a fictional configuration example, not this user's saved profile.
+
+Current explicit task configuration overrides previously agreed project configuration, then user-wide configuration. Resolve emphasis per rule, preserving unspecified inherited values; otherwise default to Apply. A supplied primary-target list replaces the inherited list; an explicitly empty list clears inherited targets for that scope. Silence preserves inherited configuration. Changes are temporary unless the user asks to remember them in an agreed location; do not infer configuration from diagnosis or this document's examples. These instructions remain subject to the Guide's priority hierarchy and existing privacy/storage boundaries.
+
+Rule emphasis and primary targets are not fields in the version-1 JSON format below. Do not insert them into a version-1 profile, relax unknown-key rejection or silently migrate profiles. Until a versioned format supports them, use explicit task instructions or separately agreed prose configuration; do not create another preference file automatically. Configured emphasis does not prove that an application implements any preference.
 
 ## Save an optional JSON profile
 

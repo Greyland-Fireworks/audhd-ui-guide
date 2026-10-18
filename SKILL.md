@@ -34,6 +34,8 @@ Follow explicit user instructions and applicable project requirements. Document 
 
 ## Read the relevant guidance
 
+Follow the Guide's [priority hierarchy](GUIDE.md#priority-hierarchy-and-conflicts) and [rule emphasis definitions](GUIDE.md#rule-emphasis-and-primary-targets). When configuration is supplied, resolve inheritance using [preference configuration](PREFERENCES.md#configure-rule-emphasis); otherwise use Apply. Lower emphasis never waives adopted requirements, and rule IDs are not priority ranks. Configuration does not authorize storing a profile.
+
 Start with the [quick review](GUIDE.md#quick-review), then select applicable AUDHD-01 through AUDHD-13 rules by the actual workflow. Read the UI standard sections relevant to the affected controls and states. Use these references as needed rather than loading every supporting file.
 
 | Task or uncertainty | Read |
@@ -57,6 +59,10 @@ Start with the [quick review](GUIDE.md#quick-review), then select applicable AUD
 
 ## Verify according to available evidence
 
+Before reporting implementation complete, inspect contextual help and conceptual relationships throughout the affected workflow. Replace unfinished or generic help with explanations supported by established behavior; confirm visible and semantic relationships among related controls, values, statuses and results. Apply the [label/clarify/show pattern](GUIDE.md#label-clarify-and-show) where it resolves ambiguity, preserving necessary detailed help and useful comparison layouts. Correct deficiencies within authorized scope; explicitly report unresolved content, conflicts and verification gaps. A review identifies these findings without editing.
+
+Inspect rendered grouping and help in its opened state, including relevant narrow and enlarged layouts. Source inspection alone cannot establish visual clarity; screenshots cannot establish accessible associations or interaction correctness. Mark unavailable checks pending. Applicable unresolved Require-level deficiencies block a claim of completion, not delivery of supported partial work.
+
 Check the complete affected task to the extent the environment permits. Include relevant loading, failure, recovery and return states; exercise saves only where persistence is involved. Check applicable keyboard operation, semantics, contrast, text enlargement, narrow layouts, reduced motion and accessibility overrides. Record affected modes not exercised and assistive technologies not tested as pending.
 
 | Evidence available | What it supports and what remains open |
@@ -77,6 +83,8 @@ For a substantive finding, use:
 A short paragraph is enough for a small task. Distinguish observed facts, hypotheses, proposed checks and performed checks; report UI and UX evidence separately even when they support one finding. Prioritize concrete consequences such as lost work, blocked access or misleading state, and explain any added friction. “No change justified by available evidence” is a valid result.
 
 For implementation, also state what changed and the actual check results. Separate local implementation, deployment and live verification. Do not claim clinical effectiveness, universal suitability, certification or “AuDHD compliance.”
+
+Report the applicable rule IDs, effective primary targets and material emphasis conflicts proportionately. Identify unresolved required outcomes and pending verification explicitly; do not describe all requirements as satisfied merely because the primary targets were addressed.
 
 ## Skill maintenance and evaluation
 
