@@ -208,9 +208,9 @@ This is a practitioner guide, not a clinical intervention or certification. Its 
 
 Version **v1.01** is being prepared for publication. The Guide remains practitioner guidance with the evidence limits described above. All 34 prepared model-evaluation scenarios remain unrun and require a [separate explicit request](SKILL_EVALUATIONS.md#explicitly-requested-model-testing). Those evaluations are not required for ordinary use or feedback, and successful text reviews would not prove real-interface usability.
 
-<details>
-<summary>Why I developed this guide — Charles Beckwith</summary>
-
+> [!NOTE]
+> **Why I developed this guide**
+>
 > Despite the serious concerns about the social and ecological impacts of AI/ML, working with Large Language Models to develop software has been life-changing for me.
 >
 > Throughout my life, I tried several times to learn programming. But the way my AuDHD brain works made it difficult to retain and recall the information I needed in the moment to write code manually.
@@ -222,8 +222,6 @@ Version **v1.01** is being prepared for publication. The Guide remains practitio
 > I’m publishing this guide in the hope that it helps someone facing similar difficulties. Please join me on the [Discord server](https://discord.gg/BY3BVkJ3Sq) to connect with other AuDHD software creators.
 >
 > — Charles Beckwith, @fashiontechguru
-
-</details>
 
 ## Accessibility and safe adoption
 
