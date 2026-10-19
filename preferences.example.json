@@ -1,13 +1,22 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "scope": "project",
   "display": {
-    "group_cues": ["color", "text", "shape", "pattern"],
+    "group_cues": [
+      "color",
+      "text",
+      "shape",
+      "pattern"
+    ],
     "surface_intensity": "subdued",
     "contrast": "standard",
-    "text_scale": 1.125,
+    "text_scale": 1.25,
     "line_height": 1.6,
-    "accessibility_theme_override": null
+    "appearance": {
+      "mode": "skin",
+      "id": "guillermo"
+    },
+    "text_style": "system"
   },
   "layout": {
     "density": "comfortable",

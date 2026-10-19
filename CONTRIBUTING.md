@@ -25,10 +25,14 @@ You do not need to disclose a diagnosis. Remove private account details and pers
 - Preserve rule IDs. New rules need new IDs; do not silently reuse a retired ID for a different meaning.
 - Prefer examples and repeatable checks over unsupported claims about how all autistic people or people with ADHD think.
 - Distinguish a formal accessibility requirement from a design preference or hypothesis. Cite primary sources when making standards or research claims.
-- Keep framework-specific implementation details and branding details optional. The dark theme remains mandatory within adoption scope, with the documented accessibility overrides.
+- Keep framework-specific implementation details and branding details optional. Accessible behavior remains mandatory across selectable light/dark appearances, with system accessibility constraints.
 - Include failure and recovery behavior, not only the ideal screenshot.
 - Use the [review template](REVIEW_TEMPLATE.md) when supplying implementation evidence.
-- Use [worked examples](EXAMPLES.md) for concrete wording and tradeoffs. Model testing with the [evaluation pack](SKILL_EVALUATIONS.md) is deferred to v1.1; it is not a prerequisite for contributing. If supplying evaluation results, report actual outcomes, including unsupported claims or unnecessary changes.
+- Use [worked examples](EXAMPLES.md) for concrete wording and tradeoffs. Model testing with the [evaluation pack](SKILL_EVALUATIONS.md) requires a separate explicit request; it is not a prerequisite for contributing. If supplying evaluation results, report actual outcomes, including unsupported claims or unnecessary changes.
+
+## Executable contributions
+
+Code, CSS, schemas and tooling contributions use MIT as described in [LICENSE_SCOPE.md](LICENSE_SCOPE.md); documentation remains CC BY 4.0. Preserve upstream notices. Keep private research and personal profiles out of public changes. Run the root unit/build/browser checks and update evidence with the tested environment; do not carry historical Pass results onto changed implementations without verification. Full model evaluations remain opt-in.
 
 ## Review decisions
 
@@ -38,4 +42,4 @@ A rule change should explain whether existing reviews need rechecking. Editorial
 
 ## Release preparation
 
-Before release, check the [license scope and attribution](LICENSE_SCOPE.md), preserve the separate logo permissions, and verify relative links after copying the directory. Review the actual Git changes and history for private content, personal preference profiles, backups and credentials. Ignore rules do not remove files already tracked by Git. Publish the documentation as a v1.0 practitioner draft with the stated evidence limits; the deferred model evaluations are not a release prerequisite.
+Before release, check the [license scope and attribution](LICENSE_SCOPE.md), preserve the separate logo permissions, and verify relative links after copying the directory. Review the actual Git changes and history for private content, personal preference profiles, backups and credentials. Ignore rules do not remove files already tracked by Git. Prepare the documentation as an unreleased practitioner draft; publication requires separate authorization with the stated evidence limits; the deferred model evaluations are not a release prerequisite.

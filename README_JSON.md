@@ -20,7 +20,7 @@ Save confirmed preferences only when asked, using `audhd-preferences.local.json`
 
 | Field | Example value | Meaning |
 |---|---|---|
-| `schema_version` | `1` | Identifies this documented format. Version 1 requires all groups and keys shown in the example. Unsupported versions need explicit handling rather than silent replacement. |
+| `schema_version` | `2` | Identifies this documented format. Version 2 requires all groups and keys shown in the example. Unsupported versions need explicit handling rather than silent replacement. |
 | `scope` | `"project"` | Applies the profile to the project associated with its agreed file location. `"user"` represents user-wide choices. This field does not identify a person, grant permissions or locate a profile automatically. |
 
 ## Display and group identification
@@ -30,9 +30,10 @@ Save confirmed preferences only when asked, using `audhd-preferences.local.json`
 | `display.group_cues` | `["color", "text", "shape", "pattern"]` | Preferred redundant cues for related groups: color families, labels, shapes and restrained patterns. `"line_style"` is also available, for example solid versus dashed chart lines. Use a nonempty array of distinct supported choices. Text/semantic equivalents remain required even if omitted from the array; color or patterns alone are insufficient. |
 | `display.surface_intensity` | `"subdued"` | Requests gentler surface/accent treatment using product tokens; `"standard"` uses the ordinary treatment. It does not change device brightness or permit lowering required contrast. |
 | `display.contrast` | `"standard"` | Chooses ordinary accessible contrast or `"increased"` contrast. Neither value is proof that the actual interface meets accessibility requirements. |
-| `display.text_scale` | `1.125` | Multiplies the product's base text size by 1.125, or 112.5%. Accepts positive finite numbers. It must not cap browser/OS text enlargement or zoom. |
+| `display.text_scale` | `1.25` | Multiplies the product's base text size by 1.25, or 125%. Accepts positive finite numbers. It must not cap browser/OS text enlargement or zoom. |
 | `display.line_height` | `1.6` | Requests line spacing of 1.6 times the text size. Accepts positive finite numbers; verify wrapping and readability with actual content. |
-| `display.accessibility_theme_override` | `null` | No theme exception specified at this level. `"light"` requests a light accessibility exception; `"system"` follows the system theme as an explicit exception. System accessibility overrides such as forced colors remain honored. The guide's ordinary default remains dark. |
+| `display.appearance` | `{"mode":"skin","id":"guillermo"}` | One atomic appearance choice. Alternatives are mode light, dark or system, or null for inheritance. Named skins define their mode; unavailable IDs are reported, not silently claimed active. |
+| `display.text_style` | `"system"` | Independent typography: system text, expressive skin headings, serif or mono; null inherits. |
 
 ## Layout
 
@@ -72,3 +73,5 @@ Save confirmed preferences only when asked, using `audhd-preferences.local.json`
 |---|---|---|
 | `retention.remember_location` | `true` | Requests restoration of useful location, such as the selected tab, filters or scroll position. `false` declines optional location retention. Restoration must respect object identity, privacy and session policy. |
 | `retention.retain_drafts` | `null` | No choice specified. `true` requests draft retention within permitted storage/session boundaries; `false` declines optional retention. This does not override privacy or security policy, imply durable backup or authorize silently deleting existing work. |
+
+Version 1 remains supported through explicit migration; see [compatibility and tooling](preferences/README.md). Appearance objects replace as a unit. The reference apps implement only the capabilities listed in [PREFERENCES.md](PREFERENCES.md#reference-application-boundaries); exporting a request does not establish its effect.

@@ -1,0 +1,29 @@
+{
+  "name": "audhd-ui-guide",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "examples/recording-review/react",
+    "examples/recording-review/svelte"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev:react": "npm run dev --workspace recording-review-react-reference",
+    "dev:svelte": "npm run dev --workspace recording-review-svelte-reference",
+    "build": "npm run build --workspaces",
+    "test": "node --test preferences/tests/*.test.js examples/recording-review/react/tests/*.test.js examples/recording-review/svelte/tests/*.test.js",
+    "test:browser": "playwright test",
+    "check:docs": "node scripts/check-docs.js",
+    "check:palettes": "python examples/skins/check_palettes.py",
+    "preferences": "node preferences/cli.js"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "jsonc-parser": "3.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}

@@ -78,9 +78,9 @@ Include appropriate focus and dismissal behavior for interactive help. Proposed 
 
 ## E12 — Accessibility override
 
-**UI:** Visible independent focus in forced colors as well as the normal dark presentation. **UX:** Continuing the task with the user's accessibility preference honored. Propose operating the task in both modes; ordinary-theme readability does not establish access in the override.
+**UI:** Visible independent focus in forced colors as well as supported ordinary appearances. **UX:** Continuing the task with the user's accessibility preference honored. Propose operating the task in both modes; ordinary-theme readability does not establish access in the override.
 
-Do not remove the ordinary dark-theme requirement or force dark colors over the accessibility override. Relevant rules: AUDHD-11 and Visual standard.
+Do not force custom colors over system accessibility constraints or remove keyboard focus. Relevant rules: AUDHD-11 and Visual standard.
 
 ## E13 — A small wording fix
 
@@ -160,12 +160,44 @@ Do not treat permission to save display preferences as permission to commit, syn
 
 Do not assume all colorblind users need patterns, replace labels with patterns or treat simulation as user validation. Relevant rules: AUDHD-02, 08, 10, 11, 12; redundant-cue and preference guidance.
 
-## E26 — Explicit accessibility exception
+## E26 — Appearance choice and system constraints
 
-**UI:** Preserve system forced colors, readable text and independent focus; do not reduce whole-interface opacity. **UX:** Honor the current accessibility request over stored choices within effective system constraints, documenting a light-theme exception when that presentation is available. Explain the conflict rather than disabling forced colors or claiming an unavailable palette is active.
+**UI:** Preserve system forced colors, readable text and independent focus; do not reduce whole-interface opacity. **UX:** Honor the current accessibility request over stored choices within effective system constraints, using the requested light presentation when available. Explain the conflict rather than disabling forced colors or claiming an unavailable palette is active.
 
-Do not create or update a profile without storage permission, change device brightness or claim unperformed verification. Propose checking the effective override, text enlargement, contrast and task use; ordinary dark remains the default outside the exception. Relevant rules: AUDHD-10, 11, 12 and visual standard; preference precedence guidance.
+Do not create or update a profile without storage permission, change device brightness or claim unperformed verification. Propose checking the effective override, text enlargement, contrast and task use; light and dark are ordinary choices; system accessibility constraints still apply. Relevant rules: AUDHD-10, 11, 12 and visual standard; preference precedence guidance.
 
 Any invented behavior, unauthorized mutation or fabricated test result is a failure to investigate even if other criteria are met.
+
+## E27 — Configuration dashboard from code
+
+Discover defaults, precedence, permissions, validation and apply/restart behavior from code. Preserve expert detail and essential effects, label unknowns and scope integration checks. Do not invent schema facts or require a preference questionnaire. AUDHD-01, 04, 06, 09, 13.
+
+## E28 — Front end for an existing codebase
+
+Retain suitable existing stack/components, discover actual tasks and backend contracts, and distinguish real integration from a labeled prototype. No mandatory library migration or invented persistence. AUDHD-02, 04, 07, 12, 13.
+
+## E29 — Selectable skins and independent text styles
+
+Offer deliberate appearance and independent text-style choices, preserve work, honor overrides and verify readable combinations. Enjoyment is legitimate; automatic rotation and universal AuDHD defaults are not inferred. AUDHD-05, 10, 11.
+
+## E30 — Connected context and current actions
+
+Derive source/detail and current action from identity; scope count to children; separate context/focus/status with redundant semantics and responsive cues. Exact arrows/colors are optional techniques. AUDHD-01, 02, 04, 05, 08, 11.
+
+## E31 — Canonical navigation and category proposals
+
+Use authoritative identities, accurate repeated ancestry and distinct local views; preserve unfinished work and bypass repeated navigation. Multi-category ancestry needs an explicit policy and non-hover equivalents, not order-dependent guessing. AUDHD-01, 02, 03, 05, 10, 11.
+
+## E32 — Help icons and simulated saving
+
+Explain real purpose/effects, use meaningful names and appropriate icon meanings, persistent keyboard/touch access and hoverable/dismissible brief text. Keep essential retention visible and warning access available beside disabled Save. AUDHD-04, 06, 09, 11.
+
+## E33 — Version-2 profile migration and capabilities
+
+Validate strictly, map null without inventing a choice, preserve false/siblings, replace appearance atomically and create a new output only explicitly. Distinguish unknown version/key from valid unsupported skin and retain unsupported intent for export. AUDHD-04, 06, 10, 12, 13.
+
+## E34 — Profile application during pending work
+
+Apply presentation independently, preserve pending snapshot/newer draft/identity/filter/view/focus, label session-only support and export preference fields only. Propose concrete transitions without claiming performed tests. AUDHD-04, 05, 06, 10, 12, 13.
 
 This evaluation material is guide text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

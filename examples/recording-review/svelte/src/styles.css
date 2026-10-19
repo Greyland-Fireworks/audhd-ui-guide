@@ -1,0 +1,239 @@
+/* Reference design rationale, not a universal AuDHD preset.
+   See ../../SPEC.md (REF-05, 06, 12-14) and
+   ../../SPEC.md. This stylesheet stays local
+   to its framework; only semantic token values are shared. Preserve the outcomes
+   described here when changing the provisional sizes, colors or layout. */
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--text); font-family: var(--ui-font-body, system-ui), sans-serif; line-height: 1.5; }
+.review-app { max-inline-size: 84rem; margin-inline: auto; padding: clamp(1rem, 3vw, 2.5rem); font-size: var(--review-text-size); }
+/* A user-selected font style and a short size/weight hierarchy distinguish page, record,
+   section and field without introducing another visual vocabulary. Reset margins
+   so explicit group gaps express relationships consistently. Relative text sizes
+   and wrapping allow enlargement; they do not replace actual zoom verification. */
+h1, h2, h3, h4, p, dl { margin: 0; }
+h1, h2, h3, h4 { font-family: var(--ui-font-heading, inherit); }
+h1 { font-size: 2em; line-height: 1.2; letter-spacing: -0.025em; }
+h2 { font-size: 1.35em; line-height: 1.35; }
+h3 { font-size: 1.1em; }
+h4 { font-size: 1em; }
+p, h1, h2, h3, dt, dd, button, label, summary { overflow-wrap: anywhere; }
+/* Native controls inherit the surrounding typography so labels and values remain
+   one readable unit. Compact mode changes group gaps, not this 44px minimum
+   control height. Actual width, target spacing and all interaction states still
+   need measurement; the CSS value alone is not an accessibility pass. */
+button, input, select, textarea { font: inherit; color: inherit; }
+button, input, select, textarea, summary { min-block-size: 44px; }
+input, select, textarea { inline-size: 100%; min-inline-size: 0; background: var(--page); border: 1px solid var(--control-border); border-radius: 0.35rem; padding: 0.6em 0.7em; }
+textarea { resize: vertical; }
+button { background: var(--raised); border: 1px solid var(--control-border); border-radius: 0.35rem; padding: 0.55em 0.9em; cursor: pointer; line-height: 1.4; }
+button:hover:not(:disabled) { border-color: var(--text); }
+button:disabled { cursor: default; background: var(--panel); color: var(--secondary); border-style: dashed; }
+/* Focus means "where keyboard interaction is now"; the active context accent
+   means "which recording is open." Keep both visible at once, including when
+   focus leaves the selected card for search or display options. Programmatically
+   focused headings retain keyboard cues without joining the normal tab order. */
+/* A library may put data-focus-visible on a focus-within container. Require
+   actual focus so that wrapper does not acquire a second, competing outline. */
+:focus-visible, [data-focus-visible]:focus { outline: 3px solid var(--focus); outline-offset: 3px; }
+/* Navigation still focuses its heading for orientation. These base rules
+   preserve keyboard cues; the explicit navigation-origin rules below resolve
+   browser differences for headings only. Never suppress control outlines. */
+[tabindex='-1']:focus-visible { outline-offset: 4px; }
+/* The main action has its own treatment: being selected does not mean "Save,"
+   "successful" or "failed." Secondary copy is quieter, never absent; essential
+   meanings and save boundaries must remain readable on every actual surface. */
+.primary { background: var(--action); color: var(--action-text); border-color: var(--action); font-weight: 650; }
+.muted, .meaning, .record-id, footer { color: var(--secondary); }
+.eyebrow { color: var(--secondary); font-size: 0.9em; font-weight: 600; }
+.page-header { display: grid; gap: 0.5rem; margin-block-end: 1.5rem; }
+.demo-boundary { border-inline-start: 3px solid var(--selected-edge); background: var(--panel); padding: 0.75em 1em; }
+/* Native disclosures keep optional navigation and simulator controls
+   available on return without occupying the main task. Their modest border
+   groups content; it does not turn every group into another active selection. */
+details { border: 1px solid var(--separator); border-radius: 0.4rem; }
+summary { padding: 0.65em 1em; font-weight: 600; cursor: pointer; }
+summary h2 { display: inline; font-size: 1em; }
+.disclosure-body { padding: 0.5em 1em 1em; display: grid; gap: var(--review-group-gap); }
+.display-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--review-group-gap); }
+.display-fields label { display: grid; align-content: start; gap: 0.35rem; font-weight: 600; }
+/* Read source -> details on wide screens; give the editing area more room.
+   DOM order stays source then details when stacked, so CSS does not create a
+   different keyboard reading order. minmax(0, ...) and min-inline-size: 0 let
+   long content wrap instead of forcing a wider viewport. Padding and gutter
+   variables also locate the connector; changing spacing must keep it truthful. */
+.workspace { --workspace-gap: 1.25rem; --panel-padding: 1.25rem; display: grid; grid-template-columns: minmax(16rem, 0.85fr) minmax(0, 1.75fr); gap: var(--workspace-gap); align-items: start; }
+.panel { background: var(--panel); padding: var(--panel-padding, 1.25rem); border: 1px solid var(--separator); border-radius: 0.6rem; min-inline-size: 0; }
+/* The card and this panel present the SAME active recording. A shared surface
+   and leading edge make that relationship visible across their spatial gap.
+   The parent recordings panel stays neutral: its other children are not active.
+   Identity text and control associations carry meaning when colors converge. */
+.review-panel { background: var(--selected); border-inline-start: 4px solid var(--active-context-accent); }
+.recordings-panel, .review-panel, .timing-section, .review-form { display: grid; gap: var(--review-group-gap); }
+.field { display: grid; gap: 0.4rem; }
+.field label { font-weight: 650; }
+.results-toolbar, .save-actions, .resolver-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
+.results-toolbar { justify-content: space-between; }
+.recording-list, .pending-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--review-group-gap); }
+/* Reserve the leading-border space on every card so selecting a different item
+   does not shift its text sideways. The selected border, underlined current
+   label and changed action wording provide redundant cues beyond background hue. */
+.recording-list li { position: relative; border: 1px solid var(--separator); border-inline-start: 4px solid transparent; padding: 1em; display: grid; gap: 0.5rem; border-radius: 0.3rem; }
+.recording-list li.current-record { background: var(--selected); color: var(--selected-text); border-inline-start-color: var(--active-context-accent); }
+.record-identity { display: grid; gap: 0.35rem; }
+.current-label { font-size: 0.85em; font-weight: 600; text-decoration: underline; text-underline-offset: 0.25em; }
+.recording-list button { inline-size: 100%; text-align: start; }
+/* "Reviewing" remains a usable shortcut to the open review, not a disabled
+   dead end. Its current-state border is separate from the outer focus outline.
+   Only the active card title and corresponding detail title receive this accent;
+   unrelated headings retain the ordinary text role. */
+.recording-list button[aria-current='true'] { background: var(--selected); border: 2px solid var(--active-context-accent); font-weight: 650; }
+.current-record .record-title, .review-header h2 { color: var(--active-context-accent); }
+/* The decorative arrow spans the card's remaining panel padding and the gutter,
+   ending before the detail edge. It cannot intercept clicks or become a control.
+   Its presence follows selectedId, so filtering out that card removes the arrow
+   instead of drawing a false connection from another result. This reference's
+   arrow geometry assumes left-to-right content; RTL needs separate verification. */
+.relationship-cue { position: absolute; inset-inline-start: calc(100% + 0.25rem); inset-block-start: 1rem; inline-size: calc(var(--panel-padding) + var(--workspace-gap) - 0.5rem); block-size: 1.5rem; color: var(--active-context-accent); pointer-events: none; }
+.relationship-cue svg { display: block; inline-size: 100%; block-size: 100%; fill: none; stroke: currentColor; stroke-width: 2.5; }
+.relationship-label { display: none; }
+.review-header { display: grid; gap: 0.35rem; padding-block-end: 1rem; border-block-end: 1px solid var(--separator); }
+.review-header .record-id { display: block; font-size: 0.75em; font-weight: 500; margin-block-start: 0.3em; }
+/* Time zone provides context for the group and spans both columns. The two
+   durations sit side by side for comparison: label -> meaning -> value. Flex
+   distribution aligns their values despite different explanation lengths, without
+   fixed heights that would clip enlarged text. Borders supplement the semantic
+   definition list; no chart is needed for these two stated quantities. */
+.timing-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--review-group-gap); }
+.timing-facts > div { border-inline-start: 2px solid var(--separator); padding-inline-start: 0.85em; display: flex; flex-direction: column; }
+.timing-facts dd { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.timing-facts > div:first-child { grid-column: 1 / -1; }
+dt { font-weight: 650; }
+dd { margin: 0; display: grid; gap: 0.4rem; }
+.meaning { display: block; }
+.timing-facts strong { display: block; font-size: 1.1em; font-weight: 600; }
+.help-trigger { background: transparent; text-align: start; }
+.help-trigger > span { display: inline-block; inline-size: 1em; }
+.timing-help-panel p { margin-block-start: 0.75rem; max-inline-size: 65ch; }
+/* Separate immutable recording facts from the editable assessment, while keeping
+   both inside the active record's surface. Save feedback stays beside its action
+   rather than in a distant toast. Error text and an edge survive loss of hue. */
+.review-form { border-block-start: 1px solid var(--separator); padding-block-start: 1rem; }
+.save-area { display: grid; gap: 0.75rem; }
+.save-feedback { font-weight: 600; }
+.error { color: var(--error); border-inline-start: 3px solid var(--error); padding-inline-start: 0.75rem; }
+.notice { border-inline-start: 3px solid var(--selected-edge); padding-inline-start: 0.75rem; }
+.demo-controls { margin-block-start: 1.5rem; }
+.pending-list li { display: grid; gap: 0.65rem; border-block-start: 1px solid var(--separator); padding-block-start: 0.75rem; }
+footer { font-size: 0.9em; margin-block-start: 1.5rem; }
+/* The persistent status region is visually hidden, not display:none, so updates
+   remain available to assistive technology. Visible, scoped feedback also stays
+   beside Save; actual screen-reader announcement quality is still unverified. */
+.visually-hidden { position: absolute; inline-size: 1px; block-size: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+/* Once panels stack, a right-pointing arrow would lie about the destination.
+   Return it to normal flow, point down and add "Details below." Reflow only
+   changes presentation; it must not remount forms, reset drafts or move focus.
+   Breakpoints are fixture choices, not research-backed AuDHD thresholds. */
+@media (max-width: 54rem) {
+  .workspace { grid-template-columns: minmax(0, 1fr); }
+  .relationship-cue { position: static; inline-size: auto; block-size: auto; display: flex; align-items: center; gap: 0.5rem; justify-self: end; }
+  .relationship-cue svg { inline-size: 1.5rem; block-size: 1.5rem; transform: rotate(90deg); }
+  .relationship-label { display: inline; color: var(--secondary); font-size: 0.85em; }
+}
+@media (max-width: 35rem) {
+  .display-fields, .timing-facts { grid-template-columns: minmax(0, 1fr); }
+  .panel { --panel-padding: 1rem; }
+  h1 { font-size: 1.7em; }
+}
+/* System colors outrank the decorative palette. Keep the native disabled-state
+   color and a structural current-button border; never force the purple/blue
+   colors back on. A current border and keyboard focus outline remain separate. */
+@media (forced-colors: active) {
+  button:disabled { color: GrayText; border-color: GrayText; }
+  button[aria-current='true'] { border-width: 2px; }
+}
+
+
+/* Three levels answer different questions: breadcrumbs show ancestry, workspace
+   links switch pages, local tabs switch views of ONE recording. Only the local
+   view uses tab semantics. Wrapping and generous targets beat a clipped scroll
+   strip; neither the header nor the compact footer is fixed over the task. */
+a { color: var(--text); text-underline-offset: 0.22em; overflow-wrap: anywhere; }
+nav a, .navigation-top > a, .footer-actions > a, .page-directory a, .skip-link {
+  display: inline-flex; align-items: center; min-block-size: 44px; min-inline-size: 44px;
+}
+.skip-link { position: absolute; inset-block-start: 0.5rem; inset-inline-start: 1rem; transform: translateY(-200%); padding: 0.5rem 1rem; background: var(--page); z-index: 2; }
+.skip-link:focus { transform: none; }
+.navigation-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; column-gap: 1.5rem; margin-block-end: 0.5rem; }
+.breadcrumbs ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0 0.5rem; }
+.breadcrumbs li { display: flex; align-items: center; min-inline-size: 0; gap: 0.5rem; }
+.breadcrumbs [aria-current='page'] { font-weight: 600; }
+.breadcrumb-separator { color: var(--secondary); }
+.workspace-navigation { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; border-block-end: 1px solid var(--separator); margin-block-end: 1.5rem; }
+.workspace-navigation a { padding: 0.5em 0; border-block-end: 3px solid transparent; text-decoration: none; }
+.workspace-navigation a[aria-current='true'] { color: var(--active-context-accent); border-block-end-color: currentColor; font-weight: 650; }
+.workspace, .library-layout, .preferences-panel, .page-directory { margin-block-start: 1.5rem; }
+.library-layout { max-inline-size: 52rem; }
+.preferences-panel, .page-directory { display: grid; gap: var(--review-group-gap); }
+.preferences-panel .disclosure-body { padding: 0; }
+.page-directory ul { margin: 0; padding-inline-start: 1.25rem; display: grid; gap: var(--review-group-gap); }
+.page-directory li p { color: var(--secondary); }
+.directory-group-label { margin-block: 0.75rem 0.25rem; font-weight: 600; }
+/* A local tab is selected, not a primary action. Reuse the active-context role
+   but retain an underline and aria-selected so hue is never the only evidence.
+   Focus stays independently visible on an unselected tab during arrow-key travel.
+   Do not let our grid override a library's native hidden panel state. */
+.local-view-label { font-size: 0.95em; color: var(--secondary); }
+.record-tabs { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; border-block-end: 1px solid var(--separator); }
+.record-tabs [role='tab'] { display: flex; align-items: center; min-block-size: 44px; padding: 0.5em 0.25em; border: 0; border-block-end: 3px solid transparent; border-radius: 0; background: transparent; cursor: pointer; }
+.record-tabs [aria-selected='true'] { color: var(--active-context-accent); border-block-end-color: currentColor; font-weight: 650; }
+.record-tab-panel { display: grid; gap: var(--review-group-gap); padding-block-start: 1rem; }
+.record-tab-panel[hidden] { display: none; }
+.record-metadata { display: grid; gap: var(--review-group-gap); }
+.record-metadata > div { border-inline-start: 2px solid var(--separator); padding-inline-start: 0.85em; }
+.page-footer { border-block-start: 1px solid var(--separator); padding-block-start: 1rem; display: grid; gap: 0.75rem; }
+.footer-actions { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: 1rem; }
+.footer-sections { max-inline-size: 100%; }
+.footer-sections nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; padding: 0 1rem 0.75rem; }
+.footer-sections a[aria-current='true'] { font-weight: 650; text-decoration-thickness: 3px; }
+
+/* Contextual help is opt-in and limited to unfamiliar meaning. Its trigger stays
+   a full-size target. Inline expansion participates in reflow rather than hiding
+   the next action behind a persistent overlay. Tooltip portals inherit root skin
+   tokens; carry text scale explicitly because they are outside .review-app. */
+.display-choice { display: grid; align-content: start; gap: 0.35rem; }
+.field-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.4rem; align-items: center; }
+.context-help-button { min-inline-size: 44px; font-size: 0.9em; font-weight: 500; }
+.context-help-detail { grid-column: 1 / -1; font-weight: 400; border-inline-start: 3px solid var(--control-border); padding: 0.65em; background: var(--panel); color: var(--text); }
+.context-tooltip { z-index: 100; max-inline-size: min(32ch, calc(100vw - 2rem)); padding: 0.8em 1em; border: 1px solid var(--control-border); border-radius: 0.4rem; background: var(--panel); color: var(--text); font-family: var(--ui-font-body, system-ui); font-size: 1rem; line-height: 1.5; overflow-wrap: anywhere; box-shadow: 0 3px 12px #0003; }
+.context-tooltip[data-text-size='larger'] { font-size: 1.25rem; }
+@media (forced-colors: active) {
+  .context-tooltip, .context-help-detail { background: Canvas; color: CanvasText; border-color: CanvasText; box-shadow: none; }
+}
+
+/* Circled information and question icons explain context. Reserve caution icons for actual
+   warnings, whose essential text must remain visible. Names and expanded state
+   expose meaning without requiring someone to recognize the visual symbol. */
+.context-help-button { padding: 0.25em 0.45em; font-size: 1em; font-weight: 700; color: var(--action); }
+.context-help-button[aria-expanded='true'] { border-width: 2px; background: var(--panel); }
+
+.context-help-button[data-help-kind='warning'] { color: var(--selected-edge); }
+.save-actions .context-help-detail { flex-basis: 100%; }
+
+/* Profile details explain application boundaries beside the deliberate action. */
+.profile-controls { display: grid; gap: 0.75rem; padding-block: 1rem; border-block-end: 1px solid var(--separator); }
+.profile-preview { display: grid; gap: 0.75rem; }
+.profile-preview ul { padding-inline-start: 1.5rem; overflow-wrap: anywhere; }
+.profile-controls button { justify-self: start; }
+.profile-controls input[type=file] { max-inline-size: 100%; }
+
+/* AUDHD-05: only deliberate navigation destinations use this override. A click
+   retains semantic focus without a rectangle; keyboard/AT activation retains
+   a visible cue even where the browser's heading heuristic omits it. */
+#page-heading[data-navigation-input='keyboard']:focus,
+#review-heading[data-navigation-input='keyboard']:focus { outline: 3px solid var(--focus); outline-offset: 4px; }
+#page-heading[data-navigation-input='pointer']:focus,
+#review-heading[data-navigation-input='pointer']:focus { outline: none; }
+
+/* AUDHD-09/11: vector help symbols inherit each skin's semantic colors,
+   including forced-color overrides; the named button owns interaction. */
+.context-help-button svg { display: block; inline-size: 1.375em; block-size: 1.375em; margin-inline: auto; }

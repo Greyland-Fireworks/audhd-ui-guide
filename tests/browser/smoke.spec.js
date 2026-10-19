@@ -1,0 +1,84 @@
+import { test, expect } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
+import { emptyProfile } from '../../preferences/profile.js';
+
+const upload = (page, value) => page.getByLabel('Import preferences').setInputFiles({name:'preferences.json',mimeType:'application/json',buffer:Buffer.from(typeof value==='string'?value:JSON.stringify(value))});
+const nav = page => page.getByRole('navigation',{name:'Workspace sections',exact:true});
+
+test('Profile preview, apply, system appearance and export preserve pending work', async ({page}) => {
+  await page.goto('/#recordings/REC-002/review');
+  const note=page.getByRole('textbox',{name:'Review note',exact:true});
+  await note.fill('Snapshot'); await page.getByRole('button',{name:'Save review',exact:true}).click();
+  await note.fill('Newer draft'); await page.getByRole('searchbox').fill('Market');
+  await page.getByRole('tab',{name:'Recording details',exact:true}).click();
+  await nav(page).getByRole('link',{name:'Workspace preferences'}).click();
+  const profile=emptyProfile();profile.display.appearance={mode:'skin',id:'bubblegum'};
+  profile.display.text_style='serif';profile.display.text_scale=1.25;profile.layout.density='compact';profile.support.help_detail='expanded';profile.retention.retain_drafts=true;
+  await upload(page,profile);
+  await expect(page.getByRole('heading',{name:'Application preview'})).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('data-skin','guillermo');
+  const apply=page.getByRole('button',{name:'Apply for this session'});
+  await apply.focus(); await page.keyboard.press('Enter'); await expect(apply).toBeFocused();
+  await expect(page.locator('html')).toHaveAttribute('data-skin','bubblegum');
+  await expect(page.locator('html')).toHaveAttribute('data-type','serif');
+  await page.emulateMedia({colorScheme:'dark'});
+  await expect(page.locator('html')).toHaveAttribute('data-skin','bubblegum');
+  await expect(page.getByRole('combobox',{name:'Text size',exact:true})).toHaveValue('larger');
+  const downloadEvent=page.waitForEvent('download'); await page.getByRole('button',{name:'Export preferences'}).click();
+  const download=await downloadEvent;
+  expect(JSON.parse(await readFile(await download.path(),'utf8'))).toEqual(profile);
+  await page.getByRole('combobox',{name:'Appearance',exact:true}).selectOption('system');
+  await page.emulateMedia({colorScheme:'light'});await expect(page.locator('html')).toHaveAttribute('data-skin','paperwhite');
+  await page.emulateMedia({colorScheme:'dark'});await expect(page.locator('html')).toHaveAttribute('data-skin','guillermo');
+  await nav(page).getByRole('link',{name:'Recordings',exact:true}).click();
+  await expect(page).toHaveURL(/REC-002\/details$/);
+  await expect(page.getByRole('searchbox')).toHaveValue('Market');
+  await page.getByRole('tab',{name:'Review',exact:true}).click();await expect(note).toHaveValue('Newer draft');
+  await expect(page.locator('#save-feedback')).toHaveText('Saving earlier edits; newer changes are not saved.');
+  await page.reload();await expect(note).toHaveValue('');
+});
+
+test('Invalid/cancelled imports leave effective choices intact; unsupported intent stays exportable',async({page})=>{
+  await page.goto('/#preferences');
+  await upload(page,'{"schema_version":2,"schema_version":1}');await expect(page.getByRole('alert')).toContainText('Duplicate key');
+  const unknown=emptyProfile();unknown.display.appearance={mode:'skin',id:'unknown-skin'};unknown.display.text_scale=1.125;
+  await upload(page,unknown);await expect(page.locator('.profile-preview')).toContainText('Not applied in this demo');
+  await page.getByRole('button',{name:'Cancel import'}).click();await expect(page.getByLabel('Import preferences')).toBeFocused();
+  await expect(page.getByRole('button',{name:'Apply for this session'})).toHaveCount(0);
+  await upload(page,unknown);await page.getByRole('button',{name:'Apply for this session'}).click();
+  await expect(page.locator('html')).toHaveAttribute('data-skin','guillermo');
+  await expect(page.getByRole('combobox',{name:'Text size',exact:true})).toHaveValue('standard');
+  const downloadEvent=page.waitForEvent('download'); await page.getByRole('button',{name:'Export preferences'}).click();
+  const download=await downloadEvent;
+  const exported=await readFile(await download.path(),'utf8');
+  expect(JSON.parse(exported)).toEqual(unknown);
+  await upload(page,exported);
+  await expect(page.locator('.profile-preview')).toContainText('unknown-skin');
+  await expect(page.locator('.profile-preview')).toContainText('1.125');
+  await page.getByRole('button',{name:'Apply for this session'}).click();
+  await expect(page.locator('html')).toHaveAttribute('data-skin','guillermo');
+  const legacy=JSON.parse(await readFile('preferences/fixtures/v1.json','utf8'));
+  legacy.display.accessibility_theme_override='light';
+  await upload(page,legacy);await expect(page.locator('.profile-controls')).toContainText('Version 1 converted');
+  await page.getByRole('button',{name:'Apply for this session'}).click();await expect(page.locator('html')).toHaveAttribute('data-skin','paperwhite');
+});
+
+test('Navigation focus, keyboard tabs and persistent help',async({page})=>{
+  await page.goto('/');
+  const prefs=nav(page).getByRole('link',{name:'Workspace preferences'});
+  await prefs.click();await expect(page.locator('#page-heading')).toBeFocused();
+  expect(await page.locator('#page-heading').evaluate(el=>getComputedStyle(el).outlineStyle)).toBe('none');
+  await nav(page).getByRole('link',{name:'Recordings',exact:true}).focus();await page.keyboard.press('Enter');
+  await expect(page.locator('#review-heading')).toBeFocused();
+  expect(await page.locator('#review-heading').evaluate(el=>getComputedStyle(el).outlineStyle)).not.toBe('none');
+  await page.getByRole('tab',{name:'Review',exact:true}).focus();await page.keyboard.press('ArrowRight');
+  await expect(page.getByRole('tab',{name:'Recording details',exact:true})).toBeFocused();
+  await expect(page.getByRole('tab',{name:'Review',exact:true})).toHaveAttribute('aria-selected','true');
+  await page.keyboard.press('Enter');await expect(page.getByRole('textbox',{name:'Review note',exact:true})).toHaveCount(0);
+  await page.getByRole('tab',{name:'Review',exact:true}).click();
+  const help=page.getByRole('button',{name:'About demo saving',exact:true});
+  await help.click();await expect(help).toHaveAttribute('aria-expanded','true');
+  await expect(page.locator('.context-help-detail')).toContainText('demo');
+  await help.focus();await page.keyboard.press('Escape');await expect(help).toHaveAttribute('aria-expanded','false');await expect(help).toBeFocused();
+  await nav(page).getByRole('link',{name:'Workspace preferences'}).click(); await page.goBack();await expect(page).toHaveURL(/review$/);
+});

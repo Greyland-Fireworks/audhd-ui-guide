@@ -1,12 +1,12 @@
 # AuDHD friendly interface rulebook and visual standard
 
-**Version:** 1.01 draft · Updated October 18, 2026
+**Version:** v1.01 · Updated October 19, 2026
 
-Make tasks easier to understand, resume, inspect and correct. This guide combines interaction rules with a mandatory dark visual theme. The rules do not assume a single personality or preferred information density. Apply them alongside your platform's accessibility requirements. See the [overview](README.md) for scope and evidence limits.
+Make tasks easier to understand, resume, inspect and correct. Accessible behavior is mandatory. Appearance is adaptable. Personalization must preserve work, context and operability. This guide combines framework-neutral interaction requirements with selectable light and dark appearances. The rules do not assume a single personality or preferred information density. Apply them alongside your platform's accessibility requirements. See the [overview](README.md) for scope and evidence limits.
 
 ## Find what you need
 
-[UI and UX definitions](#ui-and-ux-in-this-project) · [Quick review](#quick-review) · [UX and interaction rules](#ux-and-interaction-rules) · [Tabs and accordion sections](#tabs-sub-tabs-and-accordion-sections) · [Dashboard organization](#dashboard-organization-and-hierarchy) · [Help-writing guidance](#write-help-for-someone-returning-without-context) · [UI visual standard](#visual-standard) · [Dark theme](#mandatory-dark-theme)
+[UI and UX definitions](#ui-and-ux-in-this-project) · [Quick review](#quick-review) · [UX and interaction rules](#ux-and-interaction-rules) · [Tabs and accordion sections](#tabs-sub-tabs-and-accordion-sections) · [Dashboard organization](#dashboard-organization-and-hierarchy) · [Help-writing guidance](#write-help-for-someone-returning-without-context) · [UI visual standard](#visual-standard) · [Adaptable appearance](#adaptable-appearance)
 
 | I need to… | Start here |
 |---|---|
@@ -64,7 +64,7 @@ Apply this hierarchy within the instructions governing the task:
 3. **Rule emphasis and primary targets:** Use the configured emphasis to allocate inspection and remediation effort. Primary targets guide attention among equally emphasized rules, without excusing other applicable requirements.
 4. **Optional implementation techniques:** Choose cards, tooltips, diagrams and other examples to serve the outcomes above. They do not independently require a redesign or a particular component.
 
-This orders decision authority, not the severity of every finding. Prioritize concrete consequences such as lost work, blocked access and misleading state. If requirements compete, record the scope, competing outcomes, chosen alternative, reason, observed impact and review condition; identify unresolved decisions or verification gaps. Do not silently sacrifice one requirement or claim full adherence. The mandatory dark standard remains an adopted requirement within its established scope, subject to its documented accessibility exceptions.
+This orders decision authority, not the severity of every finding. Prioritize concrete consequences such as lost work, blocked access and misleading state. If requirements compete, record the scope, competing outcomes, chosen alternative, reason, observed impact and review condition; identify unresolved decisions or verification gaps. Do not silently sacrifice one requirement or claim full adherence. Accessible behavior remains mandatory across supported appearances; a skin cannot waive an adopted outcome.
 
 ### Rule emphasis and primary targets
 
@@ -137,6 +137,8 @@ Make task-relevant relationships visible: which controls affect which content, w
 
 **Check:** Identify which controls affect which results and which values belong together. Follow those relationships on a narrow screen, with enlarged text and with keyboard navigation; inspect semantic grouping separately. Decorative connections must not obscure controls or imply actions.
 
+**Connected-context example:** A current recording card and its detail panel share an active surface, title accent, repeated identity and structural edge. A directional cue points right in columns and down after stacking. A collection introduction such as “3 recordings:” identifies the actual children. These are optional techniques for the required relationship, not decorations to add to every group. Derive them from the actual object ID, not matching titles. Inspect the connection without color and after reflow.
+
 ### AUDHD-03 Offer manageable detail without hiding choices
 
 **Requirement:** Put the immediate task first. Keep advanced settings, history and references in clearly named disclosures when appropriate. Where search is provided, search all eligible choices within its stated scope, including collapsed ones. Show active filters, a reset action and selected values excluded by the current filter.
@@ -161,6 +163,8 @@ Use one term consistently for one concept, and different terms for different eff
 
 **Check:** Exercise overrides, unavailable options and boundary cases. Compare the explanation and action label with the actual result. Avoid using one button both to enter a mode and to add another item.
 
+For an already-open item, name the action by its current effect: “Reviewing Harbor morning” can return focus to the open review. Do not imply another selection or save is required. Inspect configuration loaders, schemas, API behavior and permissions before explaining defaults, overrides, units, dependencies or apply/restart effects; a key name alone is insufficient evidence.
+
 ### AUDHD-05 Preserve focus and spatial stability
 
 **Requirement:** Preserve focus, selection and scroll position during ordinary edits and saves. Do not reorder items or switch views unexpectedly. If a focused control disappears, move focus to a predictable surviving control. Closing a dialog returns focus to its trigger when available.
@@ -170,6 +174,8 @@ Use one term consistently for one concept, and different terms for different eff
 **Example:** Saving a row leaves it in place. New activity offers “Show new items” instead of shifting the row being edited.
 
 **Check:** Edit, filter, expand, collapse and close help using a keyboard. Repeat during slow responses and errors. Verify that there is no keyboard trap and focus remains visible.
+
+Deliberate page navigation may move focus to a named heading for orientation. Keep keyboard focus visible without forcing a large full-width rectangle after pointer navigation. Browser focus-visible behavior is one technique, not permission to globally remove focus styles. Check pointer, keyboard and assistive-technology behavior separately.
 
 ### AUDHD-06 Make saving and recovery understandable
 
@@ -252,6 +258,8 @@ At narrow widths or enlarged text, stack help beside the task in the reading ord
 
 **Check:** Without consulting source code or remembered implementation details, explain the feature's purpose, current state and effect using only the interface and its help. Access help with supported input methods, read it at enlarged text size, dismiss it where appropriate and confirm focus is retained. Check the explanation against the action's actual result. Follow [W3C hover/focus guidance](https://www.w3.org/WAI/WCAG22/Understanding/content-on-hover-or-focus.html) for web content.
 
+Use `(i)` for supplementary information, `(?)` for clarification and `(!)` for a genuine warning or limitation when visible help access points are useful. Name each button by its topic, expose its state and keep it operable when the nearby action is disabled. Hover help must be dismissible, hoverable and persistent as applicable; click/tap/keyboard access can expose persistent inline detail. A demo-save warning belongs beside Save and also in visible retention wording. It must distinguish simulated acknowledgment from durable storage. Avoid adding icons when the explanation is already sufficient.
+
 ### AUDHD-10 Support interruptions and working preferences
 
 **Requirement:** Preserve useful context and unfinished work within a documented scope consistent with privacy needs. Offer focused and overview layouts when both serve the task. Honor reduced-motion preferences. Avoid decorative flashing, automatic cycling and unnecessary attention-seeking notifications.
@@ -260,11 +268,13 @@ Restoring a screen is not enough if its meaning has been forgotten. Provide a co
 
 Where useful, let users attach an optional purpose or decision note to saved work. Describe recorded changes meaningfully, such as “Changed the report folder from Downloads to Reports,” rather than “Configuration updated.” Separate user-written reasons from system-generated summaries; history establishes what happened, not necessarily why. Do not require note-taking to complete ordinary tasks.
 
-**Why:** Returning should not require reconstructing the task; one information density will not suit everyone. The dark-theme policy and its accessibility overrides are defined in the visual standard.
+**Why:** Returning should not require reconstructing the task; one information density will not suit everyone. Selectable appearance and system accessibility constraints are defined in the visual standard.
 
 **Example:** Returning restores the selected document and section, while clearly identifying any stale data. A view preference does not mark content approved.
 
 **Check:** Leave and resume, including after a timeout. Confirm that preferences do not alter content or permissions. Where preservation is inappropriate on a shared device, explain the retention boundary before work is lost.
+
+Appearance changes must preserve current work and context. Offer selectable skins and independent text styles where supported; enjoyable variety is a valid preference. Never infer a diagnosis or prescribe low stimulation, darkness or one information density to everyone. Verify changes during pending work and after leaving and returning.
 
 ### AUDHD-11 Keep controls readable and operable
 
@@ -331,6 +341,14 @@ Use visual weight deliberately: page title, section heading, item title, then su
 
 For pattern choice, context retention, hidden errors and accessible operation, use the dedicated [tabs, sub-tabs and accordion guidance](#tabs-sub-tabs-and-accordion-sections).
 
+### Authoritative navigation and repeated orientation
+
+For a multi-page workspace, derive page labels, destinations and canonical ancestry from authoritative page records. A browsable index puts summaries up front and detailed material on destination pages. Keep top and bottom breadcrumb copies accurate and consistent on destination pages, with named navigation landmarks and a bypass for repeated navigation. Do not invent parents from browser history or treat a local tab as a parent page.
+
+Workspace links select destinations; local tabs select views of the same object. Keep their scope apparent without repeating two full navigation bars: the reference uses a compact footer disclosure alongside the bottom breadcrumb. Preserve ordinary link behavior, stable IDs, Back/Forward, direct links and truthful unavailable-page handling. Permissioned products must derive navigation from authorized destinations.
+
+The [reference specification](examples/recording-review/SPEC.md) demonstrates canonical ancestry. Multiple-category membership and hover/focus cross-highlighting remain a proposed extension, not an implemented capability or an adopted navigation schema. Membership alone cannot establish a unique parent; contextual paths need a deterministic direct-link policy before implementation.
+
 ### Preserve hierarchy as the dashboard changes
 
 Keep a predictable panel order during refreshes. Update values in place; do not automatically sort panels or move the focused task when new data arrives. Surface urgent new conditions without stealing focus or repeatedly announcing every counter change. Explain what dismissing an alert does; hiding a message must not imply that its underlying problem was resolved. Keep unresolved blockers visible at the affected task.
@@ -380,11 +398,11 @@ Keep hidden panel controls out of keyboard navigation and the accessibility tree
 
 ## Visual standard
 
-This is the **UI standard**: presentation, control semantics and observable states that support the UX rules. Make scope, hierarchy, selection, focus and work state visible. Projects adopting this guide must use the dark theme described here for the interfaces within their adoption scope. Branding and platform conventions can vary within that requirement. This is a deliberate design choice intended to provide a restrained work surface, not a finding that dark themes benefit every person with autism or ADHD.
+This is the **UI standard**: presentation, control semantics and observable states that support the UX rules. Make scope, hierarchy, selection, focus and work state visible. Support accessible light and dark appearances within adoption scope. Neither is inherently better for every AuDHD person. Preserve platform accessibility overrides and verify the actual supported appearances.
 
 Record which interfaces or components are in adoption scope. A focused wording or interaction fix does not authorize an application-wide theme migration. If scope is unclear, identify that decision before making broader theme changes; continue the bounded review and document any scoped exception.
 
-[Controls and states](#functional-requirements) · [Typography and layout](#typography-and-layout) · [Label, clarify and show](#label-clarify-and-show) · [Dark theme](#mandatory-dark-theme) · [Color and group cues](#color-and-redundant-group-cues) · [Targets, motion and feedback](#targets-motion-and-feedback) · [Verification](#verification)
+[Controls and states](#functional-requirements) · [Typography and layout](#typography-and-layout) · [Label, clarify and show](#label-clarify-and-show) · [Adaptable appearance](#adaptable-appearance) · [Color and group cues](#color-and-redundant-group-cues) · [Targets, motion and feedback](#targets-motion-and-feedback) · [Verification](#verification)
 
 ### Functional requirements
 
@@ -419,43 +437,27 @@ Expose selection through the control's actual state, such as native checked stat
 
 ### Label, clarify and show
 
-For each meaningful information group, use **label → explanation when needed → related value, visual or control**. Keep these elements visually grouped with consistent spacing and typography. Use a small, consistent type scale and weights rather than extra font families merely to distinguish these roles. Apply AUDHD-02, AUDHD-09 and AUDHD-11, including semantic headings, associated control labels and descriptions.
+For each meaningful information group, use **label → explanation when needed → related value, visual or control**. Keep these elements visually grouped with consistent spacing and typography. Use a small, consistent type scale and weights; intentional user-selectable fonts may vary without changing that hierarchy. Apply AUDHD-02, AUDHD-09 and AUDHD-11, including semantic headings, associated control labels and descriptions.
 
 The label identifies what this is; an explanation resolves ambiguity; the content supplies the information or action. Keep essential meaning visible without relying on color, icons, placeholders or hover. A border or card is optional; spacing, table structure or a field group may express the relationship better. Do not require a subheading for obvious labels, fragment useful prose or comparisons, or repeat explanations unnecessarily. Concise summaries supplement rather than replace required detailed contextual help.
 
 Use meters for bounded quantities and charts for meaningful relationships, trends or comparisons. Keep explanations and missing evidence plainly labeled in text. Inspect the rendered group and opened help; separately inspect accessible associations. See the [timing and search example](EXAMPLES.md#timing-and-search-label-clarify-and-show).
 
-### Mandatory dark theme
+### Adaptable appearance
 
-For individual needs and explicit accessibility exceptions, use the [preference intake and JSON profile guidance](PREFERENCES.md). Preferences supplement accessible defaults; they do not excuse inaccessible baseline controls.
+Accessible behavior is mandatory; skins are user-selectable. Light and dark palettes are ordinary choices, not accessibility exceptions. Provide discoverable appearance choices where supported; preserve system forced colors and reduced motion. A focused change does not authorize a whole-application reskin. Use [preferences](PREFERENCES.md) for intake, inheritance and storage.
 
-Use semantic tokens such as `surface`, `text`, `selected`, `focus` and `error` instead of giving colors product-specific meanings. Use opaque dark blue-gray page and panel surfaces with readable light text. Do not substitute a light theme as the standard presentation for an adopted interface. Honor explicit accessibility overrides, including operating-system forced-color modes; the dark-theme requirement must not defeat those overrides.
+Fun, personal expression and renewed interest are legitimate design objectives alongside readability and comfort. Offer useful palette and text-style variety without automatic rotation or a claim that one preset is AuDHD-ideal. Keep text style independent of skin when supported. Use a coherent heading/label/value hierarchy with intentional font choices, relative sizing and fallback fonts; user-selected styles must not remove labels, clip content or obstruct browser enlargement.
 
-Reuse a shared set of visual tokens and control states across related screens and modes rather than copying slightly different styles into each one. Translate the same roles into native platform themes where applicable; adopting this visual language does not require a web runtime, a new dependency or a change to saved-data formats. Existing product contracts continue to own permissions, value meanings and save behavior.
+Use semantic roles for page/panel surfaces, reading text, controls/actions, active context, keyboard focus, status and chart data. The [22-skin preview](examples/skins/README.md) supplies reusable examples and checks. Its names, colors, fonts and numerical dimensions are reference choices, not mandatory product branding or a contrast certification.
 
-Use the following dark palette as the reference treatment. Equivalent dark tokens may be used where branding or platform integration requires them, provided the hierarchy, independent focus and selection cues, and measured accessibility requirements are preserved. The palette is not a blanket contrast certification.
+Reserve an **active-context accent and surface** for the current working object and associated detail area. Both ends should share identity, title treatment and structural cues where useful. Do not tint an entire unrelated collection to imply that every item is current. Keyboard focus remains independently visible when it enters or leaves that context; action, success, warning, error and chart categories have separate meanings. Multiple navigation levels can each have a current state. Use text, borders or other structure when system colors collapse hue differences.
 
-| Token | Example |
-|---|---|
-| Page surface | `#111a20` |
-| Panel surface | `#1b282f` |
-| Raised surface | `#23353c` |
-| Main text | `#f0efe5` |
-| Secondary text | `#aebcbd` |
-| Decorative separator | `#3b4b51` |
-| Selected surface / text | `#102d49` / `#edf5ff` |
-| Selected edge | `#f1d76a` |
-| Focus outline | `#a6d4db` |
-| Heading fill / text | `#c5d991` / `#102027` |
-| Secondary heading fill | `#99d4da` |
+Apply appearance changes without remounting working forms, clearing drafts, changing record identity, losing pending save acknowledgments, moving focus or resetting filters and local views. System appearance changes have the same continuity obligation. Show requested versus effective choices when a preference is unsupported; storing or exporting it does not mean it was applied.
 
-Use the low-contrast separator only decoratively; if a boundary is required to identify a control, verify it meets the applicable non-text contrast requirement and choose a stronger token if necessary. Test actual foreground/background combinations, sizes and states. Do not assume these values make every combination accessible.
+Measure foreground/background combinations in their actual states. Essential control boundaries need appropriate non-text contrast; decorative separators are not interchangeable with them. Selection may use a fill plus an edge; focus may use an offset outline. Exact widths are optional, but outlines must remain visible and unclipped. Evaluate overlays against underlying content, and retain native check/radio marks. Avoid tint or shadows as the only indication.
 
-An example selected treatment is a dark fill plus a persistent 3px lower edge. A separate focus outline can use a 3px width and 3px offset. These dimensions are optional design choices; ensure outlines are visible, not clipped and work in forced-color modes. Native checkmarks or radio marks should remain visible.
-
-Evaluate translucent overlays against the actual underlying surfaces and content. A tinted overlay can muddy colors or obscure the distinction between selection and content; prefer an opaque selection surface when that distinction is unreliable. Do not use an inset shadow or color tint as the only selection cue.
-
-Rounded heading capsules and asymmetrical corners are optional branding. Plain headings are equally valid. Preserve the non-interactive heading semantics and cues described in [functional requirements](#functional-requirements).
+For charts, preserve category identity across skins, use sequential ramps for quantities and an explicit center for diverging scales, and distinguish missing data from zero. Supply labels, markers/dashes or patterns plus a usable data equivalent. Canvas adapters must redraw resolved tokens after appearance changes; CSS alone does not provide chart semantics or keyboard operation. Test adjacent marks and labels as well as tokens against the plot surface.
 
 ### Color and redundant group cues
 
@@ -479,7 +481,7 @@ Check real screens at supported widths, enlarged text, keyboard focus and select
 
 Check each affected mode or screen rather than assuming a shared style change works everywhere. Confirm labels remain connected to controls, headings and legends retain their meaning, answer rows align without clipping, selection survives hover and focus remains independently visible. Operate affected choices, tabs, disabled actions and save controls. For comparison or review tools, filter, reorder and switch items, then save and reload where applicable; verify that notes, judgments, settings and preview identities still belong to the correct records. Record any mode not exercised as pending.
 
-Record results with the [review template](REVIEW_TEMPLATE.md). Record dark-theme adoption, usability observations and accessibility conformance separately. Test the dark presentation and supported accessibility overrides; do not infer usability from the palette alone.
+Record results with the [review template](REVIEW_TEMPLATE.md). Record appearance coverage, usability observations and accessibility conformance separately. Test supported light/dark appearances and system overrides; do not infer usability from palettes or two matching implementations.
 
 ## Maintaining the rules
 
@@ -487,10 +489,12 @@ Keep IDs stable. Record requirement changes in a version history. Use product-sp
 
 ### Version history
 
+- **v1.01 — October 19, 2026:** Replaces mandatory dark appearance with accessible selectable light/dark skins, strengthens relationships/navigation/help/continuity under the existing 13 rules, and adds version-2 profiles and independent runnable references. See [evidence and limits](references/evidence-and-limits.md); model evaluations remain unrun.
+
 - **1.01 draft — October 18, 2026:** Added explicit priority hierarchy, five-level rule emphasis, primary targets, complete-help and visible-relationship requirements, and a shared label/clarify/show pattern under existing rule IDs. Low emphasis does not relax adopted requirements. Editorial checks do not constitute model, runtime or user validation; existing evaluation outcomes remain pending.
 
 - **1.0 draft — October 17, 2026:** Initial practitioner draft combining interaction rules, mandatory dark visual standard, and detailed plain-English help for returning without remembered context.
-  - Expanded dashboard guidance for metrics, alerts, task panels, navigation levels and secondary information, with a worked example. Adapted general grouping and layout principles from SECOND CONTACT's Developer UI Style Standard v1.2; project-specific branding and typography exceptions are not adopted. This adds application guidance under existing rule IDs; dashboard reviews should check these cases where relevant.
+  - Expanded dashboard guidance for metrics, alerts, task panels, navigation levels and secondary information, with a worked example. Expanded task-oriented grouping and layout principles; project-specific branding and typography exceptions are not adopted. This adds application guidance under existing rule IDs; dashboard reviews should check these cases where relevant.
   - Completed the source-standard comparison and added project-independent guidance for comparison identity, responsive help, form grouping and alignment, action/selection distinctions, shared visual tokens and verification across affected modes. Existing rule IDs remain stable; recheck these behaviors when their presentation changes.
   - Defined UI and UX, separated their guidance and evidence, consolidated repeated layout advice, clarified optional search and task-scoped verification, and expanded the review record. This is an editorial consistency review; model evaluations and user validation remain pending.
   - Aligned skill usage, adoption scope, evidence limits and evaluation records across the supporting documents. The then-current 16 scenarios remained unrun; coverage limits are documented in the evaluation procedure.

@@ -1,6 +1,6 @@
 # Worked interface examples
 
-**Version:** 1.01 draft. These fictional examples illustrate the [guide](GUIDE.md); they are not tested product findings or additional rules. They use the mandatory dark default unless an explicit accessibility exception or system override is described. Adapt the wording to verified product behavior.
+**Version:** v1.01. These fictional examples illustrate the [guide](GUIDE.md); they are not tested product findings or additional rules. They support accessible selectable appearance; exact colors and layouts are techniques, not universal requirements. Adapt the wording to verified product behavior.
 
 Use the guide's [UI and UX definitions](GUIDE.md#ui-and-ux-in-this-project). The examples identify both aspects: UI covers presentation, semantics and control operation; UX covers task understanding, effort, predictability, recovery and return. These aspects overlap, but require distinct evidence. The checks below are proposals, not performed tests. Identify the implementation layer separately; a UI label change does not establish correct persistence or recovery.
 
@@ -15,7 +15,7 @@ Use the guide's [UI and UX definitions](GUIDE.md#ui-and-ux-in-this-project). The
 | Identifying saved versions and explaining replacement | [Saved-item library](#saved-item-library-names-need-meaning) |
 | Offering optional questions without assuming needs or storage consent | [Preference intake](#preference-intake-answer-only-what-matters) |
 | Updating profiles, inheritance, invalid data and private storage | [JSON profiles](#json-profiles-preserve-choices-and-privacy) |
-| Combining color with other cues and honoring accessibility exceptions | [Group cues](#group-cues-and-accessibility-overrides) |
+| Combining color with other cues and honoring system accessibility overrides | [Group cues](#group-cues-and-accessibility-overrides) |
 | Writing errors with consequences and recovery | [Error messages](#error-messages-with-useful-consequences) |
 | Choosing visible context, help or extended reference | [Explanation depth](#put-explanations-at-the-right-depth) |
 | Checking whether an improvement adds unnecessary work | [Overcorrections](#when-guidance-becomes-an-obstacle) |
@@ -149,7 +149,7 @@ Keep stable IDs available in details for troubleshooting. Search names and descr
 
 **After — optional intake:** Use the [preference intake](PREFERENCES.md#ask-briefly-and-progressively). The person says, “Larger text and no sounds. Skip everything else; don't save a profile.” Offer a text-size preview and keep sounds off where supported for this task. Do not create a file, fill skipped fields with the fictional example's choices or ask again merely because answers are incomplete. Do not claim the application changed until verified.
 
-If the person later says, “Remember those two choices for this project,” save only confirmed choices. For a new version-1 profile, other preference leaves are `null`; `sensory.sounds` is `false`, not unanswered. If an existing profile is being updated, skipped questions leave its prior choices intact. Do not infer a text-scale number from “larger”; establish it through a preview or leave it unspecified until chosen. No diagnosis or medical reason belongs in the profile.
+If the person later says, “Remember those two choices for this project,” save only confirmed choices. For a new version-2 profile, other preference leaves are `null`; `sensory.sounds` is `false`, not unanswered. If an existing profile is being updated, skipped questions leave its prior choices intact. Do not infer a text-scale number from “larger”; establish it through a preview or leave it unspecified until chosen. No diagnosis or medical reason belongs in the profile.
 
 **UI checks:** Inspect the intake's readability and operable skip/preview controls. **UX checks:** Skip questions and continue the original task; distinguish previewed, selected, remembered and actually applied settings. Check that declining storage creates no file, and later authorized storage records only confirmed choices. Relevant rules: AUDHD-03, 04, 10, 11, 12; [preference storage](PREFERENCES.md#save-an-optional-json-profile).
 
@@ -159,7 +159,7 @@ If the person later says, “Remember those two choices for this project,” sav
 
 **Example update:** A user-wide profile has text scale `1.25` and sounds off. A project profile leaves text scale `null` and chooses an overview layout. The project therefore inherits `1.25`; its null does not reset the scale, and `false` for sounds stays an explicit choice. The user says, “Use text scale 1.5 today, but don't save that. Remember expanded help for this project.” Apply the temporary text choice within supported scope and update only the project's help preference, keeping the previous profile recoverable. Skipped preferences do not erase old values.
 
-These descriptions show only the fields relevant to the example; a saved version-1 profile requires the full documented structure, with unanswered new leaves null. If the user later asks to clear the project's text choice, null resumes inheritance from the user-wide `1.25`; it does not force scale `1`. If the project chooses `["text", "shape"]` for group cues, that array replaces inherited cues rather than retaining an unwanted inherited pattern. Visible text and accessible semantics remain baseline requirements.
+These descriptions show only the fields relevant to the example; a saved version-2 profile requires the full documented structure, with unanswered new leaves null. If the user later asks to clear the project's text choice, null resumes inheritance from the user-wide `1.25`; it does not force scale `1`. If the project chooses `["text", "shape"]` for group cues, that array replaces inherited cues rather than retaining an unwanted inherited pattern. Visible text and accessible semantics remain baseline requirements.
 
 If the existing JSON is malformed, contains an unsupported version or has a wrong type such as `"text_scale": "large"`, report that it cannot be used as a valid profile. Preserve the file; do not overwrite it with [the fictional example](preferences.example.json). Explain known safe fallbacks and unsupported settings. Parsing valid JSON alone does not prove it matches the documented format or changes an interface.
 
@@ -171,13 +171,13 @@ On a shared workstation, a preference for retained drafts does not override the 
 
 **UI concerns:** Consistent text, shape, line-style and optional pattern cues alongside color, with separate focus and selection indicators. **UX concerns:** Following related groups without decoding color alone and choosing a comfortable presentation without losing task meaning.
 
-**Before:** Delivery and Access are identified only by green and red. An agent prescribes dense hatching to everyone reporting color-vision differences and rejects an explicit request for a light accessibility theme because the guide defaults to dark.
+**Before:** Delivery and Access are identified only by green and red. An agent prescribes dense hatching to everyone reporting color-vision differences and rejects an explicit request for a light accessibility theme because it incorrectly assumes dark is mandatory.
 
 **After:** Keep visible “Delivery” and “Access” labels, with a circle and square respectively. Where charts need matching cues, offer labeled solid/circular versus dashed/square series or restrained patterns, with a nearby legend. Preview alternatives; the person may prefer labels and shapes without patterns. Keep the same mapping across panels, and keep errors, focus and selection independently identifiable. Pattern preference never removes text or semantic equivalents.
 
-A person explicitly requests a light presentation for accessibility and larger text. Record the theme as a scoped accessibility exception if they ask to remember it; otherwise use it only within the current authorized task. Honor operating-system forced colors even when a stored profile prefers a custom palette. Recheck contrast, focus, labels and charts in the effective presentation. “Subdued surfaces” changes product tokens, not device brightness, and must not reduce required contrast. Unsupported choices remain reported as unsupported rather than presented as applied.
+A person explicitly requests a light presentation for accessibility and larger text. Record the appearance preference if they ask to remember it; otherwise use it only within the current authorized task. Honor operating-system forced colors even when a stored profile prefers a custom palette. Recheck contrast, focus, labels and charts in the effective presentation. “Subdued surfaces” changes product tokens, not device brightness, and must not reduce required contrast. Unsupported choices remain reported as unsupported rather than presented as applied.
 
-**UI checks:** Inspect grouping without color, enlarged labels, chart alternatives, focus and effective theme/forced-color states. **UX checks:** Ask the person to match groups, find a relevant tool and interpret an error using their chosen cues; verify that the accessibility exception resolves the requested presentation without changing domain behavior. Simulation and profile syntax checks do not establish user benefit. Relevant rules: AUDHD-02, 08, 10, 11, 12; [color and redundant cues](GUIDE.md#color-and-redundant-group-cues).
+**UI checks:** Inspect grouping without color, enlarged labels, chart alternatives, focus and effective theme/forced-color states. **UX checks:** Ask the person to match groups, find a relevant tool and interpret an error using their chosen cues; verify that the selected appearance resolves the requested presentation without changing domain behavior. Simulation and profile syntax checks do not establish user benefit. Relevant rules: AUDHD-02, 08, 10, 11, 12; [color and redundant cues](GUIDE.md#color-and-redundant-group-cues).
 
 ## Error messages with useful consequences
 
@@ -252,3 +252,21 @@ Show the time-zone offset applicable to the recording date; do not use a fixed a
 | Simplification removes expert controls | Preserve necessary capability with clear organization and optional detail |
 
 These examples are guide text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
+## Connected recording review and adaptable appearance
+
+**Before:** A selected card is tinted but its detail panel is unrelated, both current and inactive actions say “Review,” a detached count does not introduce its list, and navigating always outlines a heading. The saved indicator does not say that storage is simulated.
+
+**After:** Shared active-context treatment connects source and detail by real record ID, with repeated identity and structural cues. “Reviewing…” reflects the open mode, “3 recordings:” introduces its labeled list, and a direction cue follows reflow. Keyboard focus remains separate; pointer navigation does not force a large heading outline. The `( ! )` warning access point (rendered as `(!)`) beside Save explains simulation while visible retention wording states the boundary. `(i)` and `(?)` help remains useful on keyboard/touch and does not conceal essential consequences.
+
+Users can choose any of 22 skins and four text styles. Light/dark are ordinary choices. Skin changes and explicit profile application preserve drafts, pending snapshots, selected record, filters and local views. Unsupported profile choices remain exportable but are not claimed active. Canonical page records supply matching top/bottom breadcrumbs and the page index; workspace links and local tabs have different scopes.
+
+**Checks:** See the [runnable references](examples/recording-review/README.md), [shared contract](examples/recording-review/SPEC.md) and [actual evidence](examples/recording-review/ACCEPTANCE.md). Relevant rules: AUDHD-01–12 as applicable. These implementations do not establish universal user benefit or replace application integration checks.
+
+## From configuration files to a useful dashboard
+
+**Before:** Every JSON key becomes a control; help repeats the key, and “Save” is presented as though it applies runtime changes immediately.
+
+**After:** Inspect the real loader, schema, defaults, precedence, dependencies, permissions and persistence path. Group by task/effect, show requested versus effective state and explain save/apply/restart separately. Keep useful technical details available without replacing plain-English summaries. Where facts remain unknown, mark them and continue supported work rather than inventing values or blocking on an optional preference questionnaire.
+
+**Checks:** Trace input through validation and persistence to effective behavior; test permissions, failure/recovery and return. Identify the evidence source for each material explanation. Relevant rules: AUDHD-01, 02, 04, 06, 09, 12, 13. The recording demo illustrates continuity; it does not implement a real configuration backend.

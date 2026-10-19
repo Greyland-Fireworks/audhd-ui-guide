@@ -1,0 +1,90 @@
+/* Shared presentation inputs, not shared application logic. Both references map
+   these roles to their own markup so the comparison uses the same visual starting
+   point. The fallback palette predates selectable skins; particular
+   hues and numerical settings are provisional choices, not an ideal AuDHD preset.
+   See ../SPEC.md for the context convention.
+   Token values alone do not prove contrast: check rendered foreground/surface
+   combinations, control states and supported system overrides. */
+:root {
+  color-scheme: dark;
+  --page: #111a20;
+  --panel: #1b282f;
+  --raised: #23353c;
+  --text: #f0efe5;
+  --secondary: #aebcbd;
+  --separator: #3b4b51;
+  --control-border: #8caaae;
+  /* One shared surface ties the selected source to the detail it controls. It is
+     not used for every card in the surrounding collection. */
+  --selected: #102d49;
+  --selected-text: #edf5ff;
+  /* Historical token name: the yellow edge now marks the demo boundary and
+     exclusion notice. Active card/detail edges use active-context-accent below;
+     reusing this yellow for them would weaken that dedicated relationship role. */
+  --selected-edge: #f1d76a;
+  /* Reserve this accent for the current card/detail titles, edges and connector.
+     Focus, the main action and errors have separate roles: working on an item,
+     interacting with a control and receiving an outcome are different states. */
+  --active-context-accent: #e2c5ff;
+  --focus: #a6d4db;
+  --action: #c5d991;
+  --action-text: #102027;
+  --error: #ffb5ac;
+}
+
+/* Choices are temporary page settings. Apply through container variables so a
+   presentation change neither rebuilds the form nor changes its business data.
+   Larger text is not a substitute for browser zoom; compact spacing must not
+   reduce the controls' target dimensions or remove labels and help. */
+.review-app {
+  --review-text-size: 1rem;
+  --review-group-gap: 1rem;
+}
+.review-app[data-text-size='larger'] { --review-text-size: 1.25rem; }
+.review-app[data-spacing='compact'] { --review-group-gap: 0.5rem; }
+
+/* Respect the user's system palette, even when distinct hues collapse. Native
+   controls, current text, repeated identity, edges and focus outlines must still
+   communicate the relationship. Do not opt out with forced-color-adjust: none. */
+@media (forced-colors: active) {
+  :root {
+    --page: Canvas;
+    --panel: Canvas;
+    --raised: Canvas;
+    --text: CanvasText;
+    --secondary: CanvasText;
+    --separator: CanvasText;
+    --control-border: ButtonText;
+    --selected: Canvas;
+    --selected-text: CanvasText;
+    --selected-edge: Highlight;
+    --active-context-accent: CanvasText;
+    --focus: Highlight;
+    --action: ButtonFace;
+    --action-text: ButtonText;
+    --error: CanvasText;
+  }
+}
+
+/* Adapter aliases retain existing component roles while consuming the standalone
+   skin contract. Apply at the document root so body margins and native popups
+   match too. System forced colors flow through the skin tokens automatically.
+   Sharing presentation values does not share either framework's state engine. */
+:root[data-skin] {
+  color-scheme: var(--ui-mode);
+  --page: var(--ui-page);
+  --panel: var(--ui-surface);
+  --raised: var(--ui-surface);
+  --text: var(--ui-text);
+  --secondary: var(--ui-muted);
+  --separator: var(--ui-border);
+  --control-border: var(--ui-control-border);
+  --selected: var(--ui-active-surface);
+  --selected-text: var(--ui-text);
+  --selected-edge: var(--ui-warning);
+  --active-context-accent: var(--ui-active-accent);
+  --focus: var(--ui-focus);
+  --action: var(--ui-action);
+  --action-text: var(--ui-on-action);
+  --error: var(--ui-danger);
+}

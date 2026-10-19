@@ -29,6 +29,8 @@ A proposed check is Pending until performed. A short review does not establish t
 - Assistive technologies and preferences actually tested:
 - Affected screens or modes, including shared styles; identify any not exercised:
 - Data retention and save locations:
+- Classification: adopted outcome, implementation example, preference or proposed extension:
+- Requested/effective appearance and unsupported profile choices:
 
 ## Procedure and results
 
@@ -44,6 +46,11 @@ Use Pass, Fail, Pending or Not applicable with a reason. Do not mark an unperfor
 | Save and confirm the saved version | | | |
 | Encounter failure and recover | | | |
 | Leave and resume | | | |
+| Connect selected source/detail, parent/children and action/result without color alone | | | |
+| Compare top/bottom breadcrumbs, workspace destinations and local views | | | |
+| Switch light/dark skins and text styles during pending work; preserve drafts, focus, filters and view | | | |
+| Import/preview/cancel/apply/export preferences; distinguish unsupported requests and storage boundaries | | | |
+| Compare pointer navigation focus with visible keyboard focus | | | |
 | Recover task meaning and unfinished work after returning without context | | | |
 | Complete with keyboard or other supported input | | | |
 | Use narrow layout and enlarged text | | | |

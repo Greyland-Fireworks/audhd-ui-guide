@@ -1,0 +1,854 @@
+/* Dashboard skins: 22 named palettes, with no runtime or external font dependency.
+   Apply data-skin to an app root; tokens inherit into HTML and inline SVG.
+   Flat, opaque surfaces keep reading and plot contrast predictable. These are
+   adapted palettes, not exact reproductions of decorative backgrounds.
+   Active context is persistent selection; focus is the current keyboard target.
+   Keep both cues, plus labels/borders, even when a user changes the skin. */
+[data-skin] {
+  --ui-font-body: system-ui, sans-serif;
+  --ui-font-heading: var(--ui-font-body);
+  --ui-font-display: var(--ui-font-body);
+  --ui-chart-surface: var(--ui-surface);
+  --ui-chart-label: var(--ui-text);
+  --ui-chart-grid: var(--ui-border);
+  --ui-chart-missing: var(--ui-muted);
+  color-scheme: var(--ui-mode);
+  color: var(--ui-text);
+  background: var(--ui-page);
+  font-family: var(--ui-font-body);
+}
+/* Opt-in typography is independent of palette. Skin display fonts are used
+   only in headings, never in dense data. No font download is triggered here. */
+[data-type="expressive"] { --ui-font-heading: var(--ui-font-display); }
+[data-type="serif"] { --ui-font-body: Georgia, serif; }
+[data-type="mono"] { --ui-font-body: ui-monospace, Consolas, monospace; }
+
+/* Obsidian — dark. */
+[data-skin="obsidian"] {
+  --ui-mode: dark;
+  --ui-page: #0B0D10;
+  --ui-surface: #11161C;
+  --ui-text: #F3F7FA;
+  --ui-muted: #B6C2CE;
+  --ui-border: #43484D;
+  --ui-control-border: #67707D;
+  --ui-action: #00E5FF;
+  --ui-on-action: #000000;
+  --ui-active-surface: #0F2930;
+  --ui-active-accent: #FFB86B;
+  --ui-focus: #8DBEFF;
+  --ui-success: #6AD5A4;
+  --ui-warning: #EAC76A;
+  --ui-danger: #FF9CBA;
+  --ui-chart-series-1: #00E5FF;
+  --ui-chart-series-2: #FFB86B;
+  --ui-chart-series-3: #BDA6F7;
+  --ui-chart-series-4: #70BFE4;
+  --ui-chart-series-5: #F3A6C8;
+  --ui-chart-series-6: #C4D48B;
+  --ui-chart-seq-1: #0F2F37;
+  --ui-chart-seq-2: #0C5865;
+  --ui-chart-seq-3: #088292;
+  --ui-chart-seq-4: #05ABBF;
+  --ui-chart-seq-5: #01D4ED;
+  --ui-chart-div-1: #70BFE4;
+  --ui-chart-div-2: #3C6276;
+  --ui-chart-div-3: #2C3137;
+  --ui-chart-div-4: #775769;
+  --ui-chart-div-5: #F3A6C8;
+  --ui-font-display: system-ui, sans-serif;
+}
+
+/* Paperwhite — light. */
+[data-skin="paperwhite"] {
+  --ui-mode: light;
+  --ui-page: #F7F1E7;
+  --ui-surface: #FFF9F1;
+  --ui-text: #201C18;
+  --ui-muted: #4D463E;
+  --ui-border: #CEC8C1;
+  --ui-control-border: #A67F58;
+  --ui-action: #735129;
+  --ui-on-action: #FFFFFF;
+  --ui-active-surface: #F2EADF;
+  --ui-active-accent: #865927;
+  --ui-focus: #163BD5;
+  --ui-success: #116944;
+  --ui-warning: #815000;
+  --ui-danger: #A90032;
+  --ui-chart-series-1: #735129;
+  --ui-chart-series-2: #865927;
+  --ui-chart-series-3: #733B9D;
+  --ui-chart-series-4: #006D90;
+  --ui-chart-series-5: #A92D67;
+  --ui-chart-series-6: #576B11;
+  --ui-chart-seq-1: #EEE5D9;
+  --ui-chart-seq-2: #D2C3B1;
+  --ui-chart-seq-3: #B6A289;
+  --ui-chart-seq-4: #9A8061;
+  --ui-chart-seq-5: #7E5E39;
+  --ui-chart-div-1: #006D90;
+  --ui-chart-div-2: #8CBAC5;
+  --ui-chart-div-3: #E4DED7;
+  --ui-chart-div-4: #D89DB3;
+  --ui-chart-div-5: #A92D67;
+  --ui-font-display: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+}
+
+/* Blueprint Dark — dark. */
+[data-skin="blueprint-dark"] {
+  --ui-mode: dark;
+  --ui-page: #06162D;
+  --ui-surface: #0B2B5A;
+  --ui-text: #EAF6FF;
+  --ui-muted: #C7DCED;
+  --ui-border: #3C587E;
+  --ui-control-border: #7FB8FF;
+  --ui-action: #7CFFCB;
+  --ui-on-action: #000000;
+  --ui-active-surface: #153E64;
+  --ui-active-accent: #FFE066;
+  --ui-focus: #8DBEFF;
+  --ui-success: #6AD5A4;
+  --ui-warning: #EAC76A;
+  --ui-danger: #FF9CBA;
+  --ui-chart-series-1: #7CFFCB;
+  --ui-chart-series-2: #FFE066;
+  --ui-chart-series-3: #BDA6F7;
+  --ui-chart-series-4: #70BFE4;
+  --ui-chart-series-5: #F3A6C8;
+  --ui-chart-series-6: #C4D48B;
+  --ui-chart-seq-1: #194468;
+  --ui-chart-seq-2: #2F6F7E;
+  --ui-chart-seq-3: #469995;
+  --ui-chart-seq-4: #5CC4AB;
+  --ui-chart-seq-5: #73EEC2;
+  --ui-chart-div-1: #70BFE4;
+  --ui-chart-div-2: #386E98;
+  --ui-chart-div-3: #26436E;
+  --ui-chart-div-4: #73628C;
+  --ui-chart-div-5: #F3A6C8;
+  --ui-font-display: system-ui, sans-serif;
+}
+
+/* Blueprint Light — light. */
+[data-skin="blueprint-light"] {
+  --ui-mode: light;
+  --ui-page: #F8FBFF;
+  --ui-surface: #FFFFFF;
+  --ui-text: #0B1D3A;
+  --ui-muted: #24486A;
+  --ui-border: #C9CDD4;
+  --ui-control-border: #1B4F9C;
+  --ui-action: #1B4F9C;
+  --ui-on-action: #FFFFFF;
+  --ui-active-surface: #EAEFF6;
+  --ui-active-accent: #355F00;
+  --ui-focus: #163BD5;
+  --ui-success: #116944;
+  --ui-warning: #815000;
+  --ui-danger: #A90032;
+  --ui-chart-series-1: #1B4F9C;
+  --ui-chart-series-2: #355F00;
+  --ui-chart-series-3: #733B9D;
+  --ui-chart-series-4: #006D90;
+  --ui-chart-series-5: #A92D67;
+  --ui-chart-series-6: #576B11;
+  --ui-chart-seq-1: #E4EAF3;
+  --ui-chart-seq-2: #B6C7DF;
+  --ui-chart-seq-3: #88A3CC;
+  --ui-chart-seq-4: #5B80B8;
+  --ui-chart-seq-5: #2D5DA4;
+  --ui-chart-div-1: #006D90;
+  --ui-chart-div-2: #8CBDCD;
+  --ui-chart-div-3: #E2E4E7;
+  --ui-chart-div-4: #D8A0BB;
+  --ui-chart-div-5: #A92D67;
+  --ui-font-display: system-ui, sans-serif;
+}
+
+/* Bubblegum — light. */
+[data-skin="bubblegum"] {
+  --ui-mode: light;
+  --ui-page: #FFF3FB;
+  --ui-surface: #FFF8FC;
+  --ui-text: #361024;
+  --ui-muted: #6F3653;
+  --ui-border: #D3C5CC;
+  --ui-control-border: #CE176F;
+  --ui-action: #9E005D;
+  --ui-on-action: #FFFFFF;
+  --ui-active-surface: #F6E2EE;
+  --ui-active-accent: #7A2451;
+  --ui-focus: #163BD5;
+  --ui-success: #116944;
+  --ui-warning: #815000;
+  --ui-danger: #A90032;
+  --ui-chart-series-1: #9E005D;
+  --ui-chart-series-2: #7A2451;
+  --ui-chart-series-3: #733B9D;
+  --ui-chart-series-4: #006D90;
+  --ui-chart-series-5: #A92D67;
+  --ui-chart-series-6: #576B11;
+  --ui-chart-seq-1: #F3DAE9;
+  --ui-chart-seq-2: #E0A9C9;
+  --ui-chart-seq-3: #CD77A9;
+  --ui-chart-seq-4: #B9458A;
+  --ui-chart-seq-5: #A6146A;
+  --ui-chart-div-1: #006D90;
+  --ui-chart-div-2: #8CB9CB;
+  --ui-chart-div-3: #E7DCE2;
+  --ui-chart-div-4: #D89DB9;
+  --ui-chart-div-5: #A92D67;
+  --ui-font-display: 'Bubblegum Sans', 'Arial Rounded MT Bold', 'Trebuchet MS', sans-serif;
+}
+
+/* Oxfordyalevardton — light. */
+[data-skin="oxfordyalevardton"] {
+  --ui-mode: light;
+  --ui-page: #EEF3E8;
+  --ui-surface: #F8F4EA;
+  --ui-text: #17251C;
+  --ui-muted: #232C24;
+  --ui-border: #C6C6BD;
+  --ui-control-border: #173F35;
+  --ui-action: #003126;
+  --ui-on-action: #FFFFFF;
+  --ui-active-surface: #E2E2D8;
+  --ui-active-accent: #4A5F21;
+  --ui-focus: #163BD5;
+  --ui-success: #116944;
+  --ui-warning: #815000;
+  --ui-danger: #A90032;
+  --ui-chart-series-1: #003126;
+  --ui-chart-series-2: #4A5F21;
+  --ui-chart-series-3: #733B9D;
+  --ui-chart-series-4: #006D90;
+  --ui-chart-series-5: #A92D67;
+  --ui-chart-series-6: #576B11;
+  --ui-chart-seq-1: #DADDD2;
+  --ui-chart-seq-2: #A9B6AB;
+  --ui-chart-seq-3: #778F84;
+  --ui-chart-seq-4: #45685D;
+  --ui-chart-seq-5: #144136;
+  --ui-chart-div-1: #006D90;
+  --ui-chart-div-2: #88B7C2;
+  --ui-chart-div-3: #DDDBD1;
+  --ui-chart-div-4: #D49AAF;
+  --ui-chart-div-5: #A92D67;
+  --ui-font-display: Graduate, Baskerville, Georgia, serif;
+}
+
+/* Pericles — light. */
+[data-skin="pericles"] {
+  --ui-mode: light;
+  --ui-page: #EAF6F5;
+  --ui-surface: #F4F0E4;
+  --ui-text: #102E3A;
+  --ui-muted: #33545A;
+  --ui-border: #C2C5BF;
+  --ui-control-border: #005D73;
+  --ui-action: #00566B;
+  --ui-on-action: #FFFFFF;
+  --ui-active-surface: #DEE2D9;
+  --ui-active-accent: #8F3329;
+  --ui-focus: #163BD5;
+  --ui-success: #116944;
+  --ui-warning: #815000;
+  --ui-danger: #A90032;
+  --ui-chart-series-1: #00566B;
+  --ui-chart-series-2: #8F3329;
+  --ui-chart-series-3: #733B9D;
+  --ui-chart-series-4: #006D90;
+  --ui-chart-series-5: #A92D67;
+  --ui-chart-series-6: #576B11;
+  --ui-chart-seq-1: #D7DED5;
+  --ui-chart-seq-2: #A6BFBD;
+  --ui-chart-seq-3: #75A0A5;
+  --ui-chart-seq-4: #44818D;
+  --ui-chart-seq-5: #146275;
+  --ui-chart-div-1: #006D90;
+  --ui-chart-div-2: #86B5BE;
+  --ui-chart-div-3: #D9D9D0;
+  --ui-chart-div-4: #D298AC;
+  --ui-chart-div-5: #A92D67;
+  --ui-font-display: Cinzel, 'Palatino Linotype', Georgia, serif;
+}
+
+/* SPQR — light. */
+[data-skin="spqr"] {
+  --ui-mode: light;
+  --ui-page: #F1DEC0;
+  --ui-surface: #F7E8C8;
+  --ui-text: #25140A;
+  --ui-muted: #3E2B18;
+  --ui-border: #C9B99E;
+  --ui-control-border: #7A0019;
+  --ui-action: #660015;
+  --ui-on-action: #FFFFFF;
+  --ui-active-surface: #EAD3B8;
+  --ui-active-accent: #6B4A17;
+  --ui-focus: #163BD5;
+  --ui-success: #116944;
+  --ui-warning: #815000;
+  --ui-danger: #A90032;
+  --ui-chart-series-1: #660015;
+  --ui-chart-series-2: #6B4A17;
+  --ui-chart-series-3: #733B9D;
+  --ui-chart-series-4: #006D90;
+  --ui-chart-series-5: #A92D67;
+  --ui-chart-series-6: #576B11;
+  --ui-chart-seq-1: #E6CCB3;
+  --ui-chart-seq-2: #C99E8F;
+  --ui-chart-seq-3: #AC6F6B;
+  --ui-chart-seq-4: #8F4147;
+  --ui-chart-seq-5: #721323;
+  --ui-chart-div-1: #006D90;
+  --ui-chart-div-2: #88B1AF;
+  --ui-chart-div-3: #DECFB1;
+  --ui-chart-div-4: #D4949C;
+  --ui-chart-div-5: #A92D67;
+  --ui-font-display: Cinzel, 'Trajan Pro', Georgia, serif;
+}
+
+/* Starship — dark. */
+[data-skin="starship"] {
+  --ui-mode: dark;
+  --ui-page: #020814;
+  --ui-surface: #07111F;
+  --ui-text: #EAF8FF;
+  --ui-muted: #A9CDE3;
+  --ui-border: #394450;
+  --ui-control-border: #A27CFF;
+  --ui-action: #7DF9FF;
+  --ui-on-action: #000000;
+  --ui-active-surface: #122633;
+  --ui-active-accent: #C0A7FF;
+  --ui-focus: #8DBEFF;
+  --ui-success: #6AD5A4;
+  --ui-warning: #EAC76A;
+  --ui-danger: #FF9CBA;
+  --ui-chart-series-1: #7DF9FF;
+  --ui-chart-series-2: #C0A7FF;
+  --ui-chart-series-3: #BDA6F7;
+  --ui-chart-series-4: #70BFE4;
+  --ui-chart-series-5: #F3A6C8;
+  --ui-chart-series-6: #C4D48B;
+  --ui-chart-seq-1: #152D3A;
+  --ui-chart-seq-2: #2D5B67;
+  --ui-chart-seq-3: #448A93;
+  --ui-chart-seq-4: #5CB8C0;
+  --ui-chart-seq-5: #74E6ED;
+  --ui-chart-div-1: #70BFE4;
+  --ui-chart-div-2: #365F78;
+  --ui-chart-div-3: #222D3A;
+  --ui-chart-div-4: #71546B;
+  --ui-chart-div-5: #F3A6C8;
+  --ui-font-display: Orbitron, Rajdhani, 'Arial Narrow', sans-serif;
+}
+
+/* Cyberpunk — dark. */
+[data-skin="cyberpunk"] {
+  --ui-mode: dark;
+  --ui-page: #000000;
+  --ui-surface: #0B0B12;
+  --ui-text: #E0E0FF;
+  --ui-muted: #A0DFFF;
+  --ui-border: #3A3A46;
+  --ui-control-border: #FF008D;
+  --ui-action: #00FF9F;
+  --ui-on-action: #000000;
+  --ui-active-surface: #0A211F;
+  --ui-active-accent: #FF4FB2;
+  --ui-focus: #8DBEFF;
+  --ui-success: #6AD5A4;
+  --ui-warning: #EAC76A;
+  --ui-danger: #FF9CBA;
+  --ui-chart-series-1: #00FF9F;
+  --ui-chart-series-2: #FF4FB2;
+  --ui-chart-series-3: #BDA6F7;
+  --ui-chart-series-4: #70BFE4;
+  --ui-chart-series-5: #F3A6C8;
+  --ui-chart-series-6: #C4D48B;
+  --ui-chart-seq-1: #0A2823;
+  --ui-chart-seq-2: #07593F;
+  --ui-chart-seq-3: #058A5B;
+  --ui-chart-seq-4: #03BB78;
+  --ui-chart-seq-5: #01EB94;
+  --ui-chart-div-1: #70BFE4;
+  --ui-chart-div-2: #385C71;
+  --ui-chart-div-3: #25252E;
+  --ui-chart-div-4: #735164;
+  --ui-chart-div-5: #F3A6C8;
+  --ui-font-display: Orbitron, Rajdhani, 'Arial Narrow', 'Trebuchet MS', sans-serif;
+}
+
+/* Guillermo — dark. */
+[data-skin="guillermo"] {
+  --ui-mode: dark;
+  --ui-page: #070608;
+  --ui-surface: #120F14;
+  --ui-text: #F1E7D2;
+  --ui-muted: #BFAF9B;
+  --ui-border: #433F3E;
+  --ui-control-border: #C99754;
+  --ui-action: #E0B56A;
+  --ui-on-action: #000000;
+  --ui-active-surface: #251E1C;
+  --ui-active-accent: #63B7A7;
+  --ui-focus: #8DBEFF;
+  --ui-success: #6AD5A4;
+  --ui-warning: #EAC76A;
+  --ui-danger: #FF9CBA;
+  --ui-chart-series-1: #E0B56A;
+  --ui-chart-series-2: #63B7A7;
+  --ui-chart-series-3: #BDA6F7;
+  --ui-chart-series-4: #70BFE4;
+  --ui-chart-series-5: #F3A6C8;
+  --ui-chart-series-6: #C4D48B;
+  --ui-chart-seq-1: #2B231E;
+  --ui-chart-seq-2: #544430;
+  --ui-chart-seq-3: #7D6541;
+  --ui-chart-seq-4: #A68752;
+  --ui-chart-seq-5: #D0A863;
+  --ui-chart-div-1: #70BFE4;
+  --ui-chart-div-2: #3C5E72;
+  --ui-chart-div-3: #2D292B;
+  --ui-chart-div-4: #775365;
+  --ui-chart-div-5: #F3A6C8;
+  --ui-font-display: Cinzel, 'Libre Baskerville', Georgia, serif;
+}
+
+/* Minimalist — light. */
+[data-skin="minimalist"] {
+  --ui-mode: light;
+  --ui-page: #FFFFFF;
+  --ui-surface: #FFFFFF;
+  --ui-text: #222222;
+  --ui-muted: #555555;
+  --ui-border: #CECECE;
+  --ui-control-border: #555555;
+  --ui-action: #333333;
+  --ui-on-action: #FFFFFF;
+  --ui-active-surface: #EDEDED;
+  --ui-active-accent: #666666;
+  --ui-focus: #163BD5;
+  --ui-success: #116944;
+  --ui-warning: #815000;
+  --ui-danger: #A90032;
+  --ui-chart-series-1: #333333;
+  --ui-chart-series-2: #666666;
+  --ui-chart-series-3: #733B9D;
+  --ui-chart-series-4: #006D90;
+  --ui-chart-series-5: #A92D67;
+  --ui-chart-series-6: #576B11;
+  --ui-chart-seq-1: #E7E7E7;
+  --ui-chart-seq-2: #BEBEBE;
+  --ui-chart-seq-3: #959595;
+  --ui-chart-seq-4: #6C6C6C;
+  --ui-chart-seq-5: #434343;
+  --ui-chart-div-1: #006D90;
+  --ui-chart-div-2: #8CBDCD;
+  --ui-chart-div-3: #E4E4E4;
+  --ui-chart-div-4: #D8A0BB;
+  --ui-chart-div-5: #A92D67;
+  --ui-font-display: system-ui, sans-serif;
+}
+
+/* Neapolitan — light. */
+[data-skin="neapolitan"] {
+  --ui-mode: light;
+  --ui-page: #FFF4E6;
+  --ui-surface: #FFFAF2;
+  --ui-text: #4B2E2B;
+  --ui-muted: #684836;
+  --ui-border: #D7CDC6;
+  --ui-control-border: #CD667C;
+  --ui-action: #8C2C48;
+  --ui-on-action: #FFFFFF;
+  --ui-active-surface: #F5E7E3;
+  --ui-active-accent: #855300;
+  --ui-focus: #163BD5;
+  --ui-success: #116944;
+  --ui-warning: #815000;
+  --ui-danger: #A90032;
+  --ui-chart-series-1: #8C2C48;
+  --ui-chart-series-2: #855300;
+  --ui-chart-series-3: #733B9D;
+  --ui-chart-series-4: #006D90;
+  --ui-chart-series-5: #A92D67;
+  --ui-chart-series-6: #576B11;
+  --ui-chart-seq-1: #F1E1DE;
+  --ui-chart-seq-2: #DAB8BC;
+  --ui-chart-seq-3: #C38F9A;
+  --ui-chart-seq-4: #AC6678;
+  --ui-chart-seq-5: #953C56;
+  --ui-chart-div-1: #006D90;
+  --ui-chart-div-2: #8CBBC6;
+  --ui-chart-div-3: #E9E2DA;
+  --ui-chart-div-4: #D89EB3;
+  --ui-chart-div-5: #A92D67;
+  --ui-font-display: 'Bookman Old Style', Georgia, Palatino, serif;
+}
+
+/* Noir Bureau — dark. */
+[data-skin="noir-bureau"] {
+  --ui-mode: dark;
+  --ui-page: #000000;
+  --ui-surface: #101010;
+  --ui-text: #EEEEEE;
+  --ui-muted: #BBBBBB;
+  --ui-border: #414141;
+  --ui-control-border: #AAAAAA;
+  --ui-action: #FF6B6B;
+  --ui-on-action: #000000;
+  --ui-active-surface: #261818;
+  --ui-active-accent: #BBBBBB;
+  --ui-focus: #8DBEFF;
+  --ui-success: #6AD5A4;
+  --ui-warning: #EAC76A;
+  --ui-danger: #FF9CBA;
+  --ui-chart-series-1: #FF6B6B;
+  --ui-chart-series-2: #BBBBBB;
+  --ui-chart-series-3: #BDA6F7;
+  --ui-chart-series-4: #70BFE4;
+  --ui-chart-series-5: #F3A6C8;
+  --ui-chart-series-6: #C4D48B;
+  --ui-chart-seq-1: #2D1B1B;
+  --ui-chart-seq-2: #5C2D2D;
+  --ui-chart-seq-3: #8C3F3F;
+  --ui-chart-seq-4: #BC5252;
+  --ui-chart-seq-5: #EC6464;
+  --ui-chart-div-1: #70BFE4;
+  --ui-chart-div-2: #3B5F6F;
+  --ui-chart-div-3: #2B2B2B;
+  --ui-chart-div-4: #765463;
+  --ui-chart-div-5: #F3A6C8;
+  --ui-font-display: system-ui, sans-serif;
+}
+
+/* Sunrise — light. */
+[data-skin="sunrise"] {
+  --ui-mode: light;
+  --ui-page: #FFF5E1;
+  --ui-surface: #FFF9ED;
+  --ui-text: #32292F;
+  --ui-muted: #4F4A4F;
+  --ui-border: #D2CBC3;
+  --ui-control-border: #0E79B2;
+  --ui-action: #0B5882;
+  --ui-on-action: #FFFFFF;
+  --ui-active-surface: #E9EBE3;
+  --ui-active-accent: #8A4F0A;
+  --ui-focus: #163BD5;
+  --ui-success: #116944;
+  --ui-warning: #815000;
+  --ui-danger: #A90032;
+  --ui-chart-series-1: #0B5882;
+  --ui-chart-series-2: #8A4F0A;
+  --ui-chart-series-3: #733B9D;
+  --ui-chart-series-4: #006D90;
+  --ui-chart-series-5: #A92D67;
+  --ui-chart-series-6: #576B11;
+  --ui-chart-seq-1: #E2E6E0;
+  --ui-chart-seq-2: #B1C5CB;
+  --ui-chart-seq-3: #80A5B5;
+  --ui-chart-seq-4: #4F85A0;
+  --ui-chart-seq-5: #1F658B;
+  --ui-chart-div-1: #006D90;
+  --ui-chart-div-2: #8CBAC3;
+  --ui-chart-div-3: #E6E0D6;
+  --ui-chart-div-4: #D89DB1;
+  --ui-chart-div-5: #A92D67;
+  --ui-font-display: system-ui, sans-serif;
+}
+
+/* Superserial — dark. */
+[data-skin="superserial"] {
+  --ui-mode: dark;
+  --ui-page: #001100;
+  --ui-surface: #032103;
+  --ui-text: #CCFF99;
+  --ui-muted: #99FF66;
+  --ui-border: #2F5224;
+  --ui-control-border: #CCFF66;
+  --ui-action: #D8FF80;
+  --ui-on-action: #000000;
+  --ui-active-surface: #16350E;
+  --ui-active-accent: #99FF66;
+  --ui-focus: #8DBEFF;
+  --ui-success: #6AD5A4;
+  --ui-warning: #EAC76A;
+  --ui-danger: #FF9CBA;
+  --ui-chart-series-1: #D8FF80;
+  --ui-chart-series-2: #99FF66;
+  --ui-chart-series-3: #BDA6F7;
+  --ui-chart-series-4: #70BFE4;
+  --ui-chart-series-5: #F3A6C8;
+  --ui-chart-series-6: #C4D48B;
+  --ui-chart-seq-1: #1D3C12;
+  --ui-chart-seq-2: #47682B;
+  --ui-chart-seq-3: #729444;
+  --ui-chart-seq-4: #9CC15D;
+  --ui-chart-seq-5: #C7ED76;
+  --ui-chart-div-1: #70BFE4;
+  --ui-chart-div-2: #346868;
+  --ui-chart-div-3: #1B3C15;
+  --ui-chart-div-4: #6F5D5C;
+  --ui-chart-div-5: #F3A6C8;
+  --ui-font-display: 'Press Start 2P', 'VT323', 'Lucida Console', Monaco, monospace;
+}
+
+/* Underwater — dark. */
+[data-skin="underwater"] {
+  --ui-mode: dark;
+  --ui-page: #04141A;
+  --ui-surface: #09232C;
+  --ui-text: #DDF7F5;
+  --ui-muted: #BDE3DF;
+  --ui-border: #385258;
+  --ui-control-border: #3B8396;
+  --ui-action: #66F4E7;
+  --ui-on-action: #000000;
+  --ui-active-surface: #11363D;
+  --ui-active-accent: #A7D9D4;
+  --ui-focus: #8DBEFF;
+  --ui-success: #6AD5A4;
+  --ui-warning: #EAC76A;
+  --ui-danger: #FF9CBA;
+  --ui-chart-series-1: #66F4E7;
+  --ui-chart-series-2: #A7D9D4;
+  --ui-chart-series-3: #BDA6F7;
+  --ui-chart-series-4: #70BFE4;
+  --ui-chart-series-5: #F3A6C8;
+  --ui-chart-series-6: #C4D48B;
+  --ui-chart-seq-1: #143C42;
+  --ui-chart-seq-2: #276668;
+  --ui-chart-seq-3: #39908D;
+  --ui-chart-seq-4: #4CB9B3;
+  --ui-chart-seq-5: #5FE3D8;
+  --ui-chart-div-1: #70BFE4;
+  --ui-chart-div-2: #37697F;
+  --ui-chart-div-3: #223C44;
+  --ui-chart-div-4: #725E72;
+  --ui-chart-div-5: #F3A6C8;
+  --ui-font-display: system-ui, sans-serif;
+}
+
+/* USSR Black — dark. */
+[data-skin="ussr-black"] {
+  --ui-mode: dark;
+  --ui-page: #0B0B0B;
+  --ui-surface: #151515;
+  --ui-text: #F0E6D0;
+  --ui-muted: #B0A38E;
+  --ui-border: #45433E;
+  --ui-control-border: #D7261E;
+  --ui-action: #FFD166;
+  --ui-on-action: #000000;
+  --ui-active-surface: #2A261C;
+  --ui-active-accent: #E36660;
+  --ui-focus: #8DBEFF;
+  --ui-success: #6AD5A4;
+  --ui-warning: #EAC76A;
+  --ui-danger: #FF9CBA;
+  --ui-chart-series-1: #FFD166;
+  --ui-chart-series-2: #DE4B44;
+  --ui-chart-series-3: #BDA6F7;
+  --ui-chart-series-4: #70BFE4;
+  --ui-chart-series-5: #F3A6C8;
+  --ui-chart-series-6: #C4D48B;
+  --ui-chart-seq-1: #312C1F;
+  --ui-chart-seq-2: #60512F;
+  --ui-chart-seq-3: #8F773F;
+  --ui-chart-seq-4: #BD9C4F;
+  --ui-chart-seq-5: #ECC260;
+  --ui-chart-div-1: #70BFE4;
+  --ui-chart-div-2: #3E6272;
+  --ui-chart-div-3: #2F2E2B;
+  --ui-chart-div-4: #795666;
+  --ui-chart-div-5: #F3A6C8;
+  --ui-font-display: 'Arial Black', Impact, 'Franklin Gothic Heavy', sans-serif;
+}
+
+/* USSR Red — dark. */
+[data-skin="ussr-red"] {
+  --ui-mode: dark;
+  --ui-page: #1B0505;
+  --ui-surface: #2B0909;
+  --ui-text: #F2E6C9;
+  --ui-muted: #D4C4A0;
+  --ui-border: #573A33;
+  --ui-control-border: #B8892A;
+  --ui-action: #FFE08A;
+  --ui-on-action: #000000;
+  --ui-active-surface: #3E1C15;
+  --ui-active-accent: #CBB78B;
+  --ui-focus: #8DBEFF;
+  --ui-success: #6AD5A4;
+  --ui-warning: #EAC76A;
+  --ui-danger: #FF9CBA;
+  --ui-chart-series-1: #FFE08A;
+  --ui-chart-series-2: #CBB78B;
+  --ui-chart-series-3: #BDA6F7;
+  --ui-chart-series-4: #70BFE4;
+  --ui-chart-series-5: #F3A6C8;
+  --ui-chart-series-6: #C4D48B;
+  --ui-chart-seq-1: #442318;
+  --ui-chart-seq-2: #6F4E32;
+  --ui-chart-seq-3: #99794C;
+  --ui-chart-seq-4: #C4A466;
+  --ui-chart-seq-5: #EECF80;
+  --ui-chart-div-1: #70BFE4;
+  --ui-chart-div-2: #4A5B6C;
+  --ui-chart-div-3: #432420;
+  --ui-chart-div-4: #85505F;
+  --ui-chart-div-5: #F3A6C8;
+  --ui-font-display: 'Arial Black', Impact, 'Franklin Gothic Heavy', sans-serif;
+}
+
+/* USSR Snow — light. */
+[data-skin="ussr-snow"] {
+  --ui-mode: light;
+  --ui-page: #F5F2EA;
+  --ui-surface: #FFFFFF;
+  --ui-text: #2B2B2B;
+  --ui-muted: #5B5147;
+  --ui-border: #D0D0D0;
+  --ui-control-border: #A4001A;
+  --ui-action: #8F0016;
+  --ui-on-action: #FFFFFF;
+  --ui-active-surface: #F5E8EA;
+  --ui-active-accent: #6B4E1F;
+  --ui-focus: #163BD5;
+  --ui-success: #116944;
+  --ui-warning: #815000;
+  --ui-danger: #A90032;
+  --ui-chart-series-1: #8F0016;
+  --ui-chart-series-2: #6B4E1F;
+  --ui-chart-series-3: #733B9D;
+  --ui-chart-series-4: #006D90;
+  --ui-chart-series-5: #A92D67;
+  --ui-chart-series-6: #576B11;
+  --ui-chart-seq-1: #F2E0E3;
+  --ui-chart-seq-2: #DBADB4;
+  --ui-chart-seq-3: #C57A86;
+  --ui-chart-seq-4: #AE4757;
+  --ui-chart-seq-5: #981429;
+  --ui-chart-div-1: #006D90;
+  --ui-chart-div-2: #8CBDCD;
+  --ui-chart-div-3: #E6E6E6;
+  --ui-chart-div-4: #D8A0BB;
+  --ui-chart-div-5: #A92D67;
+  --ui-font-display: 'Arial Black', Impact, 'Franklin Gothic Heavy', sans-serif;
+}
+
+/* Vaporwave — dark. */
+[data-skin="vaporwave"] {
+  --ui-mode: dark;
+  --ui-page: #1B0B2E;
+  --ui-surface: #24123A;
+  --ui-text: #F6E6FF;
+  --ui-muted: #EDD6FF;
+  --ui-border: #524165;
+  --ui-control-border: #6EF7FF;
+  --ui-action: #6EF7FF;
+  --ui-on-action: #000000;
+  --ui-active-surface: #2B274C;
+  --ui-active-accent: #FFD36A;
+  --ui-focus: #8DBEFF;
+  --ui-success: #6AD5A4;
+  --ui-warning: #EAC76A;
+  --ui-danger: #FF9CBA;
+  --ui-chart-series-1: #6EF7FF;
+  --ui-chart-series-2: #FFD36A;
+  --ui-chart-series-3: #BDA6F7;
+  --ui-chart-series-4: #70BFE4;
+  --ui-chart-series-5: #F3A6C8;
+  --ui-chart-series-6: #C4D48B;
+  --ui-chart-seq-1: #2D2D52;
+  --ui-chart-seq-2: #3C5B79;
+  --ui-chart-seq-3: #4A89A0;
+  --ui-chart-seq-4: #59B7C8;
+  --ui-chart-seq-5: #68E5EF;
+  --ui-chart-div-1: #70BFE4;
+  --ui-chart-div-2: #466086;
+  --ui-chart-div-3: #3D2B52;
+  --ui-chart-div-4: #81557A;
+  --ui-chart-div-5: #F3A6C8;
+  --ui-font-display: 'Press Start 2P', 'VT323', 'Lucida Console', Monaco, monospace;
+}
+
+/* Zebra Pop — light. */
+[data-skin="zebra-pop"] {
+  --ui-mode: light;
+  --ui-page: #FFF8EF;
+  --ui-surface: #FFFDF8;
+  --ui-text: #141316;
+  --ui-muted: #3F3943;
+  --ui-border: #CBCAC6;
+  --ui-control-border: #363234;
+  --ui-action: #78003D;
+  --ui-on-action: #FFFFFF;
+  --ui-active-surface: #F3E6E7;
+  --ui-active-accent: #6F2DFF;
+  --ui-focus: #163BD5;
+  --ui-success: #116944;
+  --ui-warning: #815000;
+  --ui-danger: #A90032;
+  --ui-chart-series-1: #78003D;
+  --ui-chart-series-2: #6F2DFF;
+  --ui-chart-series-3: #733B9D;
+  --ui-chart-series-4: #006D90;
+  --ui-chart-series-5: #A92D67;
+  --ui-chart-series-6: #576B11;
+  --ui-chart-seq-1: #EFDFE2;
+  --ui-chart-seq-2: #D4ACBC;
+  --ui-chart-seq-3: #B97997;
+  --ui-chart-seq-4: #9E4771;
+  --ui-chart-seq-5: #83144C;
+  --ui-chart-div-1: #006D90;
+  --ui-chart-div-2: #8CBCC9;
+  --ui-chart-div-3: #E3E1DD;
+  --ui-chart-div-4: #D89FB7;
+  --ui-chart-div-5: #A92D67;
+  --ui-font-display: 'Arial Black', 'Trebuchet MS', 'Franklin Gothic Heavy', sans-serif;
+}
+
+/* Small opt-in hooks, not a component library. Layout remains the adapter's job.
+   Share the active surface/title between a selected source and its detail panel.
+   The border and explicit current label preserve meaning without hue perception. */
+.ui-panel { background: var(--ui-surface); border: 1px solid var(--ui-border); }
+.ui-active { background: var(--ui-active-surface); border-inline-start: 4px solid var(--ui-active-accent); }
+.ui-active-title { color: var(--ui-active-accent); }
+.ui-muted { color: var(--ui-muted); }
+.ui-action { background: var(--ui-action); color: var(--ui-on-action); }
+.ui-skin :focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 4px; }
+.ui-chart { background: var(--ui-chart-surface); color: var(--ui-chart-label); }
+.ui-chart text { fill: currentColor; font-family: var(--ui-font-body); }
+.ui-chart .grid { stroke: var(--ui-chart-grid); }
+/* Stable series IDs must retain their category mapping when sorting/filtering.
+   Supply labels and marker shapes/dashes too: six hues are not six guarantees
+   of perceptual separation. Low ramp values need borders or numeric labels. */
+.ui-chart [data-series="1"] { fill: var(--ui-chart-series-1); stroke: var(--ui-chart-series-1); }
+.ui-chart [data-series="2"] { fill: var(--ui-chart-series-2); stroke: var(--ui-chart-series-2); }
+.ui-chart [data-series="3"] { fill: var(--ui-chart-series-3); stroke: var(--ui-chart-series-3); }
+.ui-chart [data-series="4"] { fill: var(--ui-chart-series-4); stroke: var(--ui-chart-series-4); }
+.ui-chart [data-series="5"] { fill: var(--ui-chart-series-5); stroke: var(--ui-chart-series-5); }
+.ui-chart [data-series="6"] { fill: var(--ui-chart-series-6); stroke: var(--ui-chart-series-6); }
+.ui-chart .line { fill: none; stroke-width: 3; }
+.ui-chart .line[data-series="2"] { stroke-dasharray: 8 5; }
+.ui-chart [data-current="true"] { stroke: var(--ui-text); stroke-width: 3; }
+/* Let the OS supply colors. Mark outlines, labels and dash patterns survive;
+   numeric tables remain available when filled ramps collapse in forced colors. */
+@media (forced-colors: active) {
+  [data-skin] {
+    --ui-page: Canvas; --ui-surface: Canvas; --ui-active-surface: Canvas;
+    --ui-text: CanvasText; --ui-muted: CanvasText; --ui-border: CanvasText;
+    --ui-control-border: ButtonText; --ui-action: ButtonFace;
+    --ui-on-action: ButtonText; --ui-active-accent: Highlight; --ui-focus: Highlight;
+    --ui-success: CanvasText; --ui-warning: CanvasText; --ui-danger: CanvasText;
+  }
+  .ui-chart [data-series] { fill: CanvasText; stroke: CanvasText; }
+  .ui-chart .line { fill: none; }
+}

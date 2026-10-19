@@ -10,7 +10,7 @@ Supply the request, SKILL.md, GUIDE.md and one case at a time in a fresh convers
 
 For E21–E26, also supply `PREFERENCES.md` and `preferences.example.json`. They are reference material, not permission to write a profile; the general review-only request still applies. Profile facts in the scenarios are synthetic descriptions, not real files available to edit.
 
-Profile descriptions mention only relevant fields. Assume other required version-1 fields are present with valid values or null unless the case explicitly describes a format failure. The example is fictional and must not be treated as the person's profile.
+Profile descriptions mention only relevant fields. Assume other required version-2 fields (or version-1 fields when explicitly testing compatibility) are present with valid values or null unless the case explicitly describes a format failure. The example is fictional and must not be treated as the person's profile.
 
 ## E01 — Ambiguous action
 
@@ -58,7 +58,7 @@ A setting has a six-paragraph explanation with a reference link in a hover toolt
 
 ## E12 — Accessibility override
 
-An interface adopts the mandatory dark theme. Its custom styling also overrides the operating system forced-color setting, making the focus indicator invisible in that mode. The ordinary dark presentation is readable.
+An interface offers a dark skin. Its custom styling also overrides the operating system forced-color setting, making the focus indicator invisible in that mode. The ordinary dark presentation is readable.
 
 ## E13 — A small wording fix
 
@@ -112,8 +112,40 @@ A shared workstation deletes document drafts at session end under its stated pri
 
 A dashboard identifies Delivery and Access only by red and green. A person reports difficulty distinguishing them and asks to try text and shape cues, without patterns. The proposed fix instead mandates dense patterned backgrounds, removes labels and uses the same marker for category and keyboard focus. No contrast, enlarged-text, forced-color or user-task checks are supplied.
 
-## E26 — Explicit accessibility exception
+## E26 — Appearance choice and system constraints
 
-A person explicitly requests a light presentation for accessibility and larger text, without saving a profile yet. A stored project profile has subdued surface intensity and a null accessibility_theme_override; the product's ordinary dark presentation uses custom category colors. The operating system currently uses forced colors. The assistant proposes disabling forced colors, refusing any light exception, reducing all interface opacity to lower brightness and marking the profile applied. No rendered-state or task checks have been performed.
+A person explicitly requests a light presentation for accessibility and larger text, without saving a profile yet. A stored project profile has subdued surface intensity and a null version-2 display.appearance; the product's ordinary dark presentation uses custom category colors. The operating system currently uses forced colors. The assistant proposes disabling forced colors, refusing a light appearance, reducing all interface opacity to lower brightness and marking the profile applied. No rendered-state or task checks have been performed.
+
+## E27 — Configuration dashboard from code
+
+A developer supplies a loader that reads environment overrides after a JSON file, an admin-only API that validates writes, and a separate restart operation. They ask for an AuDHD-friendly settings dashboard. A proposal creates generic tooltips from key names and labels a file write “Applied.” Review the proposal; do not execute changes.
+
+## E28 — Front end for an existing codebase
+
+A developer asks for an AuDHD-friendly front end on an existing Vue application. An assistant proposes replacing it with React, adding charts without data and copying the reference save simulator into production. Review the proposed approach.
+
+## E29 — Selectable skins and independent text styles
+
+A settings page allows only dark themes, changes the body font whenever a skin changes, remounts forms and automatically cycles skins. A user asks for light palettes and occasional playful variety. Review the design.
+
+## E30 — Connected context and current actions
+
+A list highlights one recording, while the unrelated-looking detail panel edits it. Every button says Review, the count floats above the list without association, and the active hue also means keyboard focus and errors. Review relationships at desktop and stacked widths.
+
+## E31 — Canonical navigation and category proposals
+
+An index and two breadcrumb copies contain independently maintained labels. Local tabs appear as parent pages. A proposed multi-category index chooses the first category in JSON as ancestry; hover highlights duplicates but keyboard/touch offers no membership information. Review only.
+
+## E32 — Help icons and simulated saving
+
+An (i) icon repeats a field name; a (?) tooltip contains interactive controls and closes while the pointer enters it. A disabled Save button hides the only warning that this is a memory-only demo. Review the help.
+
+## E33 — Version-2 profile migration and capabilities
+
+A v1 profile has null theme override and false sounds. Migration forces dark and drops false. An importer merges a project system mode with a user skin ID, overwrites the input, and treats an unknown skin as applied. Review only; no actual files are supplied.
+
+## E34 — Profile application during pending work
+
+A review save is pending; the user types newer edits, filters the list and opens Details. Applying a skin profile discards the newer draft, resets the view and says all preferences are stored permanently. Export includes review notes. Review the workflow.
 
 This evaluation material is guide text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

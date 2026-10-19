@@ -1,8 +1,12 @@
 # License scope and attribution
 
-The project's guide, documentation, skill text and example preference JSON are licensed under the Creative Commons Attribution 4.0 International license (CC BY 4.0). The unmodified license text is in [LICENSE](LICENSE); the official source is [Creative Commons](https://creativecommons.org/licenses/by/4.0/legalcode.txt).
+The project's guide, documentation (including gallery screenshots and annotations), skill text and example preference JSON are licensed under the Creative Commons Attribution 4.0 International license (CC BY 4.0). The unmodified license text is in [LICENSE](LICENSE); the official source is [Creative Commons](https://creativecommons.org/licenses/by/4.0/legalcode.txt).
 
 Project attribution: AuDHD friendly interface guidance — Charles Beckwith, @fashiontechguru. Retain supplied attribution and indicate modifications as required by the license.
+
+## Reusable implementation code
+
+[LICENSE-CODE](LICENSE-CODE) applies to original JavaScript/JSX/Svelte, CSS, HTML previews, Python tooling, machine-readable JSON Schemas, palette registry data, tests, package/build configuration and CI configuration in this repository. Markdown documentation, `preferences.example.json` and `preferences/fixtures/v1.json` remain CC BY 4.0. The logo retains the separate terms below. Third-party dependencies retain their own licenses and notices; neither project license replaces them. No font files are bundled; stacks use local fallbacks.
 
 ## Separate logo permissions
 

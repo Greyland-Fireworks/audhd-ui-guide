@@ -1,22 +1,24 @@
 # Skill evaluation procedure
 
-**Version:** 1.0 draft · **Status:** 26 authored scenarios; model testing is deferred to v1.1 and has not been run.
+**Version:** v1.01 · **Status:** 34 authored scenarios; all model outcomes remain Pending. Run only on a separate explicit request.
 
 This pack tests interpretation and review quality, not accessibility conformance or real interface operation.
 
-## Planned for v1.1: model testing
+## Explicitly requested model testing
 
-This is deferred work, not a requirement for using or publishing the v1.0 practitioner draft. Do not ask contributors to run the whole pack before giving ordinary feedback.
+This is deferred work, not a requirement for using or publishing this practitioner draft. Do not ask contributors to run the whole pack before giving ordinary feedback.
 
 Start with E03, E07 and E08 in fresh conversations. Give each model the standard request, skill, guide and one scenario; for E21–E26, include the preference documentation and example JSON specified below. Save its first response without coaching, then have a separate reviewer use the rubric. Record model/date, inputs, document revisions and outcomes. If practical, compare with the same scenarios without the skill, recording exactly which references each condition receives, and later expand to other cases or configurations. Report missed problems, disproportionate fixes and unsupported claims separately. Do not infer demonstrated user benefit from successful text reviews.
 
 The procedure below is retained for that future work. No evaluation runs are scheduled or required now.
 
+E27–E34 add broad developer requests, connected context, appearance, navigation, help and profile/workflow scenarios. Their review recommendations remain unrun; no implemented behavior or skill activation success is inferred. Supply preference documentation for E29, E33 and E34 as well.
+
 ### Coverage limits
 
 E01–E26 cover fictional review recommendations, including dashboard comparison, help, accessibility overrides, recovery and scope restraint. E17–E20 add pattern choice, nested tab context, hidden validation and responsive keyboard access. E21–E26 add preference intake, skipped questions, storage consent, profile validation/precedence, privacy and redundant visual cues. They do not test skill discovery, the `audhd audit` trigger and target selection, authorized implementation, design deliverables or actual interface operation. Treat those behaviors as untested; successful text reviews would not validate them. Editorial consistency and link checks are separate from model evaluation. Run model evaluations only when explicitly requested.
 
-The preference cases assess recommendations using synthetic descriptions, not actual profile reads/writes or rendered preference effects. They include null/false distinctions, skipped updates, array replacement, clearing/inheritance, invalid structure, embedded instructions and privacy/override conflicts. The example profile has no runtime integration; JSON syntax validation does not establish that settings are supported or applied.
+The preference cases assess recommendations using synthetic descriptions, not actual profile reads/writes or rendered preference effects. They include null/false distinctions, skipped updates, array replacement, clearing/inheritance, invalid structure, embedded instructions and privacy/override conflicts. The public references have bounded runtime integration; these model cases supply only synthetic descriptions, and JSON syntax alone does not establish application.
 
 ## Keep inputs and answers separate
 
@@ -45,6 +47,6 @@ Mark unrun cases Pending. If a response invents behavior, claims tests it did no
 
 ## Current evidence
 
-The scenarios and document structure have been reviewed during authoring. This is not an independent model evaluation. All E01–E26 model outcomes remain Pending (deferred to v1.1); no success rate is claimed. No runnable interface or interaction testing is included in this pack.
+The scenarios and document structure have been reviewed during authoring. This is not an independent model evaluation. All E01–E34 model outcomes remain Pending (not authorized or run); no success rate is claimed. No runnable interface or interaction testing is included in this pack.
 
 This evaluation material is guide text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

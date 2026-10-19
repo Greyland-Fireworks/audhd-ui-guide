@@ -1,6 +1,6 @@
 ---
 name: audhd-ui-guide
-description: Design, review or improve UI and UX using AuDHD-friendly interaction rules and a mandatory dark visual standard. Use when the user says "audhd audit", or for dashboard organization, settings forms, status feedback, accessible controls and interruption recovery; not clinical advice or certification.
+description: Design, review or improve UI and UX using AuDHD-friendly interaction rules, accessible selectable appearance and verifiable workflow continuity. Use when the user says "audhd audit", or for dashboard organization, settings forms, status feedback, accessible controls and interruption recovery; not clinical advice or certification.
 ---
 
 # AuDHD-friendly UI and UX guidance
@@ -30,7 +30,15 @@ For individual design or personalization, follow [preference intake and storage]
 
 Use the guide's [UI and UX definitions](GUIDE.md#ui-and-ux-in-this-project). Identify UI presentation/control concerns, UX task/behavior concerns or both. Separately identify the implementation layer: wording/layout, interaction state, navigation, persistence or business logic. A misleading “Saved” label may require acknowledgment handling, not just different wording. Explain dependencies without silently expanding the task.
 
-Follow explicit user instructions and applicable project requirements. Document conflicts and scoped exceptions rather than claiming full adherence. A focused wording or interaction fix does not authorize recoloring an entire application. Apply the mandatory dark theme within the established adoption scope; when scope is unclear, proceed with supported findings and flag the scope decision before making broader theme changes. Honor explicit accessibility overrides, including forced colors.
+Follow explicit user instructions and applicable project requirements. Document conflicts and scoped exceptions rather than claiming full adherence. A focused wording or interaction fix does not authorize recoloring an entire application. Accessible behavior is mandatory across supported light and dark appearances. Preserve chosen skins/text styles and do not prescribe a universal AuDHD preset. Honor explicit accessibility overrides, including forced colors.
+
+## From a broad developer request to a working interface
+
+For “build a config dashboard” or “add a front end,” inspect supplied configuration loaders, schemas, routes, API contracts, tests and existing controls. Establish real tasks, entities, defaults, precedence, permissions, dependencies and save/apply/restart effects. Key names and sample values do not establish those facts. Mark unknowns; ask only when undiscoverable information blocks correctness, while completing supported work.
+
+Organize around decisions and relationships rather than turning every object into a card or file into a tab. Keep expert detail available behind useful summaries. Use the existing stack and authorized integration; a labeled mock cannot silently substitute for working behavior. Optional intake must not block progress or infer preferences.
+
+Inspect source/detail, parent/child, action/result and dependency connections automatically, including current action wording, collection scope, navigation ancestry and separate focus/context cues. Open help and exercise transitions in the rendered interface. Use [adapter guidance](references/framework-adapters.md) for framework mappings and the [reference specification](examples/recording-review/SPEC.md) for observable checks; their particular components are examples, not requirements.
 
 ## Read the relevant guidance
 
@@ -54,7 +62,7 @@ Start with the [quick review](GUIDE.md#quick-review), then select applicable AUD
 - Make scope, effective values, action effects and work state understandable. Distinguish pending work from saved or verified results. Keep essential consequences visible beside the decision.
 - Preserve drafts, focus, selection, scroll and interruption context within privacy boundaries. Preserve domain behavior, permissions, accessible names, roles, states and keyboard operation.
 - For unfamiliar features, follow the guide's plain-English help requirements. Explain verified purpose and effects without relying on backend symbols or memory of building the system. Keep help accessible on return and use persistent explanations for lengthy or interactive content; mark unknown behavior rather than inventing it.
-- Within dark-theme adoption scope, preserve readable text and independent selection and focus cues. Measure contrast; palette values alone are not proof. Respect reduced motion and avoid decorative flashing or automatic cycling.
+- Across supported appearances, preserve readable text and independent active-context, selection and keyboard-focus cues. Appearance changes must preserve drafts, pending work, filters and local views. Measure contrast; palette values alone are not proof. Respect reduced motion and avoid decorative flashing or automatic cycling.
 - Keep working controls unchanged when no relevant problem is evidenced. Do not add redundant tooltips, locks or confirmations, expand a focused fix into a redesign, or install packages, publish or alter unrelated configuration merely to apply the skill.
 
 ## Verify according to available evidence
@@ -88,7 +96,7 @@ Report the applicable rule IDs, effective primary targets and material emphasis 
 
 ## Skill maintenance and evaluation
 
-For editorial skill changes, check consistency with the guide, scope, frontmatter and reference links. This does not constitute model or user validation. Load [SKILL_EVALUATIONS.md](SKILL_EVALUATIONS.md) and run model evaluations only when explicitly requested; testing remains deferred to v1.1. Keep reviewer material out of the evaluated model's context as the procedure requires. Ordinary interface work and editorial revisions do not require the evaluation pack.
+For editorial skill changes, check consistency with the guide, scope, frontmatter and reference links. This does not constitute model or user validation. Load [SKILL_EVALUATIONS.md](SKILL_EVALUATIONS.md) and run model evaluations only when explicitly requested; they remain unrun and require a separate explicit request. Keep reviewer material out of the evaluated model's context as the procedure requires. Ordinary interface work and editorial revisions do not require the evaluation pack.
 
 ## License
 

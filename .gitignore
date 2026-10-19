@@ -18,3 +18,12 @@ Desktop.ini
 
 # Unfinished ideas, background research and local working notes.
 /scratchpad/
+
+# Reproducible examples: retain sources and the root lockfile only.
+node_modules/
+dist/
+test-results/
+playwright-report/
+.playwright-cli/
+__pycache__/
+/output/

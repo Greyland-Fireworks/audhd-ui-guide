@@ -1,0 +1,293 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AuDHD preferences version 2",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "scope",
+    "display",
+    "layout",
+    "sensory",
+    "attention",
+    "support",
+    "retention"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 2
+    },
+    "scope": {
+      "enum": [
+        "project",
+        "user"
+      ]
+    },
+    "display": {
+      "type": "object",
+      "required": [
+        "group_cues",
+        "surface_intensity",
+        "contrast",
+        "text_scale",
+        "line_height",
+        "appearance",
+        "text_style"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "group_cues": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "color",
+                  "text",
+                  "shape",
+                  "pattern",
+                  "line_style"
+                ]
+              }
+            }
+          ]
+        },
+        "surface_intensity": {
+          "enum": [
+            null,
+            "standard",
+            "subdued"
+          ]
+        },
+        "contrast": {
+          "enum": [
+            null,
+            "standard",
+            "increased"
+          ]
+        },
+        "text_scale": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          ]
+        },
+        "line_height": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          ]
+        },
+        "appearance": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "mode"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "mode": {
+                  "enum": [
+                    "light",
+                    "dark",
+                    "system"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "mode",
+                "id"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "mode": {
+                  "const": "skin"
+                },
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                }
+              }
+            }
+          ]
+        },
+        "text_style": {
+          "enum": [
+            null,
+            "system",
+            "expressive",
+            "serif",
+            "mono"
+          ]
+        }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "required": [
+        "density",
+        "view",
+        "multiple_sections_open"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "density": {
+          "enum": [
+            null,
+            "compact",
+            "comfortable"
+          ]
+        },
+        "view": {
+          "enum": [
+            null,
+            "focused",
+            "overview"
+          ]
+        },
+        "multiple_sections_open": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "sensory": {
+      "type": "object",
+      "required": [
+        "reduce_motion",
+        "autoplay",
+        "sounds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "reduce_motion": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "autoplay": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "sounds": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "attention": {
+      "type": "object",
+      "required": [
+        "optional_notifications",
+        "live_updates"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "optional_notifications": {
+          "enum": [
+            null,
+            "immediate",
+            "batched",
+            "off"
+          ]
+        },
+        "live_updates": {
+          "enum": [
+            null,
+            "automatic",
+            "manual"
+          ]
+        }
+      }
+    },
+    "support": {
+      "type": "object",
+      "required": [
+        "return_summary",
+        "step_guidance",
+        "larger_targets",
+        "help_detail"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "return_summary": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "step_guidance": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "larger_targets": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "help_detail": {
+          "enum": [
+            null,
+            "concise",
+            "expanded"
+          ]
+        }
+      }
+    },
+    "retention": {
+      "type": "object",
+      "required": [
+        "remember_location",
+        "retain_drafts"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "remember_location": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "retain_drafts": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}
