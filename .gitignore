@@ -15,3 +15,6 @@ audhd-preferences.local.json.*
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Unfinished ideas, background research and local working notes.
+/scratchpad/
