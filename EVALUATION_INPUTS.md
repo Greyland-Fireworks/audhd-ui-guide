@@ -148,4 +148,8 @@ A v1 profile has null theme override and false sounds. Migration forces dark and
 
 A review save is pending; the user types newer edits, filters the list and opens Details. Applying a skin profile discards the newer draft, resets the view and says all preferences are stored permanently. Export includes review notes. Review the workflow.
 
+## E35 — Finding recordings with forgotten identifiers and retained search
+
+A recording library shows IDs as its only item names and a search box as its main discovery route. A returning user remembers the map and comparison purpose of a recording, but cannot recall its name, date or ID. A retained query restricts the list to three of eighteen eligible recordings; the restriction is inconspicuous and no result count or reset action is shown. The loaded recording is outside those results, with an unsaved review note still visible but no explanation of its absence from the list. Map, date and purpose metadata exist. The owner requests review only; no rendered interface or interaction checks are available. They ask whether thumbnails, pins, recently watched and autocomplete should all be added.
+
 This evaluation material is guide text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

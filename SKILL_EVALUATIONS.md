@@ -1,6 +1,6 @@
 # Skill evaluation procedure
 
-**Version:** v1.01 · **Status:** 34 authored scenarios; all model outcomes remain Pending. Run only on a separate explicit request.
+**Version:** v1.01 · **Status:** 35 authored scenarios; all model outcomes remain Pending. Run only on a separate explicit request.
 
 This pack tests interpretation and review quality, not accessibility conformance or real interface operation.
 
@@ -13,6 +13,8 @@ Start with E03, E07 and E08 in fresh conversations. Give each model the standard
 The procedure below is retained for that future work. No evaluation runs are scheduled or required now.
 
 E27–E34 add broad developer requests, connected context, appearance, navigation, help and profile/workflow scenarios. Their review recommendations remain unrun; no implemented behavior or skill activation success is inferred. Supply preference documentation for E29, E33 and E34 as well.
+
+E35 adds recognition-based collection discovery, retained search scope and reset continuity. Its model outcome remains Pending; it does not establish real-interface behavior or user benefit.
 
 ### Coverage limits
 
@@ -47,6 +49,6 @@ Mark unrun cases Pending. If a response invents behavior, claims tests it did no
 
 ## Current evidence
 
-The scenarios and document structure have been reviewed during authoring. This is not an independent model evaluation. All E01–E34 model outcomes remain Pending (not authorized or run); no success rate is claimed. No runnable interface or interaction testing is included in this pack.
+The scenarios and document structure have been reviewed during authoring. This is not an independent model evaluation. All E01–E35 model outcomes remain Pending (not authorized or run); no success rate is claimed. No runnable interface or interaction testing is included in this pack.
 
 This evaluation material is guide text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

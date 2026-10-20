@@ -43,6 +43,6 @@ for(const path of publicFiles.filter(p=>/\.(js|jsx|svelte|css|html)$/.test(p))) 
 }
 const guide=content.get(resolve('GUIDE.md'));
 assert.equal([...guide.matchAll(/^### AUDHD-\d{2} /gm)].length,13,'Stable 13 rule IDs');
-for(const file of ['EVALUATION_INPUTS.md','EVALUATION_RUBRIC.md']) assert.equal([...content.get(resolve(file)).matchAll(/^## E\d{2} /gm)].length,34,`${file}: 34 authored scenarios`);
+for(const file of ['EVALUATION_INPUTS.md','EVALUATION_RUBRIC.md']) assert.equal([...content.get(resolve(file)).matchAll(/^## E\d{2} /gm)].length,35,`${file}: 35 authored scenarios`);
 if(failures.length) { console.error(failures.join('\n'));process.exitCode=1; }
-else console.log(`PASS: ${markdown.length} public Markdown files, relative links/anchors, 13 rules, 34 evaluation cases and source boundaries.`);
+else console.log(`PASS: ${markdown.length} public Markdown files, relative links/anchors, 13 rules, 35 evaluation cases and source boundaries.`);

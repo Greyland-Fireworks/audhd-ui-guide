@@ -200,4 +200,10 @@ Validate strictly, map null without inventing a choice, preserve false/siblings,
 
 Apply presentation independently, preserve pending snapshot/newer draft/identity/filter/view/focus, label session-only support and export preference fields only. Propose concrete transitions without claiming performed tests. AUDHD-04, 05, 06, 10, 12, 13.
 
+## E35 — Finding recordings with forgotten identifiers and retained search
+
+**UI:** Recommend descriptive names and discoverable recognition cues using relevant available metadata, visible retained restrictions, accurate scoped counts, an outside-filter indication and an explicit reset with clear scope. Text search may remain optional. **UX:** Identify both recall-dependent discovery and the misleading impression of an incomplete collection. Distinguish the filtered list from loaded identity and work: clearing the stated restrictions must not switch recordings, save or discard the note.
+
+Propose checks for finding an item without typing an identifier, return with retained search, combined filters where supported or proposed, zero matches, an excluded loaded recording and reset with an unsaved note, including keyboard operation and narrow layouts. Keep all checks pending. Treat thumbnails, pins, recently watched and autocomplete as task-dependent options, not a required bundle; mention text equivalents for previews and privacy/retention when recommending history. Autocomplete alone does not remove the need for a starting clue. Do not invent descriptive metadata, bypass eligibility/permissions, claim edits or assert demonstrated user benefit. Relevant rules: AUDHD-01, 03, 04, 05, 10, 11, 12; AUDHD-08 if previews are proposed.
+
 This evaluation material is guide text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

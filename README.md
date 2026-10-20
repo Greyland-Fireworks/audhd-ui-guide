@@ -206,7 +206,7 @@ AuDHD commonly refers to the co-occurrence of autism and ADHD. Some people want 
 
 This is a practitioner guide, not a clinical intervention or certification. Its specific patterns have not been established here through research with a representative group of AuDHD users. No skin, font or information density is claimed to suit every AuDHD person.
 
-Version **v1.01** is being prepared for publication. The Guide remains practitioner guidance with the evidence limits described above. All 34 prepared model-evaluation scenarios remain unrun and require a [separate explicit request](SKILL_EVALUATIONS.md#explicitly-requested-model-testing). Those evaluations are not required for ordinary use or feedback, and successful text reviews would not prove real-interface usability.
+Version **v1.01** is being prepared for publication. The Guide remains practitioner guidance with the evidence limits described above. All 35 prepared model-evaluation scenarios remain unrun and require a [separate explicit request](SKILL_EVALUATIONS.md#explicitly-requested-model-testing). Those evaluations are not required for ordinary use or feedback, and successful text reviews would not prove real-interface usability.
 
 > [!NOTE]
 > **Why I developed this guide**

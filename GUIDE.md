@@ -145,11 +145,15 @@ Make task-relevant relationships visible: which controls affect which content, w
 
 Inspect the effort created by the workflow itself: repeated decisions, switching between views and interruptions needed to complete a task. Reduce unnecessary reconstruction without hiding useful expert detail. Do not optimize for a minimum click count; a predictable extra step may be easier than a short but ambiguous action.
 
-**Why:** Reduced clutter must not create invisible state or an apparently incomplete library.
+Where users need to find or revisit items, provide task-relevant recognition cues so they can browse without recalling an exact name, date or identifier. Use descriptive names and visible choices based on meaningful attributes where useful; text search can supplement these cues. Make retained restrictions visible, state the result count and scope, and explain when the current item is outside the filtered results. Changing or clearing filters must preserve the loaded item and its work; selecting another item is a separate action. State which restrictions a reset clears.
+
+Map/date choices, thumbnail previews, pinned comparisons, recently watched lists and autocomplete are optional patterns chosen for the task, not universal requirements. Autocomplete still requires a starting clue; thumbnails need useful text equivalents. History and pins must respect the product's retention and privacy boundaries. See the [recognition-based recording example](EXAMPLES.md#find-a-recording-without-remembering-its-identifier).
+
+**Why:** Reduced clutter must not create invisible state or an apparently incomplete library. Finding an item should not depend solely on remembered identifiers.
 
 **Example:** A filtered tag picker still shows selected tags and an explicit “No tag” choice where omission is supported. Expanding the list does not change selections.
 
-**Check:** Find a hidden term, clear the filter and return. Verify that filtering never edits data and that empty results explain whether the cause is filtering or missing content.
+**Check:** Find an item using recognizable attributes without typing an identifier, search for a term in a collapsed choice where supported, then return with a retained filter. Combine filters, reach zero matches, exclude the loaded item and clear the stated restrictions with an unsaved edit. Verify that filter status and empty-result explanations are accurate, and that loaded identity, draft and usable focus survive. Repeat with keyboard operation and narrow layouts; report unavailable checks as pending.
 
 ### AUDHD-04 Explain effective behavior
 
@@ -488,6 +492,8 @@ Record results with the [review template](REVIEW_TEMPLATE.md). Record appearance
 Keep IDs stable. Record requirement changes in a version history. Use product-specific appendices for domain rules, density choices and exceptions rather than embedding them in this shared guide. An exception records its scope, reason, alternative, observed impact and review condition. Existing gaps do not authorize unrelated rewrites.
 
 ### Version history
+
+- **v1.01 draft update — October 20, 2026:** Expanded AUDHD-03 with recognition-based discovery, visible retained filters and reset continuity. Added a recording example, skill routing and evaluation case E35 under the existing 13 rule IDs. Discovery patterns remain optional; all 35 model outcomes remain pending.
 
 - **v1.01 — October 19, 2026:** Replaces mandatory dark appearance with accessible selectable light/dark skins, strengthens relationships/navigation/help/continuity under the existing 13 rules, and adds version-2 profiles and independent runnable references. See [evidence and limits](references/evidence-and-limits.md); model evaluations remain unrun.
 

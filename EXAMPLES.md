@@ -207,6 +207,22 @@ Pair the message with an appropriate action and visible context. Do not erase in
 
 A useful writing pattern is **what it does → when to use it → what it affects → example or recovery**. Include only the parts needed to resolve uncertainty. Apply the guide's [help-format guidance](GUIDE.md#choose-the-help-format) to choose between brief definitions, persistent explanations and interactive reference content.
 
+## Find a recording without remembering its identifier
+
+**Reported problem:** A supplied account describes recall-dependent navigation: finding a recording required remembering a name, date or ID, and a retained search hid other recordings without making that restriction sufficiently obvious. The account reports changes made in another project; their implementation and effectiveness have not been independently verified here. The following interface and counts are fictional illustrations.
+
+**Before:** An ID-heavy list relies on a search box as its main discovery route. A returning user recognizes a recording's map and purpose but cannot remember what to type. An inconspicuous retained query makes the restricted list look like the complete library.
+
+**After:** Offer descriptive names such as “Harbor — morning comparison,” with map and date metadata. Provide visible map and date choices where those attributes help users recognize the target, alongside optional labeled text search. Keep stable IDs available for precise reference without making them the only names. Display “Showing 3 of 18 recordings” beside the results and “Filters: Map: Harbor; Date: October 19, 2026; Search: morning” beside the relevant controls. The denominator describes the eligible collection within the user's current workspace and permissions.
+
+If the loaded recording is excluded, keep its title and review visible with “Current recording is outside these filters.” A **Show all recordings** action clears text search, map and date restrictions together, as nearby text explains. It restores all eligible recordings in the current workspace; it does not bypass permissions, switch the loaded recording, save or discard notes. Filtering, resetting and selecting another recording have separate effects.
+
+Thumbnail previews, pinned comparisons, “Recently watched” and autocomplete suggestions are optional alternatives or additions when supported by the task. Thumbnails need useful text equivalents; autocomplete still needs a starting clue. Pins and history must respect the product's retention and privacy boundaries. Do not add every pattern or infer that this combination suits every user.
+
+**UI checks:** Inspect descriptive labels, visible restrictions, scoped counts, the outside-filter message and reset explanation. Operate choices, optional search and reset with a keyboard and at narrow widths; check useful focus after results change.
+
+**UX checks:** Locate a recording from recognizable attributes without typing its name or ID. Return with a retained query, combine map/date/search restrictions, reach zero matches and distinguish “no matches” from an empty collection. With an unsaved note in the loaded recording, filter it out and choose Show all recordings; verify that all stated restrictions clear while loaded identity and the draft remain unchanged. Ask a reviewer to predict those effects before acting. These are proposed checks, not performed tests or evidence of reduced effort. Relevant rules: AUDHD-01, 03, 04, 05, 10, 11, 12; AUDHD-08 when previews are used.
+
 ## Timing and search: label, clarify and show
 
 In this fictional recording interface, simulation time and real execution time differ, measured execution duration includes recorded pauses, and the recording is dated January 15, 2026. Verify the corresponding facts before using the wording in a real product.

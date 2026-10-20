@@ -49,6 +49,7 @@ Start with the [quick review](GUIDE.md#quick-review), then select applicable AUD
 | Task or uncertainty | Read |
 |---|---|
 | Dashboard priorities, metrics, alerts, panels or navigation levels | [Dashboard organization](GUIDE.md#dashboard-organization-and-hierarchy) |
+| Collection browsing, remembered identifiers, retained search or hidden results | [AUDHD-03](GUIDE.md#audhd-03-offer-manageable-detail-without-hiding-choices) and the [recording discovery example](EXAMPLES.md#find-a-recording-without-remembering-its-identifier) |
 | Tabs, sub-tabs, accordion sections or hidden validation errors | [Pattern selection, context and accessible operation](GUIDE.md#tabs-sub-tabs-and-accordion-sections) |
 | Color/group cues, display comfort or individual customization | [Color and redundant group cues](GUIDE.md#color-and-redundant-group-cues) and [preferences](PREFERENCES.md) |
 | Meaning and example value of each JSON configuration field | [JSON field reference](README_JSON.md); use PREFERENCES.md for authoritative format and storage rules |
@@ -60,6 +61,7 @@ Start with the [quick review](GUIDE.md#quick-review), then select applicable AUD
 ## Apply within the affected workflow
 
 - Make scope, effective values, action effects and work state understandable. Distinguish pending work from saved or verified results. Keep essential consequences visible beside the decision.
+- For collection browsing and return workflows, inspect whether finding an item requires remembered identifiers. Check recognition cues, retained filter visibility, empty-result explanations and reset scope independently of the loaded selection. Exercise discovery without typing and filter/reset transitions with unsaved work where applicable. Choose optional discovery patterns only when justified by the task; follow AUDHD-03 rather than prescribing every pattern.
 - Preserve drafts, focus, selection, scroll and interruption context within privacy boundaries. Preserve domain behavior, permissions, accessible names, roles, states and keyboard operation.
 - For unfamiliar features, follow the guide's plain-English help requirements. Explain verified purpose and effects without relying on backend symbols or memory of building the system. Keep help accessible on return and use persistent explanations for lengthy or interactive content; mark unknown behavior rather than inventing it.
 - Across supported appearances, preserve readable text and independent active-context, selection and keyboard-focus cues. Appearance changes must preserve drafts, pending work, filters and local views. Measure contrast; palette values alone are not proof. Respect reduced motion and avoid decorative flashing or automatic cycling.

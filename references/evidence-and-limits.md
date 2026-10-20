@@ -1,10 +1,11 @@
 # Evidence and limits
 
-Updated October 19, 2026. This concise record supports the [Guide](../GUIDE.md); it does not reproduce background reports. [Executable evidence](../examples/recording-review/ACCEPTANCE.md) records the actual tested scope.
+Updated October 20, 2026. This concise record supports the [Guide](../GUIDE.md); it does not reproduce background reports. [Executable evidence](../examples/recording-review/ACCEPTANCE.md) records the actual tested scope.
 
 | Material | Classification and rule mapping | Evidence and limits |
 |---|---|---|
 | Clear scope, relationships and explanations | Adopted outcomes: AUDHD-01, 02, 04, 09 | Practitioner observations plus cognitive accessibility guidance; the exact card/arrow/colon treatment is an implementation example. |
+| Recognition-based collection discovery and visible filters | Guidance under AUDHD-01, 03, 04, 05, 10, 11, 12 | Supplied account of a problem and reported changes in another project, plus a fictional worked example and E35. Implementation, reduced effort and model/participant outcomes are unverified; optional patterns are not universal requirements. |
 | Independent context and focus | Adopted outcomes: AUDHD-02, 05, 11 | Reference transitions exercise separate cues; one person's feedback identified distracting heading outlines. This does not justify hiding keyboard focus. |
 | Skins, text styles and enjoyment | Selectable preferences under adopted continuity/accessibility outcomes: AUDHD-10, 11 | 22 named palettes and four styles demonstrate bounded implementation. No representative study establishes ideal hues, fonts, number of skins or clinical benefit. |
 | Canonical index/breadcrumbs | Implemented pattern: AUDHD-01, 03, 05, 10 | Shared page records, independent routers and browser checks. Multiple-category paths/cross-highlighting remain a proposal. |
