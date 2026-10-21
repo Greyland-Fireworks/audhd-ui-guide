@@ -10,7 +10,7 @@ Project attribution: AuDHD friendly interface guidance — Charles Beckwith, @fa
 
 ## Separate logo permissions
 
-The logo file `audhd_uiux_icon_v1.png` is excluded from CC BY 4.0. Its existing permissions are:
+The project logo artwork, including its editable SVG source and PNG exports at all sizes, is excluded from CC BY 4.0. All use the existing logo permissions below.
 
 You may display the unmodified logo to identify, discuss or link to this project, with credit and a link to the project. Other uses, including unrelated product branding or merchandise, require prior written permission. Permission does not imply endorsement.
 

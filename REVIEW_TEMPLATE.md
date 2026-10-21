@@ -4,7 +4,7 @@ Copy this template for one bounded task. Remove personal information from public
 
 ## Short review for a focused change
 
-Use this instead of the full record for a small, bounded issue. Include the rule ID, build and environment with the check. Expand to the full review when several states or an entire workflow are affected.
+Use this instead of the full record for a small, bounded issue. Lead the user-facing response with the result and its consequence; use these fields as a coverage guide rather than mandatory headings. Include the rule ID, build and environment with the check. Expand to the full review when several states or an entire workflow are affected.
 
 - **Task:**
 - **Difficulty:**
@@ -13,6 +13,7 @@ Use this instead of the full record for a small, bounded issue. Include the rule
 - **Proposed change and affected layer:** wording/layout, interaction state, navigation, persistence or business logic.
 - **Check and actual result:**
 - **Remaining uncertainty:**
+- **Added effort and justification, if material:** decisions, reading, navigation or maintenance.
 
 A proposed check is Pending until performed. A short review does not establish that the whole interface passes the guide.
 
@@ -30,6 +31,7 @@ A proposed check is Pending until performed. A short review does not establish t
 - Affected screens or modes, including shared styles; identify any not exercised:
 - Data retention and save locations:
 - Classification: adopted outcome, implementation example, preference or proposed extension:
+- Consequential behavior: established behavior and source; proposed choice and tradeoff; unresolved dependency and what it blocks. Omit empty categories.
 - Requested/effective appearance and unsupported profile choices:
 
 ## Procedure and results
@@ -82,6 +84,8 @@ Using only the interface and its help, ask the reviewer to explain:
 - What can be done next?
 
 Record missing or incorrect answers, where help was sought, and prior familiarity with the implementation. Attribute supplied observations to their source; label agent walkthroughs as inspection, not user feedback. If no user participated, leave user checks pending. Do not require a person to demonstrate memory difficulties to participate.
+
+For observed-use evaluation, ask intended users to complete a few bounded workflows, including recovery or return where relevant. Include differing or conflicting preferences and retain unsuccessful attempts and rejected designs. Record instruction-following results, accessibility checks and observed experience separately; none substitutes for the others.
 
 ### Difficulty and tradeoffs
 

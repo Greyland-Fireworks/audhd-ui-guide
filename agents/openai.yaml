@@ -1,0 +1,5 @@
+interface:
+  display_name: "AuDHD UI Guide"
+  short_description: "Cognitive accessibility for UI"
+  icon_small: "./audhd_uiux_icon_256.png"
+  icon_large: "./audhd_uiux_icon_2048.png"

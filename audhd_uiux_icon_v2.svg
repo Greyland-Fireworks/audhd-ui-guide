@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="512"
+   height="512"
+   viewBox="0 0 1024 1024"
+   role="img"
+   aria-labelledby="logo-title logo-description"
+   version="1.1"
+   id="svg7"
+   sodipodi:docname="audhd_uiux_icon_v2.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#111111"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#d1d1d1"
+     showguides="true"
+     inkscape:zoom="3.5449219"
+     inkscape:cx="255.85895"
+     inkscape:cy="256"
+     inkscape:window-width="3840"
+     inkscape:window-height="2054"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="emblem">
+    <sodipodi:guide
+       position="692.82204,589.01157"
+       orientation="1,0"
+       id="guide15"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <title
+     id="logo-title">AuDHD UI/UX</title>
+  <desc
+     id="logo-description">AuDHD curves across the top and UI/UX across the bottom of a turquoise circular frame. The overlapping circuit brains and central spark merge into one continuous pink-to-cream color wash.</desc>
+  <!-- Editable vector master, 1024-unit square; center 512,512.
+       Letter centers follow radius 396, rotated tangent to the circle.
+       Glyphs use an 80-unit cap height and 18-unit spacing along the arc.
+       Text is outlined for consistent rendering without installed fonts.
+       Each letter is an editable use of a named glyph in defs.
+       All brain geometry lives in #brain-shape and is painted ONCE by
+       #brain-symbol. Edit #brain-wash for a continuous shared color wash.
+       Remove the filter on #emblem to disable the optional soft glow. -->
+  <defs
+     id="defs4">
+    <linearGradient
+       id="brain-wash"
+       gradientUnits="userSpaceOnUse"
+       x1="136"
+       y1="512"
+       x2="888"
+       y2="512">
+      <stop
+         offset="0"
+         stop-color="#ff50b1"
+         id="stop1" />
+      <stop
+         offset="1"
+         stop-color="#fff2cb"
+         id="stop2" />
+    </linearGradient>
+    <filter
+       id="glow"
+       x="0"
+       y="0"
+       width="1024"
+       height="1024"
+       filterUnits="userSpaceOnUse"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         in="SourceGraphic"
+         stdDeviation="5"
+         result="blur"
+         id="feGaussianBlur2" />
+      <feComponentTransfer
+         in="blur"
+         result="soft-glow"
+         id="feComponentTransfer2">
+        <feFuncA
+           type="linear"
+           slope="0.45"
+           id="feFuncA2" />
+      </feComponentTransfer>
+      <feMerge
+         id="feMerge3">
+        <feMergeNode
+           in="soft-glow"
+           id="feMergeNode2" />
+        <feMergeNode
+           in="SourceGraphic"
+           id="feMergeNode3" />
+      </feMerge>
+    </filter>
+    <!-- Font-independent glyphs. Lowercase u deliberately has x-height 56. -->
+    <path
+       id="letter-a"
+       fill-rule="evenodd"
+       d="M0 80V24L24 0H56L80 24V80H60V50H20V80ZM20 32H60V28L52 20H28L20 28Z" />
+    <path
+       id="letter-small-u"
+       d="M0 24H20V54L28 62H52L60 54V24H80V80H62V72L52 80H20L0 60Z" />
+    <path
+       id="letter-u"
+       d="M0 0H20V52L28 60H52L60 52V0H80V60L60 80H20L0 60Z" />
+    <path
+       id="letter-d"
+       fill-rule="evenodd"
+       d="M0 0H56L80 24V56L56 80H0ZM20 20V60H48L60 48V32L48 20Z" />
+    <path
+       id="letter-h"
+       d="M0 0H20V30H60V0H80V80H60V50H20V80H0Z" />
+    <path
+       id="letter-i"
+       d="M0 0H44V18H32V62H44V80H0V62H12V18H0Z" />
+    <path
+       id="letter-slash"
+       d="M0 80L20 0H40L20 80Z" />
+    <path
+       id="letter-x"
+       d="M0 0H22L40 26L58 0H80L52 40L80 80H58L40 54L22 80H0L28 40Z" />
+    <!-- Paired curved accents, reflected across the horizontal/vertical axes. -->
+    <g
+       id="upper-left-accents"
+       fill="none"
+       stroke="#45f4dc"
+       stroke-width="14">
+      <path
+         d="M172.948 331.723A384 384 0 0 1 255.054 226.632"
+         id="path3" />
+      <path
+         d="M144.694 316.700A416 416 0 0 1 233.642 202.852"
+         id="path4" />
+    </g>
+    <!-- Opaque white geometry forms a UNION mask: overlapping shapes do
+         not receive separate gradients or create a color-layer seam. -->
+    <mask
+       id="brain-shape"
+       x="0"
+       y="0"
+       width="1024"
+       height="1024"
+       maskUnits="userSpaceOnUse"
+       maskContentUnits="userSpaceOnUse"
+       style="mask-type:alpha">
+      <g
+         id="brain-outlines"
+         fill="none"
+         stroke="white"
+         stroke-width="42">
+        <ellipse
+           id="left-brain-outline"
+           cx="388"
+           cy="512"
+           rx="232"
+           ry="244" />
+        <ellipse
+           id="right-brain-outline"
+           cx="636"
+           cy="512"
+           rx="232"
+           ry="244" />
+      </g>
+      <g
+         id="left-brain-circuit"
+         fill="none"
+         stroke="white"
+         stroke-width="32"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <path
+           id="left-upper-branch"
+           d="M272 412L328 356V454H386" />
+        <path
+           id="left-lower-branch"
+           d="M328 454V520H296V596Q296 636 336 636V686" />
+        <circle
+           id="left-circuit-node"
+           cx="262"
+           cy="494"
+           r="30"
+           fill="white"
+           stroke="none" />
+      </g>
+      <g
+         id="right-brain-circuit"
+         fill="none"
+         stroke="white"
+         stroke-width="32"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <path
+           id="right-outer-branch"
+           d="M676 356C748 356 784 402 784 470" />
+        <path
+           id="right-upper-branch"
+           d="M676 356V432H708Q736 432 736 460V510" />
+        <path
+           id="right-lower-branch"
+           d="M676 580H716V624Q716 664 676 664H652V704" />
+        <circle
+           id="right-circuit-node"
+           cx="776"
+           cy="554"
+           r="30"
+           fill="white"
+           stroke="none" />
+      </g>
+      <path
+         id="center-spark"
+         fill="white"
+         d="M512 432C506 480 484 506 440 512C484 518 506 544 512 592C518 544 540 518 584 512C540 506 518 480 512 432Z" />
+    </mask>
+    <mask
+       id="brain-shape-4"
+       x="0"
+       y="0"
+       width="1024"
+       height="1024"
+       maskUnits="userSpaceOnUse"
+       maskContentUnits="userSpaceOnUse">
+      <g
+         id="brain-outlines-8"
+         fill="none"
+         stroke="#ffffff"
+         stroke-width="42">
+        <ellipse
+           id="left-brain-outline-8"
+           cx="388"
+           cy="512"
+           rx="232"
+           ry="244" />
+        <ellipse
+           id="right-brain-outline-2"
+           cx="636"
+           cy="512"
+           rx="232"
+           ry="244" />
+      </g>
+      <g
+         id="left-brain-circuit-4"
+         fill="none"
+         stroke="#ffffff"
+         stroke-width="32"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <path
+           id="left-upper-branch-5"
+           d="m 272,412 56,-56 v 98 h 58" />
+        <path
+           id="left-lower-branch-5"
+           d="m 328,454 v 66 h -32 v 76 q 0,40 40,40 v 50" />
+        <circle
+           id="left-circuit-node-1"
+           cx="262"
+           cy="494"
+           r="30"
+           fill="#ffffff"
+           stroke="none" />
+      </g>
+      <g
+         id="right-brain-circuit-7"
+         fill="none"
+         stroke="#ffffff"
+         stroke-width="32"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <path
+           id="right-outer-branch-1"
+           d="m 676,356 c 72,0 108,46 108,114" />
+        <path
+           id="right-upper-branch-1"
+           d="m 676,356 v 76 h 32 q 28,0 28,28 v 50" />
+        <path
+           id="right-lower-branch-5"
+           d="m 676,580 h 40 v 44 q 0,40 -40,40 h -24 v 40" />
+        <circle
+           id="right-circuit-node-2"
+           cx="776"
+           cy="554"
+           r="30"
+           fill="#ffffff"
+           stroke="none" />
+      </g>
+      <path
+         id="center-spark-7"
+         fill="#ffffff"
+         d="m 512,432 c -6,48 -28,74 -72,80 44,6 66,32 72,80 6,-48 28,-74 72,-80 -44,-6 -66,-32 -72,-80 z" />
+    </mask>
+    <mask
+       id="brain-shape-3"
+       x="0"
+       y="0"
+       width="1024"
+       height="1024"
+       maskUnits="userSpaceOnUse"
+       maskContentUnits="userSpaceOnUse">
+      <g
+         id="brain-outlines-2"
+         fill="none"
+         stroke="#ffffff"
+         stroke-width="42">
+        <ellipse
+           id="left-brain-outline-2"
+           cx="388"
+           cy="512"
+           rx="232"
+           ry="244" />
+        <ellipse
+           id="right-brain-outline-1"
+           cx="636"
+           cy="512"
+           rx="232"
+           ry="244" />
+      </g>
+      <g
+         id="left-brain-circuit-6"
+         fill="none"
+         stroke="#ffffff"
+         stroke-width="32"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <path
+           id="left-upper-branch-8"
+           d="m 272,412 56,-56 v 98 h 58" />
+        <path
+           id="left-lower-branch-57"
+           d="m 328,454 v 66 h -32 v 76 q 0,40 40,40 v 50" />
+        <circle
+           id="left-circuit-node-6"
+           cx="262"
+           cy="494"
+           r="30"
+           fill="#ffffff"
+           stroke="none" />
+      </g>
+      <g
+         id="right-brain-circuit-1"
+         fill="none"
+         stroke="#ffffff"
+         stroke-width="32"
+         stroke-linecap="round"
+         stroke-linejoin="round">
+        <path
+           id="right-outer-branch-8"
+           d="m 676,356 c 72,0 108,46 108,114" />
+        <path
+           id="right-upper-branch-9"
+           d="m 676,356 v 76 h 32 q 28,0 28,28 v 50" />
+        <path
+           id="right-lower-branch-2"
+           d="m 676,580 h 40 v 44 q 0,40 -40,40 h -24 v 40" />
+        <circle
+           id="right-circuit-node-7"
+           cx="776"
+           cy="554"
+           r="30"
+           fill="#ffffff"
+           stroke="none" />
+      </g>
+      <path
+         id="center-spark-9"
+         fill="#ffffff"
+         d="m 512,432 c -6,48 -28,74 -72,80 44,6 66,32 72,80 6,-48 28,-74 72,-80 -44,-6 -66,-32 -72,-80 z" />
+    </mask>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#brain-wash"
+       id="linearGradient7"
+       gradientUnits="userSpaceOnUse"
+       x1="136"
+       y1="512"
+       x2="888"
+       y2="512" />
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask19">
+      <g
+         id="g22"
+         fill="none"
+         stroke="#ffffff"
+         stroke-width="32"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         style="display:inline"
+         inkscape:label="icon">
+        <path
+           id="path19"
+           style="baseline-shift:baseline;display:inline;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;stroke:none;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+           d="m 387.99812,246.99823 c -140.06633,0 -253.00031,119.45321 -253.00031,265.00177 0,145.54856 112.93398,265.00177 253.00031,265.00177 45.10217,0 87.39104,-12.3864 124.00188,-34.04103 36.61082,21.6546 78.89973,34.04103 124.00187,34.04103 140.06633,0 253.00032,-119.45321 253.00032,-265.00177 0,-145.54856 -112.93399,-265.00177 -253.00032,-265.00177 -45.1023,0 -87.39139,12.38626 -124.00187,34.04103 -36.61093,-21.65478 -78.89954,-34.04103 -124.00188,-34.04103 z m 0,42.00133 c 30.69396,0 59.89463,6.90928 86.25055,19.3648 -38.60999,33.72727 -67.47263,79.2354 -81.59313,131.08406 a 16,16 0 0 0 -6.65413,-1.44944 h -42.00272 v -81.99862 a 16.0016,16.0016 0 0 0 -16.96254,-15.97188 16.0016,16.0016 0 0 0 -2.15913,0.27964 16.0016,16.0016 0 0 0 -8.19227,4.3763 l -55.99885,56.00179 a 16,16 0 0 0 0,22.62721 16,16 0 0 0 22.62787,0 l 28.6849,-28.68599 v 59.37139 49.99893 h -15.99762 a 16.0016,16.0016 0 0 0 -6.186,1.24438 30,30 0 0 0 2.18301,-11.24137 30,30 0 0 0 -29.99853,-30.00029 30,30 0 0 0 -29.99852,30.00029 30,30 0 0 0 29.99852,30.00029 30,30 0 0 0 18.13765,-6.10539 16.0016,16.0016 0 0 0 -0.13853,2.10659 v 75.99576 c 0,16 4.25086,30.87833 14.68877,41.31623 6.83786,6.83787 15.59709,10.97862 25.31245,13.04968 v 35.63496 a 16,16 0 0 0 16.0024,15.99984 16,16 0 0 0 15.99762,-15.99984 v -49.99893 a 16.0016,16.0016 0 0 0 -15.99762,-15.99984 c -10.66667,0 -15.79155,-2.41766 -18.68698,-5.31309 -2.89543,-2.89543 -5.31662,-8.02234 -5.31662,-18.68901 V 536.0021 h 16.0024 a 16.0016,16.0016 0 0 0 15.99762,-15.99985 v -50.00359 h 42.00272 a 16,16 0 0 0 0.18152,0 c -2.09356,13.69076 -3.18138,27.7199 -3.18138,42.00134 0,81.53989 35.44437,154.89076 91.24712,203.63564 -26.3557,12.45526 -55.55692,19.3648 -86.25055,19.3648 -116.19379,0 -210.9976,-99.03404 -210.9976,-223.00044 0,-123.9664 94.80381,-223.00044 210.9976,-223.00044 z m 248.00375,0 c 116.19379,0 210.9976,99.03404 210.9976,223.00044 0,123.9664 -94.80381,223.00044 -210.9976,223.00044 -30.69362,0 -59.89485,-6.90954 -86.25054,-19.3648 C 605.55408,666.89076 640.99844,593.53989 640.99844,512 c 0,-81.53989 -35.44436,-154.89076 -91.24711,-203.63564 26.35569,-12.45526 55.55692,-19.3648 86.25054,-19.3648 z M 512,331.43434 C 564.66668,371.82804 599.0005,437.39959 599.0005,512 599.0005,586.60041 564.66668,652.17196 512,692.56566 459.33332,652.17196 424.99949,586.60041 424.99949,512 c 0,-74.60041 34.33383,-140.17196 87.00051,-180.56566 z"
+           inkscape:label="elipses" />
+        <path
+           id="path20"
+           style="baseline-shift:baseline;display:inline;overflow:visible;opacity:1;vector-effect:none;fill:#ffffff;stroke:none;stroke-linecap:butt;stroke-linejoin:miter;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+           d="m 656.68034,318.46005 a 16,16 0 0 0 -15.99763,15.99984 v 76.00042 a 16.0016,16.0016 0 0 0 15.99763,15.99985 h 32.00002 c 6.66667,0 8.79199,1.41623 9.68742,2.31166 0.89543,0.89543 2.31199,3.02272 2.31199,9.68939 v 49.99892 a 16,16 0 0 0 16.0024,15.99985 16,16 0 0 0 15.99762,-15.99985 v -49.99892 c 0,-12 -3.24623,-23.87871 -11.68414,-32.31661 -8.4379,-8.43791 -20.31529,-11.68413 -32.31529,-11.68413 h -15.99763 v -43.01269 c 23.87866,2.7561 40.96256,11.71797 53.10886,25.21386 14.71801,16.35335 22.8906,40.62008 22.8906,71.79655 a 16,16 0 0 0 15.99762,15.99985 16,16 0 0 0 16.0024,-15.99985 c 0,-36.82353 -9.82476,-69.55603 -31.10675,-93.20269 -21.28199,-23.64665 -53.48771,-36.79545 -92.89512,-36.79545 z m 0,31.99969 c 5.05814,0 9.76878,0.31641 14.32095,0.77832 -4.5523,-0.462 -9.26265,-0.77832 -14.32095,-0.77832 z"
+           inkscape:label="top squiggle" />
+        <path
+           id="path21"
+           d="m 676,580 h 40 v 44 q 0,40 -40,40 h -24 v 40"
+           inkscape:label="bottom squiggle" />
+        <circle
+           id="circle21"
+           cx="784.96906"
+           cy="535.82526"
+           r="30"
+           fill="#ffffff"
+           stroke="none"
+           inkscape:label="dot" />
+        <path
+           id="path22"
+           fill="#ffffff"
+           d="M 512,444.94856 C 507.09351,485.17942 489.10305,506.97114 453.12211,512 489.10305,517.02886 507.09351,538.82058 512,579.05144 516.90649,538.82058 534.89696,517.02886 570.87789,512 534.89696,506.97114 516.90649,485.17942 512,444.94856 Z"
+           style="display:inline;stroke-width:0.827883"
+           inkscape:label="star"
+           transform="matrix(1.2228699,0,0,1.1931139,-114.10939,-98.874292)" />
+      </g>
+    </mask>
+  </defs>
+  <rect
+     id="background"
+     width="1024"
+     height="1024"
+     fill="#050909" />
+  <g
+     id="emblem"
+     filter="url(#glow)"
+     sodipodi:insensitive="true"
+     style="display:inline">
+    <circle
+       id="outer-frame"
+       cx="512"
+       cy="512"
+       r="468"
+       fill="none"
+       stroke="#45f4dc"
+       stroke-width="18"
+       sodipodi:insensitive="true" />
+    <g
+       id="curved-lettering"
+       fill="#45f4dc"
+       sodipodi:insensitive="true">
+      <g
+         id="top-word"
+         aria-label="AuDHD">
+        <use
+           id="top-1"
+           href="#letter-a"
+           transform="rotate(-28.359,426.39931,-460.07453)" />
+        <use
+           id="top-2"
+           href="#letter-small-u"
+           transform="rotate(-14.179,581.5415,-1423.5478)" />
+        <use
+           id="top-3"
+           href="#letter-d"
+           transform="translate(472,76)" />
+        <use
+           id="top-4"
+           href="#letter-h"
+           transform="rotate(14.179,-29.541501,2371.5648)" />
+        <use
+           id="top-5"
+           href="#letter-d"
+           transform="rotate(28.359,125.60069,1408.0617)" />
+      </g>
+      <g
+         id="bottom-word"
+         aria-label="UI/UX">
+        <use
+           id="bottom-1"
+           href="#letter-u"
+           transform="rotate(22.86,-1870.5978,1245.2679)" />
+        <use
+           id="bottom-2"
+           href="#letter-i"
+           transform="rotate(11.286,-4125.3312,2557.5552)" />
+        <use
+           id="bottom-3"
+           href="#letter-slash"
+           transform="rotate(2.604,-18829.305,10901.548)" />
+        <use
+           id="bottom-4"
+           href="#letter-u"
+           transform="rotate(-8.681,5993.9524,-3031.3126)" />
+        <use
+           id="bottom-5"
+           href="#letter-x"
+           transform="rotate(-22.86,2422.5978,-1089.2818)" />
+      </g>
+    </g>
+    <g
+       id="curved-accents"
+       style="display:inline"
+       sodipodi:insensitive="true">
+      <use
+         href="#upper-left-accents"
+         id="use4" />
+      <use
+         href="#upper-left-accents"
+         transform="matrix(-1,0,0,1,1024,0)"
+         id="use5" />
+      <use
+         href="#upper-left-accents"
+         transform="matrix(1,0,0,-1,0,1024)"
+         id="use6" />
+      <use
+         href="#upper-left-accents"
+         transform="rotate(180,512,512)"
+         id="use7" />
+    </g>
+    <rect
+       id="rect7"
+       width="1024"
+       height="1024"
+       fill="url(#brain-wash)"
+       mask="url(#mask19)"
+       style="font-variation-settings:normal;display:inline;opacity:1;vector-effect:none;fill:url(#linearGradient7);fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;stop-color:#000000;stop-opacity:1"
+       x="0"
+       y="0"
+       transform="matrix(0.81774848,0,0,0.83814298,93.31278,82.870794)"
+       inkscape:label="icon and color wash mask" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Layer 1" />
+  <metadata
+     id="metadata22">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>AuDHD UI/UX</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

@@ -1,6 +1,6 @@
 # AuDHD friendly interface guidance
 
-<img src="audhd_uiux_icon_v1.png" alt="AuDHD project logo: overlapping pink and cream circuit motifs inside a turquoise circle" width="160" height="160">
+<img src="audhd_uiux_icon_256.png" alt="AuDHD project logo: overlapping pink and cream circuit motifs inside a turquoise circle" width="160" height="160">
 
 Practical guidance for developers and AI agents building interfaces that are easier to understand, use, pause, resume and correct.
 
@@ -26,6 +26,14 @@ Select or name the `audhd-ui-guide` skill, then choose a prompt below. Paste pro
 Start with one task; you do not need to redesign everything. For a manual review, follow [Try one small review](#try-one-small-review). For agents without skill discovery, use [the attachment-based instructions](#use-without-skill-support).
 
 ## How do I install it?
+
+### ChatGPT and Codex plugin
+
+A skills-only **AuDHD UI Guide** plugin package is prepared for directory submission; it is **not yet publicly available**. It bundles interface audits, new-interface guidance and targeted improvements with the existing guide, preferences and examples. Once approved and published, find AuDHD UI Guide in the ChatGPT or Codex plugin directory, install it and select or name `audhd-ui-guide` in a chat.
+
+Contributors can continue working with the GitHub source and installation methods below. Maintainers can build the ZIP and follow the manual checklist in [OPENAI_PUBLISHING.md](OPENAI_PUBLISHING.md); see [validation status](PLUGIN_VALIDATION.md).
+
+### Existing local installation methods
 
 **Choose one platform and one scope:** personal installation makes the skill available across your projects; project installation makes it available inside one application project. `~` means your home directory; paths without `~` start at the application project.
 

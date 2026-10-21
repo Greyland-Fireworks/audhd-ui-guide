@@ -16,6 +16,7 @@ Make tasks easier to understand, resume, inspect and correct. Accessible behavio
 | Find a rule by ID | [Rule index](#ux-and-interaction-rules) |
 | Organize metrics, alerts, tasks and navigation | [Dashboard guidance](#dashboard-organization-and-hierarchy) |
 | Choose tabs, sub-tabs or expandable groups | [Tabs and accordion sections](#tabs-sub-tabs-and-accordion-sections) |
+| Protect consequential settings without obstructing inspection | [Unlock to edit](#unlock-to-edit-interaction-pattern) |
 | Apply consistent controls, layout and visual states | [UI visual standard](#visual-standard) |
 | Tailor display or interaction preferences | [Optional preference intake and storage](PREFERENCES.md) |
 | Record findings or see concrete applications | [Review template](REVIEW_TEMPLATE.md) and [worked examples](EXAMPLES.md) |
@@ -306,7 +307,7 @@ Include a returning-without-memory review: using only the interface and its help
 
 **Requirement:** Where accidental edits have meaningful consequences, consider a readable locked state with an explicit “Unlock to edit” action for a named field or group. Do not lock every ordinary field by default; extra steps can themselves be a barrier. An editing lock is not an authorization boundary.
 
-Keep values readable and, where appropriate, selectable. Distinguish locked, editing enabled, changed, saving, saved and failed states. Explain whether editing autosaves, re-locking saves or a separate Save action is required. A lock icon alone proves neither saving nor security.
+Keep values readable and, where appropriate, selectable and copyable. Treat editing availability, comparison with a reference, persistence and applicability as independent properties: a field can be locked, changed from baseline and saved at the same time. Explain whether editing autosaves, re-locking saves or a separate Save action is required. A lock icon alone proves neither saving nor security.
 
 Name recovery actions precisely: “Copy default value to clipboard,” “Restore last saved value” and “Restore value from before editing” have different effects. Do not silently substitute one for another. Document whether bulk imports or presets replace locked values and whether unlocking survives a reload.
 
@@ -317,6 +318,62 @@ If re-locking promises to save, confirm persistence through an appropriate ackno
 **Example:** A deployment destination is readable but requires unlocking. Nearby descriptive notes remain directly editable.
 
 **Check:** Copy a locked value, unlock one field, edit, change sections, restore, save and reload. Test failure and keyboard access. Verify that safeguards do not prevent emergency correction or create repetitive friction without benefit.
+
+For the detailed transitions, reference values and product decisions, use the [unlock-to-edit pattern](#unlock-to-edit-interaction-pattern).
+
+## Unlock to edit interaction pattern
+
+Use this pattern when AUDHD-13's deliberate transition from inspection to modification is justified by the consequences of accidental edits. Keep the name, current value, units, protection reason, editing action and recovery feedback together in a stable layout. A card is optional. Ordinary fields can remain directly editable. Unlocking does not grant permission, override a dependency, bypass validation or establish control over a running process.
+
+### Keep independent states visible
+
+| Property | Question it answers | Example labels |
+|---|---|---|
+| Editing availability | Can I directly change this field? | Locked / Editing enabled |
+| Comparison | Does this value differ from the named reference? | Matches baseline / Changed / Baseline unavailable |
+| Persistence | What version was saved, and where? | Unsaved / Saving / Saved on this device / Save failed |
+| Applicability | Does this setting currently take effect? | Inactive under the selected configuration; value retained |
+
+Show the states that apply to the actual workflow. “Matches baseline” establishes neither validity nor saving; “Editing enabled” need not mean the value has changed. Give editing, comparison and keyboard focus distinct cues, with readable text rather than color or padlock icons alone. Keep a dependent setting's explanation and retained value available even when direct editing is unavailable.
+
+### Make transitions local and predictable
+
+| Action or situation | Expected interaction when using this pattern |
+|---|---|
+| Inspect a locked field | Show its current value and units. Allow text selection and copying where appropriate; keep selected choices recognizable. |
+| Choose **Unlock to edit** | Enable only the named field or explicitly named group without changing its value. If session restoration is offered, capture the value at this point. |
+| Edit or switch sections | Follow the stated saving contract. Preserve the draft, editing state, focus and useful position across ordinary panel navigation; navigation alone does not finish or cancel editing. |
+| Choose **Restore value from before editing** | Restore only the named field's captured value and leave editing enabled. Apply the same saving contract as other edits. |
+| Choose **Lock editing** | Prevent further direct editing without silently discarding changes. If this action also promises saving, complete the required save acknowledgement or verification before closing editing. |
+| A promised save fails | Preserve the draft and keep editing open, with a persistent explanation and a working retry or recovery action. |
+| Unlock again | Capture a fresh restoration point for the new editing session, if supported. |
+
+Independent fields may remain open together. Unlocking one must not silently close or unlock its neighbors. An unlocked-field count can help in a large workspace, but is optional. The explicit local unlock action ordinarily needs no second confirmation dialog.
+
+### Name reference values and recovery precisely
+
+Distinguish the current draft, the value captured before unlocking, the selected comparison baseline, a default and the last saved value. If the product also has an applied or historical configuration, identify it separately and establish when draft changes reach it. Do not assume an existing process or record changes with the draft, or that its configuration is frozen, without evidence.
+
+For example, a retry limit starts at `3` when unlocked. Editing it to `5` may successfully autosave; **Restore value from before editing** still returns it to `3`. That restoration point does not move with each autosave. Offer this action while editing when the value differs from the captured value; describe it as one restoration point, not a revision history. Label whole-form undo and restoring defaults separately, with their actual scope.
+
+**Copy default value to clipboard**, when offered, copies the stated default without changing the draft or comparison baseline and can work while editing is locked. Confirm successful copying; if clipboard access fails, keep the reference selectable and explain manual copying. Any focus movement should follow the user's copy request and help complete it.
+
+### Establish saving and lifetime behavior
+
+Use [AUDHD-06](#audhd-06-make-saving-and-recovery-understandable) to establish the saving contract before implementing the pattern. Resolve these decisions from the product or mark them proposed or unknown:
+
+- **Save trigger and scope:** Does saving occur while typing, on committed changes, on re-locking or through a separate action? Does it persist one field or the whole form? A local lock action must not imply that other fields were also locked.
+- **Destination and evidence:** Is this a local draft, shared record or explicit export? Confirm only the version and destination actually acknowledged or verified. Local write/readback verification does not establish durable backup, domain validity or conflict handling across sessions.
+- **Reload and session boundaries:** Which values survive, do fields reopen locked, and is the restoration point temporary? A common choice is to restore saved values with editing locked and discard temporary restoration points; document the chosen behavior rather than implying persisted undo.
+- **Intentional replacement:** Can importing, loading a preset or whole-form undo replace locked values? Explain the replacement's scope and what happens to open edits and restoration points. Re-locking affected fields after an intentional replacement is one option; locks protect direct editing, not every authorized replacement operation.
+
+Keep saving feedback truthful to the operation. Do not promise every partially typed value is preserved if saving happens only after a committed change, or invent asynchronous progress for an instantaneous operation. Preserve recovery information after its initial announcement.
+
+### Accessible operation and verification
+
+Include the field's name in each action's accessible name. Use native read-only text controls where suitable to preserve inspection and copying. If a choice control must be disabled, keep its value and reason readable nearby rather than relying on keyboard focus reaching it. Follow the shared [control requirements](#audhd-11-keep-controls-readable-and-operable) and [target, motion and feedback guidance](#targets-motion-and-feedback); keep focus cues independent and announce meaningful action results without rearranging the interface.
+
+Exercise inspect/copy → unlock → edit → navigate away and back → restore → re-lock → reload against the chosen contract. Where supported, also test independent open fields, inactive dependencies, intentional bulk replacement, save failure or conflicting responses, clipboard failure, keyboard operation, narrow layouts, enlarged text and accessibility overrides. Check that a restoration point survives intermediate saves and that failure does not falsely close a save-dependent editing session. Record observed results separately from planned checks and user feedback; another product's tests do not verify this implementation. Assess whether the safeguard's added steps are justified for the people and task involved.
 
 ## Dashboard organization and hierarchy
 
