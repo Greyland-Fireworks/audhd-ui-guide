@@ -73,7 +73,7 @@ Start with the [quick review](GUIDE.md#quick-review), then select applicable AUD
 | Dashboard priorities, metrics, alerts, panels or navigation levels | [Dashboard organization](GUIDE.md#dashboard-organization-and-hierarchy) |
 | Collection browsing, remembered identifiers, retained search or hidden results | [AUDHD-03](GUIDE.md#audhd-03-offer-manageable-detail-without-hiding-choices) and the [recording discovery example](EXAMPLES.md#find-a-recording-without-remembering-its-identifier) |
 | Tabs, sub-tabs, accordion sections or hidden validation errors | [Pattern selection, context and accessible operation](GUIDE.md#tabs-sub-tabs-and-accordion-sections) |
-| Consequential settings, editing locks or field-level restoration | [AUDHD-13](GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards) and the [unlock-to-edit pattern](GUIDE.md#unlock-to-edit-interaction-pattern); establish the product's save and replacement contract |
+| Consequential settings, editing locks or field-level restoration | [AUDHD-13](GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards), the [unlock-to-edit pattern](GUIDE.md#unlock-to-edit-interaction-pattern) and its [runnable example](examples/unlock-to-edit/README.md); establish the product's save and replacement contract |
 | Color/group cues, display comfort or individual customization | [Color and redundant group cues](GUIDE.md#color-and-redundant-group-cues) and [preferences](PREFERENCES.md) |
 | Meaning and example value of each JSON configuration field | [JSON field reference](README_JSON.md); use PREFERENCES.md for authoritative format and storage rules |
 | Contextual help, unfamiliar meaning or returning without context | [AUDHD-09](GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision), plus AUDHD-01 and AUDHD-10 |
@@ -123,7 +123,7 @@ Report the applicable rule IDs, effective primary targets and material emphasis 
 
 ## Skill maintenance and evaluation
 
-For editorial skill changes, check consistency with the guide, scope, frontmatter and reference links. This does not constitute model or user validation. Load [SKILL_EVALUATIONS.md](SKILL_EVALUATIONS.md) and run model evaluations only when explicitly requested; they remain unrun and require a separate explicit request. Keep reviewer material out of the evaluated model's context as the procedure requires. Ordinary interface work and editorial revisions do not require the evaluation pack.
+For editorial skill changes, check consistency with the guide, scope, frontmatter and reference links. This does not constitute model or user validation. Load [SKILL_EVALUATIONS.md](SKILL_EVALUATIONS.md) and run new model evaluations only when explicitly requested; the evidence record distinguishes supplied outcomes from pending trials. Keep reviewer material, including archived responses, out of the evaluated model's context as the procedure requires. Ordinary interface work and editorial revisions do not require the evaluation pack.
 
 ## License
 

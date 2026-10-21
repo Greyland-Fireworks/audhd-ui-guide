@@ -49,7 +49,7 @@ Viewport emulation, the application's Larger text preset and forced-color emulat
 - Representative participant understanding, preference suitability and enjoyment.
 - Angular/Vue executable references; deep/multiple-category navigation; localization/RTL and permission-filtered indexes.
 - Backend persistence, authentication/permissions, cross-session draft recovery and production configuration integration.
-- All E01–E34 model evaluations, which require a separate explicit request.
+- Further model trials require a separate explicit request; the [current evaluation record](../../SKILL_EVALUATIONS.md#current-evidence) now distinguishes six supplied review responses from 29 Pending cases. These do not establish implementation success.
 - The authored continuous-check workflow has not been executed on hosted CI; only local commands were run. Full browser scenarios outside Chromium, physical touch devices and alternative font availability remain unverified.
 
 The examples use fictional recordings and in-memory save simulation. A successful simulated acknowledgment is not durable storage. Profile export saves preferences only. No clinical benefit or blanket accessibility conformance is claimed.

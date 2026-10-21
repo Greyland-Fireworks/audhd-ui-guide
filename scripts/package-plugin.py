@@ -31,11 +31,17 @@ root_files = {
     'SKILL.md', 'GUIDE.md', 'PREFERENCES.md', 'README_JSON.md', 'README.md',
     'REVIEW_TEMPLATE.md', 'EXAMPLES.md', 'SKILL_EVALUATIONS.md',
     'EVALUATION_INPUTS.md', 'EVALUATION_RUBRIC.md', 'CONTRIBUTING.md',
-    'LICENSE', 'LICENSE-CODE', 'LICENSE_SCOPE.md', 'preferences.example.json',
+    'LICENSE', 'LICENSE-CODE', 'LICENSE_SCOPE.md', 'PRIVACY.md', 'preferences.example.json',
     'audhd_uiux_icon_v2.svg', 'audhd_uiux_icon_256.png',
     'audhd_uiux_icon_2048.png', 'agents/openai.yaml',
     'package.json', 'package-lock.json', 'playwright.config.js',
-    'scripts/check-docs.js', 'OPENAI_PUBLISHING.md', 'PLUGIN_VALIDATION.md',
+    'scripts/check-docs.js',
+    'examples/unlock-to-edit/index.html', 'examples/unlock-to-edit/app.js',
+    'examples/unlock-to-edit/check.mjs', 'examples/unlock-to-edit/README.md',
+    'references/evaluations/2026-10-20-readiness/README.md',
+    'references/evaluations/2026-10-20-readiness/supplied-review.zip',
+    *{f'references/evaluations/2026-10-20-readiness/{case}-response.txt'
+      for case in ['E03', 'E07', 'E08', 'E26', 'E34', 'E35']},
 }
 sources = sorted(root_files | {p for p in tracked if
                  p.startswith(('references/', 'preferences/', 'examples/', 'tests/browser/'))})
@@ -56,7 +62,7 @@ shutil.copyfile(ROOT / 'plugin/plugin.json', package / 'plugin.json')
 (package / 'assets').mkdir()
 for name in ['audhd_uiux_icon_256.png', 'audhd_uiux_icon_2048.png']:
     shutil.copyfile(ROOT / name, package / 'assets' / name)
-for name in ['LICENSE', 'LICENSE-CODE', 'LICENSE_SCOPE.md']:
+for name in ['LICENSE', 'LICENSE-CODE', 'LICENSE_SCOPE.md', 'PRIVACY.md']:
     shutil.copyfile(ROOT / name, package / name)
 
 entry = (skill / 'SKILL.md').read_text(encoding='utf-8')
@@ -69,7 +75,7 @@ assert all(fields.values()) and ': ' not in fields['description']
 
 files = sorted(p for p in package.rglob('*') if p.is_file())
 for path in files:
-    if path.suffix in {'.md', '.json', '.yaml', '.js', '.jsx', '.svelte', '.html', '.css', '.py'}:
+    if path.suffix in {'.md', '.txt', '.json', '.yaml', '.js', '.mjs', '.jsx', '.svelte', '.html', '.css', '.py'}:
         text = path.read_text(encoding='utf-8')
         assert not re.search(r'\b[A-Z]:[\\/]|/Users/|/home/|-----BEGIN .*PRIVATE KEY|\bsk-[A-Za-z0-9]{20,}', text), path
     if path.suffix == '.md':
@@ -121,4 +127,6 @@ assert archive.stat().st_size <= 100 * 1024**2
 print(f'PASS: {len(files)} files; listing limits, front matter, resource links, icons, source boundary and ZIP integrity.')
 print(f'Plugin: {package}')
 print(f'ZIP: {archive}')
-print(f'SHA256: {hashlib.sha256(archive.read_bytes()).hexdigest()}')
+digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+archive.with_suffix('.zip.sha256').write_text(f'{digest}  {archive.name}\n', encoding='utf-8')
+print(f'SHA256: {digest}')

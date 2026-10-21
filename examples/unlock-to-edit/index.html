@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Unlock to edit · AuDHD UI Guide</title>
+<style>
+  :root { color-scheme: light; --bg:#f4f4ef; --panel:#fff; --ink:#172b2a; --muted:#435754; --line:#637672; --accent:#065d54; --tint:#e1f1ec; --error:#9b2424; font:100%/1.6 system-ui,sans-serif; }
+  :root[data-theme=dark] { color-scheme:dark; --bg:#121c20; --panel:#1c292e; --ink:#f0f5f2; --muted:#c0d0cb; --line:#9bafa8; --accent:#83e4c3; --tint:#273f3b; --error:#ffb4ab; }
+  * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--ink); overflow-wrap:anywhere; }
+  main { max-width:68rem; margin:auto; padding:clamp(16px,4vw,48px); }
+  h1 { font-size:clamp(1.8rem,4vw,2.8rem); line-height:1.2; margin:.4rem 0 1rem; } h2 { line-height:1.3; }
+  p { max-width:70ch; } .eyebrow { color:var(--accent); font-weight:750; } .muted { color:var(--muted); }
+  a { color:var(--accent); } button,input,select,textarea { font:inherit; color:var(--ink); background:var(--panel); border:2px solid var(--line); border-radius:.35rem; min-height:44px; padding:.5rem .7rem; max-width:100%; }
+  button { cursor:pointer; text-align:left; } button:disabled { cursor:default; border-style:dashed; color:var(--muted); }
+  :focus-visible { outline:3px solid var(--accent); outline-offset:4px; }
+  input { display:block; width:100%; margin:.4rem 0; } input[readonly] { background:var(--bg); }
+  label { font-weight:650; } .toolbar,.actions,nav { display:flex; gap:.75rem; flex-wrap:wrap; align-items:center; }
+  .toolbar { margin:1.5rem 0; justify-content:space-between; } .toolbar label { display:inline-flex; flex-wrap:wrap; gap:.5rem; align-items:center; max-width:100%; min-width:0; }
+  nav { margin-bottom:1.5rem; } nav button[aria-current=page] { background:var(--tint); border-color:var(--accent); font-weight:750; }
+  .fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr)); gap:1.25rem; }
+  article,.save-state,details { background:var(--panel); border:1px solid var(--line); border-radius:.6rem; padding:20px; }
+  article[data-editing=true] { border:3px solid var(--accent); padding:18px; }
+  .field-header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; margin-bottom:1rem; }
+  .field-header h2 { margin:.3rem 0 0; min-width:0; }
+  .lock-control { position:relative; flex:none; }
+  .lock-toggle { display:grid; place-items:center; width:44px; height:44px; padding:8px; color:var(--accent); }
+  .lock-toggle svg { width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .lock-hint { display:none; position:absolute; top:calc(100% + 6px); right:0; z-index:1; width:max-content; max-width:200px; background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:.3rem; padding:.35rem .6rem; font-size:1rem; }
+  .lock-control:hover .lock-hint,.lock-toggle:focus-visible + .lock-hint { display:block; }
+  .lock-control[data-hint-dismissed] .lock-hint { display:none; }
+  .state { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
+  .comparison { font-weight:650; } .actions { align-items:stretch; } .actions button { flex:1 1 12rem; }
+  .save-state { margin:1.25rem 0; border-left:5px solid var(--accent); } .save-state p { margin:.3rem 0; }
+  .error { color:var(--error); font-weight:650; } [hidden] { display:none!important; }
+  summary { cursor:pointer; min-height:44px; padding:.5rem 0; font-weight:650; } details label { display:block; margin:.5rem 0; }
+  textarea { width:100%; min-height:9rem; } footer { margin-top:2rem; } @media(forced-colors:active) { article[data-editing=true],:focus-visible { border-color:Highlight; outline-color:Highlight; } }
+</style>
+<main>
+  <header>
+    <div class="eyebrow">INTERACTION EXAMPLE · LOCAL DRAFT</div>
+    <h1>Inspect freely. Edit deliberately.</h1>
+    <p>Try protected delivery settings for a fictional service. Nothing is sent. These limits are protected because accidental edits could change retry volume and waiting time.</p>
+  </header>
+  <div class="toolbar">
+    <label for="appearance">Appearance <select id="appearance"><option value="light">Light</option><option value="dark">Dark</option></select></label>
+    <label for="text-size">Text size <select id="text-size"><option value="100%">100%</option><option value="150%">150%</option><option value="200%">200%</option></select></label>
+  </div>
+  <nav aria-label="Example sections">
+    <button id="settings-tab" aria-current="page" aria-controls="settings">Settings</button>
+    <button id="contract-tab" aria-controls="contract">How saving works</button>
+  </nav>
+  <section id="settings" aria-label="Delivery settings">
+    <p class="muted">Use the lock in each card’s upper-right corner to enable or finish editing. Unlocking opens only that field. Edits save when you leave the field or commit a change. Re-locking verifies both values in browser storage. “Changed” compares with the example defaults.</p>
+    <div class="fields">
+      <article id="retries-card" aria-labelledby="retries-heading">
+        <div class="field-header">
+          <h2 id="retries-heading">Retry limit</h2>
+          <div class="lock-control">
+            <button id="retries-lock" class="lock-toggle" aria-controls="retries" aria-label="Unlock to edit — retry limit" aria-describedby="retries-state">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path id="retries-shackle" d="M7 10V7a5 5 0 0 1 10 0v3"/><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M12 14v3"/></svg>
+            </button>
+            <span id="retries-hint" class="lock-hint" aria-hidden="true">Unlock to edit</span>
+          </div>
+        </div>
+        <span id="retries-state" class="state">Locked</span>
+        <label for="retries">Additional attempts</label>
+        <input id="retries" type="text" inputmode="numeric" value="3" readonly aria-describedby="retries-help retries-state retries-comparison retries-error">
+        <p id="retries-help">Retries after the first attempt fails. Use a whole number from 0 to 10. This setting is always active in this example.</p>
+        <p id="retries-error" class="error" hidden></p>
+        <p id="retries-comparison" class="comparison">Matches default: 3</p>
+        <p id="retries-before" class="muted">Unlock to capture a restoration point.</p>
+        <div class="actions">
+          <button id="retries-restore" aria-label="Restore value from before editing — retry limit" disabled>Restore value from before editing</button>
+        </div>
+      </article>
+      <article id="timeout-card" aria-labelledby="timeout-heading">
+        <div class="field-header">
+          <h2 id="timeout-heading">Response timeout</h2>
+          <div class="lock-control">
+            <button id="timeout-lock" class="lock-toggle" aria-controls="timeout" aria-label="Unlock to edit — response timeout" aria-describedby="timeout-state">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path id="timeout-shackle" d="M7 10V7a5 5 0 0 1 10 0v3"/><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M12 14v3"/></svg>
+            </button>
+            <span id="timeout-hint" class="lock-hint" aria-hidden="true">Unlock to edit</span>
+          </div>
+        </div>
+        <span id="timeout-state" class="state">Locked</span>
+        <label for="timeout">Seconds per attempt</label>
+        <input id="timeout" type="text" inputmode="numeric" value="30" readonly aria-describedby="timeout-help timeout-state timeout-comparison timeout-error">
+        <p id="timeout-help">Wait before an attempt times out. Use a whole number from 1 to 120. This setting is always active in this example.</p>
+        <p id="timeout-error" class="error" hidden></p>
+        <p id="timeout-comparison" class="comparison">Matches default: 30</p>
+        <p id="timeout-before" class="muted">Unlock to capture a restoration point.</p>
+        <div class="actions">
+          <button id="timeout-restore" aria-label="Restore value from before editing — response timeout" disabled>Restore value from before editing</button>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section id="contract" aria-labelledby="contract-heading" hidden>
+    <h2 id="contract-heading">Your draft and its limits</h2>
+    <p>Both settings are saved together on committed edits, restoration, and re-locking. Each write is immediately read back and compared. There is no server save, live service or durable backup.</p>
+    <p>Changing sections or appearance preserves open edits and restoration points. Reload restores successfully stored settings, starts both fields locked, and discards restoration points. Appearance and text size reset on reload.</p>
+    <p>Restore means the value at the start of that field’s editing session, even after autosave. It is one restoration point, not history. Loading example defaults intentionally replaces both fields, including locked values, and re-locks them only after a verified save.</p>
+    <p>Other tabs can overwrite this browser-local draft; conflict handling and cross-device synchronization are not provided. A lock protects direct editing, not permissions or security.</p>
+  </section>
+  <div class="save-state">
+    <strong>Whole-draft storage</strong>
+    <p id="save-status" role="status" aria-live="polite" aria-atomic="true">Example defaults loaded; no draft saved yet.</p>
+    <p id="action-status" role="status" aria-live="polite" aria-atomic="true"></p>
+    <div class="actions"><button id="retry-save">Retry saving draft</button><button id="export">Export current values</button></div>
+    <p class="muted">Export includes current values, even incomplete edits, as text for manual recovery. It is not an importable preset.</p>
+    <div id="manual-export" hidden><label for="recovery">Last export snapshot — copy manually</label><textarea id="recovery" readonly></textarea></div>
+  </div>
+  <details>
+    <summary>Try failure and replacement</summary>
+    <p>These controls simulate failures for this example. Normal saves use real browser storage. A verification mismatch may occur after a write; “unverified” does not promise the stored value is unchanged.</p>
+    <label for="failure">Next save attempt</label>
+    <select id="failure"><option value="none">Normal write and verification</option><option value="blocked">Simulate a blocked write</option><option value="mismatch">Simulate a verification mismatch</option></select>
+    <p><button id="defaults">Replace both settings with example defaults</button></p>
+  </details>
+  <footer class="muted">A focused example of AUDHD-13. <a href="../../GUIDE.md#unlock-to-edit-interaction-pattern">Read the Guide</a>. Browser checks do not establish suitability for every user.</footer>
+</main>
+<script type="module" src="app.js"></script>
+</html>

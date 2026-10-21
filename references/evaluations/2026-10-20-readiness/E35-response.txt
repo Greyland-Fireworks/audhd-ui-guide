@@ -1,0 +1,20 @@
+The supplied description supports three focused findings. Adding thumbnails, pins, recently watched and autocomplete together is not justified. This review covers recording discovery, retained search and the loaded review note; no edits or runtime checks were performed. Rule emphasis defaults to **Apply**, with no configured primary targets.
+
+1. **High: Discovery requires information the returning user cannot recall.**  
+   IDs are the only item names, while the user remembers the map and comparison purpose. This is a **UI concern** about labels and available cues, and a **UX concern** about finding the recording without reconstructing its identifier.  
+   **Recommend:** Show existing map and purpose metadata in browsable item summaries, with date as supporting information and ID retained as secondary detail. Keep search as a supplement. **Layers:** wording/layout and discovery interaction; metadata retrieval may require investigation. **Rules:** AUDHD-03, AUDHD-04.  
+   **Pending verification:** Ask the returning user to find the recording using map and purpose without typing a name, date or ID. Record what they recognize, infer or still cannot distinguish.
+
+2. **High: The retained restriction makes the library appear incomplete.**  
+   An inconspicuous query shows only three of eighteen eligible recordings, without a count or reset action. The user cannot readily tell why other recordings are absent. **Both UI and UX.**  
+   **Recommend:** Make the active query conspicuous beside “3 of 18 eligible recordings,” and provide a precisely scoped action such as “Clear search” if it clears only that query. Search should cover all eligible recordings within its stated scope; current coverage is unknown. **Layers:** wording/layout and filter interaction state; search logic if coverage is incomplete. **Rule:** AUDHD-03.  
+   **Pending verification:** Return with the retained query, confirm count and scope, reach zero matches, then clear the stated restriction. Check that explanations and totals remain accurate.
+
+3. **High: The loaded recording’s absence is unexplained while work remains open.**  
+   The recording is outside the results, but its unsaved note remains visible. That creates uncertainty about which item is being reviewed and how browsing relates to the open work. Actual draft loss is **not established**. **Both UI and UX.**  
+   **Recommend:** Identify the loaded recording beside its note and visibly explain “Current recording is outside these search results.” Clearing or changing filters should preserve loaded identity and the unsaved note; loading another recording must remain a separate action. **Layers:** wording/layout and interaction state; draft persistence and switching behavior require inspection. **Rules:** AUDHD-01, AUDHD-03, AUDHD-05, AUDHD-06, AUDHD-10.  
+   **Pending verification:** With an unsaved note, exclude the loaded recording, change and clear search, and confirm that identity, note, unsaved status and usable focus survive without an implicit save or item switch.
+
+Start with these metadata and filter changes. Thumbnails are worth considering only if they provide useful recognition beyond text, with text equivalents. Pins need evidence of recurring comparison work; recently watched needs a relevant history use case and established retention/privacy boundaries. Autocomplete still requires a starting clue and would not resolve this user’s difficulty alone. Each addition creates more controls or maintenance to justify.
+
+Only the supplied text was inspected. Rendering, accessible semantics, keyboard operation, focus, narrow/enlarged layouts, supported appearances, contrast, search coverage and draft-retention behavior remain unverified. These are pending checks, not confirmed failures or passes.

@@ -1,0 +1,12 @@
+“Restore” is too vague for an action that replaces current work. This wording-only review uses the supplied description; no interface or behavior checks were performed, and nothing was edited.
+
+**Main finding — clarify the replacement and its scope.** Users may not realize their current draft will be replaced or may expect published content to change. Propose:
+
+- **Action:** “Replace draft with saved version”
+- **Visible explanation beside it:** “This replaces your current draft with the saved version. Published content stays unchanged.”
+
+This is **both UI and UX**: the label lacks precision, affecting a user’s ability to predict the result. The affected implementation layer is **wording/layout**; no behavior change is proposed. Relevant rules: **AUDHD-04, AUDHD-09 and AUDHD-13**, with scope under **AUDHD-01**.
+
+**Recovery remains unknown.** Whether undo exists is undocumented. Do not promise “You can undo this” or assert “This cannot be undone.” Establish the recovery boundary before adding either claim. That dependency concerns **interaction state/persistence**, separate from the proposed wording change (**AUDHD-06, AUDHD-09**).
+
+**Pending verification:** In a test environment, use a draft that differs from its saved version, activate the action, and check that the draft is replaced while published content stays unchanged. Investigate and exercise any undo path. Separately, ask someone unfamiliar with the workflow to explain what will change from the proposed wording before acting. No new confirmation dialog or safeguard is justified by the supplied facts alone.

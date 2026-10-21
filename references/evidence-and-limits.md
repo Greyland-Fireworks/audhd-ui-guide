@@ -5,7 +5,7 @@ Updated October 20, 2026. This concise record supports the [Guide](../GUIDE.md);
 | Material | Classification and rule mapping | Evidence and limits |
 |---|---|---|
 | Clear scope, relationships and explanations | Adopted outcomes: AUDHD-01, 02, 04, 09 | Practitioner observations plus cognitive accessibility guidance; the exact card/arrow/colon treatment is an implementation example. |
-| Recognition-based collection discovery and visible filters | Guidance under AUDHD-01, 03, 04, 05, 10, 11, 12 | Supplied account of a problem and reported changes in another project, plus a fictional worked example and E35. Implementation, reduced effort and model/participant outcomes are unverified; optional patterns are not universal requirements. |
+| Recognition-based collection discovery and visible filters | Guidance under AUDHD-01, 03, 04, 05, 10, 11, 12 | Supplied account of a problem and reported changes in another project, plus a fictional worked example and E35. E35 has a supplied review response; implementation and participant outcomes for that scenario remain unverified. Optional patterns are not universal requirements. |
 | Independent context and focus | Adopted outcomes: AUDHD-02, 05, 11 | Reference transitions exercise separate cues; one person's feedback identified distracting heading outlines. This does not justify hiding keyboard focus. |
 | Skins, text styles and enjoyment | Selectable preferences under adopted continuity/accessibility outcomes: AUDHD-10, 11 | 22 named palettes and four styles demonstrate bounded implementation. No representative study establishes ideal hues, fonts, number of skins or clinical benefit. |
 | Canonical index/breadcrumbs | Implemented pattern: AUDHD-01, 03, 05, 10 | Shared page records, independent routers and browser checks. Multiple-category paths/cross-highlighting remain a proposal. |
@@ -13,7 +13,8 @@ Updated October 20, 2026. This concise record supports the [Guide](../GUIDE.md);
 | Per-record save snapshots and recovery | Adopted outcomes: AUDHD-04, 06, 07, 13 | Separate state-engine tests and rendered failure/retry, reverse completion and newer-edit scenarios. Simulation does not establish backend durability or concurrency handling. |
 | Charts and data equivalents | Adopted outcomes: AUDHD-08, 11; exact colors and chart types are examples | Token contrast and sequential ordering checks; labeled bars/lines, explicit diverging center, missing-data text and tables. Participant interpretation and real chart-library integration remain unverified. |
 | Preference migration/application | Implemented contract: AUDHD-04, 06, 10, 12, 13 | Strict validator, compatibility fixtures and independent consumers. Product-specific capabilities and privacy still govern effective behavior. |
-| Other frameworks and broad developer prompts | Adapter guidance and evaluation scenarios | Angular/Vue executable checks and all model evaluations remain Pending. A scenario's existence is not successful execution. |
+| Unlock-to-edit transitions | Scoped implementation of AUDHD-04, 05, 06, 11, 13 | [Standalone example](../examples/unlock-to-edit/README.md) exercises independent locks, restoration after autosave, verification failures and reload. Local browser checks are separate from intended-user and assistive-technology evidence. |
+| Other frameworks and broad developer prompts | Adapter guidance and evaluation scenarios | Angular/Vue executable checks remain Pending. [Six supplied review responses](../SKILL_EVALUATIONS.md#current-evidence) do not establish skill activation or implementation reliability; the other 29 cases remain Pending. |
 
 ## Primary sources and application
 

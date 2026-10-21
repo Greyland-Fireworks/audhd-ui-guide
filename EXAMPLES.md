@@ -9,6 +9,7 @@ Use the guide's [UI and UX definitions](GUIDE.md#ui-and-ux-in-this-project). The
 | I need help with… | Open this example |
 |---|---|
 | Naming a setting, explaining scope and saving safely | [Settings form](#settings-form-understand-before-changing) |
+| Trying independent editing locks, restoration and save failure | [Runnable unlock-to-edit demonstrator and observed checks](examples/unlock-to-edit/README.md) |
 | Organizing tabs, accordion sections and hidden errors | [Settings workspace](#settings-workspace-tabs-and-accordion-sections) |
 | Prioritizing metrics, alerts, tasks and supporting information | [Dashboard](#dashboard-from-summary-to-action) |
 | Distinguishing execution, verified output and stale results | [Monitoring screen](#monitoring-screen-status-is-not-a-promise) |

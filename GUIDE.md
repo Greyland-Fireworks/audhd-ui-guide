@@ -319,7 +319,7 @@ If re-locking promises to save, confirm persistence through an appropriate ackno
 
 **Check:** Copy a locked value, unlock one field, edit, change sections, restore, save and reload. Test failure and keyboard access. Verify that safeguards do not prevent emergency correction or create repetitive friction without benefit.
 
-For the detailed transitions, reference values and product decisions, use the [unlock-to-edit pattern](#unlock-to-edit-interaction-pattern).
+For the detailed transitions, reference values and product decisions, use the [unlock-to-edit pattern](#unlock-to-edit-interaction-pattern). Try the [standalone demonstrator](examples/unlock-to-edit/README.md) to exercise one explicitly scoped implementation and its failure paths.
 
 ## Unlock to edit interaction pattern
 

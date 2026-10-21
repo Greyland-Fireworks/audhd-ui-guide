@@ -4,7 +4,7 @@
   "version": "1.1.1",
   "description": "Design, audit and improve interfaces using the AuDHD UI Guide, with cognitive accessibility, workflow continuity and individual preferences.",
   "author": {
-    "name": "Charles Beckwith",
+    "name": "Greyland Fireworks Corporation",
     "url": "https://github.com/Greyland-Fireworks/audhd-ui-guide"
   },
   "homepage": "https://github.com/Greyland-Fireworks/audhd-ui-guide",
@@ -24,7 +24,7 @@
         "displayName": "AuDHD UI Guide",
         "shortDescription": "Cognitive accessibility for UI",
         "longDescription": "Apply the AuDHD UI Guide to audit existing interfaces, design new dashboards and improve UI and UX while preserving application behavior and visual design. Includes guidelines, review templates, preference schemas and worked examples. Distinguishes evidence, design hypotheses and individual preferences. No single appearance suits everyone. Practitioner guidance, not clinical advice or accessibility certification.",
-        "developerName": "Charles Beckwith",
+        "developerName": "Greyland Fireworks Corporation",
         "category": "Developer Tools",
         "capabilities": [
           "Interface audits",
@@ -32,14 +32,16 @@
           "Accessibility improvements"
         ],
         "websiteURL": "https://github.com/Greyland-Fireworks/audhd-ui-guide",
-        "supportURL": "https://github.com/Greyland-Fireworks/audhd-ui-guide/issues",
+        "supportURL": "https://github.com/Greyland-Fireworks/audhd-ui-guide/discussions",
         "defaultPrompt": [
           "Run an AuDHD usability audit on this monitoring dashboard.",
           "Using the AuDHD UI Guide, create a configuration dashboard that matches this application.",
           "Review this interface and implement the highest-priority cognitive accessibility improvements."
         ],
         "composerIcon": "./assets/audhd_uiux_icon_256.png",
-        "logo": "./assets/audhd_uiux_icon_2048.png"
+        "logo": "./assets/audhd_uiux_icon_2048.png",
+        "privacyPolicyURL": "https://github.com/Greyland-Fireworks/audhd-ui-guide/blob/main/PRIVACY.md",
+        "termsOfServiceURL": "https://github.com/Greyland-Fireworks/audhd-ui-guide/blob/main/LICENSE_SCOPE.md"
       },
       "publication": {
         "release_notes": "Clarify skill completion criteria, require inspectable demonstrations for exploratory requests, and add a compact execution checklist, consequential decision tracking and proportional reporting. Guide rules remain v1.01."

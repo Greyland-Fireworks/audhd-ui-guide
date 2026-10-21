@@ -15,3 +15,7 @@ The project logo artwork, including its editable SVG source and PNG exports at a
 You may display the unmodified logo to identify, discuss or link to this project, with credit and a link to the project. Other uses, including unrelated product branding or merchandise, require prior written permission. Permission does not imply endorsement.
 
 This scope notice identifies the materials covered by each permission; it does not amend the CC BY 4.0 license text.
+
+## Warranty disclaimer
+
+The materials are provided “as is,” subject to the warranty disclaimers and limitations of liability in the applicable licenses. See the licenses identified on this page.

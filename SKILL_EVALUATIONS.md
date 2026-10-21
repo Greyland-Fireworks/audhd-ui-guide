@@ -1,20 +1,20 @@
 # Skill evaluation procedure
 
-**Version:** v1.01 · **Status:** 35 authored scenarios; all model outcomes remain Pending. Run only on a separate explicit request.
+**Version:** v1.01 · **Status:** 35 authored scenarios; six supplied review outcomes inspected, 29 Pending. New model trials require a separate explicit request.
 
 This pack tests interpretation and review quality, not accessibility conformance or real interface operation.
 
 ## Explicitly requested model testing
 
-This is deferred work, not a requirement for using or publishing this practitioner draft. Do not ask contributors to run the whole pack before giving ordinary feedback.
+Further trials are deferred work, not a requirement for using or publishing this practitioner draft. Do not ask contributors to run the whole pack before giving ordinary feedback. See [current evidence](#current-evidence) for the supplied review results and their limits.
 
 Start with E03, E07 and E08 in fresh conversations. Give each model the standard request, skill, guide and one scenario; for E21–E26, include the preference documentation and example JSON specified below. Save its first response without coaching, then have a separate reviewer use the rubric. Record model/date, inputs, document revisions and outcomes. If practical, compare with the same scenarios without the skill, recording exactly which references each condition receives, and later expand to other cases or configurations. Report missed problems, disproportionate fixes and unsupported claims separately. Do not infer demonstrated user benefit from successful text reviews.
 
 The procedure below is retained for that future work. No evaluation runs are scheduled or required now.
 
-E27–E34 add broad developer requests, connected context, appearance, navigation, help and profile/workflow scenarios. Their review recommendations remain unrun; no implemented behavior or skill activation success is inferred. Supply preference documentation for E29, E33 and E34 as well.
+E27–E34 add broad developer requests, connected context, appearance, navigation, help and profile/workflow scenarios. E34 has a supplied review response; E27–E33 remain Pending. No implemented behavior or skill activation success is inferred. Supply preference documentation for E29, E33 and E34 as well.
 
-E35 adds recognition-based collection discovery, retained search scope and reset continuity. Its model outcome remains Pending; it does not establish real-interface behavior or user benefit.
+E35 adds recognition-based collection discovery, retained search scope and reset continuity. Its supplied response mostly meets the rubric, with less explicit keyboard/narrow-layout test sequences. This does not establish real-interface behavior or user benefit.
 
 ### Coverage limits
 
@@ -49,6 +49,8 @@ Mark unrun cases Pending. If a response invents behavior, claims tests it did no
 
 ## Current evidence
 
-The scenarios and document structure have been reviewed during authoring. This is not an independent model evaluation. All E01–E35 model outcomes remain Pending (not authorized or run); no success rate is claimed. No runnable interface or interaction testing is included in this pack.
+The [supplied October 20 review archive and October 21 assessment](references/evaluations/2026-10-20-readiness/README.md) preserve exact inputs, responses, document snapshots and reported methodology. Inspection against the rubric supports “meets core criteria” for E03, E07, E08, E26 and E34, and “mostly meets” for E35. The other 29 cases remain Pending. These are supplied review outcomes; no new blind trials were run during reconciliation.
+
+The report describes separate subagent contexts with first responses reviewed by the parent. Precise model build/settings and execution logs are unavailable; no repeated runs or without-skill comparison were provided. The standard prompt itself requests many assessed behaviors. Do not present these results as an isolated measure of skill benefit, an independently reproduced run, implementation reliability or user suitability. The separately reported unreadable Light demonstration remains unresolved; successful text reviews do not erase it.
 
 This evaluation material is guide text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

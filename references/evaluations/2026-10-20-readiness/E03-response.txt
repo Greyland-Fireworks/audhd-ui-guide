@@ -1,0 +1,15 @@
+The supplied description supports one focused finding: **the help does not restore understanding of “Refresh preview.”** Scope is this control and its help; nothing was edited.
+
+The text “Calls refresh_preview(config)” describes code rather than explaining the action. Because it is hover-only, the explanation also depends on pointer hover. The returning user must reconstruct which values the preview uses and whether refreshing saves or publishes.
+
+This is **both UI and UX**: UI wording and help access impede understanding of the task and its consequences. The affected implementation layers are **wording/layout and help interaction**, with no demonstrated need to change preview business logic. Relevant rules are AUDHD-09, AUDHD-04, AUDHD-11 and AUDHD-10; emphasis defaults to Apply.
+
+Recommend replacing the code-shaped help with a short, visible explanation beside the existing button:
+
+> Rebuild the preview using the current form values, including unsaved changes. Use this to see your edits before saving. Refreshing does not save or publish.
+
+This adds a small amount of reading but removes the need to discover a tooltip or interpret code. The supplied facts do not justify a new help panel, confirmation or broader redesign.
+
+**Verification pending:** With an unsaved edit, check that refreshing updates the preview without saving or publishing and preserves the form values. Check that the explanation remains readable at narrow widths and enlarged text, is associated with the control for assistive technology, and is available without hover. Ask someone unfamiliar with the implementation to explain the action using only the interface.
+
+Only the supplied description was inspected. Rendered layout, accessible semantics, runtime behavior, refresh failure handling and actual user understanding remain unknown.

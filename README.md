@@ -27,13 +27,7 @@ Start with one task; you do not need to redesign everything. For a manual review
 
 ## How do I install it?
 
-### ChatGPT and Codex plugin
-
-A skills-only **AuDHD UI Guide** plugin package is prepared for directory submission; it is **not yet publicly available**. It bundles interface audits, new-interface guidance and targeted improvements with the existing guide, preferences and examples. Once approved and published, find AuDHD UI Guide in the ChatGPT or Codex plugin directory, install it and select or name `audhd-ui-guide` in a chat.
-
-Contributors can continue working with the GitHub source and installation methods below. Maintainers can build the ZIP and follow the manual checklist in [OPENAI_PUBLISHING.md](OPENAI_PUBLISHING.md); see [validation status](PLUGIN_VALIDATION.md).
-
-### Existing local installation methods
+### Local installation methods
 
 **Choose one platform and one scope:** personal installation makes the skill available across your projects; project installation makes it available inside one application project. `~` means your home directory; paths without `~` start at the application project.
 
@@ -214,7 +208,7 @@ AuDHD commonly refers to the co-occurrence of autism and ADHD. Some people want 
 
 This is a practitioner guide, not a clinical intervention or certification. Its specific patterns have not been established here through research with a representative group of AuDHD users. No skin, font or information density is claimed to suit every AuDHD person.
 
-Version **v1.01** is being prepared for publication. The Guide remains practitioner guidance with the evidence limits described above. All 35 prepared model-evaluation scenarios remain unrun and require a [separate explicit request](SKILL_EVALUATIONS.md#explicitly-requested-model-testing). Those evaluations are not required for ordinary use or feedback, and successful text reviews would not prove real-interface usability.
+Version **v1.01** is being prepared for publication. The Guide remains practitioner guidance with the evidence limits described above. Six supplied review responses have been inspected; 29 of the 35 authored cases remain Pending. See the [evaluation evidence and limits](SKILL_EVALUATIONS.md#current-evidence). New trials require a separate explicit request and are not required for ordinary use or feedback. Successful text reviews do not prove real-interface usability.
 
 > [!NOTE]
 > **Why I developed this guide**
