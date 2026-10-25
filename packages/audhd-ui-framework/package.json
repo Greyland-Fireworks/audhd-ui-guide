@@ -1,0 +1,39 @@
+{
+  "name": "audhd-ui-framework",
+  "version": "0.1.0-alpha.2",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "license": "SEE LICENSE IN LICENSE_SCOPE.md",
+  "exports": {
+    ".": "./profile.js",
+    "./v1.schema.json": "./v1.schema.json",
+    "./v2.schema.json": "./v2.schema.json",
+    "./skins.css": "./skins.css",
+    "./palettes": "./palette-data.json",
+    "./capabilities": "./capabilities.js",
+    "./import-workflow": "./import-workflow.js"
+  },
+  "files": [
+    "profile.js",
+    "v1.schema.json",
+    "v2.schema.json",
+    "skins.css",
+    "palette-data.json",
+    "README.md",
+    "LICENSE",
+    "LICENSE-CODE",
+    "LICENSE_SCOPE.md",
+    "capabilities.js",
+    "import-workflow.js"
+  ],
+  "sideEffects": [
+    "./skins.css"
+  ],
+  "dependencies": {
+    "ajv": "8.20.0",
+    "jsonc-parser": "3.3.1"
+  }
+}

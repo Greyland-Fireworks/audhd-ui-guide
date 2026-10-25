@@ -46,15 +46,16 @@ test('Palette preview retains labels and data through all skins', async ({page})
 
 test('Actual text contrast, all skin/style combinations and enlarged targets', async ({page}) => {
   await page.getByRole('navigation',{name:'Workspace sections',exact:true}).getByRole('link',{name:'Workspace preferences'}).click();
-  const skins=page.getByRole('combobox',{name:'Appearance',exact:true});
-  const styles=page.getByRole('combobox',{name:'Text style',exact:true});
-  const values=await skins.locator('option').evaluateAll(nodes=>nodes.map(n=>n.value).filter(v=>v.startsWith('skin:')));
+  await page.locator('.appearance-disclosure > summary').click();
+  const skins=page.getByRole('group',{name:'Appearance',exact:true});
+  const styles=page.getByRole('group',{name:'Text style',exact:true});
+  const values=await skins.locator('input[type=radio]').evaluateAll(nodes=>nodes.map(n=>n.value).filter(v=>v.startsWith('skin:')));
   await page.setViewportSize({width:320,height:900});
-  await page.getByRole('combobox',{name:'Text size',exact:true}).selectOption('larger');
+  await page.getByRole('group',{name:'Text size',exact:true}).locator('input[value="larger"]').check();
   for(const skin of values) {
-    await skins.selectOption(skin);
+    await skins.locator(`input[value="${skin}"]`).check();
     for(const type of ['system','expressive','serif','mono']) {
-      await styles.selectOption(type);
+      await styles.locator(`input[value="${type}"]`).check();
       expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${skin}/${type} reflow`).toBe(true);
     }
     const failures=await page.evaluate(()=>{
@@ -68,7 +69,7 @@ test('Actual text contrast, all skin/style combinations and enlarged targets', a
     });
     expect(failures,skin).toEqual([]);
   }
-  await page.getByRole('combobox',{name:'Spacing',exact:true}).selectOption('compact');
+  await page.getByRole('group',{name:'Spacing',exact:true}).locator('input[value="compact"]').check();
   const undersized=await page.locator('a,button,select,summary,input').evaluateAll(nodes=>nodes.filter(el=>el.getClientRects().length).filter(el=>{const box=el.getBoundingClientRect();return box.width<44||box.height<44;}).map(el=>el.textContent||el.id));
   expect(undersized).toEqual([]);
 });

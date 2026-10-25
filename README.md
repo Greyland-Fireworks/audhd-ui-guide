@@ -16,6 +16,10 @@ Practical guidance for developers and AI agents building interfaces that are eas
 
 ## How do I use it?
 
+For a bounded first pass, request **`audhd quick review`** and name the component or task. For the complete affected workflow, use **`audhd audit`**. Both are review-only unless you request changes. They report evidence and unknowns, not UX scores or automatic shipping approval. The [interface-pattern lookup](references/interface-patterns.md) helps select checks without reading every rule.
+
+Developers can also try the optional [audhd-ui-framework foundation](packages/audhd-ui-framework/README.md): preference utilities, application capability declarations, a shared import/preview workflow and explicitly scoped appearance assets, packaged for local installation. It is an **internal alpha candidate**, with [validation gates recorded separately](references/framework-evidence.md). The Guide and Skill require no framework installation. See [concept provenance](references/concept-adoption.md) for the independently authored integration of review-workflow ideas.
+
 Select or name the `audhd-ui-guide` skill, then choose a prompt below. Paste prompts into your agent’s chat:
 
 - **Review an existing interface:** “Use the audhd-ui-guide skill. Run an AuDHD audit on this program's UI components. Report the main problems and recommended improvements before changing anything.”
@@ -208,7 +212,7 @@ AuDHD commonly refers to the co-occurrence of autism and ADHD. Some people want 
 
 This is a practitioner guide, not a clinical intervention or certification. Its specific patterns have not been established here through research with a representative group of AuDHD users. No skin, font or information density is claimed to suit every AuDHD person.
 
-Version **v1.01** is being prepared for publication. The Guide remains practitioner guidance with the evidence limits described above. Six supplied review responses have been inspected; 29 of the 35 authored cases remain Pending. See the [evaluation evidence and limits](SKILL_EVALUATIONS.md#current-evidence). New trials require a separate explicit request and are not required for ordinary use or feedback. Successful text reviews do not prove real-interface usability.
+Version **v1.01** is being prepared for publication. The Guide remains practitioner guidance with the evidence limits described above. The earlier supplied-review dataset covers six of 35 authored cases, with 29 Pending in that dataset; see its [evidence and limits](SKILL_EVALUATIONS.md#current-evidence). The newer [framework skill comparison](references/evaluations/2026-10-24-framework/README.md) records separate baseline/candidate trials, a failed first gate and a repaired candidate. New trials require a separate explicit request and are not required for ordinary use or feedback. Successful text reviews do not prove real-interface usability.
 
 > [!NOTE]
 > **Why I developed this guide**

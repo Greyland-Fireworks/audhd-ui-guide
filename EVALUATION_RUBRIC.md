@@ -206,4 +206,20 @@ Apply presentation independently, preserve pending snapshot/newer draft/identity
 
 Propose checks for finding an item without typing an identifier, return with retained search, combined filters where supported or proposed, zero matches, an excluded loaded recording and reset with an unsaved note, including keyboard operation and narrow layouts. Keep all checks pending. Treat thumbnails, pins, recently watched and autocomplete as task-dependent options, not a required bundle; mention text equivalents for previews and privacy/retention when recommending history. Autocomplete alone does not remove the need for a starting clue. Do not invent descriptive metadata, bypass eligibility/permissions, claim edits or assert demonstrated user benefit. Relevant rules: AUDHD-01, 03, 04, 05, 10, 11, 12; AUDHD-08 if previews are proposed.
 
+## E36 — First-pass presentation choices
+
+Require the initial design to include representative palette/font/size/spacing previews, distinct peer groups and conspicuous selected state separate from focus. Use a task-justified disclosure for the long optional palette collection with explicit show/hide wording, current selection and compact visual summary. Keep import/export discoverable; distinguish immediate application from preview. Preserve unsaved work, native selection semantics and text equivalents. Propose narrow/keyboard/override and application checks without claiming execution. Accept equivalent layouts; do not require a specific framework, card design or fixed option limit. AUDHD-02, 03, 04, 05, 09, 11, 12.
+
+## E37 — Optional collections during required correction
+
+Distinguish optional bulk from required correction. Recommend collapsing the long optional collection with action wording, current value and representative visual; keep the blocking error and correction path discoverable rather than mandating collapsed defaults everywhere. Opening must not apply a choice. Require keyboard/state checks and preserve task context. No edits, fabricated verification or numerical option threshold. AUDHD-03, 04, 05, 11, 12.
+
+## E38 — Peer settings and misleading previews
+
+Identify weak group boundaries, inconsistent peer prominence, subtle selection and confused focus. Require representative previews and truthful application scope; investigate whether to implement promised padding or correct the promise based on established needs, without asserting behavior from screenshots. Propose testing actual padding/gaps, targets, selection semantics, theme/narrow layouts and focus. Borders and cards are optional. No automatic layout rewrite or claim of proven usability. AUDHD-02, 04, 11, 12.
+
+## E39 — Optional explanation versus essential consequences
+
+Move optional background to accessible help immediately after its subject when it reduces clutter, retain concise essential replacement/session consequences and blocking errors visibly near decisions, and preserve keyboard/touch access and programmatic associations. Avoid redundant info buttons and hiding all explanations indiscriminately. Keep the recommendation scoped, with checks marked proposed. AUDHD-04, 06, 09, 11, 12.
+
 This evaluation material is guide text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

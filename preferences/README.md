@@ -1,5 +1,7 @@
 # Portable preferences
 
+The canonical implementation and schemas now live in the optional [framework package](../packages/audhd-ui-framework/README.md). The existing `profile.js` path remains a compatibility re-export; schema files remain checked compatibility copies. CLI behavior and schema versions are unchanged. Consumers can import the package without importing appearance CSS.
+
 [Authoritative format, precedence and privacy](../PREFERENCES.md) · [Field reference](../README_JSON.md)
 
 Install from the repository root with `npm ci` (Node 22.12+). Validation is read-only:

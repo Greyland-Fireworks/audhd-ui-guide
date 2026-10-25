@@ -1,25 +1,28 @@
-import { useRef, useState } from 'react';
-import { parseProfile } from '../../../../preferences/profile.js';
-import { inspectProfile } from '../../shared/profile-capabilities.js';
+import { useEffect, useRef, useState } from 'react';
+import { createImportWorkflow } from 'audhd-ui-framework/import-workflow';
+import { recordingCapabilities, capabilityMessage, importMessage } from '../../shared/profile-capabilities.js';
 
 export default function ProfileControls({ profile, onApply }) {
-  const [preview, setPreview] = useState(null);
+  const [state, setState] = useState({ state: 'idle', preview: null, error: null });
   const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-  const input = useRef(null);
-  const request = useRef(0);
-  async function read(event) {
+  const input = useRef(null), workflow = useRef(null);
+  const { preview, error } = state;
+  useEffect(() => {
+    // Create on each setup so StrictMode's setup/cleanup cycle stays usable.
+    const controller = createImportWorkflow({ capabilities: recordingCapabilities });
+    workflow.current = controller;
+    setState(controller.getSnapshot());
+    const unsubscribe = controller.subscribe(next => { setState(next); setMessage(importMessage(next)); });
+    return () => { unsubscribe(); controller.dispose(); };
+  }, []);
+  function read(event) {
     const file = event.target.files[0];
     event.target.value = '';
-    const token = ++request.current;
-    setPreview(null); setError(''); setMessage('');
-    if (!file) return;
-    try {
-      const value = parseProfile(await file.text());
-      if (token !== request.current) return;
-      setPreview(inspectProfile(value));
-      setMessage(value.schema_version === 1 ? 'Version 1 converted to a version 2 preview. Original file unchanged.' : 'Preferences ready to preview. Nothing applied yet.');
-    } catch (failure) { if (token === request.current) setError(failure.message); }
+    if (file) void workflow.current.importText(() => file.text());
+    else workflow.current.cancel();
+  }
+  function cancel() {
+    workflow.current.cancel(); input.current.value = ''; input.current.focus();
   }
   function exportProfile() {
     const url = URL.createObjectURL(new Blob([JSON.stringify(profile, null, 2) + '\n'], { type: 'application/json' }));
@@ -36,11 +39,12 @@ export default function ProfileControls({ profile, onApply }) {
     {preview && <div className="profile-preview">
       <h4>Application preview</h4>
       <p>Profile scope: {preview.profile.scope}. This demo loads one profile; it does not discover other user or project files.</p>
-      <ul>{preview.rows.filter(row => row.value !== 'null' || row.supported).map(row => <li key={row.path}><strong>{row.path}</strong>: <code>{row.value}</code> — {row.message}</li>)}</ul>
+      <ul>{preview.rows.filter(row => row.value !== null || row.declared).map(row => <li key={row.path}><strong>{row.path}</strong>: <code>{JSON.stringify(row.value)}</code> — {capabilityMessage(row)}</li>)}</ul>
       {/* Keep this button mounted after applying so keyboard focus stays here. */}
-      <button type="button" onClick={() => { onApply(preview.profile); setMessage('Preferences applied for this session. Unsupported choices were retained for export, not applied.'); }}>Apply for this session</button>
-      <button type="button" onClick={() => { ++request.current; setPreview(null); setMessage('Import cancelled. Current preferences unchanged.'); input.current.value = ''; input.current.focus(); }}>Cancel import</button>
+      <button type="button" onClick={() => { onApply(workflow.current.getSnapshot().preview.profile); setMessage('Preferences applied for this session. Unsupported choices were retained for export, not applied.'); }}>Apply for this session</button>
+
     </div>}
+    {(state.state === 'reading' || state.state === 'ready') && <button type="button" onClick={cancel}>Cancel import</button>}
     <button type="button" onClick={exportProfile}>Export preferences</button>
   </section>;
 }

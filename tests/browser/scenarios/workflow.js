@@ -92,9 +92,9 @@ export default async (page) => {
   await search.fill('Harbor');
   await preferences();
   for (const [label, value] of [['Text size', 'larger'], ['Spacing', 'compact'], ['Detailed help', 'collapsed']]) {
-    const control = page.getByRole('combobox', { name: label, exact: true });
-    await control.focus();
-    await control.selectOption(value);
+    const control = label === 'Detailed help' ? page.getByRole('combobox', {name:label,exact:true}) : page.getByRole('group',{name:label,exact:true}).locator(`input[value="${value}"]`);
+    if (label === 'Detailed help') { await control.focus(); await control.selectOption(value); }
+    else await control.check();
     assert(await control.evaluate(el => el === document.activeElement), `${label}: focus retained`);
   }
   await resume();
@@ -109,7 +109,7 @@ export default async (page) => {
   await page.getByRole('button', { name: 'Clear search' }).click();
   await select('Market loop');
   await preferences();
-  assert(await page.getByRole('combobox', { name: 'Text size', exact: true }).inputValue() === 'larger', 'Choices survive record change');
+  assert(await page.getByRole('group',{name:'Text size',exact:true}).locator('input:checked').inputValue() === 'larger', 'Choices survive record change');
   await resume();
   pass('REF-06');
 

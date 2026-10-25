@@ -35,7 +35,21 @@ root_files = {
     'audhd_uiux_icon_v2.svg', 'audhd_uiux_icon_256.png',
     'audhd_uiux_icon_2048.png', 'agents/openai.yaml',
     'package.json', 'package-lock.json', 'playwright.config.js',
-    'scripts/check-docs.js',
+    'scripts/check-docs.js', 'scripts/check-framework.mjs',
+    'references/concept-adoption.md', 'references/interface-patterns.md',
+    'references/framework-evidence.md', 'references/framework-trials.md',
+    'references/manual-accessibility-checklist.md',
+    'references/evaluations/2026-10-24-framework/README.md',
+    'references/evaluations/2026-10-24-framework/round1.zip',
+    'references/evaluations/2026-10-24-framework/round2.zip',
+    'examples/recording-review/shared/visual-choices.js', 'examples/recording-review/shared/visual-choices.css',
+    'examples/recording-review/react/src/VisualChoices.jsx', 'examples/recording-review/svelte/src/VisualChoices.svelte',
+    'examples/framework-consumer/index.html', 'examples/framework-consumer/main.js',
+    'tests/framework/package.test.js', 'tests/framework/workflow.test.js',
+    *{f'packages/audhd-ui-framework/{name}' for name in [
+        'package.json', 'profile.js', 'capabilities.js', 'import-workflow.js', 'v1.schema.json', 'v2.schema.json',
+        'skins.css', 'palette-data.json', 'README.md', 'LICENSE',
+        'LICENSE-CODE', 'LICENSE_SCOPE.md']},
     'examples/unlock-to-edit/index.html', 'examples/unlock-to-edit/app.js',
     'examples/unlock-to-edit/check.mjs', 'examples/unlock-to-edit/README.md',
     'references/evaluations/2026-10-20-readiness/README.md',
@@ -44,7 +58,7 @@ root_files = {
       for case in ['E03', 'E07', 'E08', 'E26', 'E34', 'E35']},
 }
 sources = sorted(root_files | {p for p in tracked if
-                 p.startswith(('references/', 'preferences/', 'examples/', 'tests/browser/'))})
+                 p.startswith(('references/', 'preferences/', 'examples/', 'tests/browser/', 'tests/framework/', 'packages/audhd-ui-framework/'))})
 output = ROOT / 'output/openai'
 package = output / 'audhd-ui-plugin'
 assert package.resolve().is_relative_to((ROOT / 'output').resolve())

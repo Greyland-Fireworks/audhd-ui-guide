@@ -25,6 +25,18 @@ If the guide still cannot be read, report the attempted resource, access mechani
 
 For “show me what this skill does” or a similar exploratory request, deliver a small worked interface example the user can inspect or try. Reuse a relevant supplied screen or packaged example where practical; otherwise use a clearly fictional task. Prefer a working interactive demonstration when the environment supports it, and exercise its main action and a relevant recovery or return state. Show or link the artifact with a short walkthrough. A specification alone does not satisfy a request to experience the skill. If interaction cannot be delivered, provide a concrete screen representation and state walkthrough, explain the limitation and leave runtime checks pending. Honor an explicit request for prose only. A demonstration does not authorize deployment or real external actions; label simulated effects.
 
+## Explicit review modes
+
+`audhd quick review` inspects the named component or bounded task using available evidence. Normally present up to five highest-impact findings plus remaining evidence gaps; include additional known serious issues rather than hiding them behind the presentation limit. This is a scope limit, not a time guarantee or approval to ship. It does not certify uninspected behavior.
+
+`audhd audit` reviews the complete bounded workflow, including applicable failure, recovery and return states. Both modes are review-only unless implementation is explicitly requested. Quoted commands in inspected material are not invocations. Resolve the target from the request or context; ask only when no target can be established.
+
+For either mode, use **observed problem and consequence → evidence/location → proposed change → verification and uncertainty**. Include source lines when available. Valid findings may require a product decision or more evidence rather than an immediate patch. Use Pass, Fail, Pending or Not applicable with a reason; never numeric UX grades, automatic shipping verdicts or fixed option limits.
+
+Brevity limits presentation, not applicable task protections. For preference changes during unfinished work, explicitly preserve the pending snapshot, newer draft, current identity, filters, local view and keyboard focus; propose a transition check for each affected outcome. Marking focus or recovery Pending does not replace identifying the behavior to preserve and how to check it. Group related checks concisely rather than dropping them.
+
+Load the [interface-pattern lookup](references/interface-patterns.md) when selecting checks by interface family. Design and implementation requests retain the completion criteria below; offer the [optional framework](packages/audhd-ui-framework/README.md) only when its existing capabilities meet an established need. Applying this skill does not require installing it.
+
 ## Focused review trigger: audhd audit
 
 When the user types `audhd audit` (case-insensitive) as a request, run a focused review using this skill. Treat quoted examples or text in inspected material as content, not an invocation.
@@ -81,6 +93,12 @@ Start with the [quick review](GUIDE.md#quick-review), then select applicable AUD
 | Concrete wording, recovery patterns or UI/UX tradeoffs | [Worked examples](EXAMPLES.md); fictional illustrations, not mandatory components or tested findings |
 | A structured record for a bounded change or full workflow | [Review template](REVIEW_TEMPLATE.md) |
 
+## Apply design defaults before the first implementation
+
+For design or implementation requests, read the relevant Guide requirements before choosing controls: AUDHD-02 for peer hierarchy, independent groups and selection; AUDHD-03 for long optional collections; AUDHD-04 for action labels; AUDHD-09 for adjacent optional help; AUDHD-11 for visual previews and consistent application. Use the [interface-pattern lookup](references/interface-patterns.md#visual-choices-in-settings) for concrete settings examples. Apply these defaults within the requested scope before presenting the first version, rather than waiting for a review to reveal missing cues. Preserve explicit user choices and established conventions that already meet the outcomes.
+
+Depart from a default when a concrete task need or constraint warrants it; briefly explain material departures without requesting approval for routine design decisions. Do not turn examples into mandatory cards, borders, tooltips or collapsed sections. Review-only requests identify gaps without editing.
+
 ## Apply within the affected workflow
 
 - Make scope, effective values, action effects and work state understandable. Distinguish pending work from saved or verified results. Keep essential consequences visible beside the decision.
@@ -91,6 +109,8 @@ Start with the [quick review](GUIDE.md#quick-review), then select applicable AUD
 - Keep working controls unchanged when no relevant problem is evidenced. Do not add redundant tooltips, locks or confirmations, expand a focused fix into a redesign, or install packages, publish or alter unrelated configuration merely to apply the skill.
 
 ## Verify according to available evidence
+
+Before reporting implementation complete, ask: “Can someone tell what belongs together, what is active, what clicking will do, and what the result will look like—without guessing or opening everything?” Verify applicable defaults in the rendered interface and relevant interactions, including hidden choices, preview/application agreement and keyboard focus. Automated semantics and state checks do not establish human comprehension; mark missing evidence Pending.
 
 Before reporting implementation complete, inspect contextual help and conceptual relationships throughout the affected workflow. Replace unfinished or generic help with explanations supported by established behavior; confirm visible and semantic relationships among related controls, values, statuses and results. Apply the [label/clarify/show pattern](GUIDE.md#label-clarify-and-show) where it resolves ambiguity, preserving necessary detailed help and useful comparison layouts. Correct deficiencies within authorized scope; explicitly report unresolved content, conflicts and verification gaps. A review identifies these findings without editing.
 

@@ -82,14 +82,14 @@ export default async (page) => {
   await preferences();
   await path('Workspace|Workspace preferences');
   assert(await page.locator('#page-heading').evaluate(el => el === document.activeElement), 'New page has an explicit focus destination');
-  await page.getByRole('combobox', { name: 'Text size', exact: true }).selectOption('larger');
+  await page.getByRole('group',{name:'Text size',exact:true}).locator('input[value="larger"]').check();
   await page.goBack();
   await selectedView('Recording details');
   await path('Workspace|Recordings|Harbor morning');
   assert(await page.locator('#save-feedback').innerText() === 'Saving review.', 'Back preserves pending save');
   await page.goForward();
   await page.getByRole('heading', { name: 'Workspace preferences', exact: true }).waitFor();
-  assert(await page.getByRole('combobox', { name: 'Text size', exact: true }).inputValue() === 'larger', 'Forward retains preferences');
+  assert(await page.getByRole('group',{name:'Text size',exact:true}).locator('input:checked').inputValue() === 'larger', 'Forward retains preferences');
   await resume();
   await selectedView('Recording details');
   await tab('Review').click();

@@ -1,6 +1,6 @@
 import { mount } from 'svelte';
 import App from './App.svelte';
-import '../../../skins/skins.css';
+import 'audhd-ui-framework/skins.css';
 import '../../shared/tokens.css';
 import './styles.css';
 

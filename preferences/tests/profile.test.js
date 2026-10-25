@@ -5,7 +5,8 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { emptyProfile, migrateProfile, parseProfile, resolveProfiles, validateProfile } from '../profile.js';
-import { inspectProfile } from '../../examples/recording-review/shared/profile-capabilities.js';
+import { inspectCapabilities } from 'audhd-ui-framework/capabilities';
+import { recordingCapabilities } from '../../examples/recording-review/shared/profile-capabilities.js';
 
 test('Strict profiles reject malformed, duplicate, missing, unknown and nonfinite data', async () => {
   const example = parseProfile(await readFile(new URL('../../preferences.example.json', import.meta.url), 'utf8'));
@@ -49,9 +50,9 @@ test('Precedence preserves false, replaces arrays and appearance atomically, nul
 test('Unknown named skins and valid unsupported scales survive without applied claims', () => {
   const p=emptyProfile(); p.display.appearance={mode:'skin',id:'not-installed'};p.display.text_scale=1.125;
   p.retention.retain_drafts=true;
-  const result=inspectProfile(p);
+  const result=inspectCapabilities(p, recordingCapabilities);
   assert.deepEqual(result.profile,p);
-  for (const path of ['display.appearance','display.text_scale','retention.retain_drafts']) assert.equal(result.rows.find(row=>row.path===path).supported,false);
+  for (const path of ['display.appearance','display.text_scale','retention.retain_drafts']) assert.equal(result.rows.find(row=>row.path===path).status,'unsupported');
 });
 
 test('CLI creates a new migration file and refuses overwriting source or existing output', async () => {

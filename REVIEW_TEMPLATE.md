@@ -17,6 +17,8 @@ Use this instead of the full record for a small, bounded issue. Lead the user-fa
 
 A proposed check is Pending until performed. A short review does not establish that the whole interface passes the guide.
 
+For `audhd quick review`, normally surface up to five highest-impact findings and remaining gaps; disclose any additional known serious issue. Use **problem/consequence → evidence/location → focused proposal → verification/uncertainty**. Source locations help when available, but product-contract questions and missing evidence can be valid findings without a code patch. `audhd audit` covers the complete bounded workflow and relevant failure, recovery and return states. Neither mode gives a numerical UX grade or automatic shipping approval.
+
 ## Full review
 
 ### Scope

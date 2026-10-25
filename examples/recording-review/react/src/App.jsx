@@ -2,10 +2,12 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Button, Disclosure, DisclosurePanel, Heading, Tabs, TabList, Tab, TabPanel } from 'react-aria-components';
 import { recordings, reviewStatuses, copy, contextualHelp } from '../../shared/fixtures.js';
 import { pages, workspaceSections, recordViews } from '../../shared/navigation.js';
-import palettes from '../../../skins/palette-data.json';
+import palettes from 'audhd-ui-framework/palettes';
 import ContextHelp from './ContextHelp.jsx';
+import VisualChoices from './VisualChoices.jsx';
+import { appearanceChoices, styleChoices, sizeChoices, spacingChoices } from '../../shared/visual-choices.js';
 import ProfileControls from './ProfileControls.jsx';
-import { emptyProfile } from '../../../../preferences/profile.js';
+import { emptyProfile } from 'audhd-ui-framework';
 import { routeFromHash, recordingHref } from './navigation.js';
 import { createReviewState, editReview, filterRecordings, resolveSave, reviewFeedback, sameReview, startSave } from './review-state.js';
 
@@ -31,6 +33,8 @@ export default function App() {
   const [appearance, setAppearance] = useState('skin:guillermo');
   const [systemDark, setSystemDark] = useState(() => matchMedia('(prefers-color-scheme: dark)').matches);
   const skin = appearance.startsWith('skin:') ? appearance.slice(5) : appearance === 'light' || (appearance === 'system' && !systemDark) ? 'paperwhite' : 'guillermo';
+  const appearanceChoice = appearance === 'light' ? 'skin:paperwhite' : appearance === 'dark' ? 'skin:guillermo' : appearance;
+  const appearanceLabel = appearanceChoices.find(option => option.value === appearanceChoice)?.label ?? 'Default';
   useEffect(() => {
     const media = matchMedia('(prefers-color-scheme: dark)');
     const update = () => setSystemDark(media.matches);
@@ -180,41 +184,43 @@ export default function App() {
       {/* Preferences have a real destination. They still change only presentation,
           not review state. The same help Boolean controls the timing disclosure. */}
       {route.page === 'preferences' && <section className="preferences-panel panel" aria-labelledby="preferences-heading">
-        <h2 id="preferences-heading">Display options</h2>
-        <ProfileControls profile={profile} onApply={applyProfile} />
+        <div className="display-options-heading"><h2 id="preferences-heading">Display options</h2><ContextHelp topic="display options" text={contextualHelp.displayOptions} textSize={textSize} /></div>
+
         <div className="disclosure-body">
-          <p className="muted">Temporary choices for this session. Light and dark skins are equally supported. Changing appearance keeps your work in place; reloading resets this demo. Skin headings use locally available fonts with fallbacks.</p>
-          <div className="display-fields">
-            <div className="display-choice">
-              <div className="field-heading"><label htmlFor="skin-choice">Appearance</label><ContextHelp topic="skin" text={contextualHelp.skin} textSize={textSize} /></div>
-              <select id="skin-choice" value={appearance} onChange={event => { const value = event.target.value; setAppearance(value); remember('display', 'appearance', value.startsWith('skin:') ? { mode: 'skin', id: value.slice(5) } : { mode: value }); }}>
-                <option value="light">Light — Paperwhite</option><option value="dark">Dark — Guillermo</option><option value="system">Follow system</option>
-                {palettes.map(palette => <option key={palette.id} value={`skin:${palette.id}`}>{palette.name} ({palette.mode})</option>)}
-              </select>
-            </div>
-            <div className="display-choice">
-              <div className="field-heading"><label htmlFor="text-style-choice">Text style</label><ContextHelp topic="text style" text={contextualHelp.textStyle} textSize={textSize} /></div>
-              <select id="text-style-choice" value={textStyle} onChange={event => { setTextStyle(event.target.value); remember('display', 'text_style', event.target.value); }}>
-                <option value="system">System</option><option value="expressive">Skin headings</option><option value="serif">Serif</option><option value="mono">Monospace</option>
-              </select>
-            </div>
-            <label>Text size
-              <select value={textSize} onChange={event => { setTextSize(event.target.value); remember('display', 'text_scale', event.target.value === 'larger' ? 1.25 : 1); }}>
-                <option value="standard">Standard</option><option value="larger">Larger</option>
-              </select>
-            </label>
-            <label>Spacing
-              <select value={spacing} onChange={event => { setSpacing(event.target.value); remember('layout', 'density', event.target.value); }}>
-                <option value="comfortable">Comfortable</option><option value="compact">Compact</option>
-              </select>
-            </label>
-            <label>Detailed help
-              <select value={helpExpanded ? 'expanded' : 'collapsed'} onChange={event => { setHelpExpanded(event.target.value === 'expanded'); remember('support', 'help_detail', event.target.value === 'expanded' ? 'expanded' : 'concise'); }}>
+          <div className="preference-sections">
+            <details className="appearance-disclosure">
+              <summary>
+                <span className="appearance-summary-content">
+                  <span className="appearance-summary-label">
+                    <span className="appearance-show">Show appearance choices</span>
+                    <span className="appearance-hide">Hide appearance choices</span>
+                    <span>Current: {appearanceLabel}</span>
+                  </span>
+                  <span className="appearance-summary-preview" data-audhd-ui="" data-skin={skin} aria-hidden="true">
+                    <span className="appearance-summary-font">Aa · Heading</span>
+                    <span className="sample-bands"><i /><i /><i /></span>
+                  </span>
+                </span>
+              </summary>
+              <div className="appearance-disclosure-body">
+                <p>Choose one card. Changes apply immediately for this session. Arrow keys move between choices. Previews show each skin’s heading font using locally available fonts and fallbacks. To use it on the page, choose Skin headings under Text style.</p>
+                <VisualChoices name="Appearance" helpTopic="skin" helpText={contextualHelp.skin} textSize={textSize} defaultSkin={systemDark ? 'guillermo' : 'paperwhite'} value={appearanceChoice} options={appearanceChoices} kind="appearance" onChange={value => { setAppearance(value); remember('display', 'appearance', value.startsWith('skin:') ? {mode:'skin',id:value.slice(5)} : {mode:value}); }} />
+              </div>
+            </details>
+            <h3>Readability and spacing</h3>
+            <VisualChoices helpTopic="text style" helpText={contextualHelp.textStyle} textSize={textSize} name="Text style" value={textStyle} options={styleChoices} kind="style" onChange={value => { setTextStyle(value); remember('display','text_style',value); }} />
+            <VisualChoices name="Text size" value={textSize} options={sizeChoices} kind="size" onChange={value => { setTextSize(value); remember('display','text_scale',value === 'larger' ? 1.25 : 1); }} />
+            <VisualChoices name="Spacing" value={spacing} options={spacingChoices} kind="spacing" onChange={value => { setSpacing(value); remember('layout','density',value); }} />
+            <section className="visual-choices help-preference" aria-labelledby="help-preference-heading">
+              <div className="choice-heading"><h4 id="help-preference-heading">Detailed help</h4></div>
+              <p id="help-detail-description">Choose whether detailed explanations start collapsed or expanded.</p>
+              <select id="help-detail" aria-labelledby="help-preference-heading" aria-describedby="help-detail-description" value={helpExpanded ? 'expanded' : 'collapsed'} onChange={event => { setHelpExpanded(event.target.value === 'expanded'); remember('support', 'help_detail', event.target.value === 'expanded' ? 'expanded' : 'concise'); }}>
                 <option value="collapsed">Collapsed</option><option value="expanded">Expanded</option>
               </select>
-            </label>
+            </section>
           </div>
         </div>
+        <ProfileControls profile={profile} onApply={applyProfile} />
       </section>}
 
       {route.page === 'workspace' && <section className="page-directory panel" aria-labelledby="directory-heading">
@@ -272,7 +278,7 @@ export default function App() {
                     Render only for the current source, never an unrelated result. */}
                 {route.page === 'recording' && item.id === selectedId && <span className="relationship-cue" aria-hidden="true">
                   <span className="relationship-label">Details below</span>
-                  <svg viewBox="0 0 32 24"><path d="M2 12h26m-7-7 7 7-7 7" /></svg>
+                  <svg viewBox="0 0 32 24"><path d="M2 8H16V2L30 12 16 22V16H2Z" /></svg>
                 </span>}
               </li>
             ))}

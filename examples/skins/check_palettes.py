@@ -14,8 +14,10 @@ def contrast(a, b):
     low, high = sorted([luminance(a), luminance(b)])
     return (high + .05) / (low + .05)
 
-skins = json.loads((ROOT / 'palette-data.json').read_text())
-css = (ROOT / 'skins.css').read_text(encoding='utf-8')
+ASSETS = ROOT.parent.parent / 'packages/audhd-ui-framework'
+skins = json.loads((ASSETS / 'palette-data.json').read_text())
+assert (ROOT / 'palette-data.json').read_bytes() == (ASSETS / 'palette-data.json').read_bytes()
+css = (ASSETS / 'skins.css').read_text(encoding='utf-8')
 assert len(skins) == 22 and len({s['id'] for s in skins}) == 22
 assert sum(s['mode'] == 'light' for s in skins) == 11
 for skin in skins:

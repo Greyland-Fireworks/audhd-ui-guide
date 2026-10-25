@@ -3,10 +3,12 @@
   import { Collapsible, Tabs } from 'bits-ui';
   import { recordings, reviewStatuses, copy, contextualHelp } from '../../shared/fixtures.js';
   import { pages, workspaceSections, recordViews } from '../../shared/navigation.js';
-  import palettes from '../../../skins/palette-data.json';
+  import palettes from 'audhd-ui-framework/palettes';
   import ContextHelp from './ContextHelp.svelte';
-  import ProfileControls from './ProfileControls.svelte';
-  import { emptyProfile } from '../../../../preferences/profile.js';
+  import VisualChoices from './VisualChoices.svelte';
+import { appearanceChoices, styleChoices, sizeChoices, spacingChoices } from '../../shared/visual-choices.js';
+import ProfileControls from './ProfileControls.svelte';
+  import { emptyProfile } from 'audhd-ui-framework';
   import { parseLocation, reviewAddress } from './navigation.js';
   import { createWorkspace, feedbackFor, isDirty, matchingRecordings, requestSave, settleSave, updateDraft } from './review-workspace.js';
 
@@ -29,6 +31,8 @@
   let appearance = $state('skin:guillermo');
   let systemDark = $state(matchMedia('(prefers-color-scheme: dark)').matches);
   let skin = $derived(appearance.startsWith('skin:') ? appearance.slice(5) : appearance === 'light' || (appearance === 'system' && !systemDark) ? 'paperwhite' : 'guillermo');
+  let appearanceChoice = $derived(appearance === 'light' ? 'skin:paperwhite' : appearance === 'dark' ? 'skin:guillermo' : appearance);
+  let appearanceLabel = $derived(appearanceChoices.find(option => option.value === appearanceChoice)?.label ?? 'Default');
   onMount(() => {
     const media = matchMedia('(prefers-color-scheme: dark)');
     const update = () => systemDark = media.matches;
@@ -195,41 +199,43 @@
        root-owned task state. The help setting and timing disclosure share a value. -->
   {#if route.page === 'preferences'}
   <section class="preferences-panel panel" aria-labelledby="preferences-heading">
-    <h2 id="preferences-heading">Display options</h2>
-    <ProfileControls profile={profile} onApply={applyProfile} />
+    <div class="display-options-heading"><h2 id="preferences-heading">Display options</h2><ContextHelp topic="display options" text={contextualHelp.displayOptions} textSize={textSize} /></div>
+
     <div class="disclosure-body">
-      <p class="muted">Temporary choices for this session. Light and dark skins are equally supported. Changing appearance keeps your work in place; reloading resets this demo. Skin headings use locally available fonts with fallbacks.</p>
-      <div class="display-fields">
-        <div class="display-choice">
-          <div class="field-heading"><label for="skin-choice">Appearance</label><ContextHelp topic="skin" text={contextualHelp.skin} {textSize} /></div>
-          <select id="skin-choice" value={appearance} onchange={event => { appearance = event.currentTarget.value; remember('display', 'appearance', appearance.startsWith('skin:') ? { mode: 'skin', id: appearance.slice(5) } : { mode: appearance }); }}>
-            <option value="light">Light — Paperwhite</option><option value="dark">Dark — Guillermo</option><option value="system">Follow system</option>
-            {#each palettes as palette (palette.id)}<option value={`skin:${palette.id}`}>{palette.name} ({palette.mode})</option>{/each}
-          </select>
-        </div>
-        <div class="display-choice">
-          <div class="field-heading"><label for="text-style-choice">Text style</label><ContextHelp topic="text style" text={contextualHelp.textStyle} {textSize} /></div>
-          <select id="text-style-choice" value={textStyle} onchange={event => { textStyle = event.currentTarget.value; remember('display', 'text_style', textStyle); }}>
-            <option value="system">System</option><option value="expressive">Skin headings</option><option value="serif">Serif</option><option value="mono">Monospace</option>
-          </select>
-        </div>
-        <label>Text size
-          <select value={textSize} onchange={event => { textSize = event.currentTarget.value; remember('display', 'text_scale', textSize === 'larger' ? 1.25 : 1); }}>
-            <option value="standard">Standard</option><option value="larger">Larger</option>
-          </select>
-        </label>
-        <label>Spacing
-          <select value={spacing} onchange={event => { spacing = event.currentTarget.value; remember('layout', 'density', spacing); }}>
-            <option value="comfortable">Comfortable</option><option value="compact">Compact</option>
-          </select>
-        </label>
-        <label>Detailed help
-          <select value={helpExpanded ? 'expanded' : 'collapsed'} onchange={event => { helpExpanded = event.currentTarget.value === 'expanded'; remember('support', 'help_detail', helpExpanded ? 'expanded' : 'concise'); }}>
+      <div class="preference-sections">
+        <details class="appearance-disclosure">
+          <summary>
+            <span class="appearance-summary-content">
+              <span class="appearance-summary-label">
+                <span class="appearance-show">Show appearance choices</span>
+                <span class="appearance-hide">Hide appearance choices</span>
+                <span>Current: {appearanceLabel}</span>
+              </span>
+              <span class="appearance-summary-preview" data-audhd-ui="" data-skin={skin} aria-hidden="true">
+                <span class="appearance-summary-font">Aa · Heading</span>
+                <span class="sample-bands"><i></i><i></i><i></i></span>
+              </span>
+            </span>
+          </summary>
+          <div class="appearance-disclosure-body">
+            <p>Choose one card. Changes apply immediately for this session. Arrow keys move between choices. Previews show each skin’s heading font using locally available fonts and fallbacks. To use it on the page, choose Skin headings under Text style.</p>
+            <VisualChoices name="Appearance" helpTopic="skin" helpText={contextualHelp.skin} textSize={textSize} defaultSkin={systemDark ? 'guillermo' : 'paperwhite'} value={appearanceChoice} options={appearanceChoices} kind="appearance" onChange={value => { appearance=value; remember('display','appearance',value.startsWith('skin:') ? {mode:'skin',id:value.slice(5)} : {mode:value}); }} />
+          </div>
+        </details>
+        <h3>Readability and spacing</h3>
+        <VisualChoices helpTopic="text style" helpText={contextualHelp.textStyle} textSize={textSize} name="Text style" value={textStyle} options={styleChoices} kind="style" onChange={value => { textStyle=value; remember('display','text_style',value); }} />
+        <VisualChoices name="Text size" value={textSize} options={sizeChoices} kind="size" onChange={value => { textSize=value; remember('display','text_scale',value === 'larger' ? 1.25 : 1); }} />
+        <VisualChoices name="Spacing" value={spacing} options={spacingChoices} kind="spacing" onChange={value => { spacing=value; remember('layout','density',value); }} />
+        <section class="visual-choices help-preference" aria-labelledby="help-preference-heading">
+          <div class="choice-heading"><h4 id="help-preference-heading">Detailed help</h4></div>
+          <p id="help-detail-description">Choose whether detailed explanations start collapsed or expanded.</p>
+          <select id="help-detail" aria-labelledby="help-preference-heading" aria-describedby="help-detail-description" value={helpExpanded ? 'expanded' : 'collapsed'} onchange={event => { helpExpanded = event.currentTarget.value === 'expanded'; remember('support', 'help_detail', helpExpanded ? 'expanded' : 'concise'); }}>
             <option value="collapsed">Collapsed</option><option value="expanded">Expanded</option>
           </select>
-        </label>
+        </section>
       </div>
     </div>
+    <ProfileControls profile={profile} onApply={applyProfile} />
   </section>
   {/if}
 
@@ -294,7 +300,7 @@
                  a connector when filtering hides the selected source. -->
             {#if route.page === 'recording' && item.id === selectedId}<span class="relationship-cue" aria-hidden="true">
               <span class="relationship-label">Details below</span>
-              <svg viewBox="0 0 32 24"><path d="M2 12h26m-7-7 7 7-7 7" /></svg>
+              <svg viewBox="0 0 32 24"><path d="M2 8H16V2L30 12 16 22V16H2Z" /></svg>
             </span>{/if}
           </li>
         {/each}

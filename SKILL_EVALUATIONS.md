@@ -1,8 +1,16 @@
 # Skill evaluation procedure
 
-**Version:** v1.01 · **Status:** 35 authored scenarios; six supplied review outcomes inspected, 29 Pending. New model trials require a separate explicit request.
+A separate [framework integration comparison](references/evaluations/2026-10-24-framework/README.md) records newly executed current/candidate trials and preserves their failures. Its two extra quick-review cases and comparative protocol are separate from the 35-case historical pack below; those results do not silently replace the supplied October 20 evidence or establish implementation/user benefit.
+
+**Version:** v1.01 · **Historical supplied-review dataset:** 35 authored scenarios; six supplied outcomes inspected, 29 Pending in that dataset. The separate comparison linked above adds version-specific evidence without converting these counts into blanket passes. New model trials require a separate explicit request.
 
 This pack tests interpretation and review quality, not accessibility conformance or real interface operation.
+
+## October 25 design-default extension — Pending
+
+E36–E39 add four authored cases to the unchanged 35-case historical dataset: first-pass design, optional collection disclosure with a required-correction exception, peer hierarchy and preview accuracy, and optional versus essential explanations. The pack now contains 39 cases. All four new cases are unrun; historical outcomes and archived comparisons remain unchanged. Editorial validation does not establish model behavior or user benefit.
+
+For these cases, supply only the skill, Guide and the individual input. Use the case-specific design/review request rather than converting E36 into a review-only task. Keep the rubric out of evaluated contexts and record fresh first responses and settings as described below. Do not use this conversation's coached examples as independent evaluation evidence.
 
 ## Explicitly requested model testing
 

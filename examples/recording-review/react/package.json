@@ -15,7 +15,8 @@
   "dependencies": {
     "react": "19.3.1",
     "react-dom": "19.3.1",
-    "react-aria-components": "1.22.1"
+    "react-aria-components": "1.22.1",
+    "audhd-ui-framework": "0.1.0-alpha.2"
   },
   "devDependencies": {
     "vite": "8.3.4",

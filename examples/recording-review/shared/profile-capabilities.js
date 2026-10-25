@@ -1,22 +1,25 @@
-import { migrateProfile } from '../../../preferences/profile.js';
-import palettes from '../../skins/palette-data.json' with { type: 'json' };
+import palettes from 'audhd-ui-framework/palettes' with { type: 'json' };
 
-// This is a data capability report, not a common application state engine.
-// Each adapter applies these fields independently. Unsupported intent survives
-// export and never becomes a claim that the demo implements persistence, etc.
-export function inspectProfile(input) {
-  const profile = migrateProfile(input);
-  const rows = [];
-  for (const [group, fields] of Object.entries(profile)) {
-    if (!fields || typeof fields !== 'object') continue;
-    for (const [key, value] of Object.entries(fields)) {
-      const path = `${group}.${key}`;
-      let supported = ['display.appearance', 'display.text_style', 'layout.density', 'support.help_detail'].includes(path);
-      if (path === 'display.appearance' && value?.mode === 'skin') supported = palettes.some(p => p.id === value.id);
-      if (path === 'display.text_scale') supported = [null, 1, 1.25].includes(value);
-      const handled = supported && value !== null;
-      rows.push({ path, value: JSON.stringify(value), supported, message: value === null ? (supported ? 'Unspecified: use demo default' : 'Unspecified') : handled ? 'Supported in this demo' : 'Not applied in this demo; retained for export' });
-    }
-  }
-  return { profile, rows };
-}
+// These declarations describe the recording demos, not every package consumer.
+export const recordingCapabilities = {
+  'display.appearance': [
+    ...['system', 'light', 'dark'].map(mode => ({ mode })),
+    ...palettes.map(({ id }) => ({ mode: 'skin', id })),
+  ],
+  'display.text_style': true,
+  'display.text_scale': [1, 1.25],
+  'layout.density': true,
+  'support.help_detail': true,
+};
+
+export const capabilityMessage = row => row.status === 'unspecified'
+  ? (row.declared ? 'Unspecified: use demo default' : 'Unspecified')
+  : row.status === 'supported' ? 'Supported in this demo' : 'Not applied in this demo; retained for export';
+
+export const importMessage = state => ({
+  reading: 'Reading preferences. Nothing applied yet.',
+  cancelled: 'Import cancelled. Current preferences unchanged.',
+  ready: state.preview?.sourceVersion === 1
+    ? 'Version 1 converted to a version 2 preview. Original file unchanged.'
+    : 'Preferences ready to preview. Nothing applied yet.',
+})[state.state] ?? '';

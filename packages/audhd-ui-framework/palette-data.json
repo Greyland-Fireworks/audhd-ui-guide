@@ -1,0 +1,112 @@
+[
+  {
+    "id": "obsidian",
+    "name": "Obsidian",
+    "mode": "dark"
+  },
+  {
+    "id": "paperwhite",
+    "name": "Paperwhite",
+    "mode": "light"
+  },
+  {
+    "id": "blueprint-dark",
+    "name": "Blueprint Dark",
+    "mode": "dark"
+  },
+  {
+    "id": "blueprint-light",
+    "name": "Blueprint Light",
+    "mode": "light"
+  },
+  {
+    "id": "bubblegum",
+    "name": "Bubblegum",
+    "mode": "light"
+  },
+  {
+    "id": "oxfordyalevardton",
+    "name": "Oxfordyalevardton",
+    "mode": "light"
+  },
+  {
+    "id": "pericles",
+    "name": "Pericles",
+    "mode": "light"
+  },
+  {
+    "id": "spqr",
+    "name": "SPQR",
+    "mode": "light"
+  },
+  {
+    "id": "starship",
+    "name": "Starship",
+    "mode": "dark"
+  },
+  {
+    "id": "cyberpunk",
+    "name": "Cyberpunk",
+    "mode": "dark"
+  },
+  {
+    "id": "guillermo",
+    "name": "Guillermo",
+    "mode": "dark"
+  },
+  {
+    "id": "minimalist",
+    "name": "Minimalist",
+    "mode": "light"
+  },
+  {
+    "id": "neapolitan",
+    "name": "Neapolitan",
+    "mode": "light"
+  },
+  {
+    "id": "noir-bureau",
+    "name": "Noir Bureau",
+    "mode": "dark"
+  },
+  {
+    "id": "sunrise",
+    "name": "Sunrise",
+    "mode": "light"
+  },
+  {
+    "id": "superserial",
+    "name": "Superserial",
+    "mode": "dark"
+  },
+  {
+    "id": "underwater",
+    "name": "Underwater",
+    "mode": "dark"
+  },
+  {
+    "id": "ussr-black",
+    "name": "USSR Black",
+    "mode": "dark"
+  },
+  {
+    "id": "ussr-red",
+    "name": "USSR Red",
+    "mode": "dark"
+  },
+  {
+    "id": "ussr-snow",
+    "name": "USSR Snow",
+    "mode": "light"
+  },
+  {
+    "id": "vaporwave",
+    "name": "Vaporwave",
+    "mode": "dark"
+  },
+  {
+    "id": "zebra-pop",
+    "name": "Zebra Pop",
+    "mode": "light"
+  }
+]

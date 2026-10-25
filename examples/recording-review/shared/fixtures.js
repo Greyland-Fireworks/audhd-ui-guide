@@ -25,6 +25,7 @@ export const copy = {
 // Brief, verified explanations for unfamiliar choices (AUDHD-09). Save and
 // retention consequences remain visible in the app rather than only in help.
 export const contextualHelp = {
+  displayOptions: 'Temporary choices for this session. Light and dark skins are equally supported. Changing appearance keeps your work in place; reloading resets this demo. Skin headings use locally available fonts with fallbacks.',
   demoSave: 'This is a save simulation, not permanent storage. Save review only stages your assessment in this open page; the demo controls simulate success or failure. Nothing is written to a file or server, and reloading loses the review.',
   skin: 'Change the colors across this workspace to suit your comfort or mood. Light and dark choices keep the same controls, recording and review.',
   textStyle: 'System uses your device’s usual interface font. Skin headings adds the skin’s character to headings only; Serif and Monospace change the reading style throughout the workspace.',

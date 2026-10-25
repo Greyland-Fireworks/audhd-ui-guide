@@ -1,13 +1,15 @@
 # Dashboard skins
 
-Open `preview.html` directly, or serve this directory with `python -m http.server 4175 --bind 127.0.0.1`. The preview has all 22 original skin names, optional text styles, shared active-context panels, labeled bar/line charts, data tables and scale swatches. It starts with Guillermo as an example, not a recommended universal default. Selection is session-only and does not persist.
+Canonical CSS and palette data live in the [framework package](../../packages/audhd-ui-framework/README.md). The local stylesheet imports that source. Add `data-audhd-ui` to the same root as `data-skin` and `data-type`; unmarked sibling regions remain unstyled. The local palette registry is a byte-checked compatibility copy. Package installation is optional for this preview.
+
+Open `preview.html` directly, or serve the repository root with `python -m http.server 4175 --bind 127.0.0.1` and open `/examples/skins/preview.html`. The preview has all 22 original skin names, optional text styles, shared active-context panels, labeled bar/line charts, data tables and scale swatches. It starts with Guillermo as an example, not a recommended universal default. Selection is session-only and does not persist.
 
 ## Use
 
-Load `skins.css`, then apply `data-skin="guillermo"` and class `ui-skin` to an app root. `palette-data.json` supplies chooser names and light/dark metadata. Tokens also work in scoped previews. Set `data-type="expressive"`, `serif` or `mono` on that root to opt into alternative typography; omit it for system text. Display font names use local fallbacks; no fonts are bundled or downloaded.
+Load `skins.css`, then apply `data-audhd-ui` and `data-skin="guillermo"` and class `ui-skin` to an app root. `palette-data.json` supplies chooser names and light/dark metadata. Tokens also work in scoped previews. Set `data-type="expressive"`, `serif` or `mono` on that root to opt into alternative typography; omit it for system text. Display font names use local fallbacks; no fonts are bundled or downloaded.
 
 ```html
-<section data-skin="guillermo" class="ui-skin">
+<section data-audhd-ui data-skin="guillermo" class="ui-skin">
   <article class="ui-panel ui-active">
     <p>Current dataset</p>
     <h2 class="ui-active-title">Weekly review</h2>

@@ -152,4 +152,20 @@ A review save is pending; the user types newer edits, filters the list and opens
 
 A recording library shows IDs as its only item names and a search box as its main discovery route. A returning user remembers the map and comparison purpose of a recording, but cannot recall its name, date or ID. A retained query restricts the list to three of eighteen eligible recordings; the restriction is inconspicuous and no result count or reset action is shown. The loaded recording is outside those results, with an unsaved review note still visible but no explanation of its absence from the list. Map, date and purpose metadata exist. The owner requests review only; no rendered interface or interaction checks are available. They ask whether thumbnails, pins, recently watched and autocomplete should all be added.
 
+## E36 — First-pass presentation choices
+
+Design the settings area for an existing application. It has 24 named palettes, four text styles, two text sizes, two layout densities and import/export. Selection applies immediately and must preserve unsaved work. The palette registry includes colors and heading fonts. Provide a first-pass design and verification plan; no implementation files or browser are available.
+
+## E37 — Optional collections during required correction
+
+Review only: a settings page places 30 appearance choices above account recovery controls. Its collapsed alternative says only “Appearance — Cedar.” Elsewhere, a required correction form has a validation error inside a closed section. The owner suggests collapsing every section by default. No runtime evidence is available.
+
+## E38 — Peer settings and misleading previews
+
+Review only: text styles appear as large labeled cards, text size as another similar row without group separation, and detailed help as a small unlabeled dropdown. Selected cards differ only by a thin hue change. Spacing previews look identical; choosing Compact changes list gaps but leaves card padding unchanged although its description promises both. Keyboard focus uses the same cue as selection. Only this description is supplied.
+
+## E39 — Optional explanation versus essential consequences
+
+Review only: a preferences page permanently displays a long explanation of palette origins, font fallbacks and session behavior. Its info buttons sit at the far edge of the panel. The proposed cleanup hides every explanation, including a warning that importing replaces current preferences and an error blocking application. Recommend a focused change without adding new visual components everywhere.
+
 This evaluation material is guide text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

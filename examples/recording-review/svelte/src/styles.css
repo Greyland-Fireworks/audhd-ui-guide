@@ -1,3 +1,4 @@
+@import "../../shared/visual-choices.css";
 /* Reference design rationale, not a universal AuDHD preset.
    See ../../SPEC.md (REF-05, 06, 12-14) and
    ../../SPEC.md. This stylesheet stays local
@@ -18,7 +19,7 @@ h3 { font-size: 1.1em; }
 h4 { font-size: 1em; }
 p, h1, h2, h3, dt, dd, button, label, summary { overflow-wrap: anywhere; }
 /* Native controls inherit the surrounding typography so labels and values remain
-   one readable unit. Compact mode changes group gaps, not this 44px minimum
+   one readable unit. Compact mode changes card padding and group gaps, not this 44px minimum
    control height. Actual width, target spacing and all interaction states still
    need measurement; the CSS value alone is not an accessibility pass. */
 button, input, select, textarea { font: inherit; color: inherit; }
@@ -77,7 +78,7 @@ summary h2 { display: inline; font-size: 1em; }
 /* Reserve the leading-border space on every card so selecting a different item
    does not shift its text sideways. The selected border, underlined current
    label and changed action wording provide redundant cues beyond background hue. */
-.recording-list li { position: relative; border: 1px solid var(--separator); border-inline-start: 4px solid transparent; padding: 1em; display: grid; gap: 0.5rem; border-radius: 0.3rem; }
+.recording-list li { position: relative; border: 1px solid var(--separator); border-inline-start: 4px solid transparent; padding: var(--review-group-gap); display: grid; gap: calc(var(--review-group-gap) * .5); border-radius: 0.3rem; }
 .recording-list li.current-record { background: var(--selected); color: var(--selected-text); border-inline-start-color: var(--active-context-accent); }
 .record-identity { display: grid; gap: 0.35rem; }
 .current-label { font-size: 0.85em; font-weight: 600; text-decoration: underline; text-underline-offset: 0.25em; }
@@ -94,7 +95,7 @@ summary h2 { display: inline; font-size: 1em; }
    instead of drawing a false connection from another result. This reference's
    arrow geometry assumes left-to-right content; RTL needs separate verification. */
 .relationship-cue { position: absolute; inset-inline-start: calc(100% + 0.25rem); inset-block-start: 1rem; inline-size: calc(var(--panel-padding) + var(--workspace-gap) - 0.5rem); block-size: 1.5rem; color: var(--active-context-accent); pointer-events: none; }
-.relationship-cue svg { display: block; inline-size: 100%; block-size: 100%; fill: none; stroke: currentColor; stroke-width: 2.5; }
+.relationship-cue svg { display: block; inline-size: 100%; block-size: 100%; fill: currentColor; stroke: none; }
 .relationship-label { display: none; }
 .review-header { display: grid; gap: 0.35rem; padding-block-end: 1rem; border-block-end: 1px solid var(--separator); }
 .review-header .record-id { display: block; font-size: 0.75em; font-weight: 500; margin-block-start: 0.3em; }
@@ -220,7 +221,8 @@ nav a, .navigation-top > a, .footer-actions > a, .page-directory a, .skip-link {
 .save-actions .context-help-detail { flex-basis: 100%; }
 
 /* Profile details explain application boundaries beside the deliberate action. */
-.profile-controls { display: grid; gap: 0.75rem; padding-block: 1rem; border-block-end: 1px solid var(--separator); }
+.profile-controls { display: grid; gap: 0.75rem; margin-block-start: 1.5rem; padding: clamp(.75rem, 2vw, 1.25rem); border: 1px solid var(--control-border); border-block-start-width: 3px; border-radius: .5rem; background: var(--page); min-inline-size: 0; }
+.profile-controls > h3 { font-size: 1.35em; padding-block-end: .75rem; border-block-end: 1px solid var(--control-border); }
 .profile-preview { display: grid; gap: 0.75rem; }
 .profile-preview ul { padding-inline-start: 1.5rem; overflow-wrap: anywhere; }
 .profile-controls button { justify-self: start; }

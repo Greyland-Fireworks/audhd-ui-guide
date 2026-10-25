@@ -13,22 +13,23 @@ export default async (page) => {
     await page.getByRole('searchbox').fill('Market');
     await page.getByRole('tab', {name:'Recording details',exact:true}).click();
     await nav.getByRole('link',{name:'Workspace preferences',exact:true}).click();
-    const skin = page.getByRole('combobox',{name:'Appearance',exact:true});
-    const style = page.getByRole('combobox',{name:'Text style',exact:true});
-    const ids = await skin.locator('option').evaluateAll(nodes=>nodes.map(n=>n.value).filter(value=>value.startsWith('skin:')));
+  await page.locator('.appearance-disclosure > summary').click();
+    const skin = page.getByRole('group',{name:'Appearance',exact:true});
+    const style = page.getByRole('group',{name:'Text style',exact:true});
+    const ids = await skin.locator('input[type=radio]').evaluateAll(nodes=>nodes.map(n=>n.value).filter(value=>value.startsWith('skin:')));
     assert(ids.length===22,'22 skins available');
     for (const id of ids) {
-      await skin.focus(); await skin.selectOption(id);
+      await skin.locator(`input[value="${id}"]`).check();
       assert(await page.locator('html').getAttribute('data-skin')===id.slice(5),'Skin applied');
-      assert(await skin.evaluate(el=>el===document.activeElement),'Skin retains focus');
+      assert(await skin.locator('input:checked').evaluate(el=>el===document.activeElement),'Skin retains focus');
       assert(page.url().endsWith('#preferences'),'Appearance does not navigate');
     }
     for (const value of ['expressive','serif','mono','system']) {
-      await style.focus(); await style.selectOption(value);
+      await style.locator(`input[value="${value}"]`).check();
       assert(await page.locator('html').getAttribute('data-type')===value,'Text style applied');
-      assert(await style.evaluate(el=>el===document.activeElement),'Text style retains focus');
+      assert(await style.locator('input:checked').evaluate(el=>el===document.activeElement),'Text style retains focus');
     }
-    await skin.selectOption('skin:bubblegum'); await style.selectOption('serif');
+    await skin.locator('input[value="skin:bubblegum"]').check(); await style.locator('input[value="serif"]').check();
     assert(await page.locator('body').evaluate(el=>getComputedStyle(el).fontFamily.includes('Georgia')),'Selected font renders');
     await page.setViewportSize({width:390,height:844});
     assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'No narrow overflow');

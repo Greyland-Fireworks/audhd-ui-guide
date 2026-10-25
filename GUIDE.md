@@ -114,6 +114,8 @@ The 13 stable rule IDs describe task outcomes and the interaction behavior suppo
 - [AUDHD-12 Validate complete tasks and report actual evidence](#audhd-12-validate-complete-tasks-and-report-actual-evidence)
 - [AUDHD-13 Protect consequential edits with scoped safeguards](#audhd-13-protect-consequential-edits-with-scoped-safeguards)
 
+These rules supply defaults for relevant design and implementation decisions before the first version is presented. Apply them within the requested scope; depart when an established task need or user constraint justifies it, and briefly explain material departures. Do not add components merely to demonstrate a rule. Verify both the visible outcome and behavior; a default is not evidence of user benefit.
+
 ### AUDHD-01 Keep scope and location visible
 
 **Requirement:** Show the current object and the scope of an edit near its controls. Organize around tasks, then related attributes. Allow direct movement between related stages when the task does not require a fixed sequence.
@@ -132,17 +134,25 @@ Design for someone who does not remember building or configuring the system, inc
 
 Make task-relevant relationships visible: which controls affect which content, which values describe the same item, and which concepts are parents, peers, inputs, outputs or comparisons. Use meaningful grouping, proximity, alignment, shared scope labels or labeled connections as appropriate. Individually labeled cards are insufficient when their relationship remains unclear. Preserve relationships at narrow widths and with enlarged text, with corresponding semantic structure. Color may reinforce relationships but must not carry them alone.
 
+**Peer settings:** Give settings at the same conceptual level consistent heading prominence and group treatment. Choose each control for its task; using a dropdown instead of cards must not accidentally make a peer setting look less important.
+
+**Independent option groups:** When several option groups appear together, make it clear which options belong together, what each group changes and which choice is active in each group. Use clear group labels and stronger separation between groups than between options within a group. Preserve that distinction across themes, compact layouts and enlarged text, with corresponding semantic grouping. Borders, cards and dividers are optional techniques, not required layouts.
+
+**Selection visibility:** In a collection of choices, make the current selection easy to locate among its peers. Use a prominent contrasting surface or status band together with explicit state wording and a structural cue such as a heavier border. A subtle outline-color change or small checkmark alone is insufficient. Keep keyboard focus visibly distinct from selection, expose the selected state programmatically and verify it in light/dark themes, forced colors and narrow layouts. When a card is the selection control, its state label must participate in the same clickable target; do not add a nested button or extra keyboard stop. Use “Active” only when the choice is currently applied; pending choices need wording that distinguishes selection from application.
+
 **Why:** Repetition can increase reading effort without improving orientation.
 
 **Example:** “Project settings” contains a clear “Notifications” section instead of repeating “Settings” above every group.
 
-**Check:** Identify which controls affect which results and which values belong together. Follow those relationships on a narrow screen, with enlarged text and with keyboard navigation; inspect semantic grouping separately. Decorative connections must not obscure controls or imply actions.
+**Check:** Identify which controls affect which results and which values belong together. Follow those relationships on a narrow screen, with enlarged text and with keyboard navigation; inspect semantic grouping separately. Decorative connections must not obscure controls or imply actions. Without clicking, can a reviewer identify the independent option groups, what each changes and the active choice in each? Verify that the distinction survives supported themes, density settings and enlarged text.
 
 **Connected-context example:** A current recording card and its detail panel share an active surface, title accent, repeated identity and structural edge. A directional cue points right in columns and down after stacking. A collection introduction such as “3 recordings:” identifies the actual children. These are optional techniques for the required relationship, not decorations to add to every group. Derive them from the actual object ID, not matching titles. Inspect the connection without color and after reflow.
 
 ### AUDHD-03 Offer manageable detail without hiding choices
 
 **Requirement:** Put the immediate task first. Keep advanced settings, history and references in clearly named disclosures when appropriate. Where search is provided, search all eligible choices within its stated scope, including collapsed ones. Show active filters, a reset action and selected values excluded by the current filter.
+
+**Long optional collections:** When an optional choice collection pushes unrelated tasks far down the page, default to a clearly named disclosure, initially collapsed unless the current task needs it open. Keep the current selection visible in the summary, with a compact representative preview when it describes appearance. Opening or closing the collection must not apply or discard choices. Keep errors and required next steps discoverable; do not collapse information needed to complete the current task.
 
 Inspect the effort created by the workflow itself: repeated decisions, switching between views and interruptions needed to complete a task. Reduce unnecessary reconstruction without hiding useful expert detail. Do not optimize for a minimum click count; a predictable extra step may be easier than a short but ambiguous action.
 
@@ -159,6 +169,8 @@ Map/date choices, thumbnail previews, pinned comparisons, recently watched lists
 ### AUDHD-04 Explain effective behavior
 
 **Requirement:** Name actions by their effect. Distinguish stored preferences, defaults, eligibility and effective behavior. Explain overrides near affected controls. Display accurate totals and units. If probabilities or weights appear, explain what they actually mean.
+
+Label disclosure actions by what clicking does, such as “Show appearance choices” and “Hide appearance choices”; show the current value separately. Distinguish revealing choices from applying them, and state when selection takes effect.
 
 Use one term consistently for one concept, and different terms for different effects. Replace vague actions such as “Process,” “Apply” or “Resolve” with a specific effect when ambiguity matters. Explain unfamiliar domain terms without losing precision. Keep internal identifiers in optional technical details rather than using them as the only user-facing name.
 
@@ -230,6 +242,10 @@ Deliver complete contextual help within the affected scope. Placeholder text, �
 
 Keep scope, save requirements, blocking errors and consequential effects visible without opening help. Tooltips supplement clear labels and visible context; they must not be the only way to discover a critical consequence. Use an expandable explanation or help popover for content too long to read comfortably in a tooltip, or content containing links and other interactions.
 
+**Associated help placement:** If an info/help button explains text, a label or an image, place it immediately after that subject, preferably on the same line or in the same row. Keep the subject and button together visually and adjacent in reading order. Do not isolate the button on a detached row or at a distant panel edge. At narrow widths or enlarged text, let the group wrap without overlap while keeping the association clear. The opened explanation may appear below the group. Retain a topic-specific accessible name, programmatic association, visible keyboard focus and an adequate target; visual proximity does not replace these semantics.
+
+For optional background that is not needed to make the current decision, default to an accessible info control immediately beside its subject. Keep consequences, blocking errors and required instructions visible. Do not add a help control when concise visible wording already suffices, or hide information the current task requires.
+
 #### Choose the help format
 
 | Information needed | Suitable presentation |
@@ -285,11 +301,13 @@ Appearance changes must preserve current work and context. Offer selectable skin
 
 **Requirement:** Support wrapping, text enlargement, visible focus and usable targets at supported widths. Use semantic controls with names, roles and states. Support keyboard operation and applicable assistive technologies. Measure contrast and target sizing rather than assuming a theme passes.
 
+**Visual preference scope:** When a choice changes a visible property, default to a representative preview beside its label: swatches for colors, color bands and a sample surface for palettes, rendered text for typography/size, and identical content showing spacing or thickness differences. Provide meaningful text equivalents and identify system-dependent examples. Applying the preference must visibly affect the relevant interface elements consistently within its stated scope. Explain meaningful exclusions; for example, “Spacing changes card padding and layout gaps; line spacing stays unchanged.” Keep previews understandable through labels and descriptions as well as visuals. Preserve readable content, visible focus and usable controls when reducing density.
+
 **Why:** Presentation and input changes must not make a task unusable.
 
 **Example:** Choice labels wrap without covering their radio buttons, and a skip link bypasses repeated navigation.
 
-**Check:** Test narrow layout, text scaling, keyboard order and accessible names. Record actual devices and assistive technologies. Untested screen-reader coverage remains pending. The visual standard below provides design defaults, not a substitute for these checks.
+**Check:** Test narrow layout, text scaling, keyboard order and accessible names. Record actual devices and assistive technologies. Untested screen-reader coverage remains pending. The visual standard below provides design defaults, not a substitute for these checks. Compare each visual preference preview with its applied result: does it demonstrate the actual differences, and do the elements promised by its wording change? Across supported settings, verify that grouping, focus visibility and usable controls remain intact. Record preview-only or untested behavior as such.
 
 ### AUDHD-12 Validate complete tasks and report actual evidence
 
