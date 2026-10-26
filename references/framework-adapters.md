@@ -2,7 +2,7 @@
 
 [Guide](../GUIDE.md) · [Reference contract](../examples/recording-review/SPEC.md) · [Evidence](evidence-and-limits.md)
 
-The Guide defines the required outcomes: preserve unfinished work, explain relationships and actions, report state honestly and keep the interface operable. The framework package supplies only the documented preference utilities, import/preview controller and optional appearance assets; it does not implement every Guide rule. An adapter is the application code that connects these pieces to a UI framework. The application still controls permissions, saves, navigation, focus and actual preference application. The demos supply fictional records and examples of these decisions.
+The Guide defines the required outcomes: preserve unfinished work, explain relationships and actions, report state honestly and keep the interface operable. The framework package supplies only the documented preference utilities, import/preview controller and appearance assets; it does not implement every Guide rule. Installation is optional, while new interfaces without an established design system follow the [full-kit reuse and Guillermo default policy](../GUIDE.md#adaptable-appearance), including explicit-preference precedence and justified exceptions. An adapter is the application code that connects these pieces to a UI framework. The application still controls permissions, saves, navigation, focus and actual preference application. The demos supply fictional records and examples of these decisions.
 
 | Ownership layer | Owns | Does not establish |
 |---|---|---|

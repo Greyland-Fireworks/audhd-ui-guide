@@ -12,7 +12,7 @@ Practical guidance for developers and AI agents building interfaces that are eas
 
 - **[Guide](GUIDE.md):** Rules for making context, relationships, actions and recovery understandable. Use it to design or review an interface, with or without AI.
 - **[Skill](SKILL.md):** A workflow for AI development agents: understand your codebase, apply the Guide and verify improvements.
-- **[Examples](EXAMPLES.md):** An [annotated screenshot gallery](examples/GALLERY.md), worked patterns, [runnable React and Svelte interfaces](examples/recording-review/README.md), and [22 skins with chart palettes](examples/skins/README.md). Explore the choices, see the rules in action and adapt useful patterns to your own stack.
+- **[Examples](EXAMPLES.md):** An [annotated screenshot gallery](examples/GALLERY.md), worked patterns, [runnable React and Svelte interfaces](examples/recording-review/README.md), and [24 skins with chart palettes](examples/skins/README.md). Explore the choices, see the rules in action and adapt useful patterns to your own stack.
 
 ## How do I use it?
 
@@ -127,7 +127,7 @@ You can run either example independently. If a port is already in use, follow th
 |---|---|
 | React recording review | Implemented with provisional React Aria; independent state logic |
 | Svelte 5 recording review | Implemented with provisional Bits UI; independent state logic |
-| Skins and text styles | 22 named skins, 11 light/11 dark, four text styles; Guillermo is an example default |
+| Skins and text styles | 24 named skins, 12 light/12 dark, four text styles; new interfaces reuse the full kit and default to Guillermo absent explicit preferences or established product defaults; see [appearance policy](GUIDE.md#adaptable-appearance) for exceptions |
 | Preference version 2 | Schemas, strict validation, explicit migration, local preview/application/export; bounded supported fields |
 | Angular and Vue | Adapter documentation; full implementations and executable verification Pending |
 | Verification | [Acceptance record](examples/recording-review/ACCEPTANCE.md) separates runtime results from pending zoom, screen-reader and participant checks |

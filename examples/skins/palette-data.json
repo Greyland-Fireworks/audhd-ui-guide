@@ -108,5 +108,15 @@
     "id": "zebra-pop",
     "name": "Zebra Pop",
     "mode": "light"
+  },
+  {
+    "id": "green-ledger-light",
+    "name": "Green Ledger Light",
+    "mode": "light"
+  },
+  {
+    "id": "green-ledger-dark",
+    "name": "Green Ledger Dark",
+    "mode": "dark"
   }
 ]

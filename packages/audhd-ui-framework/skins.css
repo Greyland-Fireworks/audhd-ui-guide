@@ -1,4 +1,4 @@
-/* Dashboard skins: 22 named palettes, with no runtime or external font dependency.
+/* Dashboard skins: 24 named palettes, with no runtime or external font dependency.
    Apply data-skin to an app root; tokens inherit into HTML and inline SVG.
    Flat, opaque surfaces keep reading and plot contrast predictable. These are
    adapted palettes, not exact reproductions of decorative backgrounds.
@@ -813,6 +813,78 @@
   --ui-chart-div-4: #D89FB7;
   --ui-chart-div-5: #A92D67;
   --ui-font-display: 'Arial Black', 'Trebuchet MS', 'Franklin Gothic Heavy', sans-serif;
+}
+
+/* Green Ledger Light — light. */
+[data-audhd-ui][data-skin="green-ledger-light"] {
+  --ui-mode: light;
+  --ui-page: #F6F5EF;
+  --ui-surface: #FFFEFA;
+  --ui-text: #223B36;
+  --ui-muted: #59665E;
+  --ui-border: #D5D9CF;
+  --ui-control-border: #697D70;
+  --ui-action: #24563C;
+  --ui-on-action: #FFFFFF;
+  --ui-active-surface: #E9EEE2;
+  --ui-active-accent: #17624F;
+  --ui-focus: #7956BD;
+  --ui-success: #226344;
+  --ui-warning: #815000;
+  --ui-danger: #9B3227;
+  --ui-chart-series-1: #24563C;
+  --ui-chart-series-2: #80552B;
+  --ui-chart-series-3: #733B9D;
+  --ui-chart-series-4: #006D90;
+  --ui-chart-series-5: #A92D67;
+  --ui-chart-series-6: #576B11;
+  --ui-chart-seq-1: #E9EEE2;
+  --ui-chart-seq-2: #BDCDB9;
+  --ui-chart-seq-3: #8CA68D;
+  --ui-chart-seq-4: #5A7E65;
+  --ui-chart-seq-5: #24563C;
+  --ui-chart-div-1: #006D90;
+  --ui-chart-div-2: #8CBAC5;
+  --ui-chart-div-3: #E4DED7;
+  --ui-chart-div-4: #D89DB3;
+  --ui-chart-div-5: #A92D67;
+  --ui-font-display: Georgia, "Times New Roman", serif;
+}
+
+/* Green Ledger Dark — dark. */
+[data-audhd-ui][data-skin="green-ledger-dark"] {
+  --ui-mode: dark;
+  --ui-page: #15221B;
+  --ui-surface: #203731;
+  --ui-text: #F0F1E6;
+  --ui-muted: #BDCBBF;
+  --ui-border: #435B50;
+  --ui-control-border: #8CAA98;
+  --ui-action: #DCF1A4;
+  --ui-on-action: #20321B;
+  --ui-active-surface: #2D473B;
+  --ui-active-accent: #A4DCC2;
+  --ui-focus: #C6A3FF;
+  --ui-success: #A4DCC2;
+  --ui-warning: #FFBD87;
+  --ui-danger: #FFB1A4;
+  --ui-chart-series-1: #A4DCC2;
+  --ui-chart-series-2: #DCF1A4;
+  --ui-chart-series-3: #BDA6F7;
+  --ui-chart-series-4: #70BFE4;
+  --ui-chart-series-5: #F3A6C8;
+  --ui-chart-series-6: #C4D48B;
+  --ui-chart-seq-1: #203731;
+  --ui-chart-seq-2: #3F5C4C;
+  --ui-chart-seq-3: #66866B;
+  --ui-chart-seq-4: #9DB58A;
+  --ui-chart-seq-5: #DCF1A4;
+  --ui-chart-div-1: #70BFE4;
+  --ui-chart-div-2: #3C5E72;
+  --ui-chart-div-3: #2D292B;
+  --ui-chart-div-4: #775365;
+  --ui-chart-div-5: #F3A6C8;
+  --ui-font-display: Georgia, "Times New Roman", serif;
 }
 
 /* Small opt-in hooks, not a component library. Layout remains the adapter's job.

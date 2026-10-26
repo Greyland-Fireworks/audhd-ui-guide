@@ -1,3 +1,4 @@
+import palettes from 'audhd-ui-framework/palettes' with { type: 'json' };
 import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { emptyProfile } from '../../preferences/profile.js';
@@ -176,7 +177,7 @@ test('Visual choice cards expose radio state, keyboard selection and representat
     await expect(group(name).locator('input:checked')).toHaveCount(1);
     await expect(group(name).locator('.choice-state').filter({hasText:'✓ ACTIVE'})).toHaveCount(1);
   }
-  await expect(group('Appearance').getByRole('radio')).toHaveCount(23);
+  await expect(group('Appearance').getByRole('radio')).toHaveCount(palettes.length + 1);
   await expect(group('Appearance').getByRole('radio',{name:'Paperwhite (light)',exact:true})).toHaveCount(1);
   await expect(group('Appearance').getByRole('radio',{name:'Guillermo (dark)',exact:true})).toHaveCount(1);
   for (const [name,topic] of [['Appearance','skin'],['Text style','text style']]) {
@@ -197,7 +198,7 @@ test('Visual choice cards expose radio state, keyboard selection and representat
     await expect(card.getByRole('radio')).toBeChecked();
     await expect(footer).toHaveText('✓ ACTIVE');
     await expect(page.locator('html')).toHaveAttribute('data-skin',skin);
-    await expect(group('Appearance').locator('.choice-state').filter({hasText:'Inactive'})).toHaveCount(22);
+    await expect(group('Appearance').locator('.choice-state').filter({hasText:'Inactive'})).toHaveCount(palettes.length);
     const appearance=await footer.evaluate(el=>({fill:getComputedStyle(el).backgroundColor,ink:getComputedStyle(el).color,border:getComputedStyle(el.closest('label')).borderTopWidth}));
     expect(appearance.fill).not.toBe(appearance.ink);
     expect(appearance.border).toBe('4px');

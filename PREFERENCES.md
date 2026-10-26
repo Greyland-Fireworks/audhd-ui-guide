@@ -83,7 +83,7 @@ The [validator and migration tool](preferences/README.md) validates before conve
 
 `display.appearance` is one atomic nullable leaf: `{"mode":"light"}`, `{"mode":"dark"}`, `{"mode":"system"}` or `{"mode":"skin","id":"guillermo"}`. A named skin determines its mode. Light/dark use documented product defaults; system follows system appearance. Never merge a mode from one profile with a skin from another. Unknown well-formed skin IDs are valid intent but unsupported unless present in the consuming product's registry. No URLs or executable content are skin identifiers.
 
-`display.text_style` is independently null, `system`, `expressive`, `serif` or `mono`; expressive requests the skin's heading typography. These preferences cannot lower accessibility requirements. The Guide does not prescribe a universal default skin. Rule emphasis and primary targets remain separate documented configuration, not JSON profile keys.
+`display.text_style` is independently null, `system`, `expressive`, `serif` or `mono`; expressive requests the skin's heading typography. These preferences cannot lower accessibility requirements. For new interfaces without an established design system, the Guide's [appearance policy](GUIDE.md#adaptable-appearance) uses the full supplied skin registry and Guillermo as the initial product default when no explicit preference or established product default applies. This is not a universal personal preference. Offer system appearance using Paperwhite for light and Guillermo for dark unless established product requirements specify otherwise. Rule emphasis and primary targets remain separate documented configuration, not JSON profile keys.
 
 ### Supported fields
 

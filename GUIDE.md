@@ -56,6 +56,8 @@ Requirements describe outcomes. Examples and optional techniques illustrate ways
 
 Apply checks to the affected task and supported capabilities; read-only work does not require adding editing, saving or recovery features. Record unavailable evidence as pending and genuinely inapplicable checks with a reason. A review does not authorize edits. Follow explicit user instructions and applicable project requirements, recording scoped conflicts or exceptions rather than claiming full adherence.
 
+Measure coverage by the requested user goals and observable outcomes, alongside necessary setting or data accounting. Connecting a data source, declaring desired state, inspecting records and managing records are different capabilities; editable fields alone do not establish a complete workflow. Use supported application interfaces within authorization. Distinguish source-declared, runtime-recognized, platform-applicable, editable and behavior-verified status; explain known unavailability before an attempted action. Verify the intended result, such as persistent effective settings, allowed and denied access, or delivery to the intended destination. Startup health and generic round trips cannot establish unrelated outcomes. Keep evidence compact and report missing dependencies or checks as Pending.
+
 ### Priority hierarchy and conflicts
 
 Apply this hierarchy within the instructions governing the task:
@@ -433,6 +435,10 @@ Use visual weight deliberately: page title, section heading, item title, then su
 
 ### Keep navigation levels distinct
 
+For complex interfaces, primary destinations represent task domains and secondary destinations represent named tasks within them. Put common tasks, relevant status and setup dependencies first; keep expert detail deeper within its owning task. Do not substitute source-key groupings or a generic “More settings” collection for meaningful secondary navigation. Simple interfaces need no artificial nesting. Preserve the current parent and child, addressable destinations where appropriate, Back/Forward behavior and useful return state.
+
+Show pending changes and errors at the relevant navigation level, including collapsed groups. Change reviews and error summaries must offer a route to reveal and focus the affected control without discarding other drafts. A global count alone does not tell users where unfinished work lives.
+
 - Separate application or workspace navigation, page or task navigation, and choices within a panel. Give each level a distinct location and meaningful label; avoid visually identical rows of nested tabs with unclear ownership.
 - Show the current location and selected destination at each relevant level. Use breadcrumbs when they clarify a real parent path; do not add a navigation level merely to fill a layout.
 - Keep navigation separate from actions and filters. “Reports” opens a destination; “Generate report” starts work; “Last 7 days” changes the displayed period. Their effects should be apparent before activation.
@@ -486,6 +492,8 @@ Keep object identity, overall save scope and consequential actions outside hidde
 If validation or a save fails in a hidden panel, show a persistent, accessible summary in the current context that identifies the group and provides a route to the affected field. Reveal every containing tab and accordion section before focusing that field; associate the error with it. If the field is unavailable or access has changed, explain the obstacle and provide an appropriate fallback. Never leave a disabled Save button with its only explanation hidden. Preserve all other entries and the user's context as far as the task permits; a background error must not unexpectedly switch panels or steal focus. A deliberate “Go to error” action may reveal the target and move focus.
 
 ### Operate accessibly across layouts
+
+Do not require horizontal scrolling to discover primary destinations. At narrow widths and enlarged text, use an accessible complete section menu, drawer or vertical hierarchy suited to the host, while keeping the current location visible. Prioritize the selected task: repeated promotional copy, unrelated summaries and inactive action areas must not crowd out navigation and work. Verify access to every destination and its return path, not merely absence of page overflow; preserve drafts, focus and parent/child context through responsive changes.
 
 For web tab widgets, follow the [W3C APG tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/): provide a named tab list, associated tabs and panels, and accurate selected state. Tab enters the active tab and then proceeds into the panel or onward; arrow keys move among tabs according to orientation. For manual activation, Enter or Space opens the focused tab. Automatic activation is suitable only when panels appear without noticeable delay. Keep nested tab lists independently named and their key handling local to the active list.
 
@@ -548,7 +556,9 @@ Accessible behavior is mandatory; skins are user-selectable. Light and dark pale
 
 Fun, personal expression and renewed interest are legitimate design objectives alongside readability and comfort. Offer useful palette and text-style variety without automatic rotation or a claim that one preset is AuDHD-ideal. Keep text style independent of skin when supported. Use a coherent heading/label/value hierarchy with intentional font choices, relative sizing and fallback fonts; user-selected styles must not remove labels, clip content or obstruct browser enlargement.
 
-Use semantic roles for page/panel surfaces, reading text, controls/actions, active context, keyboard focus, status and chart data. The [22-skin preview](examples/skins/README.md) supplies reusable examples and checks. Its names, colors, fonts and numerical dimensions are reference choices, not mandatory product branding or a contrast certification.
+Use semantic roles for page/panel surfaces, reading text, controls/actions, active context, keyboard focus, status and chart data. For new interfaces without an established design system, reuse the canonical skin CSS/tokens and full palette registry described in the [skin integration guidance](examples/skins/README.md), rather than inventing replacement themes. Direct asset reuse is valid; installing the optional framework is not required. Offer all registered skins through an accessible selector with representative previews, independent text-style choices and a system-appearance choice. Layouts and branding remain adaptable; reuse is not a contrast certification.
+
+When no explicit preference or established product default applies, initialize new interfaces with **Guillermo** (`guillermo`). This is the kit's product default, not a universal AuDHD recommendation. For the system-appearance choice, use Paperwhite for light and Guillermo for dark unless established product requirements specify another mapping. Preserve preference precedence and accessibility overrides. Document concrete brand, platform or technical reasons for exceptions to kit reuse or the default; an unrelated focused change does not authorize reskinning an existing product.
 
 Reserve an **active-context accent and surface** for the current working object and associated detail area. Both ends should share identity, title treatment and structural cues where useful. Do not tint an entire unrelated collection to imply that every item is current. Keyboard focus remains independently visible when it enters or leaves that context; action, success, warning, error and chart categories have separate meanings. Multiple navigation levels can each have a current state. Use text, borders or other structure when system colors collapse hue differences.
 

@@ -4,6 +4,8 @@ Version 0.1.0-alpha.2 is an internal candidate, not a validated release. This op
 
 ## Install a local candidate
 
+Package installation remains optional. For new interfaces without an established design system, the Guide's [appearance policy](../../GUIDE.md#adaptable-appearance) defaults to reusing this package's canonical skin CSS/tokens and full palette registry; direct asset reuse is sufficient. Offer all registered skins, independent text styles and system appearance, initially using Guillermo unless explicit preferences or established product defaults apply. Document justified exceptions; do not treat package optionality as a reason to invent replacement themes.
+
 With Node 22.12 or newer, run `npm pack --workspace audhd-ui-framework --pack-destination output` from the source repository (create output first). In a consumer, run `npm install /path/to/audhd-ui-framework-0.1.0-alpha.2.tgz`. No registry publication is configured. The repository's `npm run check:framework` creates and tests a tarball and writes its checksum.
 
 ```js
@@ -11,6 +13,8 @@ import { parseProfile, emptyProfile, resolveProfiles } from 'audhd-ui-framework'
 const profile = parseProfile(fileText); // Validate before preview; does not apply it.
 const merged = resolveProfiles(emptyProfile(), profile); // Merge requests; does not apply them.
 ```
+
+The registry includes 24 skins (12 light and 12 dark), including `green-ledger-light` and `green-ledger-dark`. See the [skin preview and Green Ledger notes](../../examples/skins/README.md#green-ledger-pair) for appearance details and token-check limits.
 
 ## Public interface
 

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import palettes from 'audhd-ui-framework/palettes' with { type: 'json' };
 import { mkdir } from 'node:fs/promises';
 import workflow from './scenarios/workflow.js';
 import navigation from './scenarios/navigation.js';
@@ -32,9 +33,12 @@ test('Relationships, reflow and forced colors', async ({page}) => {
 test('Palette preview retains labels and data through all skins', async ({page}) => {
   await page.goto('http://127.0.0.1:4185/preview.html');
   await page.locator('details').first().locator('summary').click();
-  const picks=page.locator('[data-pick]'); expect(await picks.count()).toBe(22);
+  const picks=page.locator('[data-pick]');
+  expect(await picks.evaluateAll(nodes=>nodes.map(node=>node.dataset.pick))).toEqual(palettes.map(skin=>skin.id));
   for(const button of await picks.all()) {
+    const swatch=await button.locator('.swatches i').first().evaluate(el=>getComputedStyle(el).backgroundColor);
     await button.click();
+    expect(await page.locator('html').evaluate(el=>getComputedStyle(el).backgroundColor)).toBe(swatch);
     await expect(page.locator('table').first()).toBeVisible();
     await expect(page.getByText('No data for week 4.',{exact:false})).toBeVisible();
     await expect(page.locator('table').nth(1).getByRole('row',{name:'4 No data No data',exact:true})).toBeVisible();

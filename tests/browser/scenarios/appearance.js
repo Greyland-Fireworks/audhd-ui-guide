@@ -1,3 +1,5 @@
+import palettes from 'audhd-ui-framework/palettes' with { type: 'json' };
+
 export default async (page) => {
   const assert = (ok, message) => { if (!ok) throw Error(message); };
   page.setDefaultTimeout(10000);
@@ -17,7 +19,7 @@ export default async (page) => {
     const skin = page.getByRole('group',{name:'Appearance',exact:true});
     const style = page.getByRole('group',{name:'Text style',exact:true});
     const ids = await skin.locator('input[type=radio]').evaluateAll(nodes=>nodes.map(n=>n.value).filter(value=>value.startsWith('skin:')));
-    assert(ids.length===22,'22 skins available');
+    assert(JSON.stringify(ids)===JSON.stringify(palettes.map(skin=>`skin:${skin.id}`)),'Every registered skin is available in registry order');
     for (const id of ids) {
       await skin.locator(`input[value="${id}"]`).check();
       assert(await page.locator('html').getAttribute('data-skin')===id.slice(5),'Skin applied');
@@ -44,7 +46,7 @@ export default async (page) => {
     assert(await note.evaluate(el=>getComputedStyle(el).outlineStyle)!=='none','Forced-colors focus survives');
     await page.emulateMedia({forcedColors:'none'});
     await page.screenshot({path:`output/appearance-${port}-review.png`,fullPage:true});
-    results.push({port,skins:22,styles:4,preserved:['draft','pending save','filter','record','sub-tab','focus']});
+    results.push({port,skins:ids.length,styles:4,preserved:['draft','pending save','filter','record','sub-tab','focus']});
   }
   return results;
 }

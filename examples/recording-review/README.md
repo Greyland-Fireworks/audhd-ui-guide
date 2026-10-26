@@ -2,7 +2,7 @@
 
 [Specification](SPEC.md) · [Acceptance evidence](ACCEPTANCE.md) · [Adapter boundaries](../../references/framework-adapters.md) · [Guide](../../GUIDE.md)
 
-Two independently implemented interfaces review three fictional recordings. React uses React Aria provisionally; Svelte 5 uses Bits UI provisionally. Both support canonical navigation, contextual help, 22 skins, four text styles and explicit preference import/export. Reviews and preferences are session-only; simulated save acknowledgment is not a server or file save. Export downloads preferences only.
+Two independently implemented interfaces review three fictional recordings. React uses React Aria provisionally; Svelte 5 uses Bits UI provisionally. Both support canonical navigation, contextual help, 24 skins, four text styles and explicit preference import/export. Reviews and preferences are session-only; simulated save acknowledgment is not a server or file save. Export downloads preferences only.
 
 From the repository root, with Node 22.12+ and npm:
 

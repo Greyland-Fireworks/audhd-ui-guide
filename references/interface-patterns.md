@@ -14,7 +14,13 @@ Use the task, not the component name alone, to select checks. Read the linked [G
 
 Report the observed problem and consequence, evidence/location, focused proposal, and verification/uncertainty. A screenshot cannot prove persistence or keyboard behavior. Preserve useful density, existing conventions and working controls when no problem is evidenced.
 
+For complex dashboards, check [primary and secondary navigation](../GUIDE.md#keep-navigation-levels-distinct): can someone find a task without knowing configuration names, identify its parent, reach prerequisites and return to unfinished work? A simple screen need not gain extra levels. Check routes from change reviews and error summaries to hidden controls, including reveal, focus and draft preservation. Under [responsive operation](../GUIDE.md#operate-accessibly-across-layouts), every primary destination must remain discoverable without horizontal scrolling at narrow widths or enlarged text; inspect actual navigation and selected content, not just page overflow.
+
+Match verification to the user's task. A settings check observes persistence and effective behavior; an access check observes intended allowed and denied actions; a delivery check observes the intended destination. Do not treat a rendered form, recognized runtime flag, health check or generic round trip as proof of those distinct outcomes. For record-management tasks, distinguish editable declarations from inspection and management of existing records. Record only the evidence needed and leave untested outcomes Pending.
+
 ## Visual choices in settings
+
+For new interfaces without an established design system, apply the [full-kit reuse and appearance defaults](../GUIDE.md#adaptable-appearance): all registered skins, Guillermo initially absent explicit preferences or established product defaults, independent text styles and system appearance. Package installation is optional; canonical assets may be reused directly. Existing products and justified exceptions retain their established requirements.
 
 Under AUDHD-02, 03, 05 and 11, when a choice changes a visible property, show a representative example beside its label. Keep the choice understandable without relying on the example alone. This pattern arose from individual feedback on our recording demos; it is not a new rule ID or a validated universal layout requirement.
 
