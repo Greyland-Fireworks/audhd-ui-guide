@@ -36,3 +36,9 @@ The browser check exercises field-linked recovery across navigation, version-awa
 Executed in Chromium on October 26, 2026: the checks passed, including 390px navigation and record controls at 200% root text size. This text-size check is distinct from browser zoom and assistive-technology testing, which remain pending.
 
 Code uses [MIT](../../LICENSE-CODE); documentation uses [CC BY 4.0](../../LICENSE).
+
+## Overview and control links
+
+Overview is the default entry. Errors link to the reason field, unsaved records to role editing, and saved records awaiting verification to the check button. The URL names the person and target; navigation reveals that control without mutating values. Filters, per-person drafts and verification results survive route and appearance changes. Verification is tied to a saved version; saving again invalidates it. All data remains simulated and in memory.
+
+Inline comments explain these state owners, version boundaries, non-mutating retries, focus fallback and token-only appearance updates. The recording adapters and unlock editor document their distinct persistence and navigation contracts beside the relevant code.

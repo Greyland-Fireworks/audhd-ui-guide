@@ -8,6 +8,8 @@ if (!params.has('no-css')) await import('audhd-ui-framework/skins.css');
 const root = document.querySelector('#settings');
 if (!params.has('no-marker')) root.setAttribute('data-audhd-ui', '');
 const byId = id => document.getElementById(id);
+// Applied preferences stay separate from the import preview: cancel/error must
+// preserve current choices. This fixture has no durable profile storage.
 let current = emptyProfile();
 const workflow = createImportWorkflow({ capabilities: {
   'display.text_style': true,

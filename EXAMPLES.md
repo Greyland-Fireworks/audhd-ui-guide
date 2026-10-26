@@ -288,3 +288,11 @@ Users can choose any of 24 skins and four text styles. Light/dark are ordinary c
 **After:** Inspect the real loader, schema, defaults, precedence, dependencies, permissions and persistence path. Group by task/effect, show requested versus effective state and explain save/apply/restart separately. Keep useful technical details available without replacing plain-English summaries. Where facts remain unknown, mark them and continue supported work rather than inventing values or blocking on an optional preference questionnaire.
 
 **Checks:** Trace input through validation and persistence to effective behavior; test permissions, failure/recovery and return. Identify the evidence source for each material explanation. Relevant rules: AUDHD-01, 02, 04, 06, 09, 12, 13. The recording demo illustrates continuity; it does not implement a real configuration backend.
+
+## Operational overview and precise copy
+
+Use a compact title such as “Configuration editor,” rather than a slogan promising clarity. The [administration demo](examples/administration/README.md) opens on an overview: “Mira: Enter a reason” reveals and focuses the reason field; “Mira: Verify permissions” opens the check for the saved version. Neither action changes the draft. A newer save requires another check.
+
+The [recording adapters](examples/recording-review/README.md) show failed saves, pending snapshots and unsaved reviews before the complete destination index. Named-record links preserve search and drafts. When a submitted snapshot succeeds but newer edits remain, the overview still reports unfinished work. An empty group says “None”; it does not invent activity metrics. Simulation and retention limits remain visible.
+
+The [unlock-to-edit example](examples/unlock-to-edit/README.md) remains an editor: its summary links invalid values to their fields. A skin preview remains a focused appearance tool. These apply [practical language](GUIDE.md#practical-interface-language) and [status-first overviews](GUIDE.md#status-first-operational-overviews) without imposing the same page structure on every task.

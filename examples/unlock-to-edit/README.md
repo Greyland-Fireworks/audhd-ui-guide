@@ -39,3 +39,5 @@ Visible enabled text sampled in light/dark states met 4.5:1 against computed sur
 Initial verification found horizontal overflow at 320 pixels with enlarged text: the text-size selector's intrinsic width and long feedback words exceeded the available space. Shorter percentage labels, constrained toolbar width and wrapping corrected it; reduced fixed padding and shorter visible actions improved the inspected narrow layout. The failed capture remains in local output. Initial sandbox network denial was an environment failure before page load; successful checks used loopback access.
 
 Actual browser zoom, operating-system high contrast, screen-reader announcements, clipboard permission, other browser engines, cross-tab conflicts and intended-user understanding remain untested. No conformance certification, durable-storage guarantee or universal usability claim follows from these checks.
+
+The save summary links invalid entries to their fields, revealing Settings and placing focus without unlocking or replacing values. The editor remains the entry task; no overview is added.

@@ -69,7 +69,7 @@ test('REF-11,16: revert during a pending failure and fresh page reset', () => {
 // The same location contract is exercised against each independently written parser.
 import { routeFromHash } from '../src/navigation.js';
 test('NAV-01: valid direct destinations and explicit unknown-location recovery', () => {
-  assert.deepEqual(routeFromHash(''), { page: 'recording', id: 'REC-001', view: 'review' });
+  assert.deepEqual(routeFromHash(''), { page: 'workspace' });
   for (const page of ['workspace', 'recordings', 'preferences']) assert.deepEqual(routeFromHash('#' + page), { page });
   assert.deepEqual(routeFromHash('#recordings/REC-002'), { page: 'recording', id: 'REC-002', view: 'review' });
   assert.deepEqual(routeFromHash('#recordings/REC-003/details'), { page: 'recording', id: 'REC-003', view: 'details' });

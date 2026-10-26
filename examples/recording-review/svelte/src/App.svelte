@@ -80,9 +80,20 @@ import ProfileControls from './ProfileControls.svelte';
   let feedback = $derived(feedbackFor(current));
   let pendingRecords = $derived(recordings.filter(item => workspace.records[item.id].attempt));
 
+  // This adapter derives summaries independently; pending content can coexist
+  // with newer drafts. Higher-priority rows represent each record once.
+  // Acknowledgment is session-only, not verification or durable persistence.
+  let statusGroups = $derived([
+    ['Failed saves', 'Review failed save', recordings.filter(item => workspace.records[item.id].lastResult === 'failed')],
+    ['Pending saves', 'Inspect pending save', pendingRecords],
+    ['Other unsaved reviews', 'Review changes', recordings.filter(item => {
+      const review = workspace.records[item.id];
+      return !review.attempt && review.lastResult !== 'failed' && isDirty(review);
+    })],
+  ]);
   let view = $derived(viewById[selectedId] || 'review');
   let isRecordings = $derived(route.page === 'recording' || route.page === 'recordings');
-  let pageTitle = $derived(route.page === 'recording' ? 'Recording review desk' : route.page === 'workspace' ? 'All pages' : pages[route.page]?.title || 'Page unavailable');
+  let pageTitle = $derived(route.page === 'recording' ? 'Recording review desk' : route.page === 'workspace' ? 'Workspace' : pages[route.page]?.title || 'Page unavailable');
   let breadcrumbs = $derived.by(() => {
     // Use the same titles and parent IDs as the index; no second breadcrumb map.
     const path = [pages[isRecordings ? 'recordings' : route.page] || pages.workspace];
@@ -126,7 +137,7 @@ import ProfileControls from './ProfileControls.svelte';
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
   onMount(() => {
-    if (!location.hash) history.replaceState(null, '', reviewAddress(recordings[0].id));
+    if (!location.hash) history.replaceState(null, '', pages.workspace.href);
     const restore = () => applyLocation(location.hash);
     window.addEventListener('hashchange', restore);
     return () => window.removeEventListener('hashchange', restore);
@@ -177,7 +188,7 @@ import ProfileControls from './ProfileControls.svelte';
   <a class="skip-link" href="#page-heading" onclick={toTop}>Skip navigation</a>
   <div class="navigation-top">
     {@render breadcrumbTrail('top')}
-    <a href={pages.workspace.href} onclick={followLink}>All pages</a>
+    <a href={pages.workspace.href} onclick={followLink}>Workspace overview</a>
   </div>
   <nav aria-label="Workspace sections" class="workspace-navigation">
     {#each workspaceSections as id (id)}
@@ -186,9 +197,8 @@ import ProfileControls from './ProfileControls.svelte';
     {/each}
   </nav>
   <header class="page-header">
-    <p class="eyebrow">Reference workspace</p>
     <h1 id="page-heading" tabindex="-1" bind:this={pageHeading}>{pageTitle}</h1>
-    <p>{route.page === 'recording' ? 'Review a recording and save your assessment.' : pages[route.page]?.summary || 'This address does not name a page in this reference. Use All pages to find a destination.'}</p>
+    {#if route.page !== 'workspace'}<p>{route.page === 'recording' ? 'Review a recording and save your assessment.' : pages[route.page]?.summary || 'This address does not name a page in this reference. Use Workspace overview to find a destination.'}</p>{/if}
   </header>
 
   <!-- Retention is essential task context, so it stays visible outside optional
@@ -240,6 +250,19 @@ import ProfileControls from './ProfileControls.svelte';
   {/if}
 
   {#if route.page === 'workspace'}
+    <section class="panel" aria-label="Review status">
+      {#each statusGroups as [title, action, items]}
+        <section>
+          <h2>{title}</h2>
+          {#if items.length}
+            <ul>{#each items as item (item.id)}<li>
+              <a href={reviewAddress(item.id)} onclick={followLink}>{item.name}: {action}</a>
+              · {feedbackFor(workspace.records[item.id])}
+            </li>{/each}</ul>
+          {:else}<p>None.</p>{/if}
+        </section>
+      {/each}
+    </section>
     <section class="page-directory panel" aria-labelledby="directory-heading">
       <h2 id="directory-heading">Workspace pages</h2>
       <!-- Nested list structure and indentation agree with the real breadcrumb
@@ -435,7 +458,7 @@ import ProfileControls from './ProfileControls.svelte';
     <div class="footer-actions">
       <details class="footer-sections"><summary>Sections</summary>
         <nav aria-label="Footer sections">
-          <a href={pages.workspace.href} onclick={followLink}>All pages</a>
+          <a href={pages.workspace.href} onclick={followLink}>Workspace overview</a>
           <a href={pages.recordings.href} onclick={followLink}>All recordings</a>
           <a href={pages.preferences.href} onclick={followLink}>Workspace preferences</a>
           {#if route.page === 'recording'}

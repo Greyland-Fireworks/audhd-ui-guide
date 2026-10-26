@@ -83,9 +83,20 @@ export default function App() {
   const dirty = !sameReview(review.draft, review.saved);
   const feedback = reviewFeedback(review);
   const pendingRecords = recordings.filter(item => state.reviews[item.id].pending);
+  // Summaries share the editor's authoritative state, including pending snapshots.
+  // Higher-priority rows own each record once; pending feedback still reports
+  // newer unsaved edits. Acknowledgment here is session-only, never verification.
+  const statusGroups = [
+    ['Failed saves', 'Review failed save', recordings.filter(item => state.reviews[item.id].outcome === 'failed')],
+    ['Pending saves', 'Inspect pending save', pendingRecords],
+    ['Other unsaved reviews', 'Review changes', recordings.filter(item => {
+      const review = state.reviews[item.id];
+      return !review.pending && review.outcome !== 'failed' && !sameReview(review.draft, review.saved);
+    })],
+  ];
   const view = viewById[selectedId] || 'review';
   const isRecordings = route.page === 'recording' || route.page === 'recordings';
-  const pageTitle = route.page === 'recording' ? 'Recording review desk' : route.page === 'workspace' ? 'All pages' : pages[route.page]?.title || 'Page unavailable';
+  const pageTitle = route.page === 'recording' ? 'Recording review desk' : route.page === 'workspace' ? 'Workspace' : pages[route.page]?.title || 'Page unavailable';
   // Resolve ancestry from the same static page records used by the index, so
   // labels and parent links have one owner. Local views do not become parents.
   const breadcrumbs = [];
@@ -121,7 +132,7 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
   useEffect(() => {
-    if (!location.hash) history.replaceState(null, '', recordingHref(recordings[0].id));
+    if (!location.hash) history.replaceState(null, '', pages.workspace.href);
     const restore = () => applyLocation(location.hash);
     window.addEventListener('hashchange', restore);
     return () => window.removeEventListener('hashchange', restore);
@@ -165,16 +176,15 @@ export default function App() {
           view is not an invented parent. Both copies receive this same path. */}
       <div className="navigation-top">
         <Breadcrumbs items={breadcrumbs} position="top" onNavigate={followLink} />
-        <a href={pages.workspace.href} onClick={followLink}>All pages</a>
+        <a href={pages.workspace.href} onClick={followLink}>Workspace overview</a>
       </div>
       <nav aria-label="Workspace sections" className="workspace-navigation">
         {workspaceSections.map(id => <a key={id} href={id === 'recordings' ? recordingHref(selectedId, view) : pages[id].href}
           aria-current={(id === 'recordings' ? isRecordings : route.page === id) ? 'true' : undefined} onClick={followLink}>{pages[id].title}</a>)}
       </nav>
       <header className="page-header">
-        <p className="eyebrow">Reference workspace</p>
         <h1 id="page-heading" tabIndex={-1} ref={pageHeading}>{pageTitle}</h1>
-        <p>{route.page === 'recording' ? 'Review a recording and save your assessment.' : pages[route.page]?.summary || 'This address does not name a page in this reference. Use All pages to find a destination.'}</p>
+        {route.page !== 'workspace' && <p>{route.page === 'recording' ? 'Review a recording and save your assessment.' : pages[route.page]?.summary || 'This address does not name a page in this reference. Use Workspace overview to find a destination.'}</p>}
       </header>
 
       {/* Retention is essential task context, so it stays visible outside optional
@@ -223,6 +233,15 @@ export default function App() {
         <ProfileControls profile={profile} onApply={applyProfile} />
       </section>}
 
+      {route.page === 'workspace' && <section className="panel" aria-label="Review status">
+        {statusGroups.map(([title, action, items]) => <section key={title}>
+          <h2>{title}</h2>
+          {items.length ? <ul>{items.map(item => <li key={item.id}>
+            <a href={recordingHref(item.id)} onClick={followLink}>{item.name}: {action}</a>
+            {' · '}{reviewFeedback(state.reviews[item.id])}
+          </li>)}</ul> : <p>None.</p>}
+        </section>)}
+      </section>}
       {route.page === 'workspace' && <section className="page-directory panel" aria-labelledby="directory-heading">
         <h2 id="directory-heading">Workspace pages</h2>
         {/* Nest recordings under their actual parent, matching the breadcrumb
@@ -411,7 +430,7 @@ export default function App() {
         <div className="footer-actions">
           <details className="footer-sections"><summary>Sections</summary>
             <nav aria-label="Footer sections">
-              <a href={pages.workspace.href} onClick={followLink}>All pages</a>
+              <a href={pages.workspace.href} onClick={followLink}>Workspace overview</a>
               <a href={pages.recordings.href} onClick={followLink}>All recordings</a>
               <a href={pages.preferences.href} onClick={followLink}>Workspace preferences</a>
               {route.page === 'recording' && recordViews.map(item => <a key={item.id} href={recordingHref(selectedId, item.id)} aria-current={item.id === view ? 'true' : undefined} onClick={followLink}>{item.title}</a>)}

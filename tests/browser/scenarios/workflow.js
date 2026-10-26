@@ -25,7 +25,7 @@ export default async (page) => {
       .getByRole('button', { name: outcome === 'saved' ? 'Complete save' : 'Fail save', exact: true }).click();
   };
   const fresh = async () => {
-    await page.goto(baseURL);
+    await page.goto(baseURL + '/#recordings/REC-001/review');
     await note.waitFor();
   };
 

@@ -437,6 +437,16 @@ Make reference material part of the workflow under AUDHD-03, 05, 08 and 09. Use 
 
 Use visual weight deliberately: page title, section heading, item title, then supporting text. Related panels share spacing, boundaries and terminology; unrelated tasks have clear separation. Color may reinforce grouping but must not carry it alone. Avoid a wall of equally emphasized cards, repeated generic headings such as “Overview,” or oversized metrics that conceal the action users need.
 
+### Practical interface language
+
+Every sentence must identify something, explain a decision, report state, describe a consequence or provide a necessary next action. Use literal titles sized proportionally to the task. Remove slogans, reassuring filler, redundant subtitles, decorative numbering and copy praising the interface. Preserve essential help, units, prerequisites, consequences and recovery instructions: concision must not become cryptic terminology. Judge copy in its rendered context, not by word counts or banned-word tests.
+
+### Status-first operational overviews
+
+For configuration, administration and monitoring interfaces, prioritize actual blockers, failures and unfinished work, followed by common operational state. Derive summaries from the same records as the controls. Distinguish draft, saved, effective and verified state; include scope and freshness where relevant. Never invent metrics, alerts or verification claims. Focused editors and previews need no artificial overview.
+
+Link actionable status directly to its task or control with condition-specific actions such as “Review changes,” “Verify permissions” and “Configure email.” Reveal and focus the affected content while preserving drafts, filters and useful return state. Prefer compact lists or grouped rows over promotional cards; retain readable text and accessible targets. Keep the complete destination index secondary. Verify empty, error, pending and successful states, including a newer save invalidating previous verification.
+
 ### Prioritize useful work
 
 Check the initial desktop and narrow-screen view against the user's task: can someone identify the next useful action and reach it without passing repeated introductions? Place common decisions and relevant prerequisites before technical ownership or source details. Keep expert settings discoverable within named tasks; source order is not a priority order. Show save or review controls where they apply, retaining global controls only when unfinished work makes them useful. This is a contextual task-visibility check, not a fixed above-the-fold quota or ban on expressive design.

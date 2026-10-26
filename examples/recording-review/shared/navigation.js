@@ -2,7 +2,7 @@
 // engine. Both adapters independently interpret these destinations. Breadcrumbs
 // use this canonical parent path; category membership is not invented as ancestry.
 export const pages = {
-  workspace: { id: 'workspace', title: 'Workspace', href: '#workspace', parentId: null, summary: 'Browse every destination in this reference.' },
+  workspace: { id: 'workspace', title: 'Workspace', href: '#workspace', parentId: null, summary: 'Review save status and open unfinished reviews.' },
   recordings: { id: 'recordings', title: 'Recordings', href: '#recordings', parentId: 'workspace', summary: 'Find a recording and open its review or supporting details.' },
   preferences: { id: 'preferences', title: 'Workspace preferences', href: '#preferences', parentId: 'workspace', summary: 'Choose a skin and text style, adjust text size, spacing and detailed help without changing reviews.' },
 };

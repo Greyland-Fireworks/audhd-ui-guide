@@ -8,7 +8,7 @@
   :root[data-theme=dark] { color-scheme:dark; --bg:#121c20; --panel:#1c292e; --ink:#f0f5f2; --muted:#c0d0cb; --line:#9bafa8; --accent:#83e4c3; --tint:#273f3b; --error:#ffb4ab; }
   * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--ink); overflow-wrap:anywhere; }
   main { max-width:68rem; margin:auto; padding:clamp(16px,4vw,48px); }
-  h1 { font-size:clamp(1.8rem,4vw,2.8rem); line-height:1.2; margin:.4rem 0 1rem; } h2 { line-height:1.3; }
+  h1 { font-size:clamp(1.5rem,3vw,2rem); line-height:1.2; margin:.4rem 0 1rem; } h2 { line-height:1.3; }
   p { max-width:70ch; } .eyebrow { color:var(--accent); font-weight:750; } .muted { color:var(--muted); }
   a { color:var(--accent); } button,input,select,textarea { font:inherit; color:var(--ink); background:var(--panel); border:2px solid var(--line); border-radius:.35rem; min-height:44px; padding:.5rem .7rem; max-width:100%; }
   button { cursor:pointer; text-align:left; } button:disabled { cursor:default; border-style:dashed; color:var(--muted); }
@@ -37,9 +37,8 @@
 </style>
 <main>
   <header>
-    <div class="eyebrow">INTERACTION EXAMPLE · LOCAL DRAFT</div>
-    <h1>Inspect freely. Edit deliberately.</h1>
-    <p>Try protected delivery settings for a fictional service. Nothing is sent. These limits are protected because accidental edits could change retry volume and waiting time.</p>
+    <h1>Delivery settings</h1>
+    <p>Fictional service; nothing is sent. Editing locks protect retry volume and waiting time from accidental changes.</p>
   </header>
   <div class="toolbar">
     <label for="appearance">Appearance <select id="appearance"><option value="light">Light</option><option value="dark">Dark</option></select></label>
@@ -106,6 +105,7 @@
   <div class="save-state">
     <strong>Whole-draft storage</strong>
     <p id="save-status" role="status" aria-live="polite" aria-atomic="true">Example defaults loaded; no draft saved yet.</p>
+    <ul id="field-issues" aria-label="Fields needing attention"></ul>
     <p id="action-status" role="status" aria-live="polite" aria-atomic="true"></p>
     <div class="actions"><button id="retry-save">Retry saving draft</button><button id="export">Export current values</button></div>
     <p class="muted">Export includes current values, even incomplete edits, as text for manual recovery. It is not an importable preset.</p>

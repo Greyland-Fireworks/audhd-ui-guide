@@ -22,6 +22,8 @@ Tests observe the rendered interface through shared scenarios and separately tes
 
 The selected source card and its detail panel share an active-context surface, title accent and structural edge, driven by record ID. Unrelated cards remain neutral. A right/down connector follows reflow; current text, repeated identity and semantic associations remain when colors collapse. Collection labels introduce their actual lists, and “Reviewing…” returns to the open review. These are techniques implementing AUDHD-02, not required decoration for all products.
 
+An empty hash opens Workspace with derived failed-save, pending-save and unsaved-review rows before the complete destination index. Higher-priority rows represent a record once; pending feedback still identifies newer unsaved edits. Named links open the review and preserve drafts, filters and browser history. Explicit recording URLs remain supported.
+
 One static page map supplies the directory and canonical top/bottom breadcrumbs. Workspace destinations are links; Review/Recording details are manually activated local tabs. Footer sections are disclosed to reduce repetition; skip navigation bypasses repeated controls. Navigation moves focus deliberately, without forcing heading outlines after pointer activation. No initial autofocus or appearance-driven focus movement occurs.
 
 ## Proposed extension, not implemented

@@ -13,7 +13,7 @@ body { margin: 0; background: var(--page); color: var(--text); font-family: var(
    and wrapping allow enlargement; they do not replace actual zoom verification. */
 h1, h2, h3, h4, p, dl { margin: 0; }
 h1, h2, h3, h4 { font-family: var(--ui-font-heading, inherit); }
-h1 { font-size: 2em; line-height: 1.2; letter-spacing: -0.025em; }
+h1 { font-size: 1.7em; line-height: 1.2; letter-spacing: -0.025em; }
 h2 { font-size: 1.35em; line-height: 1.35; }
 h3 { font-size: 1.1em; }
 h4 { font-size: 1em; }
@@ -239,3 +239,8 @@ nav a, .navigation-top > a, .footer-actions > a, .page-directory a, .skip-link {
 /* AUDHD-09/11: vector help symbols inherit each skin's semantic colors,
    including forced-color overrides; the named button owns interaction. */
 .context-help-button svg { display: block; inline-size: 1.375em; block-size: 1.375em; margin-inline: auto; }
+
+/* Status rows wrap at narrow widths; links retain touch targets without hero cards. */
+[aria-label="Review status"] section + section { margin-block-start: 1rem; }
+[aria-label="Review status"] ul { margin: .25rem 0; padding-inline-start: 1.25rem; }
+[aria-label="Review status"] a { display: inline-flex; align-items: center; min-height: 44px; overflow-wrap: anywhere; }

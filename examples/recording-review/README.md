@@ -28,6 +28,10 @@ Shared files contain fictional data, page records, color mappings, choice descri
 
 A new demo session starts with Guillermo and Skin headings text. The choice labeled Default follows the device’s light/dark setting. Imported light/dark preferences map to Paperwhite/Guillermo; the picker shows each named skin only once. These are demonstration choices. See [profile boundaries](../../PREFERENCES.md#reference-application-boundaries) for supported values and unapplied requests. Full Angular/Vue apps, multiple-category index paths, cross-highlighting and automatic persistence remain deferred.
 
+## Entry and status links
+
+An empty address opens Workspace. Failed saves, pending saves and unsaved reviews appear before the complete destination index. Each row links to its named review, restoring task focus without clearing filters or drafts. Pending saves capture a snapshot; newer edits can remain unsaved even after that snapshot succeeds. These summaries use each adapter’s existing state independently. Explicit recording links still open that recording directly.
+
 ## Settings and simulated saves
 
 Appearance choices start collapsed. Select **Show appearance choices** to open the previews; the summary keeps the current skin name, color bands and heading-font sample visible. Selecting a card applies it immediately for this session. **Hide appearance choices** closes the collection without changing the selection.

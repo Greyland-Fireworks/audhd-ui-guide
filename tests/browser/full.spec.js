@@ -7,7 +7,7 @@ import appearance from './scenarios/appearance.js';
 import headingFocus from './scenarios/heading-focus.js';
 import help from './scenarios/context-help.js';
 
-test.beforeEach(async ({page}) => { await mkdir('output/playwright',{recursive:true}); await page.goto('/'); });
+test.beforeEach(async ({page}) => { await mkdir('output/playwright',{recursive:true}); await page.goto('/#recordings/REC-001/review'); });
 for (const [name,run] of Object.entries({workflow,navigation,appearance,headingFocus,help})) {
   test(name, async ({page}, info) => { const result=await run(page); await info.attach('observations',{body:JSON.stringify(result,null,2),contentType:'application/json'}); });
 }

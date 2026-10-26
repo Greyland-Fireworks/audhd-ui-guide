@@ -93,6 +93,10 @@ try {
   await commit('retries', '');
   assert.match(await status(), /Not saved/);
   assert.equal(await page.locator('#retries').getAttribute('aria-invalid'), 'true');
+  await page.locator('#contract-tab').click();
+  await page.getByRole('link',{name:'Correct retry limit',exact:true}).click();
+  assert.equal(await page.locator('#retries').evaluate(el=>el===document.activeElement),true);
+  assert(await page.locator('#settings').isVisible());
   await page.locator('#retries-restore').click();
   assert.equal(await page.locator('#retries').inputValue(), '6');
   await fault('blocked');
@@ -102,6 +106,7 @@ try {
   await page.locator('#defaults').click();
   assert.equal(await page.locator('#retries').inputValue(), '3');
   assert(await readonly('retries') && await readonly('timeout'));
+  assert.equal(await page.locator('#field-issues a').count(),0);
   note('Invalid draft remains recoverable; failed bulk replacement preserves edits; verified replacement updates and re-locks both fields.');
 
   for (const theme of ['light', 'dark']) {

@@ -45,6 +45,13 @@ root_files = {
     'examples/recording-review/shared/visual-choices.js', 'examples/recording-review/shared/visual-choices.css',
     'examples/recording-review/react/src/VisualChoices.jsx', 'examples/recording-review/svelte/src/VisualChoices.svelte',
     'examples/framework-consumer/index.html', 'examples/framework-consumer/main.js',
+    'tests/browser/overview.spec.js',
+    'examples/screenshots/gallery-administration-overview.png',
+    'examples/screenshots/gallery-administration-overview-narrow.png',
+    'examples/screenshots/gallery-react-overview.png',
+    'examples/screenshots/gallery-svelte-overview-narrow.png',
+    'examples/screenshots/gallery-unlock-editor.png',
+
     'tests/framework/package.test.js', 'tests/framework/workflow.test.js',
     *{f'packages/audhd-ui-framework/{name}' for name in [
         'package.json', 'profile.js', 'capabilities.js', 'import-workflow.js', 'v1.schema.json', 'v2.schema.json',

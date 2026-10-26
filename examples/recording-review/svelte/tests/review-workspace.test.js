@@ -81,7 +81,7 @@ test('REF-08,11,16: failure, current-content retry, exact revert and fresh reset
 // The same location contract is exercised against each independently written parser.
 import { parseLocation } from '../src/navigation.js';
 test('NAV-01: valid direct destinations and explicit unknown-location recovery', () => {
-  assert.deepEqual(parseLocation(''), { page: 'recording', id: 'REC-001', view: 'review' });
+  assert.deepEqual(parseLocation(''), { page: 'workspace' });
   for (const page of ['workspace', 'recordings', 'preferences']) assert.deepEqual(parseLocation('#' + page), { page });
   assert.deepEqual(parseLocation('#recordings/REC-002'), { page: 'recording', id: 'REC-002', view: 'review' });
   assert.deepEqual(parseLocation('#recordings/REC-003/details'), { page: 'recording', id: 'REC-003', view: 'details' });

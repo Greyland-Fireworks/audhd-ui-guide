@@ -53,3 +53,13 @@ Viewport emulation, the application's Larger text preset and forced-color emulat
 - The authored continuous-check workflow has not been executed on hosted CI; only local commands were run. Full browser scenarios outside Chromium, physical touch devices and alternative font availability remain unverified.
 
 The examples use fictional recordings and in-memory save simulation. A successful simulated acknowledgment is not durable storage. Profile export saves preferences only. No clinical benefit or blanket accessibility conformance is claimed.
+
+## October 26, 2026: status-first entry update
+
+The empty hash now opens Workspace. Both independent adapters derive failed, pending and other-unsaved rows from existing review state and retain the complete index below them. Higher-priority rows represent a record once; pending feedback still identifies newer edits. Named links preserve filters and drafts through Back/Forward and move focus to the review heading. Literal titles and essential simulation boundaries replace redundant introductory copy.
+
+Executed: both production builds; 25 unit tests; the 54-test browser suite (Chromium full checks plus Firefox/WebKit smoke checks); six focused Chromium navigation/overview checks after the navigation-label refinement; and two final overview checks after clarifying the other-unsaved label. The overview checks cover clean state, unsaved drafts, pending earlier snapshots, failed saves, successful saves, retained search, focus/history and 390px width at 200% root text size. Existing appearance checks exercise all skins and independent text styles while preserving work. Builds retain the existing React chunk-size warning.
+
+The separate administration and unlock-to-edit browser checks also passed: linked validation errors, scoped drafts, version-invalidated verification, non-mutating check retries, recovery, all administration skins, narrow layouts and forced colors. Documentation links/anchors, skill validation, palette checks, whitespace and isolated package validation are checked separately. Current [gallery captures](../GALLERY.md#current-operational-views) were visually inspected; historical captures and verification records remain unchanged.
+
+These checks do not establish screen-reader usability, participant comprehension, actual browser zoom behavior or production integration. No model evaluations were run.

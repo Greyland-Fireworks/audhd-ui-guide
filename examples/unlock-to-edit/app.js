@@ -5,6 +5,9 @@ const fields = {
   timeout: { label: 'response timeout', min: 1, max: 120, locked: true, before: null },
 };
 const $ = id => document.getElementById(id);
+// Drafts and restoration points belong to this page, not its visible section.
+// Reload reads browser storage, which may contain an unverified write.
+// Acknowledgment and restoration points are page-local; locks are not authorization.
 let draft = { ...defaults };
 let saved = null;
 const valid = (id, value) => typeof value === 'string' && /^\d+$/.test(value) && Number(value) >= fields[id].min && Number(value) <= fields[id].max;
@@ -28,8 +31,25 @@ function renderField(id) {
   input.setAttribute('aria-invalid', String(invalid));
   $(`${id}-error`).hidden = !invalid;
   $(`${id}-error`).textContent = invalid ? `Enter a whole number from ${field.min} to ${field.max}. Your entry is retained.` : '';
+  fieldIssues();
 }
 
+// Error navigation reveals the existing field without unlocking or changing it.
+// Keep this separate from the live status text to avoid announcing every link.
+function fieldIssues() {
+  $('field-issues').replaceChildren();
+  for (const id of Object.keys(fields).filter(id => !valid(id, draft[id]))) {
+    const row = document.createElement('li'), link = document.createElement('a');
+    link.href = `#${id}`;
+    link.textContent = `Correct ${fields[id].label}`;
+    link.onclick = event => {
+      event.preventDefault();
+      $('settings-tab').click();
+      $(id).focus();
+    };
+    row.append(link); $('field-issues').append(row);
+  }
+}
 function persist(values = draft) {
   if (!Object.keys(fields).every(id => valid(id, values[id]))) {
     $('save-status').textContent = 'Not saved. Correct the highlighted value; both settings are saved together. Your draft remains on this page.';
@@ -109,6 +129,7 @@ for (const [id, field] of Object.entries(fields)) {
   });
 }
 
+// Hide, do not recreate, inputs: tab and appearance changes preserve edits and focus.
 for (const section of ['settings', 'contract']) {
   $(`${section}-tab`).addEventListener('click', () => {
     for (const name of ['settings', 'contract']) {

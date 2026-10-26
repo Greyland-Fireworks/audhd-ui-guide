@@ -4,7 +4,7 @@ import { pages, recordViews } from '../../shared/navigation.js';
 // URL state identifies location only. Drafts, preferences and search stay in the
 // app's in-memory workspace. Parsing is independent of the Svelte implementation.
 export function routeFromHash(hash) {
-  if (!hash) return { page: 'recording', id: recordings[0].id, view: 'review' };
+  if (!hash) return { page: 'workspace' };
   const page = Object.values(pages).find(item => item.href === hash);
   if (page) return { page: page.id };
   const match = /^#recordings\/([^/]+)(?:\/([^/]+))?$/.exec(hash);

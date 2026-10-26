@@ -5,7 +5,7 @@ import { pages, recordViews } from '../../shared/navigation.js';
 // explicit missing-page view; it never silently displays a different recording.
 // No draft or preference is serialized into the URL. React owns its own parser.
 export function parseLocation(fragment) {
-  if (fragment === '') return { page: 'recording', id: recordings[0].id, view: 'review' };
+  if (fragment === '') return { page: 'workspace' };
   for (const item of Object.values(pages)) {
     if (fragment === item.href) return { page: item.id };
   }

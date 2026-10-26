@@ -41,8 +41,8 @@ export default async (page) => {
   await page.getByRole('heading', { name: 'Page unavailable', exact: true }).waitFor();
   await path('Workspace|Page unavailable');
   assert(await page.locator('.review-panel').count() === 0, 'Invalid ID does not silently display a substitute recording');
-  await page.locator('.navigation-top').getByRole('link', { name: 'All pages', exact: true }).click();
-  await page.getByRole('heading', { name: 'All pages', exact: true }).waitFor();
+  await page.locator('.navigation-top').getByRole('link', { name: 'Workspace overview', exact: true }).click();
+  await page.getByRole('heading', { name: 'Workspace', exact: true }).waitFor();
   await path('Workspace');
   assert(await page.locator('.page-directory a').count() === 5, 'Index covers both workspace sections and all three records');
   const recordIndex = page.getByRole('list', { name: 'Individual recordings:', exact: true });
@@ -143,7 +143,7 @@ export default async (page) => {
   await page.setViewportSize({ width: 1440, height: 1080 });
   await preferences();
   await page.screenshot({ path: 'output/playwright/navigation-preferences.png', fullPage: true });
-  await page.locator('.navigation-top').getByRole('link', { name: 'All pages', exact: true }).click();
+  await page.locator('.navigation-top').getByRole('link', { name: 'Workspace overview', exact: true }).click();
   await page.screenshot({ path: 'output/playwright/navigation-index.png', fullPage: true });
   await page.locator('.page-directory').getByRole('link', { name: 'Harbor morning', exact: true }).click();
   await selectedView('Recording details');

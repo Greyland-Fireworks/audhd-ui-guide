@@ -9,11 +9,12 @@
 <script type="module" src="app.js"></script>
 <a href="#main">Skip to task</a>
 <header><h1>Team access</h1><p>Fictional workspace. Saves and permission checks are simulated in memory; reload resets everything.</p></header>
-<nav aria-label="Workspace"><a href="#people">People <span id="pending"></span></a><a href="#settings">Workspace settings</a></nav>
+<nav aria-label="Workspace"><a href="#overview">Overview</a><a href="#people">People <span id="pending"></span></a><a href="#settings">Workspace settings</a></nav>
+<!-- Keep optional appearance controls after the selected task in reading order. -->
+<main id="main" tabindex="-1"></main>
 <details id="appearance"><summary>Appearance</summary>
 <label for="type">Text style</label><select id="type"><option value="system">System</option><option value="expressive">Skin headings</option><option value="serif">Serif</option><option value="mono">Monospace</option></select>
 <fieldset><legend>Skin · session only</legend><div id="palettes" class="palettes"></div></fieldset>
 <p id="appearance-status" role="status"></p></details>
-<main id="main" tabindex="-1"></main>
 <p id="announcement" role="status"></p>
 </html>

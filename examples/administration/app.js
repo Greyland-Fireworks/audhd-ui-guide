@@ -4,6 +4,8 @@ const people = [
   { id: 'mira', name: 'Mira', role: 'reader', reason: 'Reviews completed work', version: 1 },
   { id: 'sam', name: 'Sam', role: 'editor', reason: 'Maintains shared notes', version: 1 },
 ];
+// Route changes and appearance updates must preserve per-person drafts.
+// All records live in memory; reload resets this simulation.
 const drafts = new Map();
 const outcomes = new Map();
 const invalid = new Set();
@@ -17,10 +19,14 @@ const changed = person => {
   const draft = drafts.get(person.id);
   return Boolean(draft && (draft.role !== person.role || draft.reason !== person.reason));
 };
+const hasVerifiedSavedVersion = person => {
+  const outcome = outcomes.get(person.id);
+  return Boolean(outcome?.verified && outcome.version === person.version);
+};
 function pending() {
   const count = people.filter(changed).length;
   $('#pending').textContent = count ? `· ${count} unsaved` : '';
-  const person = people.find(person => location.hash === `#people/${person.id}`);
+  const person = people.find(person => location.hash.split('/')[1] === person.id);
   if (person && $('#draft-status')) {
     $('#draft-status').textContent = changed(person) ? 'Unsaved changes for this person. Verification still checks the saved version.' : 'No unsaved changes for this person.';
     $('#reset').disabled = !changed(person);
@@ -88,15 +94,38 @@ function detail(person) {
     }
     person.role = draft.role; person.reason = draft.reason; person.version++; saveCount++;
     invalid.delete(person.id);
+    // Saving invalidates the old check. Retrying verification never saves.
     outcomes.delete(person.id);
     detail(person);
     $('#verify').focus();
   };
   $('#verify').onclick = () => verify(person);
 }
+function overview() {
+  // Derive rows from task state. Verification belongs to a saved version, not
+  // a draft; keeping separate counters would risk stale completion claims.
+  const groups = [
+    ['Errors', people.filter(p => invalid.has(p.id)), 'reason', 'Enter a reason'],
+    ['Other unsaved records', people.filter(p => changed(p) && !invalid.has(p.id)), 'role', 'Review changes'],
+    ['Saved records awaiting verification', people.filter(person => !hasVerifiedSavedVersion(person)), 'verify', 'Verify permissions'],
+  ];
+  const sections = groups.map(([title, records, target, action]) => {
+    const rows = records.map(person => {
+      let status = '';
+      if (target === 'verify') {
+        status = ` · Saved version ${person.version}`;
+        if (outcomes.get(person.id)?.verified === false) status += ' · Verification unavailable';
+      }
+      return `<li><a href="#people/${person.id}/${target}">${person.name}: ${action}</a>${status}</li>`;
+    });
+    const content = rows.length ? `<ul class="records">${rows.join('')}</ul>` : '<p>None.</p>';
+    return `<section><h3>${title}</h3>${content}</section>`;
+  });
+  $('#main').innerHTML = '<h2>Overview</h2>' + sections.join('');
+}
 function settings() {
-  const verified = people.filter(person => outcomes.get(person.id)?.verified && outcomes.get(person.id).version === person.version).length;
-  $('#main').innerHTML = `<h2>Workspace settings</h2><p>Common decisions first; technical reference stays available below.</p>
+  const verified = people.filter(hasVerifiedSavedVersion).length;
+  $('#main').innerHTML = `<h2>Workspace settings</h2>
     <section class="ui-panel"><h3>Who can edit notes?</h3><p><strong>Available in simulation. ${verified} of ${people.length} saved records verified.</strong> Inspect a person’s saved role and its allowed and denied actions. New saves require a new check; drafts do not change a saved result.</p><a href="#people">Choose a person</a></section>
     <section class="ui-panel"><h3>Example: a missing mail service</h3><p><strong>Illustrative dependency state.</strong> In a product with an implemented email connector, say which mail service or credential is missing and how to connect it before testing the intended recipient. This demonstration has no email implementation; connecting a service alone would not enable delivery here.</p></section>
     <details><summary>Advanced operations and implementation boundaries</summary>
@@ -105,11 +134,12 @@ function settings() {
     <h3>Bulk account import</h3><p><strong>Not implemented.</strong> There is no importer here. This is an implementation gap, not a dependency or permission restriction.</p></details>`;
 }
 function render() {
-  const [route, id] = (location.hash.slice(1) || 'people').split('/');
+  const [route, id] = (location.hash.slice(1) || 'overview').split('/');
   document.querySelectorAll('nav a').forEach(link => {
     if (link.hash === `#${route}`) link.setAttribute('aria-current','page'); else link.removeAttribute('aria-current');
   });
-  if (route === 'settings') settings();
+  if (route === 'overview') overview();
+  else if (route === 'settings') settings();
   else if (route === 'people' && !id) {
     $('#main').innerHTML = `<h2>People</h2><p>Select a person to inspect and change their permissions.</p><label>Find a person<input id="search" type="search" value="${escape(query)}"></label><button id="clear">Clear search</button><ul class="records" id="records"></ul>`;
     recordList();
@@ -126,12 +156,19 @@ $('a[href="#main"]').onclick = event => { event.preventDefault(); $('#main').foc
 window.addEventListener('hashchange', event => {
   const previous = new URL(event.oldURL).hash;
   render();
-  const returnLink = location.hash === '#people' && [...document.querySelectorAll('#records a')].find(link=>link.hash===previous);
-  (returnLink || $('#main')).focus();
+  // Reveal the requested control after rendering. A filtered-out return row
+  // falls back to main without erasing the filter or any draft.
+  const target = location.hash.split('/')[2];
+  const control = ['role', 'reason', 'verify'].includes(target) && $(`#${target}`);
+  const previousRecord = previous.split('/').slice(0, 2).join('/');
+  const returnLink = location.hash === '#people'
+    && [...document.querySelectorAll('#records a')].find(link => link.hash === previousRecord);
+  (control || returnLink || $('#main')).focus();
 });
 render();
 const media = matchMedia('(prefers-color-scheme: dark)');
 let skin = 'guillermo';
+// Update tokens only, preserving form nodes, focus and task state.
 function applySkin() {
   const systemSkin = media.matches ? 'guillermo' : 'paperwhite';
   document.documentElement.dataset.skin = skin === 'system' ? systemSkin : skin;

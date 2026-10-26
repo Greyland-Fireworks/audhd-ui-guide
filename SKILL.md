@@ -82,6 +82,8 @@ Apply [AUDHD-09](GUIDE.md#audhd-09-put-essential-explanations-beside-the-decisio
 
 Inspect source/detail, parent/child, action/result and dependency connections automatically, including current action wording, collection scope, navigation ancestry and separate focus/context cues. Open help and exercise transitions in the rendered interface. Use [adapter guidance](references/framework-adapters.md) for framework mappings and the [reference specification](examples/recording-review/SPEC.md) for observable checks; their particular components are examples, not requirements.
 
+Apply the Guide’s [practical language](GUIDE.md#practical-interface-language) and [status-first overview](GUIDE.md#status-first-operational-overviews) requirements: ground summaries in actual state and link to the relevant controls while retaining essential decision and recovery help.
+
 ## Read the relevant guidance
 
 Follow the Guide's [priority hierarchy](GUIDE.md#priority-hierarchy-and-conflicts) and [rule emphasis definitions](GUIDE.md#rule-emphasis-and-primary-targets). When configuration is supplied, resolve inheritance using [preference configuration](PREFERENCES.md#configure-rule-emphasis); otherwise use Apply. Lower emphasis never waives adopted requirements, and rule IDs are not priority ranks. Configuration does not authorize storing a profile.

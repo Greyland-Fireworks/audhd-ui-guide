@@ -1,8 +1,30 @@
 # Example screenshot gallery
 
-See how the same interface principles work in different skins. These are full-page captures of the runnable references, with fictional data. **Start with the annotated light view** to see what the design is doing.
+Current captures below show status-first entry screens and the focused editor. Fictional data and simulation boundaries remain visible. Older October 19 captures are retained afterward as historical illustrations, not validation of the current UI.
 
-The live references now consume the canonical, opt-in [framework appearance assets](../packages/audhd-ui-framework/README.md). These captures predate the collapsible appearance bank, visual choice cards and Skin headings default. Their captions describe the captured state, not the current initial settings. They remain illustrations, not fresh validation of the latest UI; [framework evidence](../references/framework-evidence.md) records the new checks and remaining limits.
+## Current operational views
+
+Captured October 26, 2026, with Chromium on Windows. Administration uses a 1280 × 900 viewport; recording desktop uses 1440 × 1080. Narrow captures use a 390 × 844 viewport and 200% root text size, which is not browser zoom. Screenshots were inspected for hierarchy, wrapping and unnecessary copy. See [recording acceptance evidence](recording-review/ACCEPTANCE.md) for executed checks and remaining limits.
+
+**Administration overview.** A missing reason takes priority over the draft row. Saved versions awaiting verification remain separate because the check applies to saved permissions, independently of the invalid draft. Each action reveals and focuses its person’s field or check button.
+
+![Administration overview with Mira’s missing reason followed by saved versions awaiting permission checks.](screenshots/gallery-administration-overview.png)
+
+[Administration at narrow width and enlarged text](screenshots/gallery-administration-overview-narrow.png)
+
+**Recording workspace.** The failed save appears once, with its named-record action. “Other unsaved reviews” excludes records already represented by failure or pending-save rows. The complete destination index follows operational status. The literal title replaces the repeated workspace eyebrow and introductory subtitle.
+
+![React Workspace with a failed save, empty pending and other-unsaved groups, and the complete destination index below.](screenshots/gallery-react-overview.png)
+
+[Svelte overview at narrow width and enlarged text](screenshots/gallery-svelte-overview-narrow.png)
+
+**Focused editor.** Delivery settings remains the entry task. Lock, restoration and browser-storage limits remain explained; invalid entries link from the summary back to their fields. This capture shows valid values, so no error links are present.
+
+![Delivery settings editor with literal heading, scoped locks, restoration controls and browser-local save status.](screenshots/gallery-unlock-editor.png)
+
+## Historical appearance captures
+
+The October 19 images below predate the current appearance bank and status-first entry. Captions describe their captured states. They are preserved for reference; current interfaces consume the canonical [framework appearance assets](../packages/audhd-ui-framework/README.md).
 
 [Paperwhite walkthrough](#paperwhite-a-guided-tour) · [Guillermo review](#guillermo-the-same-work-in-a-dark-skin) · [Bubblegum preferences](#bubblegum-personal-appearance-choices) · [Cyberpunk directory](#cyberpunk-a-map-of-the-workspace)
 
@@ -52,7 +74,7 @@ The help icons are consistent SVG outlines that inherit each skin’s semantic c
 ## Explore and verify
 
 - [Run React or Svelte locally](recording-review/README.md) to try navigation, help, review state and appearance changes. React Aria and Bits UI remain provisional choices.
-- [Explore all 22 skins and chart palettes](skins/README.md). Light and dark appearances are personal choices, not universal AuDHD prescriptions.
+- [Explore all 24 skins and chart palettes](skins/README.md). Light and dark appearances are personal choices, not universal AuDHD prescriptions.
 - [Read acceptance results and pending checks](recording-review/ACCEPTANCE.md). Screenshots illustrate appearance; they do not establish keyboard accessibility, screen-reader usability or suitability for every person.
 
 Captured October 19, 2026, using headless Chrome 155 on Windows at a 1280 × 900 CSS-pixel viewport, with full-page capture, Standard text size and Comfortable spacing. Full-page image heights vary. The [editable annotation source](screenshots/react-paperwhite-annotated.svg) preserves the original capture and adds vector outlines and numbers; the gallery displays its PNG rendering. Screenshots and annotations are documentation under [CC BY 4.0](../LICENSE_SCOPE.md).

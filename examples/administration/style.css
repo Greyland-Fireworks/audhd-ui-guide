@@ -32,3 +32,7 @@ p,li,h1,h2,h3,summary,button,nav a { overflow-wrap: anywhere; }
 :focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 3px; }
 @media(max-width: 480px) { nav { display: grid; } body { padding: 1rem; } }
 @media(forced-colors:active) { [aria-current="page"],.palette:has(:checked) { outline: 2px solid Highlight; } }
+
+/* Wrapping rows keep every action discoverable at enlarged text and narrow widths. */
+.records a { display: inline-flex; align-items: center; min-height: 44px; }
+h1 { font-size: 1.7rem; }
