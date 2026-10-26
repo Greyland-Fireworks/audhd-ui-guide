@@ -25,7 +25,7 @@ export default async (page) => {
       assert(page.url().endsWith('#preferences'),'Appearance does not navigate');
     }
     for (const value of ['expressive','serif','mono','system']) {
-      await style.locator(`input[value="${value}"]`).check();
+      await style.locator(`input[value="${value}"]`).click();
       assert(await page.locator('html').getAttribute('data-type')===value,'Text style applied');
       assert(await style.locator('input:checked').evaluate(el=>el===document.activeElement),'Text style retains focus');
     }

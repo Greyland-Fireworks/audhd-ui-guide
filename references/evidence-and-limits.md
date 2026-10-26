@@ -1,6 +1,6 @@
 # Evidence and limits
 
-Updated October 20, 2026. This concise record supports the [Guide](../GUIDE.md); it does not reproduce background reports. [Executable evidence](../examples/recording-review/ACCEPTANCE.md) records the actual tested scope.
+Updated October 25, 2026. This concise record supports the [Guide](../GUIDE.md); it does not reproduce background reports. [Original demo acceptance evidence](../examples/recording-review/ACCEPTANCE.md) records its tested revision. The [framework evidence summary](framework-evidence.md) records later package and settings changes, current Windows checks and outstanding native/Linux checks.
 
 | Material | Classification and rule mapping | Evidence and limits |
 |---|---|---|
@@ -14,7 +14,7 @@ Updated October 20, 2026. This concise record supports the [Guide](../GUIDE.md);
 | Charts and data equivalents | Adopted outcomes: AUDHD-08, 11; exact colors and chart types are examples | Token contrast and sequential ordering checks; labeled bars/lines, explicit diverging center, missing-data text and tables. Participant interpretation and real chart-library integration remain unverified. |
 | Preference migration/application | Implemented contract: AUDHD-04, 06, 10, 12, 13 | Strict validator, compatibility fixtures and independent consumers. Product-specific capabilities and privacy still govern effective behavior. |
 | Unlock-to-edit transitions | Scoped implementation of AUDHD-04, 05, 06, 11, 13 | [Standalone example](../examples/unlock-to-edit/README.md) exercises independent locks, restoration after autosave, verification failures and reload. Local browser checks are separate from intended-user and assistive-technology evidence. |
-| Other frameworks and broad developer prompts | Adapter guidance and evaluation scenarios | Angular/Vue executable checks remain Pending. [Six supplied review responses](../SKILL_EVALUATIONS.md#current-evidence) do not establish skill activation or implementation reliability; the other 29 cases remain Pending. |
+| Other frameworks and broad developer prompts | Adapter guidance and evaluation scenarios | Angular/Vue executable checks remain Pending. [Six supplied review responses](../SKILL_EVALUATIONS.md#current-evidence) do not establish skill activation or implementation reliability; the other 29 historical cases remain Pending. Four later design-default cases are also unrun; the separate framework comparison does not replace those historical outcomes. |
 
 ## Primary sources and application
 

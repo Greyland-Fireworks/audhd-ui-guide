@@ -60,7 +60,7 @@ test('Pending imports cancel and ignore stale success or error after a newer pre
     await release();
     await expect(page.locator('.profile-preview')).not.toContainText('held-read');
     await expect(page.getByRole('alert')).toHaveCount(0);
-    await expect(page.locator('html')).toHaveAttribute('data-type', 'system');
+    await expect(page.locator('html')).toHaveAttribute('data-type', 'expressive');
   }
   await hold(held);
   await page.getByLabel('Import preferences').setInputFiles([]);
@@ -142,7 +142,7 @@ test('Navigation focus, keyboard tabs and persistent help',async({page})=>{
   await page.getByRole('tab',{name:'Review',exact:true}).click();
   const help=page.getByRole('button',{name:'About demo saving',exact:true});
   await help.click();await expect(help).toHaveAttribute('aria-expanded','true');
-  await expect(page.locator('.context-help-detail')).toContainText('demo');
+  await expect(page.locator('.context-help-detail')).toContainText('not permanent storage');
   await help.focus();await page.keyboard.press('Escape');await expect(help).toHaveAttribute('aria-expanded','false');await expect(help).toBeFocused();
   await nav(page).getByRole('link',{name:'Workspace preferences'}).click(); await page.goBack();await expect(page).toHaveURL(/review$/);
 });
@@ -159,7 +159,7 @@ test('Visual choice cards expose radio state, keyboard selection and representat
   await expect(displayHelp).toHaveAttribute('aria-expanded','false');
   await displayHelp.click();
   await expect(displayHelp).toHaveAttribute('aria-expanded','true');
-  await expect(page.locator('.display-options-heading .context-help-detail')).toContainText('Temporary choices for this session');
+  await expect(page.locator('.display-options-heading .context-help-detail')).toContainText('These choices last while this page is open');
   await displayHelp.click();
   await expect(page.getByRole('heading',{name:'Readability and spacing'})).toBeVisible();
   await disclosure.locator('summary').focus();
@@ -168,6 +168,10 @@ test('Visual choice cards expose radio state, keyboard selection and representat
   await expect(disclosure.locator('.appearance-hide')).toBeVisible();
   await expect(disclosure.locator('.appearance-show')).not.toBeVisible();
   const group = name => page.getByRole('group', {name,exact:true});
+  await expect(group('Text style').getByRole('radio').first()).toHaveAccessibleName('Skin headings');
+  await expect(group('Text style').getByRole('radio').last()).toHaveAccessibleName('System');
+  await expect(group('Text style').getByRole('radio',{name:'Skin headings',exact:true})).toBeChecked();
+  await expect(page.locator('html')).toHaveAttribute('data-type','expressive');
   for (const name of ['Appearance','Text style','Text size','Spacing']) {
     await expect(group(name).locator('input:checked')).toHaveCount(1);
     await expect(group(name).locator('.choice-state').filter({hasText:'✓ ACTIVE'})).toHaveCount(1);

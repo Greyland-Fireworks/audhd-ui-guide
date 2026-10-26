@@ -5,7 +5,7 @@ export default function VisualChoices({name, value, options, kind, onChange, hel
       <input type="radio" name={name} value={option.value} checked={value === option.value} onChange={() => onChange(option.value)} aria-label={option.label} aria-describedby={`${name.replaceAll(' ', '-')}-${option.value.replace(':','-')}-description`} />
       <span className="choice-name">{option.label}</span>
       <span className="choice-preview" aria-hidden="true" data-kind={kind} data-choice={option.value} data-audhd-ui="" data-skin={kind === 'appearance' && option.value === 'system' ? defaultSkin : option.skin}>
-        <span className="sample-heading">Review a recording</span><span className="sample-body">Keep your work in view.</span>
+        <span className="sample-heading">{kind === 'style' ? 'Heading' : 'Review a recording'}</span><span className="sample-body">{kind === 'style' ? 'Body' : 'Keep your work in view.'}</span>
         {kind === 'appearance' && <><span className="sample-bands"><i /><i /><i /></span><span className="sample-action">Action</span><span className="sample-selection">Current selection</span></>}
       </span>
       <span className="choice-description" id={`${name.replaceAll(' ', '-')}-${option.value.replace(':','-')}-description`}>{option.description}</span>

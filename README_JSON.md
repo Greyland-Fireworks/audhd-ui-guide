@@ -8,6 +8,8 @@ The tables below use dotted paths to identify fields inside their JSON groups. F
 
 [How values work](#unanswered-questions-updates-and-privacy) · [File identity](#file-identity) · [Display](#display-and-group-identification) · [Layout](#layout) · [Motion and sound](#motion-and-sound) · [Attention](#attention-and-updates) · [Help](#help-and-task-support) · [Retention](#retention)
 
+The values in the example file are illustrative requests, not the demos’ initial settings. A valid field may still be unsupported by an application. In the recording demos, Spacing changes padding and gaps (`layout.density`); it does not apply `display.line_height`. Detailed help currently controls only the timing explanation. See [reference application boundaries](PREFERENCES.md#reference-application-boundaries) for the complete supported scope and defaults.
+
 ## Unanswered questions, updates and privacy
 
 Every preference field accepts `null`, meaning **not specified at this level**. It is different from `false`, which is an explicit choice. Current explicit instructions take precedence over stored choices; specified project choices override user-wide choices; null falls through to user-wide choices or product defaults. System accessibility, privacy, permission and retention requirements remain constraints throughout.

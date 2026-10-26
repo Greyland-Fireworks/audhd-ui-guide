@@ -7,7 +7,7 @@
     <input type="radio" {name} value={option.value} checked={value === option.value} onchange={() => onChange(option.value)} aria-label={option.label} aria-describedby={`${name.replaceAll(' ', '-')}-${option.value.replace(':','-')}-description`} />
     <span class="choice-name">{option.label}</span>
     <span class="choice-preview" aria-hidden="true" data-kind={kind} data-choice={option.value} data-audhd-ui="" data-skin={kind === 'appearance' && option.value === 'system' ? defaultSkin : option.skin}>
-      <span class="sample-heading">Review a recording</span><span class="sample-body">Keep your work in view.</span>
+      <span class="sample-heading">{kind === 'style' ? 'Heading' : 'Review a recording'}</span><span class="sample-body">{kind === 'style' ? 'Body' : 'Keep your work in view.'}</span>
       {#if kind === 'appearance'}<span class="sample-bands"><i></i><i></i><i></i></span><span class="sample-action">Action</span><span class="sample-selection">Current selection</span>{/if}
     </span>
     <span class="choice-description" id={`${name.replaceAll(' ', '-')}-${option.value.replace(':','-')}-description`}>{option.description}</span>

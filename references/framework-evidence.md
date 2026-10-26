@@ -2,7 +2,9 @@
 
 Status: internal candidate; validation milestone incomplete. This record separates implementation checks from agent trials, manual accessibility and participant research. No registry release, deployment or clinical claim is made.
 
-Current gates (2026-10-25): Windows and Linux automated/package validation passed. Native keyboard-only workflows, complete actual 200%/400% zoom coverage, NVDA/Firefox and Windows high-contrast/reduced-motion checks remain **Pending**. Earlier blocked attempts below are retained as history, not current Linux status.
+Current gates (2026-10-25): the [settings polish revision](#settings-polish--2026-10-25) passed Windows unit, palette, build, browser and isolated-package/clean-plugin checks. The later [clarity and typography revision](#clarity-and-typography--2026-10-25) passed builds, documentation and 52 browser checks; package artifacts have not been refreshed for that revision. Linux passed an earlier revision, but has **not** been rerun for the latest presentation changes. Native keyboard-only workflows, actual 200%/400% zoom coverage, NVDA/Firefox and Windows high-contrast/reduced-motion checks remain **Pending**. The four new design-default evaluation cases are also unrun.
+
+The entries below are a dated work record, not cumulative proof that the newest revision passed every check. “Current” and “final” within older entries refer to the revision tested then. Local `output/` logs and screenshots are ignored artifacts, not files included in a fresh clone. The implementation was committed as `f428275`; record later commits and local changes when repeating checks.
 
 Subsequent user-requested visual adjustment: both recording demos now use a filled broad arrow instead of the thin connector stroke. Existing right/down reflow, active-context color and decorative semantics remain unchanged. Both builds and the two Windows relationship/reflow/forced-color checks passed (`output/arrow-build.txt`, `output/arrow-browser.txt`). Earlier full-suite and distribution results precede this visual-only change; the framework package itself is unchanged. User review of the arrow and all native manual gates remain Pending.
 
@@ -42,7 +44,7 @@ Both working embedded demo tabs were closed, viewport overrides reset and task-s
 
 The subsequent React/Svelte native-browser session was blocked at opening the React test route: Computer Use could not confidently determine Chrome's current URL for its policy checks and stopped. No new manual demo checks completed, and no additional manual passes are claimed. At the user's request, native control has ceased. Both demo processes started for that attempt were interrupted, and a follow-up listener check returned no listeners on ports 4173 or 4174. Browser tabs were not closed through automation after access was blocked; temporary localhost tabs may require user cleanup. No unrelated tabs or browser processes were closed.
 
-Use the [step-by-step manual checklist](manual-accessibility-checklist.md) for both demos, with separate Pass/Fail/Pending results. The previously observed isolated-consumer results below remain limited to that consumer. Mac browser and VoiceOver results can supplement the evidence, but cannot replace NVDA/Firefox or Windows system-setting checks. Moving to another machine also requires the current uncommitted source changes, not just the baseline checkout.
+Use the [step-by-step manual checklist](manual-accessibility-checklist.md) for both demos, with separate Pass/Fail/Pending results. The previously observed isolated-consumer results below remain limited to that consumer. Mac browser and VoiceOver results can supplement the evidence, but cannot replace NVDA/Firefox or Windows system-setting checks. For another machine, use a revision containing the framework and updated demos, plus any later local changes; see the manual checklist.
 
 ## Capability/workflow expansion: alpha.2
 
@@ -150,3 +152,13 @@ Windows checks: 25 unit tests, 22-skin palette checks, documentation links/39 au
 Final local build gzip sizes: React JS 155.79 kB / CSS 7.84 kB; Svelte JS 102.85 kB / CSS 7.83 kB. Compared with the pre-card measurements of 154.69/6.99 and 101.59/6.98, the added previews, disclosures and styling increase these bundles; no performance improvement is claimed. The existing React chunk-size advisory remains.
 
 Native accessibility gates and the four new model evaluation cases remain Pending. Earlier Linux evidence predates these presentation changes; a fresh Linux run is still needed. No release, publication or participant-validation claim is made.
+
+### Clarity and typography — 2026-10-25
+
+Cross-checked documentation against preference application, capability inspection, import-controller lifecycle and simulated saves. Corrected the API example to guard Apply with the ready state, documented that cancellation does not settle an unfinished file read, separated read-only validation from file-writing CLI migration, and distinguished Guide outcomes from package responsibilities. Updated transfer instructions after commit f428275 and marked older Linux/gallery evidence by revision.
+
+Visible copy now explains that simulated saves wait for Demo save controls, and that Detailed help controls only “About these timings.” Text-style previews identify Heading and Body. At the user's request, Skin headings is first and the demo default; System is last. Explicit imported styles remain honored, and null remains unspecified data resolved by application defaults. Guide AUDHD-11 documents that boundary without adding a rule ID or changing schemas.
+
+Both builds, documentation checks, skill metadata validation, the documented validation CLI and the public API example checks passed. The initial browser run had 44 passes and eight failures caused by stale test assumptions: lowercase wording and a no-op check on the newly selected default. Tests now check the substantive storage explanation and use a real click while retaining focus assertions. The final full run passed 52/52 (`output/clarity-browser-final.txt`); the initial log is retained as `output/clarity-browser.txt`.
+
+These changes remain local and uncommitted. Packed artifacts, Linux verification, native accessibility gates and new model trials have not been refreshed by this pass. No user-benefit or release-readiness claim is added.

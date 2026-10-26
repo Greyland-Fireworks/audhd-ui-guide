@@ -301,6 +301,8 @@ Appearance changes must preserve current work and context. Offer selectable skin
 
 **Requirement:** Support wrapping, text enlargement, visible focus and usable targets at supported widths. Use semantic controls with names, roles and states. Support keyboard operation and applicable assistive technologies. Measure contrast and target sizing rather than assuming a theme passes.
 
+**Theme typography defaults:** When a theme includes typography, use its intended heading and body fonts as the application default, unless an explicit user choice or accessibility requirement overrides them. Put the theme-matching choice first and provide a clearly labeled system-font alternative. Changing themes must preserve an explicit font choice. Describe unavailable-font fallbacks and show heading/body samples. This is an application default, not a change to profile semantics: null still means unspecified, and the preference utilities must not infer a stored choice.
+
 **Visual preference scope:** When a choice changes a visible property, default to a representative preview beside its label: swatches for colors, color bands and a sample surface for palettes, rendered text for typography/size, and identical content showing spacing or thickness differences. Provide meaningful text equivalents and identify system-dependent examples. Applying the preference must visibly affect the relevant interface elements consistently within its stated scope. Explain meaningful exclusions; for example, “Spacing changes card padding and layout gaps; line spacing stays unchanged.” Keep previews understandable through labels and descriptions as well as visuals. Preserve readable content, visible focus and usable controls when reducing density.
 
 **Why:** Presentation and input changes must not make a task unusable.
@@ -400,6 +402,8 @@ Apply AUDHD-01 through AUDHD-05, AUDHD-07, AUDHD-09 and AUDHD-10 to the dashboar
 [Page layers](#organize-the-page-by-purpose) · [Navigation levels](#keep-navigation-levels-distinct) · [Updates and responsive hierarchy](#preserve-hierarchy-as-the-dashboard-changes)
 
 ### Organize the page by purpose
+
+Organize around the user's tasks and help them understand the program's systems. Explain what each relevant system does, how it connects to other systems, and how the available settings affect its inputs, outputs and behavior. Use meaningful grouping and adjacent explanations so the user can predict effects without remembering configuration keys or reading source code. For backend configuration dashboards, use the [configuration integration contract](packages/audhd-ui-framework/CONFIGURATION.md) to establish these explanations from repository evidence, account for every option and maintain a complete Mermaid reference map.
 
 | Layer | What belongs here | Hierarchy and behavior |
 |---|---|---|

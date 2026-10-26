@@ -53,12 +53,12 @@ export default function App() {
     if (!value) setAppearance('skin:guillermo');
     else if (value.mode !== 'skin') setAppearance(value.mode);
     else if (palettes.some(p => p.id === value.id)) setAppearance(`skin:${value.id}`);
-    setTextStyle(next.display.text_style || 'system');
+    setTextStyle(next.display.text_style ?? 'expressive');
     if ([null, 1, 1.25].includes(next.display.text_scale)) setTextSize(next.display.text_scale === 1.25 ? 'larger' : 'standard');
     setSpacing(next.layout.density || 'comfortable');
     setHelpExpanded(next.support.help_detail === 'expanded');
   }
-  const [textStyle, setTextStyle] = useState('system');
+  const [textStyle, setTextStyle] = useState('expressive');
   useLayoutEffect(() => {
     document.documentElement.dataset.skin = skin;
     document.documentElement.dataset.type = textStyle;
@@ -213,7 +213,7 @@ export default function App() {
             <VisualChoices name="Spacing" value={spacing} options={spacingChoices} kind="spacing" onChange={value => { setSpacing(value); remember('layout','density',value); }} />
             <section className="visual-choices help-preference" aria-labelledby="help-preference-heading">
               <div className="choice-heading"><h4 id="help-preference-heading">Detailed help</h4></div>
-              <p id="help-detail-description">Choose whether detailed explanations start collapsed or expanded.</p>
+              <p id="help-detail-description">Show or hide “About these timings” on recording pages. Other info buttons open separately.</p>
               <select id="help-detail" aria-labelledby="help-preference-heading" aria-describedby="help-detail-description" value={helpExpanded ? 'expanded' : 'collapsed'} onChange={event => { setHelpExpanded(event.target.value === 'expanded'); remember('support', 'help_detail', event.target.value === 'expanded' ? 'expanded' : 'concise'); }}>
                 <option value="collapsed">Collapsed</option><option value="expanded">Expanded</option>
               </select>
@@ -370,7 +370,7 @@ export default function App() {
               <div className="save-actions">
                 <button className="primary" type="submit" disabled={!!review.pending || !dirty} aria-describedby="save-scope save-feedback save-reason">Save review</button>
                 <ContextHelp topic="demo saving" kind="warning" text={contextualHelp.demoSave} textSize={textSize} />
-                <p id="save-reason" className="muted">{review.pending ? 'Save in progress.' : !dirty && review.savedRevision > 0 ? 'No unsaved changes.' : ''}</p>
+                <p id="save-reason" className="muted">{review.pending ? 'Waiting for Demo save controls. Open them below to complete or fail this simulated save.' : !dirty && review.savedRevision > 0 ? 'No unsaved changes.' : ''}</p>
               </div>
             </div>
           </form>

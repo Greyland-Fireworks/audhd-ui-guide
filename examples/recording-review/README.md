@@ -24,6 +24,16 @@ npm run test:browser
 
 Browser checks use isolated ports 4183–4185 and fresh contexts, never the user's development tabs. Python 3 runs the palette check. Test results, traces and screenshots are local ignored output. No backend, login, telemetry, automatic profile storage or external fonts are included.
 
-Shared files contain static fixtures, canonical page records, semantic token values and a stateless capability report. Each framework owns review state, save settlement, routing, focus and preference application. Do not key/remount the workspace by appearance. Current dependency versions are pinned in the root lockfile; library choice remains provisional despite runnable examples.
+Shared files contain fictional data, page records, color mappings, choice descriptions and the recording-demo capability declaration. Both demos use the framework’s capability inspector and import/preview controller. Each framework still owns review state, simulated save completion, navigation, focus and preference application. Do not key/remount the workspace by appearance. Current dependency versions are pinned in the root lockfile; library choice remains provisional despite runnable examples.
 
-The default skin is Guillermo, with System text; light/dark presets map to Paperwhite/Guillermo. These are demonstration choices. See [profile boundaries](../../PREFERENCES.md#reference-application-boundaries) for supported values and unapplied requests. Full Angular/Vue apps, multiple-category index paths, cross-highlighting and automatic persistence remain deferred.
+A new demo session starts with Guillermo and Skin headings text. The choice labeled Default follows the device’s light/dark setting. Imported light/dark preferences map to Paperwhite/Guillermo; the picker shows each named skin only once. These are demonstration choices. See [profile boundaries](../../PREFERENCES.md#reference-application-boundaries) for supported values and unapplied requests. Full Angular/Vue apps, multiple-category index paths, cross-highlighting and automatic persistence remain deferred.
+
+## Settings and simulated saves
+
+Appearance choices start collapsed. Select **Show appearance choices** to open the previews; the summary keeps the current skin name, color bands and heading-font sample visible. Selecting a card applies it immediately for this session. **Hide appearance choices** closes the collection without changing the selection.
+
+Text style, Text size, Spacing and Detailed help have separate groups. Detailed help currently opens or closes only “About these timings” on recording pages; it does not expand every info button. Spacing changes card padding and layout gaps, not line height. **Skin headings** uses the skin’s heading font; available local fonts determine the actual rendering. Importing a profile is different from choosing a card: import creates a preview, and **Apply for this session** applies it. **Portable preferences** contains import/export; exports contain preferences only.
+
+**Save review** deliberately stays pending until you open **Demo save controls** and simulate completion or failure. Waiting does not finish it. This lets you test newer edits and navigation while a save is pending; completion still stores the result only in the open page. Reloading resets the demo.
+
+See the [current validation summary](../../references/framework-evidence.md) and [manual checklist](../../references/manual-accessibility-checklist.md). Automated browser checks do not close the native accessibility gates.

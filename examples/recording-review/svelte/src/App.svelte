@@ -48,12 +48,12 @@ import ProfileControls from './ProfileControls.svelte';
     if (choice === null) appearance = 'skin:guillermo';
     else if (choice.mode !== 'skin') appearance = choice.mode;
     else if (palettes.some(p => p.id === choice.id)) appearance = `skin:${choice.id}`;
-    textStyle = next.display.text_style ?? 'system';
+    textStyle = next.display.text_style ?? 'expressive';
     if ([null, 1, 1.25].includes(next.display.text_scale)) textSize = next.display.text_scale === 1.25 ? 'larger' : 'standard';
     spacing = next.layout.density ?? 'comfortable';
     helpExpanded = next.support.help_detail === 'expanded';
   }
-  let textStyle = $state('system');
+  let textStyle = $state('expressive');
   $effect(() => {
     document.documentElement.dataset.skin = skin;
     document.documentElement.dataset.type = textStyle;
@@ -228,7 +228,7 @@ import ProfileControls from './ProfileControls.svelte';
         <VisualChoices name="Spacing" value={spacing} options={spacingChoices} kind="spacing" onChange={value => { spacing=value; remember('layout','density',value); }} />
         <section class="visual-choices help-preference" aria-labelledby="help-preference-heading">
           <div class="choice-heading"><h4 id="help-preference-heading">Detailed help</h4></div>
-          <p id="help-detail-description">Choose whether detailed explanations start collapsed or expanded.</p>
+          <p id="help-detail-description">Show or hide “About these timings” on recording pages. Other info buttons open separately.</p>
           <select id="help-detail" aria-labelledby="help-preference-heading" aria-describedby="help-detail-description" value={helpExpanded ? 'expanded' : 'collapsed'} onchange={event => { helpExpanded = event.currentTarget.value === 'expanded'; remember('support', 'help_detail', helpExpanded ? 'expanded' : 'concise'); }}>
             <option value="collapsed">Collapsed</option><option value="expanded">Expanded</option>
           </select>
@@ -390,7 +390,7 @@ import ProfileControls from './ProfileControls.svelte';
           <div class="save-actions">
             <button class="primary" type="submit" disabled={!!current.attempt || !dirty} aria-describedby="save-scope save-feedback save-reason">Save review</button>
                 <ContextHelp topic="demo saving" kind="warning" text={contextualHelp.demoSave} {textSize} />
-            <p id="save-reason" class="muted">{current.attempt ? 'Save in progress.' : !dirty && current.version > 0 ? 'No unsaved changes.' : ''}</p>
+            <p id="save-reason" class="muted">{current.attempt ? 'Waiting for Demo save controls. Open them below to complete or fail this simulated save.' : !dirty && current.version > 0 ? 'No unsaved changes.' : ''}</p>
           </div>
         </div>
       </form>

@@ -34,7 +34,7 @@ For `audhd quick review`, normally surface up to five highest-impact findings an
 - Data retention and save locations:
 - Classification: adopted outcome, implementation example, preference or proposed extension:
 - Consequential behavior: established behavior and source; proposed choice and tradeoff; unresolved dependency and what it blocks. Omit empty categories.
-- Requested/effective appearance and unsupported profile choices:
+- Requested preferences, declared support, actually applied values and unsupported choices:
 
 ## Procedure and results
 
@@ -61,6 +61,8 @@ Use Pass, Fail, Pending or Not applicable with a reason. Do not mark an unperfor
 | Measure contrast and target sizes in relevant states; record combinations, method and results | | | |
 | Check reduced motion and forced colors or other supported accessibility overrides | | | |
 | Read labels and grouped choices; distinguish selection, focus, actions and disabled states | | | |
+| Identify independent settings and their active choices; compare previews with applied results | | | |
+| Predict disclosure actions; find the current choice and required errors while sections are closed | | | |
 | Open and close help without obscuring work or losing context | | | |
 | Filter, reorder or switch comparison items without moving notes or decisions to another record, where applicable | | | |
 | Identify dashboard priorities, metric scope/freshness and global versus local navigation or filters, where applicable | | | |

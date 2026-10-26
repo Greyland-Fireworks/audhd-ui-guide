@@ -115,7 +115,7 @@ export default async (page) => {
 
   await select('Harbor morning');
   assert(await save.isDisabled() && await note.isEnabled(), 'Pending saves block duplicate, not editing');
-  assert(await page.getByText('Save in progress.', { exact: true }).isVisible(), 'Disabled reason');
+  assert(await page.getByText('Waiting for Demo save controls. Open them below to complete or fail this simulated save.', { exact: true }).isVisible(), 'Disabled reason');
   await openDemo();
   assert(await page.getByRole('group', { name: /REC-001 · Attempt/ }).count() === 1, 'One pending attempt');
   pass('REF-07');

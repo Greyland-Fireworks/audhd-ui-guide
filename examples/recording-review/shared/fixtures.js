@@ -25,8 +25,8 @@ export const copy = {
 // Brief, verified explanations for unfamiliar choices (AUDHD-09). Save and
 // retention consequences remain visible in the app rather than only in help.
 export const contextualHelp = {
-  displayOptions: 'Temporary choices for this session. Light and dark skins are equally supported. Changing appearance keeps your work in place; reloading resets this demo. Skin headings use locally available fonts with fallbacks.',
-  demoSave: 'This is a save simulation, not permanent storage. Save review only stages your assessment in this open page; the demo controls simulate success or failure. Nothing is written to a file or server, and reloading loses the review.',
+  displayOptions: 'These choices last while this page is open. Changing appearance keeps your reviews and unfinished work in place. Reloading resets the demo. Skin headings use fonts installed on your device; a replacement font is used when one is unavailable.',
+  demoSave: 'This is a save simulation, not permanent storage. Save review captures your current assessment and waits. Open Demo save controls to simulate success or failure; waiting alone does not complete the save. Nothing is written to a file or server, and reloading loses the review.',
   skin: 'Change the colors across this workspace to suit your comfort or mood. Light and dark choices keep the same controls, recording and review.',
   textStyle: 'System uses your device’s usual interface font. Skin headings adds the skin’s character to headings only; Serif and Monospace change the reading style throughout the workspace.',
   reviewStatus: 'Choose Needs follow-up when you want to return to an issue, or Reviewed when your assessment is complete. These labels describe your assessment, not whether the recording itself passed a test.',

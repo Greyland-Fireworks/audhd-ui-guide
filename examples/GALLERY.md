@@ -2,7 +2,7 @@
 
 See how the same interface principles work in different skins. These are full-page captures of the runnable references, with fictional data. **Start with the annotated light view** to see what the design is doing.
 
-The live references now consume the canonical, opt-in [framework appearance assets](../packages/audhd-ui-framework/README.md). These existing captures remain illustrations, not fresh validation of the extraction; [framework evidence](../references/framework-evidence.md) records the new checks and remaining limits.
+The live references now consume the canonical, opt-in [framework appearance assets](../packages/audhd-ui-framework/README.md). These captures predate the collapsible appearance bank, visual choice cards and Skin headings default. Their captions describe the captured state, not the current initial settings. They remain illustrations, not fresh validation of the latest UI; [framework evidence](../references/framework-evidence.md) records the new checks and remaining limits.
 
 [Paperwhite walkthrough](#paperwhite-a-guided-tour) · [Guillermo review](#guillermo-the-same-work-in-a-dark-skin) · [Bubblegum preferences](#bubblegum-personal-appearance-choices) · [Cyberpunk directory](#cyberpunk-a-map-of-the-workspace)
 
