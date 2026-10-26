@@ -14,7 +14,7 @@ const merged = resolveProfiles(emptyProfile(), profile); // Merge requests; does
 
 ## Public interface
 
-For backend configuration dashboards, follow the bundled [configuration integration contract](CONFIGURATION.md): automatic discovery of configuration sources, source-backed tracing of every option, a complete option inventory and Mermaid map, explicit dashboard coverage, and verification against the host's actual behavior. Distinguish lifecycle status from runtime applicability and provide contextual references to each setting's files, keys and override sources. Organize the UI around user tasks while explaining the program's systems and their relationships. This is an application integration requirement; the preference APIs below do not analyze repositories or manage arbitrary backend configuration.
+For backend configuration dashboards, follow the bundled [configuration integration contract](CONFIGURATION.md): discover configuration sources, trace and account for every option in scope, justify coverage decisions, and verify the requested workflows against the host's actual behavior. Preserve necessary coverage evidence, reusing existing records where sufficient. Separate inventories, system maps and reference pages are warranted by user request or practical value, not required by default. Distinguish lifecycle status from runtime applicability and connect any interface references to controls through consistent names and usable navigation. Prioritize working, understandable tasks over artifact volume. This is an application integration requirement; the preference APIs below do not analyze repositories or manage arbitrary backend configuration.
 
 | Export | Contract |
 |---|---|
