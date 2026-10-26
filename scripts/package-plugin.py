@@ -50,6 +50,7 @@ root_files = {
         'package.json', 'profile.js', 'capabilities.js', 'import-workflow.js', 'v1.schema.json', 'v2.schema.json',
         'skins.css', 'palette-data.json', 'README.md', 'LICENSE',
         'LICENSE-CODE', 'LICENSE_SCOPE.md']},
+    *{f'examples/administration/{name}' for name in ['index.html', 'style.css', 'app.js', 'check.mjs', 'README.md']},
     'examples/unlock-to-edit/index.html', 'examples/unlock-to-edit/app.js',
     'examples/unlock-to-edit/check.mjs', 'examples/unlock-to-edit/README.md',
     'references/evaluations/2026-10-20-readiness/README.md',

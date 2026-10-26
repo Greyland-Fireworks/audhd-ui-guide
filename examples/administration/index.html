@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en" data-audhd-ui data-skin="guillermo" class="ui-skin">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team access · administration example</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../../packages/audhd-ui-framework/skins.css">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="app.js"></script>
+<a href="#main">Skip to task</a>
+<header><h1>Team access</h1><p>Fictional workspace. Saves and permission checks are simulated in memory; reload resets everything.</p></header>
+<nav aria-label="Workspace"><a href="#people">People <span id="pending"></span></a><a href="#settings">Workspace settings</a></nav>
+<details id="appearance"><summary>Appearance</summary>
+<label for="type">Text style</label><select id="type"><option value="system">System</option><option value="expressive">Skin headings</option><option value="serif">Serif</option><option value="mono">Monospace</option></select>
+<fieldset><legend>Skin · session only</legend><div id="palettes" class="palettes"></div></fieldset>
+<p id="appearance-status" role="status"></p></details>
+<main id="main" tabindex="-1"></main>
+<p id="announcement" role="status"></p>
+</html>

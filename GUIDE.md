@@ -58,6 +58,8 @@ Apply checks to the affected task and supported capabilities; read-only work doe
 
 Measure coverage by the requested user goals and observable outcomes, alongside necessary setting or data accounting. Connecting a data source, declaring desired state, inspecting records and managing records are different capabilities; editable fields alone do not establish a complete workflow. Use supported application interfaces within authorization. Distinguish source-declared, runtime-recognized, platform-applicable, editable and behavior-verified status; explain known unavailability before an attempted action. Verify the intended result, such as persistent effective settings, allowed and denied access, or delivery to the intended destination. Startup health and generic round trips cannot establish unrelated outcomes. Keep evidence compact and report missing dependencies or checks as Pending.
 
+Distinguish a saved mutation, an operational runtime and a verified task outcome. When a mutation succeeds but verification fails, preserve the saved identity/version and newer draft; offer a read-only verification retry when supported rather than repeating the mutation. Stop with an honest pending result when the outcome cannot be established. Errors should provide a route to reveal and focus the affected control without discarding unrelated work. The [record-administration example](examples/administration/README.md) demonstrates these transitions in a labeled simulation.
+
 ### Priority hierarchy and conflicts
 
 Apply this hierarchy within the instructions governing the task:
@@ -295,6 +297,8 @@ At narrow widths or enlarged text, stack help beside the task in the reading ord
 
 Use `(i)` for supplementary information, `(?)` for clarification and `(!)` for a genuine warning or limitation when visible help access points are useful. Name each button by its topic, expose its state and keep it operable when the nearby action is disabled. Hover help must be dismissible, hoverable and persistent as applicable; click/tap/keyboard access can expose persistent inline detail. A demo-save warning belongs beside Save and also in visible retention wording. It must distinguish simulated acknowledgment from durable storage. Avoid adding icons when the explanation is already sufficient.
 
+For unavailable capabilities, explain the actual boundary and permitted next action beside each affected decision. Missing dependencies, environment restrictions and unfinished implementation are different from a saved change awaiting verification. A limitation explained elsewhere does not make an affected control self-explanatory. Use the [capability-state examples](references/interface-patterns.md#capability-states-and-next-actions) where these distinctions matter; no new status schema is required.
+
 ### AUDHD-10 Support interruptions and working preferences
 
 **Requirement:** Preserve useful context and unfinished work within a documented scope consistent with privacy needs. Offer focused and overview layouts when both serve the task. Honor reduced-motion preferences. Avoid decorative flashing, automatic cycling and unnecessary attention-seeking notifications.
@@ -432,6 +436,10 @@ Make reference material part of the workflow under AUDHD-03, 05, 08 and 09. Use 
 | Secondary information | History, diagnostics, definitions, references and optional metadata | Use subordinate headings, a supporting column or clearly named disclosures. Keep blocking errors, unsaved state, selected values and essential consequences visible beside the work. Secondary information must remain readable and discoverable. |
 
 Use visual weight deliberately: page title, section heading, item title, then supporting text. Related panels share spacing, boundaries and terminology; unrelated tasks have clear separation. Color may reinforce grouping but must not carry it alone. Avoid a wall of equally emphasized cards, repeated generic headings such as “Overview,” or oversized metrics that conceal the action users need.
+
+### Prioritize useful work
+
+Check the initial desktop and narrow-screen view against the user's task: can someone identify the next useful action and reach it without passing repeated introductions? Place common decisions and relevant prerequisites before technical ownership or source details. Keep expert settings discoverable within named tasks; source order is not a priority order. Show save or review controls where they apply, retaining global controls only when unfinished work makes them useful. This is a contextual task-visibility check, not a fixed above-the-fold quota or ban on expressive design.
 
 ### Keep navigation levels distinct
 

@@ -48,3 +48,27 @@ Verify previews against effective rendering, keyboard focus and selection, narro
 Under AUDHD-02, 09 and 11: **If an info/help button explains a line of text, label or image, place it immediately after that subject, preferably on the same line or in the same row.** Keep the subject and button in one layout group and next to each other in reading order; do not leave the button on a detached row or at a distant panel edge. At narrow widths or enlarged text, allow the group to wrap without overlap while preserving a clear association. A persistent explanation may expand below the group.
 
 Give the button a specific accessible name such as “About text style,” retain a visible keyboard-focus indicator and an adequate target, and associate the explanation programmatically. Proximity supplements these semantics; it does not replace them. Verify placement at normal and narrow/enlarged layouts and test keyboard opening, dismissal and focus retention. This is a concrete application of the existing rules, not a new rule ID.
+
+## Capability states and next actions
+
+Use the distinctions a task needs; these are examples of truthful language, not mandatory badges or a runtime schema. A read-only presentation describes interaction, not the reason a capability is unavailable.
+
+| State | Explain beside the affected task | Useful next action |
+| --- | --- | --- |
+| Available and verified | What outcome was observed, on which saved version or destination, and its limits | Inspect the result or continue the task |
+| Configurable, verification pending | What was saved and what has not been established | Verify the saved operation without saving it again |
+| Unavailable until a dependency exists | Name the missing service, credential or application and its consequence | Configure or connect that dependency when authorized; retain preparation work where useful |
+| Restricted by the environment | State the actual permission, platform or isolation boundary | Offer an established permitted alternative or explain who can resolve the boundary |
+| Not implemented | Name the unsupported task without disguising it as a restriction | Identify an existing supported alternative, or report the implementation gap |
+
+Apply a shared dependency warning to each affected control or clearly containing task. For example, an absent client application affects every setting whose visible result requires that client. Missing credentials prevent an external verification; they do not automatically justify removing configuration. Availability and verification may differ, so a single success badge should not erase those distinctions.
+
+## Record administration and recovery
+
+The [runnable administration example](../examples/administration/README.md) connects collection selection, record inspection, contextual editing, field-linked errors, verification and filtered return. Prefer actions attached to the selected record over a raw command-output panel paired with disconnected command forms. Use named secondary destinations when accounts, permissions and credentials become distinct tasks; a small interface need not introduce extra nesting.
+
+On failure, preserve current identity, drafts and useful collection context. Test a successful save followed by failed verification, a newer unsaved draft, and a retry of the saved operation's verification: the retry must not resubmit the mutation or overwrite the newer draft. Check the intended allowed and denied permission paths or actual delivery destination; generic health does not substitute for either. Where no safe verification interface exists, explain that limit and leave the outcome pending.
+
+Keep verification claims tied to the checked record and saved version; a new save invalidates the old claim, while an unsaved draft does not replace the verified saved state. Retain unresolved field errors when leaving and returning, clear them when corrected, and keep any draft-reset action scoped to its named record. Return focus to the originating record when it remains in the filtered collection, with a meaningful fallback otherwise. The administration example exercises these distinctions without imposing a storage or routing API.
+
+During visual review, inspect both desktop and narrow task entry. Common work and prerequisites should precede decorative copy and source detail; inactive global actions should not crowd out the selected task. Keep all necessary settings discoverable. Use the Guide's [task-visibility check](../GUIDE.md#prioritize-useful-work), without imposing fixed screen-space quotas.

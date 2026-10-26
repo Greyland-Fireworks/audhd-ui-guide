@@ -101,6 +101,7 @@ Start with the [quick review](GUIDE.md#quick-review), then select applicable AUD
 | Contextual help, unfamiliar meaning or returning without context | [AUDHD-09](GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision), plus AUDHD-01 and AUDHD-10 |
 | Layout, typography, controls, selection, focus or theme | [UI visual standard](GUIDE.md#visual-standard) |
 | Concrete wording, recovery patterns or UI/UX tradeoffs | [Worked examples](EXAMPLES.md); fictional illustrations, not mandatory components or tested findings |
+| Record administration, unavailable capabilities or verification after a saved change | [Capability states and recovery patterns](references/interface-patterns.md#capability-states-and-next-actions) and the [runnable administration example](examples/administration/README.md) |
 | A structured record for a bounded change or full workflow | [Review template](REVIEW_TEMPLATE.md) |
 
 ## Apply design defaults before the first implementation
