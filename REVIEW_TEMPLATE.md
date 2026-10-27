@@ -44,9 +44,13 @@ Select applicable [component roles](references/component-review-matrix.md) and [
 
 Split mixed results: a label may pass while persistence remains Pending. Include meaningful differences between shared-component instances and verify the intended task outcome. The [worked example](references/component-review-matrix.md#worked-review-example) demonstrates a single record with mixed results.
 
+For navigation or layout work, trace a representative task's starting point, decisions, destinations, transitions and completion evidence here or in the existing plan. For implementations, compare the planned path with the delivered path; reviews trace the existing interface. Record reachability separately from task coherence; functioning links do not prove that someone can find and complete the task. An agent walkthrough remains inspection, with participant understanding Pending until observed.
+
 | Action | Expected result | Observed result | Status and evidence |
 |---|---|---|---|
 | Enter and identify current context | | | |
+| Follow the affected task path; distinguish reachable destinations from understandable organization | | | |
+| Inspect the first viewport and prominent regions at relevant widths, heights and enlargement; identify avoidable displacement and the value of repeated navigation | | | |
 | Understand purpose and next actions without remembering the implementation | | | |
 | Open contextual help and predict the control's effect in plain English | | | |
 | Find and edit a value | | | |
@@ -77,6 +81,8 @@ Split mixed results: a label may pass while persistence remains Pending. Include
 | Interpret groups without color; verify selected cues and effective accessibility overrides, where applicable | | | |
 
 Record UI evidence (presentation, semantics and control operation) separately from UX evidence (task understanding, effort, failure, recovery and return). Use Not applicable with a reason for save checks on read-only tasks. A visually correct state does not prove that the behavior producing it is correct.
+
+Before concluding, ask: “What must the user read, remember, navigate or dismiss before they can do useful work—and which of those demands can we remove without losing capability or understanding?” Record material findings and tradeoffs here; retain necessary help, accessible targets and complete capability rather than forcing all work into the first viewport.
 
 ## User feedback
 

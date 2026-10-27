@@ -5,6 +5,14 @@ description: Design, review or improve UI and UX using AuDHD-friendly interactio
 
 # AuDHD-friendly UI and UX guidance
 
+Build a practical interface that helps people complete technical tasks with the least avoidable effort.
+
+Treat attention, working memory and screen space as valuable resources. For users who experience distraction, overload or difficulty resuming work, unnecessary reading and navigation can become real barriers.
+
+Put useful state, clear decisions and necessary actions first. Every prominent element should help someone understand, act, orient themselves or recover. Remove slogans, redundant introductions and decoration that competes with the task.
+
+Make complexity navigable; do not remove required capabilities to make the screen look simpler. Do not add extraneous text or prevaricate. Preserve necessary explanations, accessible controls and individual appearance preferences. Visual polish should come from coherent hierarchy, readable relationships and reliable operation.
+
 Use [GUIDE.md](GUIDE.md) as the authoritative rulebook and visual standard; keep rule definitions in the guide. Load supporting references through the mechanism provided by the host:
 
 - **Filesystem installation:** Resolve relative links from the installed directory containing this `SKILL.md`, not the current working directory.
@@ -16,9 +24,9 @@ If the guide still cannot be read, report the attempted resource, access mechani
 
 1. Establish the requested deliverable, bounded task and completion criteria below.
 2. Inspect available evidence; separate established behavior, proposals and unresolved dependencies.
-3. Select the applicable guide rules and relevant preferences.
+3. Select the applicable guide rules and relevant preferences; walk through the task before settling its navigation and layout.
 4. Produce the design, findings or authorized changes; make the result available to inspect.
-5. Walk through proposed states for design, inspect evidence for review, or exercise affected states for implementation. Record what actually happened.
+5. Review the rendered layout and task path: walk through proposed states for design, inspect evidence for review, or exercise affected states for implementation. Record what actually happened, separating navigation reachability from task coherence.
 6. Report the result, consequential decisions, actual checks and remaining gaps, including friction introduced by the solution.
 
 ### Demonstrate the skill when asked
@@ -51,6 +59,8 @@ When the user types `audhd audit` (case-insensitive) as a request, run a focused
 ## Establish the task and scope
 
 Identify the task, intended users, interface and requested work. Inspect existing controls, state ownership, saved choices and applicable project and platform requirements.
+
+Before settling navigation or implementing a new layout, walk through a representative task from its starting point through decisions, destinations, transitions and observable completion, including relevant recovery or return. Keep related work under a recognizable task domain even when actions have different save/apply timing. Use the walkthrough to expose missing steps, competing destinations and unnecessary transitions; do not reduce coverage to fit the proposed layout. For reviews, trace the existing path within scope. Reuse the current plan or review record; no separate walkthrough document or approval step is required. A focused change need only trace its affected path.
 
 Assess coverage by user goals and observable outcomes as well as settings. Distinguish configuring a data source, declaring desired state, inspecting existing records and managing those records; provide the capabilities the requested workflow needs rather than counting editable keys as functional support. Use supported application interfaces within authorization, not direct database editing or unrelated administrative expansion.
 
@@ -136,7 +146,9 @@ Before reporting implementation complete, ask: “Can someone tell what belongs 
 
 Before reporting implementation complete, inspect contextual help and conceptual relationships throughout the affected workflow. Replace unfinished or generic help with explanations supported by established behavior; confirm visible and semantic relationships among related controls, values, statuses and results. Apply the [label/clarify/show pattern](GUIDE.md#label-clarify-and-show) where it resolves ambiguity, preserving necessary detailed help and useful comparison layouts. Correct deficiencies within authorized scope; explicitly report unresolved content, conflicts and verification gaps. A review identifies these findings without editing.
 
-Inspect rendered grouping and help in its opened state, including relevant narrow and enlarged layouts. Source inspection alone cannot establish visual clarity; screenshots cannot establish accessible associations or interaction correctness. Mark unavailable checks pending. Applicable unresolved Require-level deficiencies block a claim of completion, not delivery of supported partial work.
+Inspect the available rendered screens at ordinary, short-height, narrow and enlarged layouts where relevant. For new designs or implementations, check both the initial layout and final result. Identify what useful work is visible or reachable before scrolling and what displaces it. For each prominent region, identify the state, decision, action or orientation it supports; remove or reduce unnecessary regions within implementation scope, or recommend changes in a review. Repeated navigation needs a practical benefit, such as a useful shortcut or relevant status. Preserve readable text, necessary explanations and target sizes; this is not a requirement to fit every task above the fold. Inspect grouping and help in its opened state as well.
+
+Record navigation reachability separately from task coherence: working links do not establish that a returning user can identify where to start, understand which destination owns the task and follow it to completion. Source inspection alone cannot establish visual clarity; screenshots alone cannot establish programmatic associations or interaction correctness, and an agent walkthrough cannot establish participant comprehension. Mark unavailable checks pending. Applicable unresolved Require-level deficiencies block a claim of completion, not delivery of supported partial work.
 
 Check the complete affected task to the extent the environment permits. Include relevant loading, failure, recovery and return states; exercise saves only where persistence is involved. Check applicable keyboard operation, semantics, contrast, text enlargement, narrow layouts, reduced motion and accessibility overrides. Record affected modes not exercised and assistive technologies not tested as pending.
 
@@ -149,7 +161,7 @@ Check the complete affected task to the extent the environment permits. Include 
 
 For UX checks, ask whether a returning user can explain purpose, scope, state, action effects and recovery using only the interface and help. For unfamiliar settings, also check whether the explanation supports deciding when the feature is useful, what prerequisites apply and which value fits the task; record any knowledge the reader must supply from outside the interface. Label an agent walkthrough as inspection, not a user study. When execution or user access is unavailable, deliver supported findings and a focused verification plan; mark those checks pending instead of claiming success.
 
-Before finishing, ask: “What new decisions, reading, navigation or maintenance did this change introduce, and what justifies them?” Apply this to added help panels, appearance choices, return summaries and safeguards. Simplify additions whose cost has no task-based justification, while preserving needed help, choice and accessibility. Report material tradeoffs rather than reproducing this checklist in every response.
+Before finishing, ask: “What must the user read, remember, navigate or dismiss before they can do useful work—and which of those demands can we remove without losing capability or understanding?” Apply this to help panels, appearance choices, return summaries, repeated navigation and safeguards. Also justify material maintenance introduced by the change. Preserve needed help, choice and accessibility; report material tradeoffs in the existing record rather than reproducing this checklist in every response.
 
 ## Report proportionately
 
