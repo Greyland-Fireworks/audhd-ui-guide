@@ -81,6 +81,12 @@ Give supporting work weight according to its contribution: discovery, explanatio
 
 Scale presentation, not required capability or necessary checks. An omitted optional artifact is not a functional gap; an unimplemented requested workflow or unverified required outcome is. Collect enough evidence to implement correctly, then verify representative end-to-end tasks and relevant failure paths before spending effort on elaborate supporting presentation. This is an allocation principle, not a rigid sequence: investigate dependencies first when correctness requires it. State material uncertainty and partial results rather than letting documentation stand in for working behavior.
 
+### Choose a runtime proportional to the task
+
+When implementation or verification requires running the application, compare its supported startup methods and inspect the available runtime before adding dependencies. Prefer the method that satisfies the requested behavior and verification with the fewest additional dependencies and environment changes. Check for an existing compatible installation or an official version-matched runnable distribution before introducing a compiler toolchain, container platform or additional services. Confirm version and platform compatibility; a source checkout alone does not establish that an executable is installed or a service is running.
+
+Require a concrete task reason for extra infrastructure, such as testing source changes that require a rebuild, reproducing a required deployment environment or meeting an isolation requirement. A familiar tool or supplied deployment file alone does not establish that need. Honor explicit user choices and established project requirements; fewer dependencies must not reduce functional scope or required verification. If a startup method is unavailable, reassess supported alternatives before expanding setup or troubleshooting. Explain consequential choices briefly in the existing plan or result; no separate report or approval step is required.
+
 ### Rule emphasis and primary targets
 
 Users may assign each stable AUDHD rule an emphasis level and name primary target concepts for a task. Unspecified rules default to **Apply**; existing applicability and requirements remain unchanged.
@@ -134,13 +140,17 @@ These rules supply defaults for relevant design and implementation decisions bef
 
 **Requirement:** Show the current object and the scope of an edit near its controls. Organize around tasks, then related attributes. Allow direct movement between related stages when the task does not require a fixed sequence.
 
-Design for someone who does not remember building or configuring the system, including its original author. A page or section should briefly explain what it is for, which item is selected, what state the work is in and what the available next actions accomplish. Do not assume that a familiar-looking label restores remembered context. Use recorded descriptions and history where available; do not invent reasons for earlier choices.
+Make each destination answer “Where am I and what am I doing here?” on entry and return. Its heading, selected navigation and visible context should identify the subject, purpose and current scope, with task state and next actions clear. Design for someone who does not remember building or configuring the system, including its original author. Do not assume that a familiar-looking label restores remembered context. Use recorded descriptions and history where helpful; do not invent reasons for earlier choices.
 
-**Why:** Users should not have to remember which distant selector controls the current form.
+Prefer names such as “Server overview,” “Delivery settings” or “Users & permissions”; keep instance names and deployment details as supporting context. “Local server” alone identifies a subject but leaves the view's purpose unclear.
+
+Labels should make subject and purpose clear in context; each label need not repeat both. A destination names a view or task, a button names an action, and a field names the value being entered. “Username” within a user editor or “Permissions” under Users can be sufficient. Preserve clear accessible names and associations when using shared context. Add words when they resolve ambiguity; do not mechanically repeat the page title or add an introduction to every control.
+
+**Why:** Visible purpose and scope reduce the effort of reconstructing the task. Users should not have to remember which distant selector controls the current form.
 
 **Example:** A shared calendar editor identifies the calendar and whether an edit affects one event or the repeating series.
 
-**Check:** Switch objects, workspaces and accounts where supported. Labels, editable values and previews must refer to the same context. Test delayed responses after a switch.
+**Check:** Enter a destination directly and return after an interruption. Identify where you are, what the view is for and which object or scope it concerns using its heading, navigation and visible context. Record any inference or prior knowledge needed; distinguish agent inspection from participant understanding. Switch objects, workspaces and accounts where supported. Labels, editable values and previews must refer to the same context. Test delayed responses after a switch.
 
 ### AUDHD-02 Make hierarchy clear without repetitive headings
 
@@ -449,7 +459,9 @@ Use visual weight deliberately: page title, section heading, item title, then su
 
 Every sentence must identify something, explain a decision, report state, describe a consequence or provide a necessary next action. Use literal titles sized proportionally to the task. Remove slogans, reassuring filler, redundant subtitles, decorative numbering and copy praising the interface. Preserve essential help, units, prerequisites, consequences and recovery instructions: concision must not become cryptic terminology. Judge copy in its rendered context, not by word counts or banned-word tests.
 
-Generated labels, CLI usage strings and copied reference passages are source material, not proof of usable explanations. Review the full affected workflow, including less-common settings: expand unfamiliar terms, explain when to use or leave a feature alone, and identify required setup. Prefer a literal title such as “Configuration” over a slogan; a subtitle is useful only when it adds scope, a decision or an instruction absent from the title. Keep deeper technical references available without requiring them for the basic decision.
+Useful context is not filler. Preserve wording that helps users recognize their location, understand the view's purpose or resume the task under [AUDHD-01](#audhd-01-keep-scope-and-location-visible). Before removing it, ask whether its absence would force someone to remember or infer that meaning. A slightly longer, specific label can reduce total effort; this does not justify redundant introductions or oversized context panels.
+
+Generated labels, CLI usage strings and copied reference passages are source material, not proof of usable explanations. Review the full affected workflow, including less-common settings: expand unfamiliar terms, explain when to use or leave a feature alone, and identify required setup. Prefer a literal title such as “Server configuration” over a slogan; a subtitle is useful only when it adds orientation, scope, a decision or an instruction absent from the title and surrounding context. Keep deeper technical references available without requiring them for the basic decision.
 
 ### Status-first operational overviews
 

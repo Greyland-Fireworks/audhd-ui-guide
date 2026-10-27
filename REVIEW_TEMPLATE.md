@@ -48,10 +48,10 @@ For navigation or layout work, trace a representative task's starting point, dec
 
 | Action | Expected result | Observed result | Status and evidence |
 |---|---|---|---|
-| Enter and identify current context | | | |
+| Enter directly and return after interruption: “Where am I and what am I doing here?” | Heading, selected navigation and visible context identify the view's subject, purpose and current scope without remembered implementation knowledge. | | |
 | Follow the affected task path; distinguish reachable destinations from understandable organization | | | |
 | Inspect the first viewport and prominent regions at relevant widths, heights and enlargement; identify avoidable displacement and the value of repeated navigation | | | |
-| Understand purpose and next actions without remembering the implementation | | | |
+| Identify the next useful action and its expected effect | | | |
 | Open contextual help and predict the control's effect in plain English | | | |
 | Find and edit a value | | | |
 | Inspect effective behavior or preview | | | |
@@ -82,7 +82,7 @@ For navigation or layout work, trace a representative task's starting point, dec
 
 Record UI evidence (presentation, semantics and control operation) separately from UX evidence (task understanding, effort, failure, recovery and return). Use Not applicable with a reason for save checks on read-only tasks. A visually correct state does not prove that the behavior producing it is correct.
 
-Before concluding, ask: “What must the user read, remember, navigate or dismiss before they can do useful work—and which of those demands can we remove without losing capability or understanding?” Record material findings and tradeoffs here; retain necessary help, accessible targets and complete capability rather than forcing all work into the first viewport.
+Before concluding, ask: “What must the user read, remember, navigate or dismiss before they can do useful work—and which of those demands can we remove without losing capability or understanding?” Record material findings and tradeoffs here; retain useful orientation, necessary help, accessible targets and complete capability rather than forcing all work into the first viewport. Treat context as useful when removing it would make location or purpose harder to understand.
 
 ## User feedback
 
@@ -90,7 +90,7 @@ Before concluding, ask: “What must the user read, remember, navigate or dismis
 
 Using only the interface and its help, ask the reviewer to explain:
 
-- What is this for, and what item or scope is selected?
+- Where am I, what am I doing here, and what item or scope is selected?
 - What has happened, and how current is that information?
 - What will each relevant action do, and when?
 - Is the work saved, and where?
