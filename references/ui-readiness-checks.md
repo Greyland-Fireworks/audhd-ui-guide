@@ -1,0 +1,98 @@
+# Detailed UI readiness checks
+
+Use these 50 checks through the [component review matrix](component-review-matrix.md). They make existing [Guide rules](../GUIDE.md) testable; the numbers are lookup references, not new rule IDs, a score or a requirement to add 50 features. Select checks for the affected task and supported controls; absent components do not need to be added. Preserve the Guide's [priority and emphasis hierarchy](../GUIDE.md#priority-hierarchy-and-conflicts).
+
+Record the action, expected and observed result, revision, environment and evidence in the existing [review record](../REVIEW_TEMPLATE.md#procedure-and-results). Mark Pass, Fail, Pending or Not applicable with a reason. Source inspection can establish a defect without execution; it cannot prove unexercised runtime behavior. Use the matrix's [controlled-test guidance](component-review-matrix.md#choose-the-test-environment) for failures, duplicates and retries. These are specifications, not claims that tests have been run or evidence of clinical benefit.
+
+[Navigation 1–10](#navigation-and-breadcrumbs) · [Help 11–20](#contextual-help-and-memory-refresh) · [Controls 21–30](#controls-and-decisions) · [Recovery 31–40](#state-and-recovery) · [Presentation/return 41–50](#presentation-and-returning-to-work)
+
+## Navigation and breadcrumbs
+
+Apply [AUDHD-01](../GUIDE.md#audhd-01-keep-scope-and-location-visible), [03](../GUIDE.md#audhd-03-offer-manageable-detail-without-hiding-choices), [05](../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability), [10](../GUIDE.md#audhd-10-support-interruptions-and-working-preferences), [11](../GUIDE.md#audhd-11-keep-controls-readable-and-operable); [navigation hierarchy](../GUIDE.md#keep-navigation-levels-distinct).
+
+| Check | Exercise or inspect | Pass condition and evidence boundary |
+|---|---|---|
+| <span id="check-01">1. Correct ancestry</span> | Open a nested page directly, without visiting its parents. | Breadcrumbs show the actual parent hierarchy, not browsing history or an invented parent. |
+| <span id="check-02">2. Working parent links</span> | Activate each breadcrumb ancestor. | Each opens the named parent destination; the current page remains identifiable. |
+| <span id="check-03">3. Current-page identification</span> | Inspect the last breadcrumb and its accessible state. | It names the current page. If it is a link, it exposes `aria-current="page"`; a plain-text current item need not be a redundant link. |
+| <span id="check-04">4. Breadcrumb landmark</span> | Inspect the accessibility tree and navigate by landmarks with the supported assistive technology. | Breadcrumb navigation has a meaningful label distinct from primary navigation. Record tree inspection separately from actual assistive-technology operation. |
+| <span id="check-05">5. Repeated breadcrumbs</span> | Where top and bottom copies exist, compare them after changing destinations. | Labels, order and destinations match. This check does not require adding a second copy. |
+| <span id="check-06">6. Recognizable record names</span> | Open records with similar names and compare breadcrumbs with page titles. | Names identify the same record, with distinguishing identifiers where needed; stale labels and unexplained slugs do not substitute for identity. |
+| <span id="check-07">7. Navigation selection</span> | Use clicks, direct links and Back/Forward to move between domains and tasks. | Primary and secondary selected states match the current destination at each level. |
+| <span id="check-08">8. Retained return context</span> | Filter a list, open a record, edit it and return. | The useful filter, selected-record context and return position remain; drafts are preserved within the declared retention scope. |
+| <span id="check-09">9. Reachable navigation</span> | Test narrow widths, short desktop heights, landscape layouts and enlarged text; reach the final menu destination with supported inputs. | Every primary destination remains reachable, including the end of a sticky menu, without sideways scrolling or hidden gestures. Focus is not obscured by fixed chrome; selection and labels remain understandable. |
+| <span id="check-10">10. Deep-link recovery</span> | Reload a nested destination; also try an unavailable or invalid destination. | The correct context loads, or an explanation and usable recovery route appear. The app does not silently substitute another record. |
+
+## Contextual help and memory refresh
+
+Apply [AUDHD-02](../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings), [05](../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability), [09](../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision), [11](../GUIDE.md#audhd-11-keep-controls-readable-and-operable); [help formats](../GUIDE.md#choose-the-help-format).
+
+| Check | Exercise or inspect | Pass condition and evidence boundary |
+|---|---|---|
+| <span id="check-11">11. Help coverage</span> | Inspect unfamiliar settings, statuses and actions whose labels cannot explain their use. | Each has discoverable contextual help. Clear familiar labels need no redundant tooltip. |
+| <span id="check-12">12. Useful memory refresh</span> | Read the help after returning without implementation context. | It adds purpose and practical effect beyond the label, including when or why to use the feature when relevant. |
+| <span id="check-13">13. Unfamiliar terms</span> | Find abbreviations and technical terms in a decision path. | Their meaning is explained before it is needed; a source-code reference alone does not explain the decision. |
+| <span id="check-14">14. Adjacent access</span> | Inspect each help trigger at ordinary, narrow and enlarged-text layouts. | It stays beside its subject visually and in reading order, wrapping without breaking the association. |
+| <span id="check-15">15. Hover access</span> | Where quick hover help is offered, hover its trigger. | The explanation opens without activating the associated action. Adjacent persistent help or an explicit help control can satisfy the need without mandatory hover behavior. |
+| <span id="check-16">16. Keyboard equivalent</span> | Reach and open the same help using the keyboard. | Equivalent information is available without pointer assistance, with meaningful names and visible focus. |
+| <span id="check-17">17. Touch equivalent</span> | On a supported touch device, open and close help deliberately. | The explanation is readable without simulated hover; tapping help does not execute the associated task action. |
+| <span id="check-18">18. Stable reading</span> | For custom hover help, move from the trigger onto the explanation and continue reading. | The content remains visible while being read; no arbitrary short timer dismisses it. |
+| <span id="check-19">19. Dismissal and focus</span> | Dismiss help that obscures work, including with the keyboard. | It closes without requiring loss of the current control, draft or position. Where hover/focus content must be dismissible, dismissal works without moving hover or focus. |
+| <span id="check-20">20. Appropriate format</span> | Compare the amount and type of help with its presentation. | Essential consequences remain visible. Long explanations or interactive content use an explicit disclosure/popover rather than a transient tooltip. |
+
+## Controls and decisions
+
+Apply [AUDHD-02](../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings), [04](../GUIDE.md#audhd-04-explain-effective-behavior), [06](../GUIDE.md#audhd-06-make-saving-and-recovery-understandable), [09](../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision), [11](../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+
+| Check | Exercise or inspect | Pass condition and evidence boundary |
+|---|---|---|
+| <span id="check-21">21. Persistent labels</span> | Enter a value and move focus away. | The associated label and necessary units remain available; disappearing placeholder text is not the only identification. |
+| <span id="check-22">22. Decision guidance</span> | Use only the interface to choose values for unfamiliar options throughout the affected workflow, including fields generated from source metadata. | Help explains purpose, relevance, prerequisites, tradeoffs and when to leave the value unchanged. Technical names or copied usage text alone do not establish that the decision is explained. |
+| <span id="check-23">23. Input boundaries</span> | Enter valid, invalid and boundary values in a controlled fixture. | Validation names the problem and associates it with the field without discarding recoverable input. |
+| <span id="check-24">24. Independent groups</span> | Inspect the form without activating any choices. | Each independent group has an identifiable purpose and selection state, including no selection when valid; visual and semantic grouping agree. |
+| <span id="check-25">25. Selection versus focus</span> | Move focus among choices without selecting where the control supports that distinction. | Focus differs from selection and application. The keyboard model remains appropriate to the control, including radios that select on arrow navigation. |
+| <span id="check-26">26. Application timing</span> | Change a choice and observe its result. | The interface accurately states whether it applies immediately, requires Save or requires another step. |
+| <span id="check-27">27. Keyboard task completion</span> | Complete the affected task with keyboard input only. | All needed controls are reachable and operable in a useful order, with visible focus and no unintended trap. Record any pointer assistance. |
+| <span id="check-28">28. Predictable action labels</span> | Before activation, identify the action and affected object from the label/context; then compare with the result. | The result matches the stated action and scope. Accessible and visible names describe the same purpose. |
+| <span id="check-29">29. Unavailable-state explanations</span> | Find an important unavailable action using supported inputs. | Its reason and established next step are accessible without focusing a disabled control or requiring precise hover. |
+| <span id="check-30">30. Honest preference previews</span> | Compare a choice preview with the effective rendering after application. | The demonstrated property changes as described; independent typography, spacing and appearance choices retain their declared scope. |
+
+## State and recovery
+
+Apply [AUDHD-01](../GUIDE.md#audhd-01-keep-scope-and-location-visible), [04](../GUIDE.md#audhd-04-explain-effective-behavior), [05](../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability), [06](../GUIDE.md#audhd-06-make-saving-and-recovery-understandable), [07](../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status), [12](../GUIDE.md#audhd-12-validate-complete-tasks-and-report-actual-evidence), [13](../GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards).
+
+| Check | Exercise or inspect | Pass condition and evidence boundary |
+|---|---|---|
+| <span id="check-31">31. Draft ownership</span> | Edit record A, switch to B and return. | A retains its draft within the stated retention scope; B never receives A's draft or decision. |
+| <span id="check-32">32. Actionable change review</span> | Where a change summary exists, inspect previous/proposed values and follow their links. | Values identify the correct fields. Links reveal and focus those controls while retaining other drafts and a useful return path. |
+| <span id="check-33">33. Newer edits during saving</span> | Submit a snapshot, make another edit and complete the earlier save while any later save is still pending. | The earlier response acknowledges only its submitted version. Newer edits remain recoverable and are not marked saved until their own acknowledgment arrives. |
+| <span id="check-34">34. Save versus effect</span> | Save a setting with a separate apply or restart requirement. | Saved and effective states remain distinct, with the remaining step visible; storage success is not presented as runtime verification. |
+| <span id="check-35">35. Failure retention</span> | Induce a supported save failure in the fixture. | The message identifies the failure, what remains intact and the available recovery; the retained draft matches the actual state. |
+| <span id="check-36">36. Late-response isolation</span> | Start an operation for A, navigate to B, resolve A's request and return. Inspect its overview entry if present. | Completion updates A's task/version without requiring A's panel to exist, losing its acknowledgment or altering B's state/focus. Views of the same result agree. |
+| <span id="check-37">37. Duplicate activation</span> | In the controlled fixture, activate again while an operation is pending. | Behavior follows the declared contract without unintended duplicate effects; disabled styling alone is not the safeguard. |
+| <span id="check-38">38. Uncertain completion</span> | Simulate a lost response after completion. | A timeout is not treated as proof of failure. The interface follows the established completion/retry contract and explains uncertainty or available recovery. |
+| <span id="check-39">39. Version-specific verification</span> | Acknowledge a mutation, fail its follow-up check, then retry verification. Verify version A and save B; apply B separately where required. | The receipt and acknowledged stage survive the check failure; acceptance alone is not completion. Retry checks the correct operation/version without repeating the mutation, or explains why verification is unavailable. A does not certify B, but may remain the verified running version until B is applied. |
+| <span id="check-40">40. Scoped reset</span> | Reset a field or record to its stated baseline. | The named scope returns to that baseline while unrelated drafts and saved work remain intact. Recovery limits match the product contract. |
+
+## Presentation and returning to work
+
+Apply [AUDHD-01](../GUIDE.md#audhd-01-keep-scope-and-location-visible), [02](../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings), [05](../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability), [07](../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status), [09](../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision), [10](../GUIDE.md#audhd-10-support-interruptions-and-working-preferences), [11](../GUIDE.md#audhd-11-keep-controls-readable-and-operable), [12](../GUIDE.md#audhd-12-validate-complete-tasks-and-report-actual-evidence).
+
+| Check | Exercise or inspect | Pass condition and evidence boundary |
+|---|---|---|
+| <span id="check-41">41. Truthful status distinctions</span> | Exercise loading, zero results, missing data, stale data and failure. | Each is distinguishable with appropriate wording, scope, freshness and next steps where relevant. |
+| <span id="check-42">42. Operational entry</span> | Inspect wide, short-height and narrow entry views with blockers, unfinished work and no issues. Visit an unrelated immediate-preference page. | Compact status rows and relevant actions precede optional introductions and decoration. Titles identify the task; global save/restart messaging does not misrepresent immediate preferences or crowd out work. |
+| <span id="check-43">43. Actual zoom</span> | Use browser controls to test 200% and 400% zoom; record viewport/display conditions. | Ordinary task controls remain usable without clipping, overlap or unnecessary sideways scrolling. Narrow-viewport or root-font tests are recorded separately, not substituted for browser zoom. |
+| <span id="check-44">44. Long-content resilience</span> | Use long labels, names, translated text and error messages. | They wrap without hiding controls, losing associated labels or obscuring important state. |
+| <span id="check-45">45. Usable targets</span> | Measure interactive targets and spacing in relevant layouts. | Targets meet the applicable criteria. The kit's practical 44 × 44 CSS-pixel design target is considered where appropriate; exceptions are explained, not misreported as a universal WCAG AA rule. |
+| <span id="check-46">46. Meaning across appearances</span> | Measure relevant contrast in supported skins, then inspect selection, focus, errors and unavailable states in supported forced-colors mode. | Text and controls meet applicable criteria; essential state remains distinguishable without relying only on color. Record combinations actually checked. |
+| <span id="check-47">47. Appearance access and continuity</span> | In each main-menu variant, locate appearance settings at the bottom/end; open the page with a draft and pending work, change preferences and return. Let the pending operation complete during the visit. | The clearly labeled destination is reachable in desktop and mobile menus, with coherent visual/keyboard order. Drafts, request ownership and acknowledgments remain intact; return restores task context, filters and useful focus. A long content-page footer is not the main menu. |
+| <span id="check-48">48. Reduced distraction</span> | Enable reduced motion and observe updates during work. | Unnecessary motion is removed without losing meaning; updates do not pulse, reorder the focused task or steal focus. Useful playback/updates remain deliberately controllable. |
+| <span id="check-49">49. Interruption recovery</span> | Leave and return, including after a supported timeout. | The interface explains retained work, expired context and the next available action within the actual retention and privacy boundaries. |
+| <span id="check-50">50. Return without remembered context</span> | Ask someone unfamiliar with the implementation to explain selected scope, state, consequences and recovery using only the interface. | The participant correctly explains the task-relevant scope, state, consequences and recovery using available labels and help. Record misunderstandings and moderator assistance; opening built-in help is not a failure. Limit the result to the observed task and participant. Agent inspection does not establish participant comprehension. |
+
+## Source and evidence boundaries
+
+Breadcrumb ancestry and semantics follow the [W3C APG breadcrumb pattern](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/). Hover/focus behavior follows the conditions and exceptions in [WCAG 2.2 content on hover or focus](https://www.w3.org/WAI/WCAG22/Understanding/content-on-hover-or-focus.html). These references do not require a breadcrumb or tooltip on every screen or control. Use the Guide's [help-format guidance](../GUIDE.md#choose-the-help-format) to select appropriate access to a quick memory refresh.
+
+[W3C cognitive accessibility guidance](https://www.w3.org/TR/coga-usable/) provides supplemental guidance on understanding, finding information and user involvement; it is not an AuDHD-specific certification. The Guide remains authoritative for this kit's adopted outcomes and product defaults, including appearance-menu placement. Passing automated checks does not establish participant comprehension or assistive-technology coverage that was not exercised.

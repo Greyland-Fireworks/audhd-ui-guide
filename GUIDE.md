@@ -50,6 +50,8 @@ Make tasks easier to understand, resume, inspect and correct. Accessible behavio
 
 Choose one task and use the quick review to locate the difficulty. Read the relevant rules, then the pattern or UI sections needed for that task. Use the review template to record evidence and gaps; you do not need to apply every technique to every screen.
 
+For “if it is a button, confirm…” checks, use the [component review matrix](references/component-review-matrix.md) and its [detailed readiness checks](references/ui-readiness-checks.md) for breadcrumbs, contextual help, controls, recovery and returning to work. Select applicable checks and exercise transitions as well as static states, then verify the complete task outcome. These references apply the existing rules without adding a separate standard or scoring system.
+
 “Requirement” means the intended behavior when adopting a rule in this guide. It is not a claim that the rule is a formal accessibility criterion. Record an alternative when a platform or task requires one.
 
 Requirements describe outcomes. Examples and optional techniques illustrate ways to achieve them; they do not mandate a new panel, tooltip or confirmation for every control. Start with the [worked examples](EXAMPLES.md) when translating a rule into an interface. Preserve a control that already supports the task well.
@@ -212,6 +214,8 @@ Deliberate page navigation may move focus to a named heading for orientation. Ke
 
 Explain recovery boundaries before consequential actions: canceling pending work, undoing a completed action and restoring a saved version are different operations. State what will be replaced and any real expiry of undo. Do not promise recovery the product cannot provide. Use proportionate safeguards rather than adding confirmation to every ordinary action.
 
+Retain an operation acknowledgment and any identifier before attempting follow-up verification. If the check fails, preserve what the acknowledgment establishes: “accepted,” “saved” or “completed,” with verification pending. Acceptance into a queue does not establish completion. Offer a separately labeled verification retry through a supported non-mutating check; it must not repeat a completed send, save or provisioning action. If completion itself is uncertain, say so and use the established reconciliation or duplicate-prevention contract before repeating the operation. If no safe check exists, explain the limit and next step without implying that resubmission is verification.
+
 When explaining errors, distinguish invalid input, unavailable connectivity, denied permission, failed processing and conflicting edits. State what failed, the practical consequence, what remains intact and an available next action. Do not promise that work is retained or safe to retry unless that is established. See the [error examples](EXAMPLES.md#error-messages-with-useful-consequences).
 
 **Why:** Uncertain persistence creates repeated checking and makes interruption costly.
@@ -225,6 +229,8 @@ When explaining errors, distinguish invalid input, unavailable connectivity, den
 **Requirement:** Identify loading, empty, failed, stale and current results. Match responses to the selected context. Preserve useful previous results only when clearly marked previous. Distinguish prepared input, running work, finished execution and verified output.
 
 Make uncertainty actionable when possible: “Not checked yet,” “Partially completed,” “Waiting for your approval” and “Waiting for file access” describe different situations. State the next useful action or explain that none is currently required. A generic “Unknown” should not conceal a known reason or recovery path.
+
+Own asynchronous results by task, object and submitted version, independently of whether their panel is mounted. Leaving a page must not lose an acknowledgment, raise a rendering error on completion or apply a late response to another task. Where overview and detail views exist, derive their status from the same outcome evidence, including scope, checked version and freshness. Label previous results as historical when a later check fails or a newer applied version makes them stale. A newer saved version awaiting application must not inherit verification of the still-running version; identify which version the result covers. Reconcile completion when returning within the declared retention scope; do not imply durable history if results are session-only.
 
 For long-running work, distinguish start time, elapsed time and the time status was last checked. Show a relevant deadline with its date and time zone where ambiguity matters. Relative times can help scanning, but provide an exact timestamp when comparison or later review requires it. Mark stalled or stale updates honestly. Do not invent a completion estimate, use unrelated activity as progress or animate a countdown merely to create urgency. Identify unfinished work and whether the user needs to act.
 
@@ -332,6 +338,8 @@ Appearance changes must preserve current work and context. Offer selectable skin
 ### AUDHD-12 Validate complete tasks and report actual evidence
 
 **Requirement:** Review the applicable stages of entry, editing, preview, save, failure, recovery and return as a workflow. Include users when suitability depends on preference. Distinguish implementation, deployment and verification. Keep historical observations dated.
+
+Define completion by the requested user outcome, not the number of exposed fields. Configuring a data source, declaring desired state and inspecting or managing existing records are distinct tasks. Provide the stages needed for the requested workflow through supported interfaces; do not silently substitute raw provisioning fields or directions to another tool for an in-scope management interface. Document concrete scope or environment constraints and unfinished capabilities separately. Disclosing a gap is necessary but does not make that task complete; preserve option accounting without treating it as proof of task coverage.
 
 Include a returning-without-memory review: using only the interface and its help, identify purpose, selected scope, what happened, the effect and timing of actions, save state, recovery and available next steps where applicable. Where possible, involve someone unfamiliar with the implementation; an author may unconsciously fill in missing context. Record what the person had to remember or infer and any friction introduced by the proposed fix. Label an agent walkthrough as inspection, not a user study. When user access or execution is unavailable, report supported findings and pending checks without inferring user benefit.
 
@@ -441,11 +449,15 @@ Use visual weight deliberately: page title, section heading, item title, then su
 
 Every sentence must identify something, explain a decision, report state, describe a consequence or provide a necessary next action. Use literal titles sized proportionally to the task. Remove slogans, reassuring filler, redundant subtitles, decorative numbering and copy praising the interface. Preserve essential help, units, prerequisites, consequences and recovery instructions: concision must not become cryptic terminology. Judge copy in its rendered context, not by word counts or banned-word tests.
 
+Generated labels, CLI usage strings and copied reference passages are source material, not proof of usable explanations. Review the full affected workflow, including less-common settings: expand unfamiliar terms, explain when to use or leave a feature alone, and identify required setup. Prefer a literal title such as “Configuration” over a slogan; a subtitle is useful only when it adds scope, a decision or an instruction absent from the title. Keep deeper technical references available without requiring them for the basic decision.
+
 ### Status-first operational overviews
 
 For configuration, administration and monitoring interfaces, prioritize actual blockers, failures and unfinished work, followed by common operational state. Derive summaries from the same records as the controls. Distinguish draft, saved, effective and verified state; include scope and freshness where relevant. Never invent metrics, alerts or verification claims. Focused editors and previews need no artificial overview.
 
-Link actionable status directly to its task or control with condition-specific actions such as “Review changes,” “Verify permissions” and “Configure email.” Reveal and focus the affected content while preserving drafts, filters and useful return state. Prefer compact lists or grouped rows over promotional cards; retain readable text and accessible targets. Keep the complete destination index secondary. Verify empty, error, pending and successful states, including a newer save invalidating previous verification.
+Link actionable status directly to its task or control with condition-specific actions such as “Review changes,” “Verify permissions” and “Configure email.” Reveal and focus the affected content while preserving drafts, filters and useful return state. Prefer compact lists or grouped rows over promotional cards; retain readable text and accessible targets. Keep the complete destination index secondary. Verify empty, error, pending and successful states, including a newer saved or applied version that has not yet been verified.
+
+Use a compact literal heading followed by the relevant status rows and actions. Remove decorative hero artwork, repeated introductions and oversized empty-state cards when they push operational work out of the initial view. Keep save/apply bars scoped to the work they affect: an immediate appearance choice must not appear to require saving or restarting an unrelated service. In an idle overview, show truthful ordinary state and useful entry actions rather than filling space with encouragement. Judge desktop, short-height and narrow layouts separately; compactness must preserve readable text and usable targets.
 
 ### Prioritize useful work
 
@@ -454,6 +466,10 @@ Check the initial desktop and narrow-screen view against the user's task: can so
 ### Keep navigation levels distinct
 
 For complex interfaces, primary destinations represent task domains and secondary destinations represent named tasks within them. Put common tasks, relevant status and setup dependencies first; keep expert detail deeper within its owning task. Do not substitute source-key groupings or a generic “More settings” collection for meaningful secondary navigation. Simple interfaces need no artificial nesting. Preserve the current parent and child, addressable destinations where appropriate, Back/Forward behavior and useful return state.
+
+**Appearance destination:** Place appearance settings at the bottom or end of each main navigation menu, after task destinations. Keep the destination clearly labeled and directly reachable in desktop, collapsed and mobile menus. Match visual and keyboard order; do not bury it in an unrelated task, a vague “More” collection or the footer of a long content page. Opening appearance settings, changing a choice and returning must preserve drafts, pending work, filters, navigation and usable focus. A focused tool without main navigation does not need a new menu, and local task tabs do not need duplicate appearance destinations.
+
+Navigation must fit available height as well as width. For sticky or fixed menus, provide usable vertical overflow, a compact layout or an accessible complete menu so the final destinations remain reachable by keyboard, pointer and touch. Check short desktop windows, landscape screens and actual browser zoom; a width breakpoint or absence of document-wide horizontal overflow is not sufficient evidence. Keep focused links clear of fixed headers and footers. Returning through history should restore useful task position and filters rather than unconditionally jumping to the top; use a meaningful fallback when the prior target no longer exists.
 
 Show pending changes and errors at the relevant navigation level, including collapsed groups. Change reviews and error summaries must offer a route to reveal and focus the affected control without discarding other drafts. A global count alone does not tell users where unfinished work lives.
 
@@ -570,7 +586,7 @@ Use meters for bounded quantities and charts for meaningful relationships, trend
 
 ### Adaptable appearance
 
-Accessible behavior is mandatory; skins are user-selectable. Light and dark palettes are ordinary choices, not accessibility exceptions. Provide discoverable appearance choices where supported; preserve system forced colors and reduced motion. A focused change does not authorize a whole-application reskin. Use [preferences](PREFERENCES.md) for intake, inheritance and storage.
+Accessible behavior is mandatory; skins are user-selectable. Light and dark palettes are ordinary choices, not accessibility exceptions. Provide discoverable appearance choices where supported, with their destination at the [end of main navigation](#keep-navigation-levels-distinct); preserve system forced colors and reduced motion. A focused change does not authorize a whole-application reskin. Use [preferences](PREFERENCES.md) for intake, inheritance and storage.
 
 Fun, personal expression and renewed interest are legitimate design objectives alongside readability and comfort. Offer useful palette and text-style variety without automatic rotation or a claim that one preset is AuDHD-ideal. Keep text style independent of skin when supported. Use a coherent heading/label/value hierarchy with intentional font choices, relative sizing and fallback fonts; user-selected styles must not remove labels, clip content or obstruct browser enlargement.
 

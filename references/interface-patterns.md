@@ -2,6 +2,8 @@
 
 Use the task, not the component name alone, to select checks. Read the linked [Guide rules](../GUIDE.md#ux-and-interaction-rules) when applicable; these prompts do not redefine them. Techniques are optional and findings require evidence.
 
+Use the [component review matrix](component-review-matrix.md) and applicable [detailed readiness checks](ui-readiness-checks.md) to turn the selected workflow into concrete control and transition checks. Record those results in the existing review record, alongside the task outcome.
+
 | Interface family and task | Rules | Questions to investigate | Our example | Evidence needed |
 |---|---|---|---|---|
 | Forms/settings: change a value and understand its effect | AUDHD-04, 06, 09, 11, 13 | What takes effect, when, and how is failure recovered? | [Unlock-to-edit](../examples/unlock-to-edit/README.md) preserves a restoration point | Actual save contract, rendered labels, keyboard and failure transitions |
@@ -21,6 +23,8 @@ Match verification to the user's task. A settings check observes persistence and
 ## Visual choices in settings
 
 For new interfaces without an established design system, apply the [full-kit reuse and appearance defaults](../GUIDE.md#adaptable-appearance): all registered skins, Guillermo initially absent explicit preferences or established product defaults, independent text styles and system appearance. Package installation is optional; canonical assets may be reused directly. Existing products and justified exceptions retain their established requirements.
+
+Keep the appearance destination clearly labeled at the bottom/end of each main menu, including collapsed and mobile variants, under the [navigation placement requirement](../GUIDE.md#keep-navigation-levels-distinct). Verify access and retained work using [check 47](ui-readiness-checks.md#check-47); focused tools without main navigation need no new menu.
 
 Under AUDHD-02, 03, 05 and 11, when a choice changes a visible property, show a representative example beside its label. Keep the choice understandable without relying on the example alone. This pattern arose from individual feedback on our recording demos; it is not a new rule ID or a validated universal layout requirement.
 
@@ -69,7 +73,9 @@ The [runnable administration example](../examples/administration/README.md) conn
 
 On failure, preserve current identity, drafts and useful collection context. Test a successful save followed by failed verification, a newer unsaved draft, and a retry of the saved operation's verification: the retry must not resubmit the mutation or overwrite the newer draft. Check the intended allowed and denied permission paths or actual delivery destination; generic health does not substitute for either. Where no safe verification interface exists, explain that limit and leave the outcome pending.
 
-Keep verification claims tied to the checked record and saved version; a new save invalidates the old claim, while an unsaved draft does not replace the verified saved state. Retain unresolved field errors when leaving and returning, clear them when corrected, and keep any draft-reset action scoped to its named record. Return focus to the originating record when it remains in the filtered collection, with a meaningful fallback otherwise. The administration example exercises these distinctions without imposing a storage or routing API.
+Keep verification claims tied to the checked record, version and stage. A new save does not inherit the previous version’s verification; where application is separate, that previous result may still describe the running version. Unsaved drafts do not replace verified saved state. Retain unresolved field errors when leaving and returning, clear them when corrected, and keep any draft-reset action scoped to its named record. Return focus to the originating record when it remains in the filtered collection, with a meaningful fallback otherwise. The administration example exercises these distinctions without imposing a storage or routing API.
+
+**Recovery walkthrough:** A service acknowledges an operation and returns an identifier; the follow-up check times out after the user leaves the page. Retain the receipt under its original task/version. Show the acknowledged stage—accepted, saved or completed—and verification pending consistently wherever the result appears. “Retry verification” checks that receipt without sending again; “Send again” is a separate mutation with its own consequences. If the original acknowledgment was lost instead, completion is uncertain and requires reconciliation under the service contract. Test both paths in a controlled fixture, including a late response after navigation and a newer edit.
 
 During visual review, inspect both desktop and narrow task entry. Common work and prerequisites should precede decorative copy and source detail; inactive global actions should not crowd out the selected task. Keep all necessary settings discoverable. Use the Guide's [task-visibility check](../GUIDE.md#prioritize-useful-work), without imposing fixed screen-space quotas.
 

@@ -91,6 +91,7 @@ Choose the next task that matters to you:
 | Group related tools and settings into tabs or expandable sections | [Tabs, sub-tabs and accordion sections](GUIDE.md#tabs-sub-tabs-and-accordion-sections) |
 | Tailor colors, text, density, motion or interruption support | [Personalization overview](#personalize-the-interface) and [JSON reference](README_JSON.md) |
 | Check an existing interface | [Review template](REVIEW_TEMPLATE.md) |
+| Check what a button, input, navigation item or status should do | [Component review matrix](references/component-review-matrix.md) and [50 detailed readiness checks](references/ui-readiness-checks.md) |
 | See context, help and recovery in practice | [Worked examples](EXAMPLES.md) |
 | Use the guide with an LLM | [Usage instructions](#use-with-an-llm) and [agent skill](SKILL.md) |
 | Evaluate an LLM's use of the guide | [Skill evaluation pack](SKILL_EVALUATIONS.md) |

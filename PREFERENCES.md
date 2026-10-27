@@ -19,6 +19,8 @@ Use alongside the [guide](GUIDE.md). These are configurable needs to ask about, 
 
 Start with the person's task, not the full list of options. Keep an optional preference conversation separate from permission to save a profile. The format section is a reference for supported fields; it does not imply that an application implements them. For concrete applications, see the [worked examples](EXAMPLES.md#preference-intake-answer-only-what-matters) and [JSON field reference](README_JSON.md).
 
+Make appearance settings easy to revisit: place their clearly labeled destination at the bottom/end of each main menu, including mobile variants, following the [navigation placement and continuity requirements](GUIDE.md#keep-navigation-levels-distinct). Opening preferences and returning must preserve the current task; placement does not change preference precedence or authorize storage.
+
 ## Ask briefly and progressively
 
 At the start of designing or personalizing an interface for a particular person, check for an existing profile in the agreed location and offer a short intake. Do not repeat answered questions unnecessarily or block ordinary work on a questionnaire. For a general product or multi-user review, ask about intended users and available evidence; do not treat the requester as representative of everyone.

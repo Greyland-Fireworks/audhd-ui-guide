@@ -37,6 +37,7 @@ root_files = {
     'package.json', 'package-lock.json', 'playwright.config.js',
     'scripts/check-docs.js', 'scripts/check-framework.mjs',
     'references/concept-adoption.md', 'references/interface-patterns.md',
+    'references/component-review-matrix.md', 'references/ui-readiness-checks.md',
     'references/framework-evidence.md', 'references/framework-trials.md',
     'references/manual-accessibility-checklist.md',
     'references/evaluations/2026-10-24-framework/README.md',

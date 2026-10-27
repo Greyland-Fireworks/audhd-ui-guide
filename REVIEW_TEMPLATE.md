@@ -40,6 +40,10 @@ For `audhd quick review`, normally surface up to five highest-impact findings an
 
 Use Pass, Fail, Pending or Not applicable with a reason. Do not mark an unperformed check passed.
 
+Select applicable [component roles](references/component-review-matrix.md) and [detailed checks](references/ui-readiness-checks.md); combine roles such as button + save + pending operation. Record selected checks below or in an existing task record, not a duplicate checklist. Name the control, state/transition and relevant rule with the evidence.
+
+Split mixed results: a label may pass while persistence remains Pending. Include meaningful differences between shared-component instances and verify the intended task outcome. The [worked example](references/component-review-matrix.md#worked-review-example) demonstrates a single record with mixed results.
+
 | Action | Expected result | Observed result | Status and evidence |
 |---|---|---|---|
 | Enter and identify current context | | | |

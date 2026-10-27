@@ -12,6 +12,8 @@ For material exclusions, identify the affected task and a concrete reason ground
 
 Make material coverage limits visible before users depend on unsupported workflows. Explain externally managed settings, intentional exclusions and incomplete support separately, with the applicable reason and an established next step where available. Documentation completeness and a successful sample operation do not establish functional completeness.
 
+For each requested task, trace discovery of the current object or state, the intended action, its effect and recovery. Where management is in scope, implement the needed inspection and management operations through supported application interfaces; a database-path field, raw declaration editor or instruction to use a CLI does not complete the web workflow. Avoid requiring users to manufacture machine-formatted values when a supported task-level operation can produce them. If a dependency prevents that workflow, name it as unfinished support rather than treating disclosure of the gap as completion. This does not expand the task into unrelated administration.
+
 ## Discover configuration sources automatically
 
 Discover all configuration sources for the target application within the authorized repository and available runtime context; do not require a configuration-file path from the user. Treat a supplied file as a discovery seed unless the user explicitly limits the scope to it. Follow application entry points, startup commands, configuration loaders, include/import chains, environment selection and deployment definitions. Search supported formats and code-defined defaults rather than assuming configuration is JSON or that every matching file is loaded.
@@ -65,6 +67,8 @@ Provide the explanation each setting needs, using concise adjacent wording when 
 Separate [capability states and next actions](../../references/interface-patterns.md#capability-states-and-next-actions) in the existing coverage evidence and interface where relevant. A missing service, an environment restriction, an implementation gap and pending verification are not interchangeable exclusion reasons. Missing credentials may prevent verification while still allowing configuration. Put each dependency's consequence beside every affected task; do not rely on a warning under an unrelated setting.
 
 For record administration, connect selection, inspection and actions to the same record and preserve useful return context. The [administration example](../../examples/administration/README.md) demonstrates this alongside field-linked errors and non-mutating verification retries. Its simulation is not permission to add unrelated management features or bypass supported administration interfaces.
+
+Apply [recovery](../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable) and [result ownership](../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status) across route changes: retain a successful mutation receipt even when its follow-up check times out, and expose a distinct safe verification retry when supported. Exercise completion while the user is on another page, then compare the overview and detail result for the same object/version. Missing rendered elements must not turn successful work into a reported failure.
 
 ## Connect references to controls
 
