@@ -6,7 +6,7 @@ Make tasks easier to understand, resume, inspect and correct. Accessible behavio
 
 ## Find what you need
 
-[UI and UX definitions](#ui-and-ux-in-this-project) · [Quick review](#quick-review) · [UX and interaction rules](#ux-and-interaction-rules) · [Tabs and accordion sections](#tabs-sub-tabs-and-accordion-sections) · [Dashboard organization](#dashboard-organization-and-hierarchy) · [Help-writing guidance](#write-help-for-someone-returning-without-context) · [UI visual standard](#visual-standard) · [Adaptable appearance](#adaptable-appearance)
+[UI and UX definitions](#ui-and-ux-in-this-project) · [Quick review](#quick-review) · [UX and interaction rules](#ux-and-interaction-rules) · [Tabs and accordion sections](references/interface-patterns.md#tabs-sub-tabs-and-accordion-sections) · [Dashboard organization](#dashboard-organization-and-hierarchy) · [Help-writing guidance](#write-help-for-someone-returning-without-context) · [UI visual standard](#visual-standard) · [Adaptable appearance](#adaptable-appearance)
 
 | I need to… | Start here |
 |---|---|
@@ -15,8 +15,8 @@ Make tasks easier to understand, resume, inspect and correct. Accessible behavio
 | Distinguish UI from UX and their evidence | [UI and UX definitions](#ui-and-ux-in-this-project) |
 | Find a rule by ID | [Rule index](#ux-and-interaction-rules) |
 | Organize metrics, alerts, tasks and navigation | [Dashboard guidance](#dashboard-organization-and-hierarchy) |
-| Choose tabs, sub-tabs or expandable groups | [Tabs and accordion sections](#tabs-sub-tabs-and-accordion-sections) |
-| Protect consequential settings without obstructing inspection | [Unlock to edit](#unlock-to-edit-interaction-pattern) |
+| Choose tabs, sub-tabs or expandable groups | [Tabs and accordion sections](references/interface-patterns.md#tabs-sub-tabs-and-accordion-sections) |
+| Protect consequential settings without obstructing inspection | [Unlock to edit](references/interface-patterns.md#unlock-to-edit-interaction-pattern) |
 | Apply consistent controls, layout and visual states | [UI visual standard](#visual-standard) |
 | Tailor display or interaction preferences | [Optional preference intake and storage](PREFERENCES.md) |
 | Record findings or see concrete applications | [Review template](REVIEW_TEMPLATE.md) and [worked examples](EXAMPLES.md) |
@@ -144,6 +144,8 @@ Make each destination answer “Where am I and what am I doing here?” on entry
 
 Prefer names such as “Server overview,” “Delivery settings” or “Users & permissions”; keep instance names and deployment details as supporting context. “Local server” alone identifies a subject but leaves the view's purpose unclear.
 
+Update the location cue when the task or child destination changes. An environment label such as “Test workspace” identifies scope, not the current page. Headings, selected navigation and any breadcrumbs must agree on the actual destination, including after search, direct links and Back/Forward. A child task may share its parent's heading if a clear child title and selected state identify the current work; extra breadcrumbs or repeated titles are not required.
+
 Labels should make subject and purpose clear in context; each label need not repeat both. A destination names a view or task, a button names an action, and a field names the value being entered. “Username” within a user editor or “Permissions” under Users can be sufficient. Preserve clear accessible names and associations when using shared context. Add words when they resolve ambiguity; do not mechanically repeat the page title or add an introduction to every control.
 
 **Why:** Visible purpose and scope reduce the effort of reconstructing the task. Users should not have to remember which distant selector controls the current form.
@@ -158,11 +160,13 @@ Labels should make subject and purpose clear in context; each label need not rep
 
 Make task-relevant relationships visible: which controls affect which content, which values describe the same item, and which concepts are parents, peers, inputs, outputs or comparisons. Use meaningful grouping, proximity, alignment, shared scope labels or labeled connections as appropriate. Individually labeled cards are insufficient when their relationship remains unclear. Preserve relationships at narrow widths and with enlarged text, with corresponding semantic structure. Color may reinforce relationships but must not carry them alone.
 
+Validate group membership against each control's purpose, dependencies and actual effect. Similar key names, shared prefixes and source-file proximity are discovery clues, not proof that settings belong to the same task. Give each editable setting a clear owning task; link from other relevant tasks without creating competing copies of its state. Inspect ambiguous names and cross-system dependencies explicitly.
+
 **Peer settings:** Give settings at the same conceptual level consistent heading prominence and group treatment. Choose each control for its task; using a dropdown instead of cards must not accidentally make a peer setting look less important.
 
 **Independent option groups:** When several option groups appear together, make it clear which options belong together, what each group changes and which choice is active in each group. Use clear group labels and stronger separation between groups than between options within a group. Preserve that distinction across themes, compact layouts and enlarged text, with corresponding semantic grouping. Borders, cards and dividers are optional techniques, not required layouts.
 
-**Selection visibility:** In a collection of choices, make the current selection easy to locate among its peers. Use a prominent contrasting surface or status band together with explicit state wording and a structural cue such as a heavier border. A subtle outline-color change or small checkmark alone is insufficient. Keep keyboard focus visibly distinct from selection, expose the selected state programmatically and verify it in light/dark themes, forced colors and narrow layouts. When a card is the selection control, its state label must participate in the same clickable target; do not add a nested button or extra keyboard stop. Use “Active” only when the choice is currently applied; pending choices need wording that distinguishes selection from application.
+**Selection visibility:** Make the current selection easy to locate among its peers, using a persistent non-color cue such as text, a native checked mark, shape or border alongside any color treatment. Keep focus distinct, expose the actual selected state programmatically and verify recognition in supported light/dark themes, forced colors and narrow layouts. If a subtle outline or small mark is hard to locate, strengthen it; custom visual cards may benefit from a contrasting surface or status band, state wording and a structural cue together. Those are conditional techniques, not mandatory decoration for clear native controls. When a card is the selection control, any state label belongs to the same clickable target, without a nested button or extra keyboard stop. “Active” means currently applied; pending choices need wording that distinguishes selection from application.
 
 **Why:** Repetition can increase reading effort without improving orientation.
 
@@ -193,6 +197,8 @@ Map/date choices, thumbnail previews, pinned comparisons, recently watched lists
 ### AUDHD-04 Explain effective behavior
 
 **Requirement:** Name actions by their effect. Distinguish stored preferences, defaults, eligibility and effective behavior. Explain overrides near affected controls. Display accurate totals and units. If probabilities or weights appear, explain what they actually mean.
+
+Separate recognition from applicability: a value accepted by a parser or listed in runtime help may have no effect on the current platform or deployment. Explain established limits before editing. Distinguish unsupported behavior from a missing prerequisite or an unverified effect; an accepted default alone must not be labeled “Running” or “Active.” If preparing configuration for another environment is in scope, identify that target and its deferred validation rather than implying a local effect.
 
 Label disclosure actions by what clicking does, such as “Show appearance choices” and “Hide appearance choices”; show the current value separately. Distinguish revealing choices from applying them, and state when selection takes effect.
 
@@ -264,13 +270,15 @@ Preserve useful comparison arrangements, such as an image grid, inspection canva
 
 ### AUDHD-09 Put essential explanations beside the decision
 
-**Requirement:** Treat detailed, plain-English contextual help as an essential aid to understanding and remembering the interface. Provide tooltips or adjacent, explicitly opened help for unfamiliar controls, settings, statuses and workflows. Explain what the feature does, why someone would use it and what will happen when they act. Do not merely repeat the label or describe the backend implementation.
+**Requirement:** Provide plain-English contextual explanations sufficient to understand and remember unfamiliar controls, settings, statuses and workflows: what they do, why someone would use them and what happens when they act. Use visible adjacent wording when sufficient, with accessible expanded help for further detail and tooltips for brief supplementary refreshers. The explanation is required; a separate help control is not. Do not merely repeat the label or describe the backend implementation.
 
 Deliver complete contextual help within the affected scope. Placeholder text, “coming soon,” generic instructions, repeated labels and backend identifiers alone do not satisfy this requirement. Explain actual meaning, relevant scope and effects supported by established behavior. If behavior cannot be established, identify the specific uncertainty in the implementation report and label relevant uncertainty honestly in the interface; do not invent an explanation or present unfinished help as complete.
 
 For unfamiliar settings, help the user make a choice: explain the concept in ordinary language, the problem it solves, when someone would need it or can leave it unchanged, and how the available choices affect the outcome. Define necessary acronyms, product names and specialist terms on first use; replacing one unfamiliar term with another is not an explanation. Give relevant tradeoffs, units and prerequisites, including whether a separate service or setup is required and what enabling the setting does not accomplish by itself. Distinguish the application's default from a recommendation; justify recommendations using established behavior and the user's task rather than prescribing a universal preset.
 
 Lead with the user-facing purpose and decision guidance. Keep exact keys, source locations and implementation references available as supporting detail; they cannot substitute for explaining meaning or choosing a value. Use concise adjacent wording for the essential decision and accessible expanded help for deeper explanation. Scale the detail to the uncertainty: familiar, self-explanatory choices do not need repetitive tutorials. A user should be able to explain what an unfamiliar setting does, whether it is relevant and why they would select a value using the interface and its help, without prior implementation knowledge or external research for the basic decision.
+
+Apply the same standard to less-common and generated fields as to prominent, hand-written controls. Shared section help can explain common prerequisites or tradeoffs when its scope is clear and it remains available on direct entry to the field; explain exceptions beside the affected control. Inspect fallback descriptions as well as authored overrides. Rewording a key, expanding an acronym or copying a usage string is sufficient only if the resulting explanation actually supports the decision. Do not repeat a full tutorial beside every field or invent missing behavior to fill the gap.
 
 Keep scope, save requirements, blocking errors and consequential effects visible without opening help. Tooltips supplement clear labels and visible context; they must not be the only way to discover a critical consequence. Use an expandable explanation or help popover for content too long to read comfortably in a tooltip, or content containing links and other interactions.
 
@@ -375,61 +383,17 @@ If re-locking promises to save, confirm persistence through an appropriate ackno
 
 **Check:** Copy a locked value, unlock one field, edit, change sections, restore, save and reload. Test failure and keyboard access. Verify that safeguards do not prevent emergency correction or create repetitive friction without benefit.
 
-For the detailed transitions, reference values and product decisions, use the [unlock-to-edit pattern](#unlock-to-edit-interaction-pattern). Try the [standalone demonstrator](examples/unlock-to-edit/README.md) to exercise one explicitly scoped implementation and its failure paths.
+For the detailed transitions, reference values and product decisions, use the [unlock-to-edit pattern](references/interface-patterns.md#unlock-to-edit-interaction-pattern). Try the [standalone demonstrator](examples/unlock-to-edit/README.md) to exercise one explicitly scoped implementation and its failure paths.
 
 ## Unlock to edit interaction pattern
 
-Use this pattern when AUDHD-13's deliberate transition from inspection to modification is justified by the consequences of accidental edits. Keep the name, current value, units, protection reason, editing action and recovery feedback together in a stable layout. A card is optional. Ordinary fields can remain directly editable. Unlocking does not grant permission, override a dependency, bypass validation or establish control over a running process.
+Read the [conditional pattern and checks](references/interface-patterns.md#unlock-to-edit-interaction-pattern) when this interaction is part of the task. The pattern does not require adding the component.
 
-### Keep independent states visible
-
-| Property | Question it answers | Example labels |
-|---|---|---|
-| Editing availability | Can I directly change this field? | Locked / Editing enabled |
-| Comparison | Does this value differ from the named reference? | Matches baseline / Changed / Baseline unavailable |
-| Persistence | What version was saved, and where? | Unsaved / Saving / Saved on this device / Save failed |
-| Applicability | Does this setting currently take effect? | Inactive under the selected configuration; value retained |
-
-Show the states that apply to the actual workflow. “Matches baseline” establishes neither validity nor saving; “Editing enabled” need not mean the value has changed. Give editing, comparison and keyboard focus distinct cues, with readable text rather than color or padlock icons alone. Keep a dependent setting's explanation and retained value available even when direct editing is unavailable.
-
-### Make transitions local and predictable
-
-| Action or situation | Expected interaction when using this pattern |
-|---|---|
-| Inspect a locked field | Show its current value and units. Allow text selection and copying where appropriate; keep selected choices recognizable. |
-| Choose **Unlock to edit** | Enable only the named field or explicitly named group without changing its value. If session restoration is offered, capture the value at this point. |
-| Edit or switch sections | Follow the stated saving contract. Preserve the draft, editing state, focus and useful position across ordinary panel navigation; navigation alone does not finish or cancel editing. |
-| Choose **Restore value from before editing** | Restore only the named field's captured value and leave editing enabled. Apply the same saving contract as other edits. |
-| Choose **Lock editing** | Prevent further direct editing without silently discarding changes. If this action also promises saving, complete the required save acknowledgement or verification before closing editing. |
-| A promised save fails | Preserve the draft and keep editing open, with a persistent explanation and a working retry or recovery action. |
-| Unlock again | Capture a fresh restoration point for the new editing session, if supported. |
-
-Independent fields may remain open together. Unlocking one must not silently close or unlock its neighbors. An unlocked-field count can help in a large workspace, but is optional. The explicit local unlock action ordinarily needs no second confirmation dialog.
-
-### Name reference values and recovery precisely
-
-Distinguish the current draft, the value captured before unlocking, the selected comparison baseline, a default and the last saved value. If the product also has an applied or historical configuration, identify it separately and establish when draft changes reach it. Do not assume an existing process or record changes with the draft, or that its configuration is frozen, without evidence.
-
-For example, a retry limit starts at `3` when unlocked. Editing it to `5` may successfully autosave; **Restore value from before editing** still returns it to `3`. That restoration point does not move with each autosave. Offer this action while editing when the value differs from the captured value; describe it as one restoration point, not a revision history. Label whole-form undo and restoring defaults separately, with their actual scope.
-
-**Copy default value to clipboard**, when offered, copies the stated default without changing the draft or comparison baseline and can work while editing is locked. Confirm successful copying; if clipboard access fails, keep the reference selectable and explain manual copying. Any focus movement should follow the user's copy request and help complete it.
-
-### Establish saving and lifetime behavior
-
-Use [AUDHD-06](#audhd-06-make-saving-and-recovery-understandable) to establish the saving contract before implementing the pattern. Resolve these decisions from the product or mark them proposed or unknown:
-
-- **Save trigger and scope:** Does saving occur while typing, on committed changes, on re-locking or through a separate action? Does it persist one field or the whole form? A local lock action must not imply that other fields were also locked.
-- **Destination and evidence:** Is this a local draft, shared record or explicit export? Confirm only the version and destination actually acknowledged or verified. Local write/readback verification does not establish durable backup, domain validity or conflict handling across sessions.
-- **Reload and session boundaries:** Which values survive, do fields reopen locked, and is the restoration point temporary? A common choice is to restore saved values with editing locked and discard temporary restoration points; document the chosen behavior rather than implying persisted undo.
-- **Intentional replacement:** Can importing, loading a preset or whole-form undo replace locked values? Explain the replacement's scope and what happens to open edits and restoration points. Re-locking affected fields after an intentional replacement is one option; locks protect direct editing, not every authorized replacement operation.
-
-Keep saving feedback truthful to the operation. Do not promise every partially typed value is preserved if saving happens only after a committed change, or invent asynchronous progress for an instantaneous operation. Preserve recovery information after its initial announcement.
-
-### Accessible operation and verification
-
-Include the field's name in each action's accessible name. Use native read-only text controls where suitable to preserve inspection and copying. If a choice control must be disabled, keep its value and reason readable nearby rather than relying on keyboard focus reaching it. Follow the shared [control requirements](#audhd-11-keep-controls-readable-and-operable) and [target, motion and feedback guidance](#targets-motion-and-feedback); keep focus cues independent and announce meaningful action results without rearranging the interface.
-
-Exercise inspect/copy → unlock → edit → navigate away and back → restore → re-lock → reload against the chosen contract. Where supported, also test independent open fields, inactive dependencies, intentional bulk replacement, save failure or conflicting responses, clipboard failure, keyboard operation, narrow layouts, enlarged text and accessibility overrides. Check that a restoration point survives intermediate saves and that failure does not falsely close a save-dependent editing session. Record observed results separately from planned checks and user feedback; another product's tests do not verify this implementation. Assess whether the safeguard's added steps are justified for the people and task involved.
+<span id="keep-independent-states-visible"></span>
+<span id="make-transitions-local-and-predictable"></span>
+<span id="name-reference-values-and-recovery-precisely"></span>
+<span id="establish-saving-and-lifetime-behavior"></span>
+<span id="accessible-operation-and-verification"></span>
 
 ## Dashboard organization and hierarchy
 
@@ -467,7 +431,7 @@ Generated labels, CLI usage strings and copied reference passages are source mat
 
 For configuration, administration and monitoring interfaces, prioritize actual blockers, failures and unfinished work, followed by common operational state. Derive summaries from the same records as the controls. Distinguish draft, saved, effective and verified state; include scope and freshness where relevant. Never invent metrics, alerts or verification claims. Focused editors and previews need no artificial overview.
 
-Link actionable status directly to its task or control with condition-specific actions such as “Review changes,” “Verify permissions” and “Configure email.” Reveal and focus the affected content while preserving drafts, filters and useful return state. Prefer compact lists or grouped rows over promotional cards; retain readable text and accessible targets. Keep the complete destination index secondary. Verify empty, error, pending and successful states, including a newer saved or applied version that has not yet been verified.
+Link actionable status directly to its task or control with condition-specific actions such as “Review changes,” “Verify permissions” and “Configure email.” This includes ordinary state users may need to change, such as retention or access policy, not only errors. A nearby link to a broad category is insufficient when the user must then find the affected setting again. Reveal and focus the relevant control or task section while preserving drafts, filters and useful return state; identify unavailable actions and their reason. Informational values need no artificial action. Prefer compact lists or grouped rows over promotional cards; retain readable text and accessible targets. Keep the complete destination index secondary. Verify empty, error, pending and successful states, including a newer saved or applied version that has not yet been verified. Trace claims such as “Configured” to their actual criteria; the presence of a category or default value is not evidence of readiness.
 
 Use a compact literal heading followed by the relevant status rows and actions. Remove decorative hero artwork, repeated introductions and oversized empty-state cards when they push operational work out of the initial view. Keep save/apply bars scoped to the work they affect: an immediate appearance choice must not appear to require saving or restarting an unrelated service. In an idle overview, show truthful ordinary state and useful entry actions rather than filling space with encouragement. Judge desktop, short-height and narrow layouts separately; compactness must preserve readable text and usable targets.
 
@@ -478,6 +442,8 @@ Check the initial desktop and narrow-screen view against the user's task: can so
 ### Keep navigation levels distinct
 
 For complex interfaces, primary destinations represent task domains and secondary destinations represent named tasks within them. Put common tasks, relevant status and setup dependencies first; keep expert detail deeper within its owning task. Do not substitute source-key groupings or a generic “More settings” collection for meaningful secondary navigation. Simple interfaces need no artificial nesting. Preserve the current parent and child, addressable destinations where appropriate, Back/Forward behavior and useful return state.
+
+Make peer tasks discoverable before a long detail panel pushes them out of view. Expanding the first section by default must not make finding another ordinary task depend on collapsing unrelated content or already knowing a search term. Choose an appropriate task selector, compact section index or disclosure arrangement; do not add duplicate navigation when the existing hierarchy suffices. Check both reaching a destination and recognizing why its controls belong there.
 
 **Appearance destination:** Place appearance settings at the bottom or end of each main navigation menu, after task destinations. Keep the destination clearly labeled and directly reachable in desktop, collapsed and mobile menus. Match visual and keyboard order; do not bury it in an unrelated task, a vague “More” collection or the footer of a long content page. Opening appearance settings, changing a choice and returning must preserve drafts, pending work, filters, navigation and usable focus. A focused tool without main navigation does not need a new menu, and local task tabs do not need duplicate appearance destinations.
 
@@ -490,11 +456,11 @@ Show pending changes and errors at the relevant navigation level, including coll
 - Keep navigation separate from actions and filters. “Reports” opens a destination; “Generate report” starts work; “Last 7 days” changes the displayed period. Their effects should be apparent before activation.
 - Changing a local tab or expanding details must not silently switch workspace, reset unrelated filters or discard edits. Preserve context within privacy boundaries, and explain unavailable destinations rather than silently selecting another.
 
-For pattern choice, context retention, hidden errors and accessible operation, use the dedicated [tabs, sub-tabs and accordion guidance](#tabs-sub-tabs-and-accordion-sections).
+For pattern choice, context retention, hidden errors and accessible operation, use the dedicated [tabs, sub-tabs and accordion guidance](references/interface-patterns.md#tabs-sub-tabs-and-accordion-sections).
 
 ### Authoritative navigation and repeated orientation
 
-For a multi-page workspace, derive page labels, destinations and canonical ancestry from authoritative page records. A browsable index puts summaries up front and detailed material on destination pages. Keep top and bottom breadcrumb copies accurate and consistent on destination pages, with named navigation landmarks and a bypass for repeated navigation. Do not invent parents from browser history or treat a local tab as a parent page.
+For a multi-page workspace, derive page labels, destinations and canonical ancestry from authoritative page records. A browsable index can put summaries up front and detail on destination pages. Where breadcrumbs help orientation, show actual ancestry; where repeated copies are useful and provided, keep their labels and destinations consistent, with named landmarks and a bypass for repeated navigation. Neither a second breadcrumb nor an index is mandatory. Do not invent parents from browser history or treat a local tab as a parent page.
 
 Workspace links select destinations; local tabs select views of the same object. Keep their scope apparent without repeating two full navigation bars: the reference uses a compact footer disclosure alongside the bottom breadcrumb. Preserve ordinary link behavior, stable IDs, Back/Forward, direct links and truthful unavailable-page handling. Permissioned products must derive navigation from authorized destinations.
 
@@ -512,42 +478,11 @@ Offer density choices where useful, without hiding ordinary expert work as “ad
 
 ## Tabs, sub-tabs and accordion sections
 
-Apply AUDHD-01, 02, 03, 05, 06, 09, 10 and 11 to consolidate related information, tools and settings into digestible chunks. **UI** concerns include labels, hierarchy, control semantics and focus. **UX** concerns include finding the right chunk, retaining context and completing work without hidden blockers. These patterns are optional techniques, not a requirement to subdivide every page.
+Read the [conditional pattern and checks](references/interface-patterns.md#tabs-sub-tabs-and-accordion-sections) when this interaction is part of the task. The pattern does not require adding the component.
 
-[Choose a pattern](#choose-a-pattern-by-task) · [Context and hidden errors](#preserve-context-and-surface-hidden-problems) · [Accessible operation](#operate-accessibly-across-layouts)
-
-### Choose a pattern by task
-
-| Pattern | Use when | Avoid when |
-|---|---|---|
-| Tabs | Peer sections within one context can be used one at a time, such as a project's Overview, Tools and Settings | Users must compare their contents simultaneously, or tabs would conceal a required step or important consequence |
-| Sub-tabs | A parent section has meaningful peer subdivisions, such as Settings containing Delivery and Access | The parent relationship is unclear, the same hierarchy can be expressed with headings, or repeated nesting forces users to reconstruct their location |
-| Accordion sections | Related groups should expand in place, such as optional notification or retry settings, while their headings remain discoverable | Essential context would disappear or repeated opening and closing would obstruct ordinary work |
-| Plain sections or a comparison layout | Related information must remain visible together or the content is already manageable | Added structure would only repeat labels without helping the task |
-
-Use navigation links for destinations that behave as separate pages; a tab-like appearance alone does not make them a tab widget. Tabs switch panels, while accordion controls expand sections in place. Keep labels specific to the contents, distinguish parent and child navigation visually and semantically, and keep the selected parent visible above its sub-tabs. Add depth only when the task benefits; do not impose a universal maximum tab count or a fixed nesting depth.
-
-Allow multiple accordion sections open when users need to compare or combine their contents. A single-open arrangement is appropriate only when it supports the task; opening one section must not discard work in another. Keep ordinary choices discoverable rather than labeling them “advanced” merely to hide them. For search within these groups, follow AUDHD-03's stated-scope and hidden-selection requirements.
-
-### Preserve context and surface hidden problems
-
-Switching tabs or collapsing a section changes the view, not the meaning, approval or saved state of its contents. Preserve drafts, selections, relevant filters and useful position within privacy and retention boundaries. Where helpful, remember the selected child for each parent. Bind retained state to the correct object or workspace; do not carry one record's draft into another. Explain any required save, discard or session-expiry boundary before work is lost.
-
-Keep object identity, overall save scope and consequential actions outside hidden panels when they apply across the workspace. Distinguish “Save delivery settings” from “Save all settings”; explain whether hidden changes are included. Use visible unsaved or error summaries on the relevant tab or accordion header when needed, with text rather than color alone. Do not imply that a collapsed group is valid or saved just because its fields are out of view.
-
-If validation or a save fails in a hidden panel, show a persistent, accessible summary in the current context that identifies the group and provides a route to the affected field. Reveal every containing tab and accordion section before focusing that field; associate the error with it. If the field is unavailable or access has changed, explain the obstacle and provide an appropriate fallback. Never leave a disabled Save button with its only explanation hidden. Preserve all other entries and the user's context as far as the task permits; a background error must not unexpectedly switch panels or steal focus. A deliberate “Go to error” action may reveal the target and move focus.
-
-### Operate accessibly across layouts
-
-Do not require horizontal scrolling to discover primary destinations. At narrow widths and enlarged text, use an accessible complete section menu, drawer or vertical hierarchy suited to the host, while keeping the current location visible. Prioritize the selected task: repeated promotional copy, unrelated summaries and inactive action areas must not crowd out navigation and work. Verify access to every destination and its return path, not merely absence of page overflow; preserve drafts, focus and parent/child context through responsive changes.
-
-For web tab widgets, follow the [W3C APG tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/): provide a named tab list, associated tabs and panels, and accurate selected state. Tab enters the active tab and then proceeds into the panel or onward; arrow keys move among tabs according to orientation. For manual activation, Enter or Space opens the focused tab. Automatic activation is suitable only when panels appear without noticeable delay. Keep nested tab lists independently named and their key handling local to the active list.
-
-For custom web accordions, follow the [W3C APG accordion pattern](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/): use heading buttons with accurate expanded state and panel relationships. Enter or Space toggles the section; normal Tab navigation reaches visible controls. Native disclosure controls may be suitable when their semantics fit the task. Use platform equivalents in native applications. These are implementation references, not proof of accessibility conformance.
-
-Keep hidden panel controls out of keyboard navigation and the accessibility tree while hidden, without erasing their data. Preserve a visible focus cue independent of selection or expansion. If a panel containing focus closes, move focus to its controlling tab or disclosure button before focus is lost. At narrow widths and enlarged text, keep every tab reachable with readable labels; avoid clipped options or ambiguous multi-row hierarchy. If tabs become accordions responsively, preserve content, drafts and a meaningful location, update semantics to match the new controls, and avoid duplicate accessible copies.
-
-**UI checks:** Operate parent tabs, sub-tabs and accordion controls with keyboard and supported touch input. Inspect names, relationships, selected/expanded states, hidden content, focus and narrow/enlarged layouts. **UX checks:** Find a setting without remembered context, edit across groups, switch parents and return, compare open sections, and trigger a validation failure inside nested hidden content. Check save scope, draft retention and the route from error summary to field. Record actual evidence and pending coverage. See the [worked example](EXAMPLES.md#settings-workspace-tabs-and-accordion-sections).
+<span id="choose-a-pattern-by-task"></span>
+<span id="preserve-context-and-surface-hidden-problems"></span>
+<span id="operate-accessibly-across-layouts"></span>
 
 ## Visual standard
 

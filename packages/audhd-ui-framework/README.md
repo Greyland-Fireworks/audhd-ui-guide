@@ -100,7 +100,7 @@ import 'audhd-ui-framework/skins.css';
 ```
 
 ```html
-<section data-audhd-ui class="ui-skin" data-skin="paperwhite" data-type="system">
+<section data-audhd-ui class="ui-skin" data-skin="guillermo" data-type="expressive">
   <p>Application-owned content</p>
   <button class="ui-action">Application-owned action</button>
 </section>
@@ -108,7 +108,7 @@ import 'audhd-ui-framework/skins.css';
 
 Use the marker, skin and typography attributes on the same root. The optional `ui-skin` class on that root supplies visible keyboard-focus outlines to descendants. The `--ui-*` CSS custom properties inherit within that region; typography supports system, expressive, serif and mono. Layout remains application-owned. Unmarked sibling regions are unaffected. Nesting an unmarked element inside a marked root still inherits its appearance; this is ordinary CSS inheritance, not an isolation boundary. Forced colors remain effective. No external font download or animation is introduced.
 
-For a theme-matching application default, set `data-type="expressive"`: the current skins use their heading font with system body text. Put that choice first in a typography picker, with a clearly labeled System alternative. Preserve explicitly requested `system`, `serif` or `mono` values when changing skins. The package does not choose an application default or replace null profile fields with `expressive`; the application makes that decision when applying an unspecified request.
+The example follows the Guide's new-interface default: Guillermo with skin-matching headings and system body text. For an explicit System text choice use `data-type="system"`. System appearance maps light mode to Paperwhite and dark mode to Guillermo unless product requirements specify otherwise. Put the theme-matching choice first in a typography picker and preserve explicitly requested `system`, `serif` or `mono` values when changing skins. CSS itself does not select an application default or replace null profile fields; the application resolves preferences under the [appearance policy](../../GUIDE.md#adaptable-appearance).
 
 Apply attributes without replacing the application tree. Preserve drafts, pending work, selection and focus. Applications must independently verify keyboard operation, accessible names, actual contrast, zoom and assistive-technology behavior. These assets do not certify accessibility or suitability for any person.
 

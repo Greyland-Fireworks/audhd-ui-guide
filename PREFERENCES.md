@@ -8,7 +8,7 @@ Use alongside the [guide](GUIDE.md). These are configurable needs to ask about, 
 |---|---|
 | Offer a brief intake or let someone skip questions | [Ask briefly and progressively](#ask-briefly-and-progressively) |
 | Explore possible display and interaction adjustments | [Customizations to prepare](#customizations-to-prepare) |
-| Set rule emphasis and primary targets | [Configure rule emphasis](#configure-rule-emphasis) |
+| Set rule emphasis and primary targets, including in an optional file | [Configure rule emphasis](#configure-rule-emphasis) and [Guide configuration file](#optional-guide-configuration-file) |
 | Save or update agreed choices privately | [Save an optional JSON profile](#save-an-optional-json-profile) |
 | Check version-2 fields and version-1 compatibility | [Format and precedence](#format-and-precedence) |
 | Resolve null, false, temporary choices, inheritance or resets | [Precedence and accessibility constraints](#precedence-and-accessibility-constraints) and [updates and clearing](#updates-and-clearing) |
@@ -60,6 +60,40 @@ Use the Guide's [five emphasis levels and primary targets](GUIDE.md#rule-emphasi
 Current explicit task configuration overrides previously agreed project configuration, then user-wide configuration. Resolve emphasis per rule, preserving unspecified inherited values; otherwise default to Apply. A supplied primary-target list replaces the inherited list; an explicitly empty list clears inherited targets for that scope. Silence preserves inherited configuration. Changes are temporary unless the user asks to remember them in an agreed location; do not infer configuration from diagnosis or this document's examples. These instructions remain subject to the Guide's priority hierarchy and existing privacy/storage boundaries.
 
 Rule emphasis and primary targets are not fields in either profile version. Do not insert them into a profile, relax unknown-key rejection or silently migrate stored profiles. Until a versioned format supports them, use explicit task instructions or separately agreed prose configuration; do not create another preference file automatically. Configured emphasis does not prove that an application implements any preference.
+
+### Optional Guide configuration file
+
+When someone wants reusable priorities, a user-selected Markdown file can hold the prose configuration above. For example, they could name it `audhd-guide.local.md` and explicitly request: “Use the audhd-ui-guide skill with the Guide priorities in this file.” This is an agent-readable configuration, not an application preference import or executable policy. The filename is illustrative, not an automatic discovery convention; read only an explicitly identified or previously agreed location. No new schema or framework installation is needed.
+
+This fictional example emphasizes orientation and decision help; it is not a personal profile or a recommendation for everyone:
+
+```markdown
+# Guide priorities
+
+Scope: this project.
+
+Primary targets:
+- Make the current task and location recognizable on entry and return.
+- Explain unfamiliar settings well enough to choose, including prerequisites.
+- Group controls by their purpose and make peer tasks easy to find.
+- Connect actionable status to the relevant control and explain platform limits.
+
+Rule emphasis:
+- AUDHD-01: Require — scope and location
+- AUDHD-09: Require — practical explanations beside decisions
+- AUDHD-02: Prioritize — meaningful hierarchy and relationships
+- AUDHD-03: Prioritize — manageable detail without hidden choices
+- AUDHD-04: Prioritize — effective behavior and applicability
+- AUDHD-07: Prioritize — truthful, current status
+
+Other rules inherit agreed emphasis; otherwise Apply.
+```
+
+Use the [rule index](GUIDE.md#ux-and-interaction-rules) to choose IDs and the [emphasis table](GUIDE.md#rule-emphasis-and-primary-targets) to choose levels. Primary targets express needs in ordinary language; they do not demand a component or extra prose. For example, prioritizing orientation may mean correcting a title and selected state rather than adding another context panel. No setting lowers accessibility, truthful-state, recovery or required-coverage obligations. Require changes completion scrutiny; it cannot turn missing evidence into a pass.
+
+The current task still takes precedence, followed by agreed project and user-wide configuration as described above. Record the source and effective emphasis briefly in the existing plan or review when material. Explain unknown IDs, ambiguous levels or conflicts instead of silently ignoring them; continue unaffected work. Readability by an agent is not automated schema validation or evidence that the priorities improved an interface.
+
+Create or update a real file only when asked to remember choices, with its scope and location agreed. Keep private configurations outside published material or explicitly excluded from version control and packaging; a `.local.md` name alone provides no protection. Do not include diagnoses, credentials or personal history. Do not silently copy a person's configuration into an installed skill or treat it as authorization for additional work. Appearance and interaction choices still use the separate JSON profile below where supported.
 
 ## Save an optional JSON profile
 

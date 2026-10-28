@@ -49,6 +49,15 @@ Start with one task; you do not need to redesign everything. For a manual review
 
 Reading the Guide and using the Skill require no npm installation. [Run the examples](#run-the-reference-examples) only if you want to explore the demonstrations.
 
+### Package contents
+
+The plugin built by `python scripts/package-plugin.py` contains:
+
+- **Included:** Guide, review checks, preferences, all 24 skins, runnable examples and tests, current gallery captures and the existing 256-pixel icon.
+- **Repository only:** Evaluation inputs, rubrics, archived responses, historical captures and the large branding image. No source files or images are deleted or altered by packaging.
+
+Included resources retain their relative links. References to omitted material lead to its source-checkout path in the packaged README; they do not download it or imply online availability. Use the matching source checkout for that material and distribution-maintenance checks.
+
 <details>
 <summary>Installation details: empty folders, Windows, WSL and verification limits</summary>
 

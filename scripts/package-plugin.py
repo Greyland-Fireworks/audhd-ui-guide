@@ -24,53 +24,65 @@ prompts = interface['defaultPrompt']
 assert len(prompts) <= 3 and len(set(prompts)) == len(prompts)
 assert all(0 < len(p) <= 128 and '\n' not in p and '@' not in p for p in prompts)
 
-# Explicit public-source allowlist: retains runnable examples and their validation
-# assets without shipping checkout metadata, local profiles or installed dependencies.
-tracked = subprocess.check_output(['git', 'ls-files', '-z'], cwd=ROOT).decode().split('\0')
+# Ship usable guidance, all runnable examples and their checks. Evaluation material,
+# historical captures and print-resolution branding remain in the repository.
+tracked = set(subprocess.check_output(['git', 'ls-files', '-z'], cwd=ROOT).decode().split('\0'))
+revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT).decode().strip()
 root_files = {
     'SKILL.md', 'GUIDE.md', 'PREFERENCES.md', 'README_JSON.md', 'README.md',
-    'REVIEW_TEMPLATE.md', 'EXAMPLES.md', 'SKILL_EVALUATIONS.md',
-    'EVALUATION_INPUTS.md', 'EVALUATION_RUBRIC.md', 'CONTRIBUTING.md',
+    'REVIEW_TEMPLATE.md', 'EXAMPLES.md', 'CONTRIBUTING.md',
     'LICENSE', 'LICENSE-CODE', 'LICENSE_SCOPE.md', 'PRIVACY.md', 'preferences.example.json',
-    'audhd_uiux_icon_v2.svg', 'audhd_uiux_icon_256.png',
-    'audhd_uiux_icon_2048.png', 'agents/openai.yaml',
+    'audhd_uiux_icon_v2.svg', 'audhd_uiux_icon_256.png', 'agents/openai.yaml',
     'package.json', 'package-lock.json', 'playwright.config.js',
     'scripts/check-docs.js', 'scripts/check-framework.mjs',
-    'references/concept-adoption.md', 'references/interface-patterns.md',
-    'references/component-review-matrix.md', 'references/ui-readiness-checks.md',
-    'references/framework-evidence.md', 'references/framework-trials.md',
-    'references/manual-accessibility-checklist.md',
-    'references/evaluations/2026-10-24-framework/README.md',
-    'references/evaluations/2026-10-24-framework/round1.zip',
-    'references/evaluations/2026-10-24-framework/round2.zip',
-    'examples/recording-review/shared/visual-choices.js', 'examples/recording-review/shared/visual-choices.css',
-    'examples/recording-review/react/src/VisualChoices.jsx', 'examples/recording-review/svelte/src/VisualChoices.svelte',
-    'examples/framework-consumer/index.html', 'examples/framework-consumer/main.js',
-    'tests/browser/overview.spec.js',
-    'examples/screenshots/gallery-administration-overview.png',
-    'examples/screenshots/gallery-administration-overview-narrow.png',
-    'examples/screenshots/gallery-react-overview.png',
-    'examples/screenshots/gallery-svelte-overview-narrow.png',
-    'examples/screenshots/gallery-unlock-editor.png',
-
-    'tests/framework/package.test.js', 'tests/framework/workflow.test.js',
-    *{f'packages/audhd-ui-framework/{name}' for name in [
-        'package.json', 'profile.js', 'capabilities.js', 'import-workflow.js', 'v1.schema.json', 'v2.schema.json',
-        'skins.css', 'palette-data.json', 'README.md', 'LICENSE',
-        'LICENSE-CODE', 'LICENSE_SCOPE.md']},
-    *{f'examples/administration/{name}' for name in ['index.html', 'style.css', 'app.js', 'check.mjs', 'README.md']},
-    'examples/unlock-to-edit/index.html', 'examples/unlock-to-edit/app.js',
-    'examples/unlock-to-edit/check.mjs', 'examples/unlock-to-edit/README.md',
-    'references/evaluations/2026-10-20-readiness/README.md',
-    'references/evaluations/2026-10-20-readiness/supplied-review.zip',
-    *{f'references/evaluations/2026-10-20-readiness/{case}-response.txt'
-      for case in ['E03', 'E07', 'E08', 'E26', 'E34', 'E35']},
 }
+repository_files = {
+    'SKILL_EVALUATIONS.md', 'EVALUATION_INPUTS.md', 'EVALUATION_RUBRIC.md',
+    'references/framework-trials.md', 'audhd_uiux_icon_2048.png',
+}
+current_captures = {
+    'gallery-administration-overview.png', 'gallery-administration-overview-narrow.png',
+    'gallery-react-overview.png', 'gallery-svelte-overview-narrow.png', 'gallery-unlock-editor.png',
+}
+def repository_only(name):
+    return (name in repository_files or name.startswith('references/evaluations/')
+            or (name.startswith('examples/screenshots/') and Path(name).name not in current_captures))
+
 sources = sorted(root_files | {p for p in tracked if
-                 p.startswith(('references/', 'preferences/', 'examples/', 'tests/browser/', 'tests/framework/', 'packages/audhd-ui-framework/'))})
+    p.startswith(('references/', 'preferences/', 'examples/', 'tests/browser/',
+                  'tests/framework/', 'packages/audhd-ui-framework/')) and not repository_only(p)})
+assert not any(repository_only(p) for p in sources)
+source_set = set(sources)
+linked_repository_files = {}
+
+def package_markdown(name, text):
+    # Omitted material stays addressable through a local source locator. Do not
+    # invent published URLs for commits that may exist only in this checkout.
+    def rewrite(match):
+        image, label, url = match.groups()
+        parsed = urlsplit(url)
+        if parsed.scheme or parsed.netloc or not parsed.path:
+            return match[0]
+        target = ((ROOT / name).parent / unquote(parsed.path)).resolve()
+        assert target.is_relative_to(ROOT.resolve()), (name, url)
+        relative = target.relative_to(ROOT.resolve()).as_posix()
+        if relative in source_set:
+            return match[0]
+        assert relative in tracked and repository_only(relative), (name, url)
+        assert target.is_file(), (name, url)
+        reference = relative + ('#' + parsed.fragment if parsed.fragment else '')
+        if reference not in linked_repository_files:
+            linked_repository_files[reference] = 'source-' + hashlib.sha256(reference.encode()).hexdigest()[:12]
+        anchor = linked_repository_files[reference]
+        prefix = '../' * len(Path(name).parent.parts)
+        if image:
+            label += ' (repository capture)'
+        return f'[{label}]({prefix}README.md#{anchor})'
+    return re.sub(r'(!?)\[([^\]\n]*)\]\(([^)\s]+)\)', rewrite, text)
+
 output = ROOT / 'output/openai'
 package = output / 'audhd-ui-plugin'
-assert package.resolve().is_relative_to((ROOT / 'output').resolve())
+assert package.resolve().is_relative_to(ROOT.resolve() / 'output')
 if package.exists():
     shutil.rmtree(package)
 skill = package / 'skills/audhd-ui-guide'
@@ -80,11 +92,26 @@ for name in sources:
     assert not source.is_symlink(), name
     target = skill / name
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_bytes(source.read_bytes())
+    if source.suffix == '.md':
+        # Keep rewritten Markdown UTF-8/LF rather than using platform newlines.
+        target.write_bytes(package_markdown(name, source.read_text(encoding='utf-8')).encode('utf-8'))
+    else:
+        target.write_bytes(source.read_bytes())
+# This appendix is package metadata, not another rulebook. It preserves the
+# identity of each omitted reference without embedding reviewer material.
+locator = '\n## Repository-only material\n\n'
+locator += ('Evaluation inputs, rubrics, archives and historical captures remain in the source checkout. '
+            'They are not required for ordinary interface work. These links identify source files; '
+            'the package does not download them or claim that the source revision is published.\n\n')
+locator += f'Source checkout base revision: `{revision}`. Locators identify files in that checkout, including any local changes at packaging time.\n\n'
+locator += '| Source-checkout path |\n|---|\n'
+for name, anchor in sorted(linked_repository_files.items()):
+    locator += f'| <span id="{anchor}"></span>`{name}` |\n'
+readme = skill / 'README.md'
+readme.write_bytes((readme.read_text(encoding='utf-8').rstrip() + '\n' + locator).encode('utf-8'))
 shutil.copyfile(ROOT / 'plugin/plugin.json', package / 'plugin.json')
 (package / 'assets').mkdir()
-for name in ['audhd_uiux_icon_256.png', 'audhd_uiux_icon_2048.png']:
-    shutil.copyfile(ROOT / name, package / 'assets' / name)
+shutil.copyfile(ROOT / 'audhd_uiux_icon_256.png', package / 'assets/audhd_uiux_icon_256.png')
 for name in ['LICENSE', 'LICENSE-CODE', 'LICENSE_SCOPE.md', 'PRIVACY.md']:
     shutil.copyfile(ROOT / name, package / name)
 
@@ -141,6 +168,8 @@ with zipfile.ZipFile(archive) as bundle:
     assert bundle.testzip() is None
     names = bundle.namelist()
     assert 'plugin.json' in names and names.count('skills/audhd-ui-guide/SKILL.md') == 1
+    assert not any(repository_only(n.removeprefix('skills/audhd-ui-guide/')) for n in names)
+    assert all(f'skills/audhd-ui-guide/{p}' in names for p in sources)
     normalized = [unicodedata.normalize('NFC', n).casefold() for n in names]
     assert len(set(normalized)) == len(names) <= 5000
     assert all('\\' not in n and not n.startswith('/') and '..' not in n.split('/')
@@ -148,6 +177,7 @@ with zipfile.ZipFile(archive) as bundle:
     assert sum(i.file_size for i in bundle.infolist()) <= 512 * 1024**2
 assert archive.stat().st_size <= 100 * 1024**2
 print(f'PASS: {len(files)} files; listing limits, front matter, resource links, icons, source boundary and ZIP integrity.')
+print(f'{len(linked_repository_files)} repository-only source locators for {revision}; ZIP {archive.stat().st_size:,} bytes.')
 print(f'Plugin: {package}')
 print(f'ZIP: {archive}')
 digest = hashlib.sha256(archive.read_bytes()).hexdigest()
