@@ -57,12 +57,13 @@ For navigation or layout work, trace a representative task's starting point, dec
 | Action | Expected result | Observed result | Status and evidence |
 |---|---|---|---|
 | Enter directly, follow search, use Back/Forward and return after interruption: “Where am I and what am I doing here?” | Heading, selected navigation and any breadcrumbs identify the subject and purpose and agree on the current task and scope; a static environment label does not substitute for location. | | |
-| Follow the affected task path; distinguish reachable destinations from understandable organization | Peer tasks remain discoverable before long detail panels. Controls belong to their actual purpose and dependencies, including ambiguous names. | | |
+| Browse without a query, then follow the affected task path; distinguish reachability from understandable organization | The multipage directory includes secondary tasks. Selected tasks reveal useful content; groups reflect decisions and dependencies, including coupled controls and ambiguous names. | | |
 | Inspect the first viewport and prominent regions at relevant widths, heights and enlargement; identify avoidable displacement and the value of repeated navigation | | | |
 | Identify the next useful action and its expected effect; follow actionable status where present | The action's purpose is clear. Status links reveal the relevant section/control, place focus meaningfully and retain drafts, filters and useful return state. Informational values need no invented action. | | |
-| Open contextual help and make the basic decision, including less-common and generated fields | Explain purpose, relevance, prerequisites and choice effects using the UI; shared help remains available on direct entry. Record fallback-copy gaps separately. | | |
-| Find and edit a value | | | |
+| Open and close contextual help and make the basic decision, including less-common and generated fields | Help is associated within the task's region and explains purpose, use/off cases, prerequisites and examples; closed help preserves essential context. Shared help works on direct entry. Record fallback-copy gaps separately. | | |
+| Find and edit a value, including units and a supported blank/zero case | Explain valid input, effect of changing the value and documented default versus recommendation. Coupled controls explain their combined behavior accurately. | | |
 | Inspect effective behavior or preview | Recognized and saved values are distinct from platform applicability and observed effects. Established unavailability is explained before editing; unknown behavior stays unverified. | | |
+| Enter a record collection or operational log view, where in scope | Authorized initial data loads without a prerequisite Refresh. For warning triage, test counts across pages, acknowledgment versus resolution, retained history, new warnings and page-size changes under the [log guidance](GUIDE.md#readable-activity-and-warning-review). | | |
 | Save and confirm the saved version | | | |
 | Encounter failure and recover | | | |
 | Leave and resume | | | |

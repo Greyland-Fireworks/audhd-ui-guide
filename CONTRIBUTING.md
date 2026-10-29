@@ -21,6 +21,7 @@ You do not need to disclose a diagnosis. Remove private account details and pers
 ## Propose a change
 
 - Keep the change focused and explain its effect on existing guidance.
+- Before adding guidance after a failed trial, identify the evidenced cause: a missing requirement, a contradiction, failure to retrieve relevant guidance, failure to apply it, or an implementation/environment defect. Cite the instruction and observed behavior; leave the cause unresolved when evidence is insufficient. Fix that cause and repeat the affected check instead of adding another copy of an existing requirement.
 - Identify UI concerns, UX concerns or both using the [project definitions](GUIDE.md#ui-and-ux-in-this-project). Keep shared presentation conventions in the visual standard and task outcomes in the interaction rules; link between them rather than duplicating requirements.
 - Preserve rule IDs. New rules need new IDs; do not silently reuse a retired ID for a different meaning.
 - Prefer examples and repeatable checks over unsupported claims about how all autistic people or people with ADHD think.

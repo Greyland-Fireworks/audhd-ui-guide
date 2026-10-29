@@ -26,8 +26,6 @@ Use the guide's [UI and UX definitions](GUIDE.md#ui-and-ux-in-this-project). The
 
 Choose the example closest to the task. Read its UI and UX concerns, then follow the proposed interaction and applicable checks. Use the guide for requirements and the preference documentation for profile rules; these illustrations do not add product capabilities or establish test results.
 
-The first five examples follow interface workflows. The next three cover individual personalization. The final three provide reusable wording and tradeoff patterns.
-
 ## Settings form: understand before changing
 
 **UI concerns:** Specific action labels, visible scope and save state, connected field labels and accessible contextual help. **UX concerns:** Predicting which reports are affected, trusting saved status, recovering a failed save and understanding retained work on return.
@@ -83,11 +81,11 @@ Use these retention and failure messages only if the product actually supports t
 2. **Attention:** “3 reports could not be delivered. Open failed deliveries to inspect each reason and retry where available.” This stays ahead of routine activity; errors for an individual report also appear beside that report. Viewing or dismissing the notice does not mark delivery successful.
 3. **Summary:** “Delivered: 42 of 45 attempted · Last 7 days · Updated 10:42, October 17, 2026, America/New_York.” A metric whose source is unavailable says so instead of displaying zero. A link labeled “View delivered reports” explains where the count leads.
 4. **Primary work:** A “Review reports awaiting approval” panel contains the selected report, relevant notes and “Open report for review.” Opening a review does not approve it. Approval remains a separate action with its actual consequences explained.
-5. **Supporting detail:** “Recent activity” and expandable “Delivery diagnostics” follow the work or occupy a subordinate column. A blocking delivery reason remains visible at the affected report even when diagnostics are collapsed.
+5. **Supporting detail:** “Activity & logs” is a separate destination for routine history. Relevant delivery diagnostics expand beside the affected report; a blocking reason stays visible even when details are collapsed. A full activity feed or generic test-workflow card does not occupy the overview simply because there is space.
 
 Application navigation identifies “Reports”; page navigation distinguishes “Overview” from “Delivery history”; the queue's owner selector is visibly a filter. These controls do not share an indistinguishable tab treatment. Each selected destination remains clear, and changing the queue filter does not silently alter the whole dashboard's period.
 
-At narrow widths, the supporting column follows the main work in the document and keyboard order. Long descriptions wrap without stretching unrelated rows. Refreshes update counts in place and offer “Show new reports” when inserting rows would displace current work. Retain drafts and filters only where supported and permitted by the product's privacy rules.
+At narrow widths, supporting detail follows its related work in the document and keyboard order. Long descriptions wrap without stretching unrelated rows. Refreshes update counts in place and offer “Show new reports” when inserting rows would displace current work. Retain drafts and filters only where supported and permitted by the product's privacy rules.
 
 **UI checks:** Inspect headings, navigation, filter ownership and metric labels at narrow widths and enlarged text; check keyboard order, focus and control operation. **UX checks:** Locate failed deliveries, explain the metric's denominator and freshness, open a review, change a local filter and return after an interruption. Introduce a delayed refresh, unavailable metric and delivery failure; verify that the edited row and draft stay stable and that reviewing or dismissing a notice does not approve or resolve work. Relevant rules: AUDHD-01, 02, 03, 04, 05, 07, 09, 10, 11, 12.
 
@@ -116,6 +114,8 @@ At narrow widths, the supporting column follows the main work in the document an
 **Failure and recovery:** “The file could not be read. Generation finished, but verification failed. Retry verification after checking file access.” Do not offer rerunning as the only recovery if verification can be retried independently.
 
 **Return:** Summarize meaningful changes since the last visit if reliably recorded. Otherwise show current status and freshness, without inventing a session history. Avoid announcements for every counter increment.
+
+**Activity and warning review:** A fictional log reader has Warnings first and All events second. Each row shows an exact timestamp, severity, a plain description and any supported next action; the original entry remains expandable. “1 unacknowledged warning in today's events” counts across pages. Acknowledge changes that warning to “Warning · Acknowledged,” retains it in history and reduces its emphasis without claiming the underlying problem is fixed. A page-size selector offers 25, 50 or 100 events; these numbers are illustrative, not kit requirements. A new warning remains unacknowledged. Show whether acknowledgment is personal or shared, and preserve unparsed events rather than inventing explanations.
 
 **UI checks:** Inspect job, freshness and status labels; operate verification and details with supported inputs and check meaningful status announcements. **UX checks:** Switch jobs during a delayed response, fail verification and return later. Verify response matching and ask the reviewer to distinguish completion, verification and freshness and choose the next action. Relevant rules: AUDHD-01, 04, 07, 09, 10, 11, 12.
 
@@ -209,6 +209,14 @@ Pair the message with an appropriate action and visible context. Do not erase in
 
 A useful writing pattern is **what it does → when to use it → what it affects → example or recovery**. Include only the parts needed to resolve uncertainty. Apply the guide's [help-format guidance](GUIDE.md#choose-the-help-format) to choose between brief definitions, persistent explanations and interactive reference content.
 
+For a fictional “Collect performance history” setting, put an `(i)` toggle beside the label and reveal this help inside the same group:
+
+- **What it does:** Records how long report generation takes so you can compare runs.
+- **Turn on when:** You are investigating why the morning report takes longer than the afternoon report.
+- **Leave off or turn off when:** You do not need those comparisons or the investigation is finished. New timing samples will stop; existing samples follow the stated retention policy.
+
+Keep any established storage cost, sensitive-data consequence or required setup visible where it affects the decision. The user can close the extra explanation once familiar. These are fictional product semantics to verify before reuse, not claims about a specific monitoring tool. Do not replace a detached help card with an equally detached icon.
+
 ## Find a recording without remembering its identifier
 
 **Reported problem:** A supplied account describes recall-dependent navigation: finding a recording required remembering a name, date or ID, and a retained search hid other recordings without making that restriction sufficiently obvious. The account reports changes made in another project; their implementation and effectiveness have not been independently verified here. The following interface and counts are fictional illustrations.
@@ -287,7 +295,11 @@ Users can choose any of 24 skins and four text styles. Light/dark are ordinary c
 
 **After:** Inspect the real loader, schema, defaults, precedence, dependencies, permissions and persistence path. Group by task/effect, show requested versus effective state and explain save/apply/restart separately. Keep useful technical details available without replacing plain-English summaries. Where facts remain unknown, mark them and continue supported work rather than inventing values or blocking on an optional preference questionnaire.
 
-**Decision help:** A fictional report service uses a retry delay. Replace “Sets retry_interval” with “Wait this long after a failed delivery before trying again. A longer delay reduces repeated requests but delays recovery. This service accepts durations such as 30s or 5m.” Use those examples only if the parser supports them. Shared Delivery help may explain which failures are retried; keep it available when a search opens the delay control directly. Less-common settings need the same decision support as prominent ones.
+**Decision help:** In a fictional report service, replace “Sets retry_interval” with “Wait after a failed delivery before trying again.” Show a number and unit selector, such as `5` and `minutes`, and explain that a longer delay reduces repeated attempts but delays recovery. If raw duration syntax is retained, say “For example, 30s means 30 seconds; 5m means 5 minutes. A unit is required,” only when that matches the parser. State the documented default separately from any workload-based recommendation. Shared Delivery help explains which failures are retried and remains available when search opens the delay control directly.
+
+**Coupled values:** Suppose this service allows up to 10 requests immediately and restores one available request every 5 seconds, up to 10. Group “Maximum requests available” with “Time to restore one request,” showing `10` and `5 seconds` and their combined effect. After all 10 are used, one more becomes available after 5 seconds. Calling this “10 requests every 5 seconds” would describe a different policy. Explain who shares the limit and the effect of changing either value; do not invent the server's capacity.
+
+**An optional blank field:** “Extra report recipient” can show the persistent example “Example: reports@example.org” and “Leave blank to send only to the owner.” The example is help, not a recipient silently inserted into the configuration. Confirm that blank has that meaning before using the wording.
 
 **Grouping and applicability:** Put a diagnostic endpoint under Diagnostics and the report download endpoint under Report delivery, even if both keys contain `listen-address`. A watcher option implemented only on another platform should say “Unavailable on this platform” with the established reason, not “Running” because a startup snapshot contains its default. If the task is to prepare configuration for that other platform, identify the target and leave its behavior verification pending. These fictional scenarios illustrate the evidence needed; they are not claims about the recording demo.
 
@@ -295,7 +307,9 @@ Users can choose any of 24 skins and four text styles. Light/dark are ordinary c
 
 ## Operational overview and precise copy
 
-Use a compact title such as “Configuration editor,” rather than a slogan promising clarity. The [administration demo](examples/administration/README.md) opens on an overview: “Mira: Enter a reason” reveals and focuses the reason field; “Mira: Verify permissions” opens the check for the saved version. Neither action changes the draft. A newer save requires another check.
+Use a compact title such as “Report server configuration,” rather than a slogan promising clarity. If the surrounding context already identifies the report server, “Configuration” can suffice; do not repeat it above every region. The [administration demo](examples/administration/README.md) opens on an overview: “Mira: Enter a reason” reveals and focuses the reason field; “Mira: Verify permissions” opens the check for the saved version. Neither action changes the draft. A newer save requires another check.
+
+In a multipage report console, an All pages directory groups destinations by purpose and alphabetizes entries within each group. Search narrows the visible list; it is not required to discover it. A collapsible Configuration group can reduce repeated sidebar links while keeping the selected task identifiable. Appearance remains last, immediately after the other menu entries rather than across a large empty gap. A delivery test stays on its focused page; an overview link is justified by specific unfinished work, not a duplicate promotional card. These are proposed arrangements, not changes to the runnable demos.
 
 For a report service, “Report retention: 30 days — Change report retention” can open Storage → Retention and focus that setting. On arrival, selected navigation and the heading identify Retention; “Test instance” remains supporting scope. Returning restores the overview position and other drafts. Derive the displayed period from the relevant saved or effective state and label that distinction. A general “Open settings” shortcut does not provide the same route, and a hard-coded “Configured” badge establishes nothing about readiness. This is a proposed pattern, not a feature of the linked demos.
 

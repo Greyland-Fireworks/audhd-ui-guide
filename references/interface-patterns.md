@@ -26,7 +26,7 @@ Match verification to the user's task. A settings check observes persistence and
 
 For new interfaces without an established design system, apply the [full-kit reuse and appearance defaults](../GUIDE.md#adaptable-appearance): all registered skins, Guillermo initially absent explicit preferences or established product defaults, independent text styles and system appearance. Package installation is optional; canonical assets may be reused directly. Existing products and justified exceptions retain their established requirements.
 
-Keep the appearance destination clearly labeled at the bottom/end of each main menu, including collapsed and mobile variants, under the [navigation placement requirement](../GUIDE.md#keep-navigation-levels-distinct). Verify access and retained work using [check 47](ui-readiness-checks.md#check-47); focused tools without main navigation need no new menu.
+Keep the appearance destination last and adjacent to the other main-menu entries, including collapsed and mobile variants, under the [navigation placement requirement](../GUIDE.md#keep-navigation-levels-distinct). Verify access and retained work using [check 47](ui-readiness-checks.md#check-47); focused tools without main navigation need no new menu.
 
 Under AUDHD-02, 03, 05 and 11, when a choice changes a visible property, show a representative example beside its label. Keep the choice understandable without relying on the example alone. This pattern arose from individual feedback on our recording demos; it is not a new rule ID or a validated universal layout requirement.
 
@@ -51,9 +51,9 @@ Verify previews against effective rendering, keyboard focus and selection, narro
 
 ## Keep associated help beside its subject
 
-Under AUDHD-02, 09 and 11: **If an info/help button explains a line of text, label or image, place it immediately after that subject, preferably on the same line or in the same row.** Keep the subject and button in one layout group and next to each other in reading order; do not leave the button on a detached row or at a distant panel edge. At narrow widths or enlarged text, allow the group to wrap without overlap while preserving a clear association. A persistent explanation may expand below the group.
+Follow [AUDHD-09's placement and disclosure rules](../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision). For example, a named `(i)` button beside a setting reveals purpose, use/off examples and choice guidance inside the same panel. Collapse returns to the concise view without hiding units or consequential state. On a narrow screen the opened help stacks directly after its subject, not after unrelated sidebar content.
 
-Give the button a specific accessible name such as “About text style,” retain a visible keyboard-focus indicator and an adequate target, and associate the explanation programmatically. Proximity supplements these semantics; it does not replace them. Verify placement at normal and narrow/enlarged layouts and test keyboard opening, dismissal and focus retention. This is a concrete application of the existing rules, not a new rule ID.
+Inspect both closed and open states, reading order, visual grouping, expanded state and keyboard/touch operation. Opening help must not activate the setting; dismissal must preserve drafts and useful focus. A detached help card and a nearby control do not establish that the participant recognizes their connection. This is an application of AUDHD-02, 05, 09 and 11, not a new rule ID.
 
 ## Capability states and next actions
 
@@ -69,9 +69,13 @@ Use the distinctions a task needs; these are examples of truthful language, not 
 
 Apply a shared dependency warning to each affected control or clearly containing task. For example, an absent client application affects every setting whose visible result requires that client. Missing credentials prevent an external verification; they do not automatically justify removing configuration. Availability and verification may differ, so a single success badge should not erase those distinctions.
 
+When all actions in a selected task are unavailable, present the reason and established next step in the main task area. Do not reduce the page to a closed “Managed settings” row while leaving only generic sidebar instructions visible. Share common limitations at the group level and identify exceptions locally, rather than repeating the same warning beside every field.
+
 ## Record administration and recovery
 
 The [runnable administration example](../examples/administration/README.md) connects collection selection, record inspection, contextual editing, field-linked errors, verification and filtered return. Prefer actions attached to the selected record over a raw command-output panel paired with disconnected command forms. Use named secondary destinations when accounts, permissions and credentials become distinct tasks; a small interface need not introduce extra nesting.
+
+Check initial entry separately from refresh: the authorized collection read starts on entry, with loading, empty and failure states distinguished. Refresh updates or retries that read. New responses must preserve the selected record and draft; auto-loading a task is not permission for continuous background polling.
 
 On failure, preserve current identity, drafts and useful collection context. Test a successful save followed by failed verification, a newer unsaved draft, and a retry of the saved operation's verification: the retry must not resubmit the mutation or overwrite the newer draft. Check the intended allowed and denied permission paths or actual delivery destination; generic health does not substitute for either. Where no safe verification interface exists, explain that limit and leave the outcome pending.
 
@@ -162,6 +166,8 @@ Apply AUDHD-01, 02, 03, 05, 06, 09, 10 and 11 to consolidate related information
 Use navigation links for destinations that behave as separate pages; a tab-like appearance alone does not make them a tab widget. Tabs switch panels, while accordion controls expand sections in place. Keep labels specific to the contents, distinguish parent and child navigation visually and semantically, and keep the selected parent visible above its sub-tabs. Add depth only when the task benefits; do not impose a universal maximum tab count or a fixed nesting depth.
 
 Allow multiple accordion sections open when users need to compare or combine their contents. A single-open arrangement is appropriate only when it supports the task; opening one section must not discard work in another. Keep ordinary choices discoverable rather than labeling them “advanced” merely to hide them. For search within these groups, follow AUDHD-03's stated-scope and hidden-selection requirements.
+
+A named navigation group can use a plus/minus disclosure to reduce repeated links; expose its expanded state and retain current-task and error cues while closed. The [complete directory](../GUIDE.md#authoritative-navigation-and-repeated-orientation) remains available without search. Selecting a task should then reveal its useful content, rather than require another generic expansion to find anything to do. Disclosure supports focus on a task; it must not hide the whole task.
 
 ### Preserve context and surface hidden problems
 

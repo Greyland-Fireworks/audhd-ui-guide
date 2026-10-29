@@ -6,6 +6,10 @@ A separate [framework integration comparison](references/evaluations/2026-10-24-
 
 This pack tests interpretation and review quality, not accessibility conformance or real interface operation.
 
+## Implementation comparison — 2026-10-28
+
+The user separately authorized a [repeated ntfy implementation comparison](references/evaluations/2026-10-28-consolidation/README.md). It holds the original prompt, source release, model and effort constant across two frozen toolkit versions, with reviewer material outside the build checkouts. Its task-outcome, setup and participant findings remain separate from the historical review-only scenarios below. Neither provisioning nor automated toolkit checks establish generated-interface quality.
+
 ## October 25 design-default extension — Pending
 
 E36–E39 add four authored cases to the unchanged 35-case historical dataset: first-pass design, optional collection disclosure with a required-correction exception, peer hierarchy and preview accuracy, and optional versus essential explanations. The pack now contains 39 cases. All four new cases are unrun; historical outcomes and archived comparisons remain unchanged. Editorial validation does not establish model behavior or user benefit.
@@ -18,7 +22,7 @@ Further trials are deferred work, not a requirement for using or publishing this
 
 Start with E03, E07 and E08 in fresh conversations. Give each model the standard request, skill, guide and one scenario; for E21–E26, include the preference documentation and example JSON specified below. Save its first response without coaching, then have a separate reviewer use the rubric. Record model/date, inputs, document revisions and outcomes. If practical, compare with the same scenarios without the skill, recording exactly which references each condition receives, and later expand to other cases or configurations. Report missed problems, disproportionate fixes and unsupported claims separately. Do not infer demonstrated user benefit from successful text reviews.
 
-The procedure below is retained for that future work. No evaluation runs are scheduled or required now.
+The procedure below remains optional; ordinary skill use and contributions do not require running this pack. Separately authorized comparisons are recorded above.
 
 E27–E34 add broad developer requests, connected context, appearance, navigation, help and profile/workflow scenarios. E34 has a supplied review response; E27–E33 remain Pending. No implemented behavior or skill activation success is inferred. Supply preference documentation for E29, E33 and E34 as well.
 
