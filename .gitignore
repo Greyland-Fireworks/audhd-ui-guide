@@ -24,6 +24,7 @@ node_modules/
 dist/
 test-results/
 playwright-report/
+/debug.log
 .playwright-cli/
 __pycache__/
 /output/

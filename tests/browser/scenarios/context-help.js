@@ -40,6 +40,8 @@ export default async (page) => {
       assert(await trigger.getAttribute('aria-expanded')==='true','Press opens inline help');
       const detail=page.locator(`[id="${await trigger.getAttribute('aria-controls')}"]`);
       assert(await detail.isVisible(),'Persistent explanation');
+      assert(await detail.evaluate(el=>parseFloat(getComputedStyle(el).fontSize))>=16,'Decision help retains ordinary reading size');
+      assert(await trigger.evaluate(el=>parseFloat(getComputedStyle(el).fontSize))>=16,'Help control retains ordinary reading size');
       await page.mouse.move(0,0); await page.keyboard.press('Tab');
       assert(await detail.isVisible(),'Persistent help survives leaving trigger');
       await trigger.focus(); await page.keyboard.press('Escape');

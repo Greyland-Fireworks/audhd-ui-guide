@@ -1,38 +1,274 @@
+/* AUDHD-02/08/11: skin tokens carry appearance; this sheet carries structure.
+   Shared edges, named groups and indentation still communicate without color.
+   See ../../GUIDE.md#typography-and-layout. No palette is redefined here. */
 * { box-sizing: border-box; }
-body { margin: 0; min-height: 100vh; padding: 1.25rem max(1.25rem, calc((100% - 70rem) / 2)); line-height: 1.6; background: var(--ui-page); color: var(--ui-text); }
-h1,h2,h3 { font-family: var(--ui-font-heading); line-height: 1.3; }
-header p { max-width: 65ch; color: var(--ui-muted); }
-main { margin-block: 1.5rem; }
-main > p { max-width: 75ch; }
-form > label:first-of-type { margin-top: 0; }
-#draft-status { color: var(--ui-muted); }
-a { color: var(--ui-action); }
-nav,.actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-block: 1rem; }
-nav a { padding: .65rem; border: 1px solid var(--ui-control-border); }
-[aria-current="page"] { background: var(--ui-active-surface); border-inline-start: 4px solid var(--ui-active-accent); }
-button,input,select { font: inherit; min-height: 44px; padding: .6rem; max-width: 100%; color: var(--ui-text); background: var(--ui-surface); border: 1px solid var(--ui-control-border); border-radius: .3rem; }
+[hidden] { display: none !important; }
+body { margin: 0; min-height: 100vh; color: var(--ui-text); background: var(--ui-page); font-family: var(--ui-font-body); line-height: 1.55; }
+a { color: var(--ui-action); text-underline-offset: .18em; }
+h1,h2,h3 { font-family: var(--ui-font-heading); line-height: 1.25; margin: 0 0 .75rem; }
+h1 { font-size: 1.8rem; }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1.1rem; }
+p { margin: .6rem 0 1rem; }
+p:last-child { margin-bottom: 0; }
+p,li,h1,h2,h3,summary,button,a { overflow-wrap: anywhere; }
+button,input,select { font: inherit; color: var(--ui-text); background: var(--ui-surface); border: 1px solid var(--ui-control-border); border-radius: .4rem; }
+button,input:not([type=radio]):not([type=checkbox]),select { min-height: 2.75rem; padding: .55rem .8rem; }
 button,summary { cursor: pointer; }
-button:disabled { cursor: default; color: var(--ui-muted); background: var(--ui-surface); border-style: dashed; }
-label { display: grid; gap: .35rem; margin-block: 1rem; }
-input[type="checkbox"],input[type="radio"] { min-height: auto; }
-input:not([type="checkbox"]):not([type="radio"]),select { min-width: 0; width: 100%; }
-.inline { display: flex; align-items: center; }
-.ui-panel,details { padding: 1rem; margin-block: 1rem; border: 1px solid var(--ui-control-border); border-radius: .4rem; }
-.error { color: var(--ui-danger); }
-.status { border-inline-start: 4px solid var(--ui-active-accent); padding-inline-start: 1rem; }
-.records { list-style: none; padding: 0; }
-.records li { padding-block: .8rem; border-bottom: 1px solid var(--ui-border); }
-.palettes { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,14rem),1fr)); gap: .75rem; }
-.palette { padding: .7rem; border: 2px solid var(--ui-control-border); margin: 0; }
-.palette:has(:checked) { outline: 3px solid var(--ui-active-accent); outline-offset: 2px; }
-.swatches { display: flex; height: 1.5rem; }
-.swatches i { flex: 1; }
+/* AUDHD-11: unavailable actions remain legible; a dashed border and adjacent
+   state explain availability without fading text into an action-colored fill. */
+button:disabled { cursor: default; border-style: dashed; color: var(--ui-muted); background: var(--ui-surface); }
+button:not(:disabled):hover { border-color: var(--ui-action); }
+button[aria-pressed=true] { background: var(--ui-active-surface); border-color: var(--ui-active-accent); box-shadow: inset 0 -.2rem var(--ui-active-accent); }
+input:not([type=checkbox]):not([type=radio]),select { min-width: 0; width: 100%; }
+input[type=checkbox],input[type=radio] { accent-color: var(--ui-active-accent); flex-shrink: 0; width: 1.1rem; height: 1.1rem; }
+label { display: grid; gap: .4rem; font-weight: 600; margin-block: .75rem; }
 fieldset { min-width: 0; }
-p,li,h1,h2,h3,summary,button,nav a { overflow-wrap: anywhere; }
+legend { font-weight: 600; padding-inline: .25rem; }
+.inline { display: flex; align-items: center; gap: .65rem; }
 :focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 3px; }
-@media(max-width: 480px) { nav { display: grid; } body { padding: 1rem; } }
-@media(forced-colors:active) { [aria-current="page"],.palette:has(:checked) { outline: 2px solid Highlight; } }
-
-/* Wrapping rows keep every action discoverable at enlarged text and narrow widths. */
-.records a { display: inline-flex; align-items: center; min-height: 44px; }
-h1 { font-size: 1.7rem; }
+/* AUDHD-05/11: a keyboard bypass must have a visible landing position. Pointer
+   route changes still focus main, but do not paint a giant persistent outline. */
+.skip-link { position: fixed; top: .5rem; left: 1rem; z-index: 10; transform: translateY(-200%); clip-path: inset(50%); padding: .75rem 1rem; background: var(--ui-surface); border: 2px solid var(--ui-focus); }
+.skip-link:focus { transform: none; clip-path: none; }
+main:focus-visible { outline-offset: .35rem; }
+.app-shell { display: grid; grid-template-columns: 15rem minmax(0,1fr); min-height: 100vh; }
+.sidebar { position: sticky; top: 0; align-self: start; height: 100vh; height: 100dvh; overflow-y: auto; background: var(--ui-surface); padding: 1.5rem 1rem; border-inline-end: 1px solid var(--ui-border); }
+.brand { display: flex; gap: .75rem; align-items: center; }
+.brand strong { display: block; font-family: var(--ui-font-heading); font-size: 1.35rem; }
+.brand span:not(.brand-mark) { display: block; font-size: .9rem; color: var(--ui-muted); }
+.brand-mark { display: grid; place-content: center; width: 2.5rem; height: 2.75rem; flex-shrink: 0; border-radius: .4rem; color: var(--ui-on-action); background: var(--ui-action); font-family: var(--ui-font-heading); font-size: 1.5rem; }
+.workspace-context { color: var(--ui-muted); padding-block: .75rem 1rem; border-bottom: 1px solid var(--ui-border); }
+.workspace { min-width: 0; width: 100%; max-width: 90rem; padding-inline: clamp(1rem,3vw,3rem); }
+.workspace-header { min-height: 4.5rem; padding-block: .75rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 1rem; border-bottom: 1px solid var(--ui-border); }
+#breadcrumbs { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; min-width: 0; }
+#breadcrumbs [aria-current] { font-weight: 600; }
+#breadcrumbs a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+#breadcrumb-path { display: contents; }
+#breadcrumb-toggle::after { content: ' +'; }
+#breadcrumb-toggle[aria-expanded="true"]::after { content: ' −'; }
+#guide-toggle { font-size: 1rem; }
+main { margin-block: .5rem 2rem; min-width: 0; scroll-margin-block-start: 1rem; }
+.task-heading { margin-block: 1rem 1.5rem; max-width: 75ch; }
+.task-heading p { margin: .5rem 0 0; }
+#workspace-nav { display: grid; gap: .3rem; }
+.nav-parent { display: flex; align-items: stretch; }
+.nav-parent a { flex: 1; min-width: 0; }
+#workspace-nav a { display: block; text-decoration: none; color: var(--ui-text); padding: .65rem .75rem; min-height: 2.75rem; border-radius: .35rem; }
+.nav-group[data-active=true] > .nav-parent { background: var(--ui-active-surface); border-radius: .35rem; box-shadow: inset .25rem 0 var(--ui-active-accent); }
+.nav-group[data-active=true] > .nav-parent a { font-weight: 700; }
+#workspace-nav a:hover { text-decoration: underline; background: var(--ui-active-surface); }
+#workspace-nav [aria-current=page] { font-weight: 700; color: var(--ui-active-accent); }
+.nav-parent button { background: transparent; border: 0; min-width: 2.75rem; }
+.nav-parent button::before,#menu-toggle::after { content: '+'; }
+.nav-parent button[aria-expanded=true]::before,#menu-toggle[aria-expanded=true]::after { content: '−'; }
+.nav-children { list-style: none; padding: 0 0 0 .65rem; margin: .4rem 0 .5rem 1rem; border-inline-start: 2px solid var(--ui-border); }
+.nav-children [aria-current=page] { background: var(--ui-active-surface); box-shadow: inset .2rem 0 var(--ui-active-accent); }
+.nav-children [data-ancestor] { font-weight: 700; border-inline-start: .2rem solid var(--ui-active-accent); }
+.nav-location { display: block; margin: .4rem .75rem; color: var(--ui-muted); }
+.nav-group:has(.nav-children:not([hidden])) .nav-location { display: none; }
+#workspace-nav .nav-parent > a { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.nav-count { display: inline-flex; align-items: center; justify-content: center; gap: .2rem; flex-shrink: 0; min-width: 1.6rem; padding-inline: .3rem; border: 1px solid var(--ui-border); border-radius: .3rem; background: var(--ui-surface); color: var(--ui-muted); font-weight: 400; }
+/* AUDHD-07/08/11: reserve warning color, a striped edge and a warning symbol
+   for actual problems. Keep texture away from the number so it stays legible.
+   The symbol and double border survive forced colors without a background. */
+.nav-count[data-kind=problem] { color: var(--ui-warning); border: 3px double currentColor; font-weight: 700; padding-inline-start: .65rem; background-image: repeating-linear-gradient(135deg,currentColor 0 2px,transparent 2px 5px); background-size: .3rem 100%; background-repeat: no-repeat; }
+.nav-count[data-kind=problem]::before { content: '⚠'; }
+#menu-toggle { width: 100%; text-align: start; }
+#menu-toggle::after { float: right; margin-inline-start: .75rem; }
+/* Related data shares a card; independent tasks receive a real gap. Cards and
+   their nested controls retain DOM order at every width (AUDHD-02/11). */
+.ui-panel { padding: 1.25rem; border: 1px solid var(--ui-border); border-radius: .7rem; background: var(--ui-surface); min-width: 0; margin-block: 0 1.25rem; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(min(100%,18rem),1fr)); gap: 1.25rem; max-width: 72rem; }
+.card-grid > .ui-panel { margin: 0; }
+.panel-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; }
+.panel-heading h2 { margin: 0; }
+.panel-heading a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.attention-list { list-style: none; padding: 0; margin: .75rem 0 0; }
+.attention-list li { padding-block: .75rem; border-bottom: 1px solid var(--ui-border); }
+.attention-list li:last-child { border-bottom: 0; }
+.attention-list p { margin: .15rem 0; }
+.attention-list a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.filter-bar { display: flex; align-items: end; flex-wrap: wrap; gap: .75rem 1rem; margin-block: 0 1.25rem; }
+.filter-bar label { flex: 1 1 18rem; max-width: 32rem; margin: 0; }
+.filter-bar > span { align-self: center; }
+/* AUDHD-02/04/07/09: account identity, evidence and next action occupy the same
+   card. Equal columns align comparable accounts without a second list of names.
+   A text severity label and solid edge survive monochrome/forced-color views;
+   a missing check uses neutral review styling rather than a false danger alert. */
+.attention-summary { padding: 1rem 1.25rem; margin-bottom: 1.25rem; background: var(--ui-surface); border-inline-start: .25rem solid var(--ui-active-accent); }
+.attention-summary h2 { margin-bottom: .4rem; }
+.attention-summary p { margin: .4rem 0; max-width: 75ch; }
+.attention-links { display: flex; flex-wrap: wrap; gap: .25rem 1.5rem; list-style: none; padding: 0; margin: 0; }
+.attention-links a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.people-cards { list-style: none; padding: 0; grid-template-columns: repeat(auto-fit,minmax(min(100%,22rem),1fr)); }
+.person-card { display: flex; flex-direction: column; }
+.person-card :is(h2,h3) { font-size: 1.3rem; margin: 0; }
+.person-card :is(h2,h3) a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.account-role { margin-block: .35rem 1rem; }
+.account-role span { display: block; }
+.account-status { padding: .75rem 1rem; border: 1px solid var(--ui-border); border-inline-start: .25rem solid var(--ui-active-accent); border-radius: .3rem; margin-bottom: 1rem; }
+.account-status p { margin: .3rem 0 0; }
+.account-status[data-level=error] { border-inline-start-color: var(--ui-danger); }
+.account-status[data-level=warning] { border-inline-start-color: var(--ui-warning); }
+.account-status[data-level=success] { border-inline-start-color: var(--ui-success); }
+#check-status { scroll-margin-block: 1rem; }
+#check-title { font-size: 1.2rem; margin: 0; }
+#check-title:focus { outline: 2px solid var(--ui-focus); outline-offset: .3rem; }
+#check-receipt:empty,#check-next:empty { display: none; }
+#check-return { margin-top: .75rem; }
+.account-actions { margin-top: auto; }
+.task-link { display: inline-flex; align-items: center; justify-content: center; min-height: 2.75rem; padding: .55rem .8rem; border: 1px solid var(--ui-control-border); border-radius: .4rem; }
+.task-link.ui-action { color: var(--ui-on-action); background: var(--ui-action); text-decoration: none; font-weight: 600; }
+.task-link:hover { text-decoration: underline; }
+.account-scope { max-width: 75ch; }
+.directory-card h2 { margin: 0 0 .5rem; }
+.directory-card { align-self: start; }
+/* AUDHD-02/05: category cards read down each column in document order. Long
+   notebook branches no longer impose their height on unrelated peer cards. */
+#page-directory { display: block; columns: 19rem 3; column-gap: 1.25rem; }
+#page-directory > .directory-card { break-inside: avoid; margin-bottom: 1.25rem; }
+.hub-overview-grid { display: grid; grid-template-columns: minmax(19rem,1fr) minmax(22rem,1.15fr); align-items: start; gap: 1.25rem; margin-bottom: 1.25rem; }
+.hub-work-stack { display: grid; gap: 1.25rem; min-width: 0; }
+.hub-overview-grid .ui-panel { margin-bottom: 0; }
+.hub-day-heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem 1.25rem; margin-block: -.5rem 1.25rem; }
+.hub-day-heading time { font-weight: 700; }
+.hub-day-heading span { color: var(--ui-muted); }
+.hub-today .panel-heading { margin-bottom: 1rem; }
+.hub-next-meeting { padding: .75rem 1rem; border-inline-start: .25rem solid var(--ui-active-accent); background: var(--ui-active-surface); border-radius: .35rem; margin-bottom: 1rem; }
+.hub-next-meeting h3 { margin: .25rem 0; }
+.hub-next-meeting a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.hub-next-meeting p { margin: .2rem 0; }
+.hub-next-meeting strong { white-space: nowrap; margin-inline-start: .5rem; }
+.hub-owner { display: block; color: var(--ui-muted); }
+/* AUDHD-02/03/07: administration review remains discoverable but cannot
+   compete with a blocked task or the next meeting as a false urgent alert. */
+.hub-administration { border-top: 1px solid var(--ui-border); padding-top: 1rem; margin-bottom: 1.25rem; }
+.hub-administration .hub-work-list { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,20rem),1fr)); gap: .5rem 1.25rem; }
+.hub-administration .hub-work-list li { border-top: 0; }
+.access-verification { scroll-margin-block-start: 1rem; }
+/* AUDHD-02/07/08: a symbol, edge and label carry priority together. Normal
+   continuation work uses the active accent, never a warning-colored badge. */
+.hub-work-item { display: grid; grid-template-columns: 1.75rem minmax(0,1fr); gap: .6rem; }
+.hub-work-item a { display: inline-flex; min-height: 2.75rem; align-items: center; font-weight: 700; }
+.work-symbol { display: grid; place-content: center; align-self: start; width: 1.65rem; height: 1.65rem; border: 1px solid currentColor; border-radius: .3rem; color: var(--ui-active-accent); margin-top: .55rem; }
+.hub-problem .work-symbol { border: 3px double currentColor; color: var(--ui-warning); font-weight: 700; }
+.hub-upcoming, .hub-work-list { margin: 0; padding: 0; list-style: none; }
+.hub-upcoming li, .hub-work-list li { padding: .8rem 0; border-top: 1px solid var(--ui-border); }
+.hub-upcoming li:first-child, .hub-work-list li:first-child { border-top: 0; }
+.hub-upcoming a { display: block; font-weight: 700; padding-block: .25rem; }
+.hub-upcoming time { display: block; margin-top: .25rem; }
+.hub-work-list p { margin: .35rem 0 0; }
+.hub-problem { padding-inline-start: .75rem !important; border-inline-start: .25rem solid var(--ui-warning); }
+.directory-card ul { list-style: none; padding: 0; margin: 0; }
+.directory-card a { display: inline-flex; align-items: center; min-height: 2.75rem; padding-block: .4rem; }
+.directory-card .directory-children { margin-inline-start: .65rem; padding-inline-start: 1rem; border-inline-start: 2px solid var(--ui-border); }
+.directory-card li + li { margin-top: .2rem; }
+.back-link { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.saved-access { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; padding: 1rem; margin-bottom: 1.25rem; border-inline-start: .25rem solid var(--ui-active-accent); background: var(--ui-active-surface); border-radius: .35rem; }
+.access-comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+.access-comparison section { padding: 1rem; background: var(--ui-surface); border: 1px solid var(--ui-border); border-block-start: .25rem solid var(--ui-active-accent); border-radius: .4rem; }
+.access-comparison section:last-child { border-block-start-style: dashed; }
+.access-comparison h2 { font: inherit; margin-bottom: .5rem; }
+.access-comparison strong { font-size: 1.2rem; }
+.allowance-illustration { margin: 1rem 0; padding: 1rem; border: 1px solid var(--ui-border); border-radius: .5rem; }
+.allowance-illustration figcaption { font-weight: 700; margin-bottom: .75rem; }
+.allowance-steps { display: flex; align-items: stretch; gap: .75rem; padding: 0; list-style: none; flex-wrap: wrap; }
+.allowance-steps li { flex: 1 1 10rem; position: relative; padding: .75rem; border: 1px solid var(--ui-border); border-block-start: .25rem solid var(--ui-active-accent); background: var(--ui-active-surface); }
+.allowance-steps strong { display: block; font-size: 1.3rem; }
+.allowance-steps span { display: block; }
+.allowance-steps li + li::before { content: '→'; position: absolute; inset-inline-start: -.8rem; top: -.35rem; background: var(--ui-surface); }
+@media (max-width: 64rem) { .hub-overview-grid { grid-template-columns: 1fr; } .hub-work-stack { grid-row: 1; } }
+@media (max-width: 40rem) { .access-comparison { grid-template-columns: 1fr; } }
+.role-fieldset { border: 0; padding: 0; margin: .5rem 0 1rem; }
+.role-choices { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .75rem; }
+.role-choice { padding: 1rem; border: 1px solid var(--ui-control-border); border-radius: .5rem; margin: .5rem 0 0; gap: .75rem !important; cursor: pointer; font-weight: 400; }
+.role-choice:has(:checked) { background: var(--ui-active-surface); outline: 2px solid var(--ui-active-accent); outline-offset: -2px; }
+.role-choice > span > span { display: block; }
+.actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-block: 1rem; }
+.actions:last-child { margin-bottom: 0; }
+.muted,#draft-status { color: var(--ui-muted); }
+.error { color: var(--ui-danger); }
+.status { border-inline-start: .25rem solid var(--ui-active-accent); padding-inline-start: 1rem; }
+.permission-results { display: flex; flex-wrap: wrap; gap: .75rem; }
+/* AUDHD-11: result tiles may shrink below their preferred width when nested
+   inside the completion group at enlarged text sizes; no sideways reading. */
+.permission-results div { flex: 0 1 10rem; min-width: 0; max-width: 100%; overflow-wrap: anywhere; border: 1px solid var(--ui-border); border-radius: .35rem; padding: .75rem 1rem; }
+.permission-results dt { color: var(--ui-muted); }
+.permission-results dd { margin: .25rem 0 0; font-weight: 700; }
+/* AUDHD-09: decision help stays inside its subject's outline. Only teaching
+   notes obey the global switch; hiding them never hides units or recovery. */
+details { border: 1px solid var(--ui-border); border-radius: .45rem; padding: .6rem .85rem; margin-block: 1rem; }
+summary { min-height: 2.75rem; align-content: center; }
+details ul { padding-inline-start: 1.4rem; }
+details li + li { margin-top: .65rem; }
+.guide-note { border-inline-start: .25rem solid var(--ui-active-accent); background: var(--ui-surface); }
+.guide-note summary { font-weight: 600; }
+.guide-note summary span { font-weight: 400; }
+.guide-note summary span::before { content: '— '; }
+.guide-note-body { max-width: 80ch; padding-block: .5rem; }
+.rule-links a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+html:not([data-guide-notes=true]) :is(.guide-note,.guide-only) { display: none; }
+#teaching-intro { border-inline-start: .25rem solid var(--ui-active-accent); padding: .75rem 1rem; background: var(--ui-surface); margin-block: .5rem 1rem; }
+.coupled-fields { border-inline-start: .25rem solid var(--ui-active-accent); padding-inline-start: 1rem; margin-block: 1rem; }
+.quantity-unit { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1fr); gap: 1rem; }
+#request-preview,#export-help { max-width: 70ch; }
+#request-id { overflow-wrap: anywhere; }
+/* AUDHD-02/08/11: consistent sample content makes the complete looks comparable.
+   Borders keep page/surface swatches visible even when their fills match their
+   surroundings. The samples are inert; the whole labeled card is one radio
+   target. Selection has a named badge and a thick edge, independently of focus.
+   See ../../GUIDE.md#label-clarify-and-show and #adaptable-appearance. */
+.appearance-current { padding: .8rem 1rem; border-inline-start: .3rem solid var(--ui-active-accent); background: var(--ui-active-surface); }
+.skin-collection { padding: 0; margin: 1.5rem 0 0; border: 0; min-width: 0; }
+.skin-collection legend { font-weight: 700; }
+#skin-help { max-width: 75ch; margin-block: .5rem 1.25rem; }
+.palettes { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,17rem),1fr)); gap: 1.25rem; }
+.palette { position: relative; display: grid !important; gap: 0; min-width: 0; padding: .35rem; border: 2px solid var(--ui-control-border); border-radius: .65rem; margin: 0; font-weight: 400; background: var(--ui-surface); color: var(--ui-text); cursor: pointer; }
+.palette > input { position: absolute; width: 1px; height: 1px; margin: 0; clip-path: inset(50%); overflow: hidden; }
+.palette:has(:checked) { border-color: var(--ui-active-accent); box-shadow: 0 0 0 2px var(--ui-active-accent); background: var(--ui-active-surface); }
+.palette:has(:focus-visible) { outline: 3px solid var(--ui-focus); outline-offset: 5px; }
+.palette-preview { display: flex; flex-direction: column; gap: .6rem; padding: 1rem; border: 1px solid var(--ui-control-border); border-radius: .4rem; }
+.preview-heading { font-family: var(--ui-font-heading); font-weight: 700; font-size: 1.4rem; line-height: 1.3; overflow-wrap: anywhere; }
+.preview-copy { font-family: var(--ui-font-body); }
+.preview-text-row { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; justify-content: space-between; }
+.preview-panel { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .6rem; padding: .6rem; margin-block: .3rem; background: var(--ui-surface); border: 1px solid var(--ui-control-border); border-radius: .3rem; }
+.preview-active { padding: .2rem .4rem; border-inline-start: .2rem solid var(--ui-active-accent); color: var(--ui-active-accent); background: var(--ui-active-surface); }
+.preview-action { padding: .35rem .6rem; color: var(--ui-on-action); background: var(--ui-action); border-radius: .25rem; }
+.preview-colors { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: .25rem; margin-top: auto; }
+.preview-colors i { height: 1.3rem; border: 1px solid var(--ui-text); border-radius: .15rem; }
+.palette-current { visibility: hidden; color: var(--ui-on-action); background: var(--ui-action); border-radius: .25rem; padding: .15rem .4rem; }
+.palette:has(:checked) .palette-current { visibility: visible; }
+.announcement:empty { margin: 0; }
+/* AUDHD-11: reflow is based on available space. Ordinary text/targets never
+   shrink to force a desktop arrangement into a phone or enlarged-text view. */
+@media(width < 64rem) {
+  .app-shell { display: block; }
+  .sidebar { position: static; height: auto; padding: .5rem 1rem; border-inline-end: 0; border-bottom: 1px solid var(--ui-border); }
+  /* The linked app name in the content header already identifies this screen.
+     Repeating the brand above the menu costs a whole task row at 200% text. */
+  .brand { display: none; }
+  .workspace-context { display: none; }
+  #workspace-nav { margin-top: .75rem; }
+  #guide-menu-host { margin-block: .75rem .5rem; }
+  .workspace { padding-inline: 1rem; }
+  .workspace-header { min-height: 3rem; padding-block: .25rem; }
+  #breadcrumb-toggle { padding-inline: .25rem; }
+  #breadcrumb-path { display: flex; flex-wrap: wrap; gap: .5rem; padding-block: .5rem; }
+}
+@media(width < 35rem) {
+  .role-choices,.quantity-unit { grid-template-columns: 1fr; }
+  .workspace-header { align-items: start; }
+  .ui-panel { padding: 1rem; }
+  /* Keep the nested result readable at enlarged text sizes: reduce framing
+     space before sacrificing the width available to words and actions. */
+  #check-status { padding: .5rem; }
+  .permission-results div { padding: .5rem; }
+  h1 { font-size: 1.6rem; }
+}
+@media(forced-colors:active) {
+  a { color: LinkText; }
+  .nav-group[data-active=true] > .nav-parent,.nav-children [aria-current],.role-choice:has(:checked),.palette:has(:checked),button[aria-pressed=true] { outline: 2px solid Highlight; }
+  .brand-mark { border: 1px solid CanvasText; }
+  .task-link.ui-action { border: 2px solid LinkText; }
+}

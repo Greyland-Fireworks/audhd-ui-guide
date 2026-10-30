@@ -1,0 +1,50 @@
+/* AUDHD-02/11: related import contents share one boundary; notebook forms use
+   the existing card grid and canonical skin tokens rather than another theme. */
+.notes-tools textarea { width: 100%; min-width: 0; resize: vertical; font: inherit; font-weight: 400; color: var(--ui-text); background: var(--ui-surface); border: 1px solid var(--ui-control-border); border-radius: .4rem; padding: .55rem .8rem; }
+.notes-tools form[data-notebook] { display:flex; flex-direction:column; align-self:start; }
+.new-notebook-editor { margin-bottom:1.25rem; }
+.new-notebook-editor > summary, .notebook-editor > summary { min-height:2.75rem; padding:.6rem .75rem; border:1px solid var(--ui-control-border); border-radius:.4rem; cursor:pointer; }
+.new-notebook-editor > form { max-width:75ch; margin-top:.75rem; }
+.notebook-editor [data-summary-state], .new-notebook-editor [data-summary-state] { font-weight:600; }
+.notebook-snapshot { border-bottom:1px solid var(--ui-border); padding-block-end:1rem; margin-block-end:1rem; }
+.notebook-counts { display:flex; flex-wrap:wrap; gap:.5rem 1.25rem; margin:0 0 1rem; }
+.notebook-counts > div { display:flex; flex-direction:column-reverse; }
+.notebook-counts dt { color:var(--ui-muted); }
+.notebook-counts dd { margin:0; font-weight:700; font-size:1.3em; }
+.notebook-previews { padding-inline-start:1.25rem; }
+.notebook-previews li + li { margin-block-start:.5rem; }
+.notes-tools form[data-notebook] .actions { margin-top: auto; padding-top: .75rem; }
+.workspace-setting-group { min-width:0; margin:0 0 1.25rem; border:1px solid var(--ui-border); border-radius:.5rem; padding:1rem; }
+.workspace-setting-group legend { font-weight:700; padding-inline:.4rem; }
+.workspace-limit-layout { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.5rem; align-items:start; }
+.workspace-limit-layout > * { min-width:0; }
+.field-unit { margin-block:.35rem .75rem; font-weight:600; }
+.note-length-impact { border-inline-start:1px solid var(--ui-border); padding-inline-start:1.25rem; }
+.note-length-impact h2 { font-size:1.15em; margin-top:0; }
+.note-length-impact .limit-scope { color:var(--ui-muted); }
+.note-usage-list { list-style:none; padding:0; margin:0; }
+.note-usage-list > li { border-top:1px solid var(--ui-border); padding-block:.75rem; overflow-wrap:anywhere; }
+.note-usage-list p { margin-block:.25rem .5rem; }
+.note-usage-list .over-limit { border-inline-start:3px solid var(--ui-warning); padding-inline-start:.75rem; }
+.note-usage-list meter { display:block; width:100%; height:1rem; }
+.note-usage-list meter::-webkit-meter-bar { border:1px solid var(--ui-border); background:var(--ui-page); border-radius:.2rem; }
+.note-usage-list meter::-webkit-meter-optimum-value { background:var(--ui-active-accent); }
+.note-usage-list .over-limit meter::-webkit-meter-optimum-value { background:var(--ui-warning); }
+.note-usage-list meter::-moz-meter-bar { background:var(--ui-active-accent); }
+.note-usage-list .over-limit meter::-moz-meter-bar { background:var(--ui-warning); }
+/* AUDHD-08/11: the numerical comparison remains readable when meters cannot
+   convey color. Narrow layouts keep the consequence within its owning group. */
+@media(max-width:65rem) {
+  .workspace-limit-layout { grid-template-columns:minmax(0,1fr); }
+  .note-length-impact { border-inline-start:0; padding-inline-start:0; border-top:1px solid var(--ui-border); padding-block-start:1rem; }
+}
+@media(max-width:40rem) {
+  /* Retain the shared boundary while leaving room for enlarged decision text. */
+  #workspace-settings-form, .workspace-setting-group { padding:.5rem; }
+}
+@media(forced-colors:active) { .note-usage-list .over-limit { border-inline-start-color:Highlight; } }
+.notes-tools input[type=file] { max-width: 100%; }
+.notes-tools .import-preview { border-top: 1px solid var(--ui-border); margin-top: 1rem; padding-top: 1.25rem; }
+.notes-tools .import-notebooks { list-style: none; padding: 0; }
+.notes-tools .import-notebooks > li { padding: .8rem 0; border-bottom: 1px solid var(--ui-border); }
+.notes-tools .import-notebooks ul { padding-inline-start: 1.5rem; }

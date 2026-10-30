@@ -54,6 +54,8 @@ test('Actual text contrast, all skin/style combinations and enlarged targets', a
   const skins=page.getByRole('group',{name:'Appearance',exact:true});
   const styles=page.getByRole('group',{name:'Text style',exact:true});
   const values=await skins.locator('input[type=radio]').evaluateAll(nodes=>nodes.map(n=>n.value).filter(v=>v.startsWith('skin:')));
+  const unreadable=await page.locator('.choice-description,button,select,textarea').evaluateAll(nodes=>nodes.filter(el=>el.getClientRects().length).filter(el=>parseFloat(getComputedStyle(el).fontSize)<16).map(el=>el.textContent||el.id));
+  expect(unreadable,'Ordinary decision help and controls retain the default reading size').toEqual([]);
   await page.setViewportSize({width:320,height:900});
   await page.getByRole('group',{name:'Text size',exact:true}).locator('input[value="larger"]').check();
   for(const skin of values) {

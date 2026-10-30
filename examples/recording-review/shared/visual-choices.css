@@ -10,7 +10,7 @@
 .choice-card:focus-within { outline:3px solid var(--focus); outline-offset:4px; }
 .choice-card input[type=radio] { position:absolute; inset:0; width:100%; height:100%; margin:0; opacity:0; cursor:pointer; }
 .choice-name { font-weight:700; }
-.choice-description { font-size:.9em; }
+.choice-description { font-size:1em; }
 .choice-state { margin-block-start:auto; padding:.65rem .75rem; border:1px solid var(--separator); border-radius:.25rem; background:var(--panel); color:var(--text); font-weight:400; text-align:center; }
 .choice-preview { display:flex; flex-direction:column; gap:.5rem; padding:.75rem; border:1px solid var(--control-border); border-radius:.25rem; overflow-wrap:anywhere; pointer-events:none; }
 .choice-preview[data-kind=appearance] { background:var(--ui-surface); color:var(--ui-text); border-color:var(--ui-control-border); font-family:system-ui,sans-serif; }

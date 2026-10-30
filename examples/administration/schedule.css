@@ -1,0 +1,161 @@
+/* AUDHD-02/08/11: related date/time and room choices share real fieldset edges;
+   separate tasks have space. Canonical skin tokens carry every color. */
+.schedule-nav { display: flex; flex-wrap: wrap; gap: .5rem; margin-block: 0 1rem; }
+.calendar-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 1rem; max-width: none; margin-block: .75rem; }
+.calendar-heading h1 { margin: 0; }
+.calendar-view-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; margin: 0; }
+.calendar-view-actions .schedule-nav { margin: 0; }
+.schedule-nav a { display: inline-flex; align-items: center; min-height: 2.75rem; padding: .5rem .75rem; border: 1px solid var(--ui-border); border-radius: .35rem; }
+.schedule-nav [aria-current] { font-weight: 700; background: var(--ui-active-surface); border-color: var(--ui-active-accent); box-shadow: inset 0 -.2rem var(--ui-active-accent); }
+.schedule-date-pair { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,10rem),1fr)); gap: 1rem; align-items: end; }
+.schedule-boundary { color: var(--ui-muted); max-width: 85ch; }
+.schedule-editor { max-width: 65rem; }
+/* AUDHD-02/08: a saved meeting is a usable destination, not just a form.
+   When/where share a reading row; notes and follow-up stay with those facts.
+   Content-driven wrapping preserves that order at enlarged text and mobile. */
+.meeting-summary { max-width: 65rem; }
+.meeting-facts { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,18rem),1fr)); gap: 1rem; margin: 0; }
+.meeting-facts dt { color: var(--ui-muted); }
+.meeting-facts dd { margin: .25rem 0 0; }
+.meeting-facts dd strong,.meeting-facts dd span { display: block; }
+.meeting-summary .schedule-boundary { margin-bottom: 0; }
+.meeting-duration { font-weight: 700; }
+#meeting-change-preview:empty { display: none; }
+#meeting-change-preview:not(:empty) { margin-block: 1.25rem; }
+.meeting-change { padding-block: .75rem; border-top: 1px solid var(--ui-border); }
+.meeting-change h3 { font: inherit; font-weight: 700; margin: 0 0 .5rem; }
+.meeting-change dl { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,16rem),1fr)); gap: .75rem; margin: 0; }
+.meeting-change dl > div { padding: .6rem .75rem; border-inline-start: .2rem solid var(--ui-border); background: var(--ui-surface); }
+.meeting-change dl > div:last-child { border-inline-start: .2rem dashed var(--ui-active-accent); }
+.meeting-change dt { color: var(--ui-muted); }
+.meeting-change dd { margin: .25rem 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.schedule-editor fieldset { margin: 1rem 0; padding: .75rem 1rem; border: 1px solid var(--ui-border); border-radius: .4rem; }
+.schedule-editor textarea { display: block; width: 100%; padding: .65rem; color: var(--ui-text); background: var(--ui-surface); border: 1px solid var(--ui-control-border); font: inherit; }
+.schedule-equipment { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; }
+.schedule-equipment label { margin-block: .25rem; }
+.schedule-day { margin-top: 1.5rem; }
+.schedule-events { list-style: none; margin: 0; padding: 0; }
+.schedule-event { border-bottom: 1px solid var(--ui-border); padding-block: .75rem; }
+.schedule-event:last-child { border-bottom: 0; }
+.schedule-event > div { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
+.schedule-event a { font-weight: 700; }
+.schedule-event p { margin: .35rem 0 0; }
+.schedule-state { border: 1px solid currentColor; padding: .2rem .4rem; }
+.schedule-room-state { font-weight: 700; }
+/* AUDHD-08/11: geometry expresses time; color reinforces it. A complete native
+   list is available beside every compact plot, including short meetings whose
+   exact-height block cannot display a full title at enlarged text sizes. */
+.calendar-toolbar { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: .5rem 1rem; align-items: end; }
+.calendar-period { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; min-width: 0; }
+.calendar-step-actions { display: flex; flex-wrap: wrap; gap: .4rem; min-width: 0; max-width: 100%; }
+.calendar-toolbar label { max-width: 15rem; margin: 0; }
+#calendar-range { margin: 0; font-size: 1.1em; }
+.calendar-time-context { color: var(--ui-muted); margin-block: .5rem .75rem; }
+.calendar-week-head,.calendar-week-grid { display: grid; grid-template-columns: 3.5rem repeat(7,minmax(0,1fr)); }
+.calendar-week-head { position: sticky; top: 0; z-index: 3; background: var(--ui-surface); border: 1px solid var(--ui-border); }
+.calendar-week-head > * { padding: .6rem .25rem; text-align: center; margin: 0; font: inherit; }
+.calendar-week-head h2 { border-inline-start: 1px solid var(--ui-border); font-weight: 700; }
+.calendar-week-head h2 span,.calendar-week-head h2 small { display: block; font: inherit; }
+.calendar-week-head [data-today=true] { box-shadow: inset 0 -.25rem var(--ui-active-accent); }
+.calendar-week-grid,.day-timeline-grid { height: 60rem; }
+.calendar-hour-axis { position: relative; color: var(--ui-muted); font-variant-numeric: tabular-nums; }
+.calendar-hour-axis > span { position: absolute; top: calc(var(--hour) * 10%); right: .25rem; transform: translateY(-50%); }
+.calendar-hour-axis > span:first-child { transform: none; }
+.calendar-hour-axis > span:last-child { transform: translateY(-100%); }
+.calendar-day-plot { position: relative; height: 100%; min-width: 0; border-inline-start: 1px solid var(--ui-border); border-bottom: 1px solid var(--ui-border); background: repeating-linear-gradient(to bottom,var(--ui-border) var(--grid-offset,0%) calc(var(--grid-offset,0%) + 1px),transparent calc(var(--grid-offset,0%) + 1px) calc(var(--grid-offset,0%) + var(--grid-hour,10%))); }
+.calendar-meeting { position: absolute; z-index: 1; display: block; overflow: hidden; padding: .25rem .3rem; border: 1px solid var(--ui-border); border-inline-start: .2rem solid var(--ui-active-accent); border-radius: .2rem; color: var(--ui-text); background: var(--ui-active-surface); line-height: 1.3; text-decoration: none; }
+.calendar-meeting time,.calendar-meeting strong,.calendar-meeting > span { display: block; }
+.calendar-meeting strong,.room-reservation strong { overflow-wrap: normal; }
+.calendar-meeting time { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.calendar-meeting:hover,.calendar-meeting:focus-visible { z-index: 4; border-color: var(--ui-focus); }
+.calendar-detail-marker:not([hidden]) { position: absolute; inset: 0; display: grid; place-items: center; line-height: 1; font-weight: 700; pointer-events: none; }
+.calendar-event-preview { position: fixed; z-index: 20; max-width: min(24rem,calc(100vw - 1rem)); padding: .6rem .75rem; border: 2px solid var(--ui-focus); border-radius: .3rem; color: var(--ui-text); background: var(--ui-surface); box-shadow: 0 .25rem .75rem #0005; line-height: 1.5; }
+.calendar-now { position: absolute; z-index: 2; width: 100%; border-top: 2px solid var(--ui-action); pointer-events: none; }
+.calendar-now > span { position: absolute; right: 0; transform: translateY(-100%); padding: 0 .2rem; color: var(--ui-text); background: var(--ui-surface); }
+.calendar-readable-list { margin-top: 1rem; }
+.calendar-readable-list > summary { min-height: 2.75rem; padding-block: .5rem; }
+.calendar-week-mobile { display: none; }
+.day-timeline-grid { display: grid; grid-template-columns: 3.5rem minmax(0,1fr); }
+.day-timeline-compact .day-timeline-grid { min-height: 10rem; }
+.month-calendar { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.month-calendar th { font-weight: 600; padding: .5rem; }
+.month-calendar td { vertical-align: top; border: 1px solid var(--ui-border); height: 9rem; padding: .25rem; }
+.month-calendar td > button { min-width: 2.75rem; min-height: 2.75rem; padding: .2rem .5rem; border: 0; background: transparent; }
+.month-calendar td[data-today=true] { border-top: .25rem solid var(--ui-active-accent); }
+.month-calendar td[data-today=true] > button { text-decoration: underline; font-weight: 700; }
+.month-calendar .month-outside { background: var(--ui-surface); color: var(--ui-muted); }
+.month-meetings { list-style: none; padding: 0; margin: .5rem 0 0; }
+.month-meetings a { display: block; padding: .35rem; margin-bottom: .25rem; border-inline-start: .2rem solid var(--ui-active-accent); background: var(--ui-active-surface); color: var(--ui-text); line-height: 1.35; }
+.month-meetings time { font-weight: 700; }
+.month-mobile-count,.month-weekday-short,.month-mobile-help { display: none; }
+.month-selected-day { margin-top: 1.5rem; }
+.room-legend { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; align-items: center; }
+.room-legend-busy,.room-legend-proposal { padding: .2rem .4rem; }
+.room-legend-busy { border-inline-start: .25rem solid var(--ui-active-accent); background: var(--ui-active-surface); }
+.room-legend-proposal { border: 2px dashed var(--ui-action); }
+.room-summary { list-style: none; padding: 0; margin: 0 0 1rem; border: 1px solid var(--ui-border); border-radius: .35rem; }
+.room-summary li { display: grid; grid-template-columns: minmax(8rem,1fr) minmax(0,2fr) auto; align-items: center; gap: .35rem 1rem; padding: .35rem .75rem; border-bottom: 1px solid var(--ui-border); }
+.room-summary li:last-child { border-bottom: 0; }
+.room-summary a { display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: 700; }
+.room-summary small { font: inherit; color: var(--ui-muted); }
+.room-comparison-row { display: grid; grid-template-columns: 14rem minmax(0,1fr); gap: 1rem; border-bottom: 1px solid var(--ui-border); padding: 1rem .75rem; align-items: start; }
+.room-facts h3 { margin-bottom: .35rem; }
+.room-facts p { margin: .25rem 0 .5rem; }
+.room-equipment-list { list-style: none; padding: 0; margin: .5rem 0; }
+.room-equipment-list [data-available=false] { color: var(--ui-muted); }
+.room-lane-wrap > .calendar-hour-axis { display: none; }
+.room-hour-horizontal { position: relative; height: 2rem; font-variant-numeric: tabular-nums; color: var(--ui-muted); }
+.room-hour-horizontal span { position: absolute; transform: translateX(-50%); }
+.room-hour-horizontal span:first-child { transform: none; }
+.room-hour-horizontal span:last-child { transform: translateX(-100%); }
+.room-time-lane { position: relative; height: 8rem; background: repeating-linear-gradient(to right,var(--ui-border) 0 1px,transparent 1px 10%); border-block: 1px solid var(--ui-border); }
+.room-reservation { position: absolute; left: var(--time-start); width: var(--time-span); top: 0; bottom: 1.5rem; overflow: hidden; padding: .35rem; border: 1px solid var(--ui-border); border-inline-start: .2rem solid var(--ui-active-accent); border-radius: .2rem; color: var(--ui-text); background: var(--ui-active-surface); text-decoration: none; line-height: 1.35; }
+.room-reservation time,.room-reservation strong { display: block; }
+.room-reservation:focus-visible { z-index: 2; }
+.room-proposal { position: absolute; left: var(--time-start); width: var(--time-span); bottom: 0; height: 1.5rem; border: 2px dashed var(--ui-action); pointer-events: none; }
+.room-choice { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; justify-content: space-between; margin-block: 0 .75rem; }
+.room-choice p { margin: 0; }
+.room-reservation-list > summary,.room-facts summary { min-height: 2.75rem; padding-block: .5rem; }
+#meeting-alternatives:empty,#meeting-errors:empty { display: none; }
+#meeting-alternatives:not(:empty),#meeting-errors:not(:empty) { margin-block: 1rem; padding: 1rem; border: 2px solid var(--ui-warning); border-radius: .35rem; }
+.schedule-meeting-actions { max-width: 65rem; }
+@media (max-width: 70rem) {
+  .calendar-week-desktop { display: none; }
+  .calendar-week-mobile { display: block; }
+  .month-calendar td { height: 5rem; padding: .1rem; }
+  .month-calendar th { padding: .4rem 0; }
+  .month-calendar td > button { min-width: 0; width: 100%; padding: .2rem 0; }
+  .month-meetings,.month-weekday-long { display: none; }
+  .month-mobile-count,.month-weekday-short { display: block; font: inherit; }
+  .month-mobile-help { display: block; }
+  /* AUDHD-02/08: retain every room for comparison. Each stacked timeline uses
+     the same range and height, so changing width never hides an alternative. */
+  .room-hour-horizontal { display: none; }
+  .room-comparison-row { grid-template-columns: 1fr; padding: 1rem 0; }
+  .room-lane-wrap { display: grid; grid-template-columns: 3.5rem minmax(0,1fr); height: 40rem; }
+  .room-lane-wrap > .calendar-hour-axis { display: block; }
+  .room-time-lane { height: 100%; background: repeating-linear-gradient(to bottom,var(--ui-border) 0 1px,transparent 1px 10%); border-inline: 1px solid var(--ui-border); }
+  .room-reservation { left: 0; right: 2rem; width: auto; top: var(--time-start); height: var(--time-span); bottom: auto; }
+  .room-proposal { top: var(--time-start); height: var(--time-span); left: auto; right: 0; width: 1.25rem; bottom: auto; }
+}
+@media (max-width: 40rem) {
+  .schedule-date-pair { grid-template-columns: 1fr; gap: .4rem; }
+  .room-query-grid { grid-template-columns: repeat(auto-fit,minmax(min(100%,9rem),1fr)); }
+  .schedule-editor fieldset { padding: .6rem; }
+  .calendar-toolbar { grid-template-columns: minmax(0,1fr); }
+  .calendar-toolbar label { display: flex; align-items: center; gap: .5rem; max-width: none; }
+  .calendar-toolbar input { width: auto; min-width: 0; flex: 1; }
+  .calendar-heading { gap: .5rem; }
+  .calendar-view-actions { width: 100%; }
+  .room-summary li { grid-template-columns: minmax(0,1fr); gap: .15rem; padding-block: .5rem; }
+}
+@media (forced-colors: active) {
+  .schedule-nav [aria-current] { outline: 2px solid Highlight; }
+  .calendar-now,.room-proposal,.room-legend-proposal { border-color: Highlight; }
+  .calendar-meeting,.room-reservation { color: LinkText; background: Canvas; border-color: CanvasText; border-inline-start-color: Highlight; }
+  /* Only the grid drawing opts out of color replacement; its colors remain
+     system colors, and child text/controls keep normal forced-color behavior. */
+  .calendar-day-plot::before,.room-time-lane::before { content: ''; position: absolute; inset: 0; pointer-events: none; forced-color-adjust: none; background: repeating-linear-gradient(to bottom,GrayText var(--grid-offset,0%) calc(var(--grid-offset,0%) + 1px),transparent calc(var(--grid-offset,0%) + 1px) calc(var(--grid-offset,0%) + var(--grid-hour,10%))); }
+  .room-time-lane::before { background: repeating-linear-gradient(to right,GrayText 0 1px,transparent 1px 10%); }
+}
+@media (forced-colors: active) and (max-width: 70rem) { .room-time-lane::before { background: repeating-linear-gradient(to bottom,GrayText 0 1px,transparent 1px 10%); } }

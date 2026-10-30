@@ -1,0 +1,77 @@
+/* AUDHD-02/08/11: notebook outlines express task groups. Titles, descriptions
+   and draft states share a reading column; color never substitutes for labels.
+   A single-column phone layout preserves the same document and keyboard order. */
+.notebook-grid { margin-block: 1rem; }
+.notebook-card { align-self:start; border-top:3px solid var(--ui-active-accent); }
+.notebook-heading { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:.25rem 1rem; }
+.notebook-heading h2 { margin:0; }
+.notebook-count { white-space:normal; border:1px solid var(--ui-border); border-radius:.4rem; padding:.3rem .55rem; }
+.notebook-description { margin-block:.5rem 1rem; }
+.notebook-summary { border-inline-start:3px solid var(--ui-active-accent); padding-inline-start:.75rem; }
+.notebook-card h2 a { display:inline-flex; align-items:center; min-height:2.75rem; }
+.note-rows { list-style:none; padding:0; margin:0; }
+.note-row { border-top:1px solid var(--ui-border); padding-block:.75rem; }
+.note-row a { display:inline-flex; align-items:center; min-height:2.75rem; font-weight:600; }
+.note-row p { margin:.2rem 0; color:var(--ui-muted); }
+.note-row.has-draft { background:var(--ui-active-surface); padding-inline:.75rem; }
+.note-state { display:block; border-inline-start:3px solid currentColor; padding-inline-start:.6rem; }
+.note-tabs { display:flex; flex-wrap:wrap; gap:.75rem; margin-block:0 1.25rem; }
+.note-tabs a { display:inline-flex; align-items:center; padding:.55rem .8rem; min-height:2.75rem; border:1px solid var(--ui-control-border); border-radius:.4rem; }
+.note-tabs [aria-current] { background:var(--ui-active-surface); border-bottom:3px solid var(--ui-active-accent); font-weight:700; }
+.note-editor { max-width:75ch; }
+.note-editor-context { display:flex; justify-content:space-between; flex-wrap:wrap; gap:.35rem 1rem; padding-block:0 1rem; margin-block:0 1rem; border-bottom:1px solid var(--ui-border); }
+.note-editor-context span { color:var(--ui-muted); }
+.note-readonly { border-inline-start:3px solid var(--ui-active-accent); padding-inline-start:1rem; margin-bottom:1rem; }
+.note-readonly p { margin-top:0; }
+/* AUDHD-05/07: the draft state, outcome and commit controls share the editor's
+   boundary. A highlighted draft is unfinished work, not a warning or error. */
+.note-save-bar { border-top:1px solid var(--ui-border); padding-block-start:1rem; margin-block-start:1rem; }
+.note-save-bar > p { margin-block-start:0; }
+.note-editor[data-draft="true"] .note-save-bar { border-inline-start:3px solid var(--ui-active-accent); padding-inline-start:1rem; }
+textarea { display:block; width:100%; min-width:0; resize:vertical; padding:.75rem; border:1px solid var(--ui-control-border); border-radius:.4rem; font:inherit; line-height:1.6; color:var(--ui-text); background:var(--ui-surface); }
+.note-editor textarea { font-weight:400; }
+.note-lifecycle { max-width:75ch; }
+.note-copy { white-space:pre-wrap; overflow-wrap:anywhere; font:inherit; }
+.version-picker { display:block; max-width:38rem; }
+.version-picker select { width:100%; }
+.version-columns { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; align-items:start; }
+.version-column { min-width:0; border:1px solid var(--ui-border); border-radius:.5rem; overflow-wrap:anywhere; }
+.version-column-heading { padding:1rem; border-bottom:1px solid var(--ui-border); background:var(--ui-active-surface); }
+.version-column-heading h3 { margin:0 0 .5rem; }
+.version-field { padding:1rem; border-bottom:1px solid var(--ui-border); }
+.version-field:last-child { border-bottom:0; }
+.version-field.is-different { border-inline-start:4px solid var(--ui-active-accent); }
+.version-field-label { display:flex; justify-content:space-between; flex-wrap:wrap; gap:.25rem 1rem; }
+.version-field-label h4 { margin:0; font:inherit; font-weight:700; }
+.version-field-label span { color:var(--ui-muted); }
+.version-field p { margin-bottom:0; }
+.version-differences { font-weight:600; padding:.75rem 0; }
+.version-restore { border-top:1px solid var(--ui-border); margin-block-start:1.25rem; padding-block-start:1rem; }
+.version-restore #restore-confirm { margin-block-start:1rem; }
+.version-dates { color:var(--ui-muted); }
+.version-change { border:1px solid var(--ui-border); border-radius:.4rem; margin-bottom:1rem; }
+.version-change > h3 { margin:0; padding:.75rem; background:var(--ui-active-surface); }
+.version-change-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+.version-change-side { min-width:0; padding:.75rem; }
+.version-change-side + .version-change-side { border-inline-start:1px solid var(--ui-border); }
+.version-change-side h4 { margin:0; font:inherit; font-weight:700; }
+.version-change-side p { margin:.25rem 0; }
+.version-change-side .note-copy { margin:.5rem 0 0; }
+.version-full-text .version-columns { margin-top:1rem; }
+/* AUDHD-02/08/11: each changed span keeps its selected/current pair together
+   on a phone. The optional full snapshots stack in the same reading order. */
+@media(max-width:60rem) {
+  .version-columns, .version-change-pair { grid-template-columns:minmax(0,1fr); }
+  .version-change-side + .version-change-side { border-inline-start:0; border-top:1px solid var(--ui-border); }
+}
+@media(max-width:40rem) {
+  /* Nested comparison frames must not consume the text column at 200% size. */
+  #note-history { padding:.65rem; }
+  .version-column-heading, .version-field { padding:.65rem; }
+}
+.workspace-facts { display:flex; flex-wrap:wrap; gap:.75rem 2rem; padding:1rem 1.25rem; border:1px solid var(--ui-border); border-radius:.5rem; margin-bottom:1.25rem; }
+.workspace-facts a { min-height:2.75rem; display:inline-flex; align-items:center; gap:.5rem; }
+#note-result { margin-bottom:1rem; padding:1rem; background:var(--ui-active-surface); }
+#note-result:focus { outline:2px solid var(--ui-focus); outline-offset:2px; }
+.note-review-list { margin-bottom:1.25rem; }
+@media(forced-colors:active) { .note-tabs [aria-current] { outline:2px solid Highlight; } .version-field.is-different { border-inline-start-color:Highlight; } }

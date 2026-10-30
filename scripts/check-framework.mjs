@@ -22,7 +22,7 @@ const npmCli = process.env.npm_execpath;
 assert(npmCli, 'Run with npm run check:framework');
 const npm = (args, cwd = root) => execFileSync(process.execPath, [npmCli, ...args], {cwd, encoding:'utf8', timeout:180000});
 const packed = JSON.parse(npm(['pack','--workspace','audhd-ui-framework','--json','--pack-destination',output]))[0];
-const allowed = ['CONFIGURATION.md','LICENSE','LICENSE-CODE','LICENSE_SCOPE.md','README.md','package.json','profile.js','capabilities.js','import-workflow.js','v1.schema.json','v2.schema.json','skins.css','palette-data.json'];
+const allowed = ['CONFIGURATION.md','LICENSE','LICENSE-CODE','LICENSE_SCOPE.md','README.md','package.json','profile.js','capabilities.js','import-workflow.js','v1.schema.json','v2.schema.json','skins.css','controls.css','palette-data.json'];
 assert.deepEqual(packed.files.map(f => f.path).sort(), allowed.sort());
 const tarball = join(output, packed.filename);
 const checksum = createHash('sha256').update(await readFile(tarball)).digest('hex');
@@ -54,13 +54,29 @@ try {
   browser=await chromium.launch();
   const page=await browser.newPage();
   const errors=[]; page.on('pageerror',error=>errors.push(error.message));
-  const styles=()=>page.evaluate(()=>Object.fromEntries(['settings','neighbor'].map(id=>{const s=getComputedStyle(document.getElementById(id));return [id,{color:s.color,background:s.backgroundColor,font:s.fontFamily}]})));
+  const styles=()=>page.evaluate(()=>Object.fromEntries(['settings','neighbor'].map(id=>{
+    const root=document.getElementById(id), s=getComputedStyle(root);
+    const button=root.querySelector(':scope > button:not([hidden])'), control=getComputedStyle(button);
+    return [id,{color:s.color,background:s.backgroundColor,font:s.fontFamily,controlFont:control.fontSize,controlHeight:button.getBoundingClientRect().height}];
+  })));
   await page.goto(`${base}/?no-css`); await page.waitForFunction(()=>document.querySelector('#settings').hasAttribute('data-audhd-ui'));
   const plain=await styles();
   await page.goto(`${base}/?no-marker`); await page.waitForFunction(()=>document.styleSheets.length>0);
   assert.deepEqual(await styles(),plain,'Importing CSS without a marker must not style matching unmarked attributes/classes');
   await page.goto(base); await page.waitForFunction(()=>document.querySelector('#settings').hasAttribute('data-audhd-ui'));
   const styled=await styles(); assert.deepEqual(styled.neighbor,plain.neighbor); assert.notDeepEqual(styled.settings,plain.settings);
+  // Check the delivered CSS, including native form defaults. A body-size token
+  // alone does not prove inputs or decision help are readable.
+  const sizes = () => page.locator('#settings :is(label,button,textarea,input)').evaluateAll(nodes => nodes.map(node => ({font:parseFloat(getComputedStyle(node).fontSize), height:node.getBoundingClientRect().height})).filter(size => size.height > 0));
+  assert((await sizes()).every(size => size.font >= 16));
+  const defaultButtonHeight = await page.locator('#export').evaluate(node => node.getBoundingClientRect().height);
+  await page.locator('#settings').evaluate(node => node.dataset.density = 'compact');
+  assert((await sizes()).every(size => size.font >= 16));
+  assert(await page.locator('#export').evaluate(node => node.getBoundingClientRect().height) >= 44);
+  assert(await page.locator('#export').evaluate(node => node.getBoundingClientRect().height) <= defaultButtonHeight);
+  await page.evaluate(() => document.documentElement.style.fontSize = '200%');
+  assert((await sizes()).every(size => size.font >= 32), 'Controls follow enlarged root text');
+  await page.evaluate(() => document.documentElement.style.fontSize = '');
   await page.getByLabel('Unsaved note').fill('Do not export or erase this draft');
   const profile=JSON.parse(await readFile(join(root,'preferences.example.json')));
   profile.display.appearance={mode:'skin',id:'obsidian'}; profile.display.text_scale=1.75;
@@ -180,5 +196,5 @@ for(const framework of ['react','svelte']) {
   bundleSizes[framework]={};
   for(const name of await readdir(folder)) bundleSizes[framework][name]=gzipSync(await readFile(join(folder,name))).length;
 }
-await writeFile(join(output,'results.json'),JSON.stringify({status:'internal candidate; manual and skill gates recorded separately',checksum,consumer,plugin,checks:['packed allowlist','Node public imports','isolated install/build','CSS opt-in and isolation','import/apply/cancel/export','draft/focus continuity','malformed reads','stale success and stale rejection after newer preview','empty selection invalidates pending read','forced-color emulation','source-checkout diagnostic','clean plugin install/test/build'],bundleSizes},null,2));
+await writeFile(join(output,'results.json'),JSON.stringify({status:'internal candidate; manual and skill gates recorded separately',checksum,consumer,plugin,checks:['packed allowlist','Node public imports','isolated install/build','CSS opt-in and isolation','rendered control sizes, compact spacing and text enlargement','import/apply/cancel/export','draft/focus continuity','malformed reads','stale success and stale rejection after newer preview','empty selection invalidates pending read','forced-color emulation','source-checkout diagnostic','clean plugin install/test/build'],bundleSizes},null,2));
 console.log(`PASS: isolated package and clean plugin checks. Candidate: ${tarball}`);

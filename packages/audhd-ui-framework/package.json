@@ -12,6 +12,7 @@
     "./v1.schema.json": "./v1.schema.json",
     "./v2.schema.json": "./v2.schema.json",
     "./skins.css": "./skins.css",
+    "./controls.css": "./controls.css",
     "./palettes": "./palette-data.json",
     "./capabilities": "./capabilities.js",
     "./import-workflow": "./import-workflow.js"
@@ -21,6 +22,7 @@
     "v1.schema.json",
     "v2.schema.json",
     "skins.css",
+    "controls.css",
     "palette-data.json",
     "README.md",
     "CONFIGURATION.md",
@@ -31,7 +33,8 @@
     "import-workflow.js"
   ],
   "sideEffects": [
-    "./skins.css"
+    "./skins.css",
+    "./controls.css"
   ],
   "dependencies": {
     "ajv": "8.20.0",

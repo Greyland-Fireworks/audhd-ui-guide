@@ -4,7 +4,10 @@ import palettes from 'audhd-ui-framework/palettes';
 
 // Fixture switches let the contract check distinguish importing CSS from opting in.
 const params = new URLSearchParams(location.search);
-if (!params.has('no-css')) await import('audhd-ui-framework/skins.css');
+if (!params.has('no-css')) {
+  await import('audhd-ui-framework/skins.css');
+  await import('audhd-ui-framework/controls.css');
+}
 const root = document.querySelector('#settings');
 if (!params.has('no-marker')) root.setAttribute('data-audhd-ui', '');
 const byId = id => document.getElementById(id);

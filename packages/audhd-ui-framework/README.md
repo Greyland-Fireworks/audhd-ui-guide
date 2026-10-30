@@ -30,6 +30,7 @@ For backend configuration dashboards, follow the bundled [configuration integrat
 | `audhd-ui-framework/v1.schema.json`, `audhd-ui-framework/v2.schema.json` | Existing JSON Schema contracts; no new preference version. |
 | `audhd-ui-framework/palettes` | JSON palette registry; use JSON import attributes in Node. |
 | `audhd-ui-framework/skins.css` | Optional styles; never imported by the JavaScript API. |
+| `audhd-ui-framework/controls.css` | Opt-in readable text and control sizing; independent of palette and runtime APIs. |
 
 The application supplies its capability declaration and decides how to apply preferences, follow system settings, protect data and retain choices. Valid data is not proof that an application supports a requested choice. Preserve unsupported intent for export while reporting what actually applied. No automatic file discovery, storage or network access occurs.
 
@@ -92,6 +93,22 @@ Snapshots are separate copies with the shape `{ state, preview, error }`. State 
 If a subscriber cancels or starts another import during notification, delivery of the superseded notification stops; the replacement transition delivers its own notifications. Thrown errors with an empty message, or thrown values that are not strings or Error objects, use `Unable to read preferences.` so hosts can show a meaningful error without converting arbitrary thrown objects to strings.
 
 Hosts own loading/cancel controls, file-input clearing, accessible announcements, focus and rendering. Keep Apply mounted after application, and offer Cancel during reads as well as preview. Application and export remain host-owned; there is no controller apply, persistence or download method. The five root exports are unchanged. Import the capability and workflow modules explicitly through their subpaths; neither accesses browser globals or imports styles.
+
+## Readable control defaults
+
+Import `audhd-ui-framework/controls.css` alongside `skins.css`, or copy both files directly. Put `data-controls` on the same `data-audhd-ui` root. This starts ordinary labels, inputs and decision help at `1rem` (16 CSS pixels with the usual browser default), with inherited fonts and `2.75rem` minimum control targets. Put `class="ui-help"` on essential explanation text if the host otherwise makes help smaller. Smaller text is reserved for secondary metadata; a muted color does not make necessary instructions secondary.
+
+```html
+<section data-audhd-ui data-controls data-skin="guillermo" class="ui-skin">
+  <label for="delay">Wait before retrying (seconds)</label>
+  <input id="delay" type="number" min="1" value="5" aria-describedby="delay-help">
+  <p id="delay-help" class="ui-help">For this example, 5 means wait five seconds after a failed attempt.</p>
+</section>
+```
+
+The asset supplies presentation defaults, not validation or retry behavior. Match units, accepted values and explanations to the real application. The [administration example](../../examples/administration/README.md) demonstrates coupled quantities and units, local help, navigation and recovery.
+
+The `--ui-text-size`, `--ui-control-target` and control-padding properties are scoped CSS choices, not stored preference fields. `data-density="compact"` reduces padding without shrinking text or targets. Explicit user and established platform requirements take precedence. Use relative values, retain text enlargement and verify computed styles after product overrides. Native checkbox/radio glyphs keep their size; associated wrapping labels provide the hit area. Unmarked sibling content is unaffected. The low-specificity selectors deliberately allow host styles to override these defaults; importing the file alone is not proof of accessible sizing.
 
 ## Optional appearance
 

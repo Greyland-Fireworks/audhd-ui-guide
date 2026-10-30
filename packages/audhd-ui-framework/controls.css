@@ -1,0 +1,48 @@
+/* Optional readable control defaults. Import alongside skins.css and put
+   data-controls on the same data-audhd-ui root. No JavaScript or skin changes.
+   Relative sizes follow browser text preferences; product styles may override
+   these low-specificity defaults after checking the rendered task. */
+:where([data-audhd-ui][data-controls]) {
+  --ui-text-size: 1rem;
+  --ui-control-target: 2.75rem;
+  --ui-control-padding-block: .55em;
+  --ui-control-padding-inline: .75em;
+  font-size: var(--ui-text-size);
+  line-height: 1.5;
+}
+
+/* Density changes padding, never the text or minimum target. This marker is
+   an application styling choice, not a new stored preference schema field. */
+:where([data-audhd-ui][data-controls][data-density="compact"]) {
+  --ui-control-padding-block: .3em;
+  --ui-control-padding-inline: .5em;
+}
+
+:where([data-audhd-ui][data-controls]) :where(button, input, select, textarea) {
+  box-sizing: border-box;
+  font: inherit;
+  font-size: max(1em, var(--ui-text-size));
+  color: inherit;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+}
+:where([data-audhd-ui][data-controls]) :where(button, select, textarea, input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"])) {
+  min-block-size: var(--ui-control-target);
+  padding: var(--ui-control-padding-block) var(--ui-control-padding-inline);
+}
+:where([data-audhd-ui][data-controls]) :where(button) {
+  min-inline-size: var(--ui-control-target);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+:where([data-audhd-ui][data-controls]) :where(label, legend, .ui-help) {
+  font-size: max(1em, var(--ui-text-size));
+}
+/* The label supplies the checkbox/radio hit area without enlarging its glyph.
+   Host markup must still associate that label with its input. */
+:where([data-audhd-ui][data-controls]) :where(label:has(input[type="checkbox"], input[type="radio"])) {
+  display: inline-flex;
+  align-items: center;
+  gap: .5em;
+  min-block-size: var(--ui-control-target);
+}

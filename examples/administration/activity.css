@@ -1,0 +1,49 @@
+.activity-review > p { max-width: 80ch; }
+.activity-count { font-weight: bold; }
+.activity-review [hidden] { display: none; }
+.activity-arrival-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+.activity-arrival-bar:has(button[hidden]) { display: none; }
+.activity-arrival-bar p { max-width: 55ch; }
+.activity-controls { display: flex; flex-wrap: wrap; align-items: start; gap: 1rem; }
+.activity-controls > details { max-width: 50ch; }
+.activity-controls label { margin-block: .5rem; }
+.activity-controls > div { max-width: 16rem; }
+.activity-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-bottom: .5rem; }
+.activity-actions:empty { display: none; }
+.activity-table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.activity-table caption { text-align: start; padding-block: .5rem; font-weight: bold; }
+.activity-table th,.activity-table td { text-align: start; vertical-align: top; padding: .8rem; border-block-end: 1px solid var(--ui-border); overflow-wrap: anywhere; }
+.activity-table th:first-child { width: 29%; }
+.activity-table th:nth-child(2) { width: 17%; }
+.activity-table th:nth-child(3) { width: 15%; }
+.activity-table td p { margin-block: 0 .75rem; }
+.activity-table details { margin: 0; padding: .5rem; }
+.activity-table pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: inherit; }
+.activity-table [data-severity="warning"] .activity-severity { color: var(--ui-warning); }
+.activity-table [data-severity="error"] .activity-severity { color: var(--ui-danger); }
+.activity-severity { display: block; font-weight: bold; }
+.activity-acknowledged { display: block; }
+.activity-unreviewed { background: var(--ui-surface); outline: 2px solid var(--ui-warning); outline-offset: -2px; }
+.activity-unreviewed[data-severity="error"] { outline-color: var(--ui-danger); }
+.activity-pages { align-items: center; }
+
+/* AUDHD-03/08: show the event's meaning before metadata on every screen.
+   Mobile cards keep the table's source order and header semantics; concise
+   timestamp/severity rows replace four repeated labels. Raw data stays last. */
+@media (max-width: 48rem) {
+  .activity-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .activity-table,.activity-table caption,.activity-table tbody,.activity-table td { display: block; width: 100%; }
+  .activity-table tr { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); margin-block: .75rem; padding: .5rem; border: 1px solid var(--ui-border); }
+  .activity-table td { border: 0; padding: .5rem; }
+  .activity-description,.activity-attention { grid-column: 1 / -1; }
+  .activity-table .activity-description p { margin: 0; font-weight: 600; }
+  .activity-time,.activity-level { color: var(--ui-muted); }
+  .activity-table .activity-attention { border-block-start: 1px solid var(--ui-border); }
+  .activity-controls { gap: .5rem 1rem; }
+  .activity-controls > div { flex: 1 1 7rem; max-width: none; }
+  .activity-controls > details { flex-basis: 100%; margin-block: .25rem; }
+}
+@media (forced-colors: active) {
+  .activity-unreviewed,.activity-unreviewed[data-severity="error"] { outline-color: Highlight; }
+  .activity-table [data-severity] .activity-severity { color: CanvasText; }
+}

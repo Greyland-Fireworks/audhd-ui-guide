@@ -44,6 +44,10 @@ Load `skins.css`, then apply `data-audhd-ui` and `data-skin="guillermo"` and cla
 
 Inline SVG can consume variables directly. Canvas chart adapters must read resolved variables with `getComputedStyle(root).getPropertyValue('--ui-chart-series-1')` and redraw after skin changes. CSS does not implement a chart library or its keyboard behavior. Keep data, selection, focus, drafts and category identity intact when changing skins. For pie/stacked charts, add segment boundaries and direct labels; for scatter plots use marker shapes; for heatmaps provide numeric values and a table. Do not put text directly on ramp cells without separately checking its contrast.
 
+## Text and control sizes
+
+Palette tokens define appearance, not a complete layout. The optional [control stylesheet](../../packages/audhd-ui-framework/controls.css) supplies relative text and target sizes when imported with a `data-controls` marker on the same `data-audhd-ui` root. See [usage and override boundaries](../../packages/audhd-ui-framework/README.md#readable-control-defaults). Keep ordinary labels, controls and decision help readable; compact spacing must not reduce their text size. Verify the rendered result after application styles and user preferences apply.
+
 ## Verification and limits
 
 Run `python check_palettes.py`. It checks text at 4.5:1 against page/panel/active surfaces, controls and focus at 3:1, button text at 4.5:1, categorical marks at 3:1 against the plot surface, sequential luminance and preview coverage. Decorative separators and low-valued ramp fills are not claimed to meet 3:1; use the control-border token for essential boundaries.
