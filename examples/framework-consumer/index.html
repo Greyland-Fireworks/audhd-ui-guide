@@ -3,9 +3,17 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Isolated framework consumer</title>
 <link rel="icon" href="data:,">
+<!-- AUDHD-11, AUDHD-08 — ../../GUIDE.md#audhd-11-keep-controls-readable-and-operable
+     This fixture deliberately starts Paperwhite/serif to test a known host style,
+     not prescribe an application default. main.js adds the opt-in marker; matching
+     attributes on the unmarked sibling below must not receive these scoped styles. -->
 <section id="settings" class="ui-skin" data-controls data-skin="paperwhite" data-type="serif">
   <h1>Local preference preview</h1>
   <p>Preferences apply to this session only. Unsupported choices remain in exports. No document data is exported.</p>
+  <!-- AUDHD-06, AUDHD-11 — ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable
+       Native labeled file selection starts a preview, not application. Keep the
+       unrelated textarea mounted so the import/apply/cancel checks can detect lost
+       document work; that text never belongs to the exported preference profile. -->
   <label>Unsaved note <textarea id="draft"></textarea></label>
   <label>Import preferences <input id="import" type="file" accept=".json,application/json"></label>
   <div id="preview" hidden><h2>Requested choices</h2><ul id="choices"></ul>
@@ -13,6 +21,9 @@
   </div>
   <button id="cancel" type="button" hidden>Cancel import</button>
   <button id="export" type="button">Export preferences</button>
+  <!-- AUDHD-07 — ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status
+       Reading, ready and applied messages describe different states. Separate
+       routine status from errors so failed import is not presented as application. -->
   <p id="status" role="status"></p><p id="error" role="alert"></p>
 </section>
 <aside id="neighbor" data-skin="obsidian" data-type="mono"><p class="ui-muted">Unmarked neighboring content</p><button class="ui-action">Neighbor action</button></aside>

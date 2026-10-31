@@ -30,7 +30,11 @@
     "LICENSE-CODE",
     "LICENSE_SCOPE.md",
     "capabilities.js",
-    "import-workflow.js"
+    "import-workflow.js",
+    "fonts.css",
+    "fonts",
+    "fonts-manifest.json",
+    "skin-selections.json"
   ],
   "sideEffects": [
     "./skins.css",

@@ -9,6 +9,8 @@ import { renderNotebookSettings, renderWorkspaceSettings, renderTransfer, notesT
 import { renderSchedule, scheduleDestinations, scheduleSummary, renderDayTimeline, updateCalendarPresentation } from './schedule.js';
 import { getCalendarEvents, localDate, rooms } from './schedule-state.js';
 import { renderWork, workDestinations, workSummary } from './work.js';
+import { registerScenarioOwner, subscribeScenario } from './scenario-state.js';
+import { mountScenarios } from './scenario-ui.js';
 
 const $ = selector => document.querySelector(selector);
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -32,7 +34,6 @@ const pages = [
   { path: 'notes/trash', label: 'Trash', parent: 'notes', group: 'Notes' },
   { path: 'administration', label: 'Administration', group: 'Administration', alias: 'people' },
   { path: 'people', label: 'Users & access', parent: 'administration', group: 'Administration' },
-  ...people.map(p => ({ path: `people/${p.id}`, label: `${p.name}: permissions`, parent: 'people', group: 'Users', record: true, targets: ['role', 'reason', 'verify', 'restore-check'] })),
   { path: 'workspace-settings', label: 'Workspace settings', parent: 'administration', group: 'Administration', targets: ['maxNoteLength','defaultNotebookId'] },
   { path: 'exports', label: 'Note transfers', parent: 'administration', group: 'Administration', alias: 'transfer' },
   { path: 'transfer', label: 'Import & export notes', parent: 'exports', group: 'Exports' },
@@ -48,12 +49,15 @@ const pages = [
 // AUDHD-01/03/10: the directory includes current records, not just initial
 // fixtures. IDs stay stable across renames; every user-authored label is escaped
 // at the HTML boundary. One ancestor walk drives breadcrumbs and discovery.
+// See ../../GUIDE.md#audhd-01-keep-scope-and-location-visible.
 function syncNotePages() {
   for(let i=pages.length-1;i>=0;i--) if(pages[i].dynamic) pages.splice(i,1);
   pages.push(...noteDestinations().map(page=>({...page,dynamic:true})));
+  pages.push(...people.map(p => ({ path: `people/${p.id}`, label: `${p.name}: permissions`, parent: 'people', group: 'Users', record: true, dynamic:true, targets: ['role', 'reason', 'verify', 'restore-check'] })));
   // AUDHD-01/02: domains contribute their actual destinations to the same
   // registry as notes. The shell never guesses a child from a URL prefix.
   // Insert the task domains before administration, leaving Appearance last.
+  // See ../../GUIDE.md#audhd-01-keep-scope-and-location-visible.
   const domains = [...scheduleDestinations().map(page=>({...page,domain:'schedule'})), ...workDestinations().map(page=>({...page,domain:'work'}))];
   pages.splice(pages.findIndex(page=>page.path==='people'), 0, ...domains.map(page=>({...page,dynamic:true})));
   pages.find(page=>page.path==='notebooks').targets=[...notebooks.map(book=>book.id),'new'].flatMap(id=>['name','description'].map(field=>`${id}/${field}`));
@@ -68,6 +72,7 @@ const ancestors = page => {
 const pageFor = path => {
   // Recognize only real destinations and declared control links. A mistyped
   // child URL must not silently pretend to be a valid parent page.
+  // AUDHD-01: ../../GUIDE.md#audhd-01-keep-scope-and-location-visible.
   const match = pages.find(p => path === p.path || p.targets?.some(target => path === `${p.path}/${target}`));
   return match?.alias ? pages.find(p => p.path === match.alias) : match;
 };
@@ -83,10 +88,11 @@ function showMenu() {
   // AUDHD-05/11: teaching controls are optional chrome. On a phone they belong
   // in the complete section menu, leaving the first viewport for actual work.
   // Move the existing button, never clone it or reset its pressed state.
-  const guide = $('#guide-toggle'), host = $('#guide-menu-host');
+  // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
+  const guide = $('#guide-toggle'), cue = $('.guide-toggle-cue'), host = $('#guide-menu-host');
   const wasFocused = document.activeElement === guide;
   const parent = narrow.matches ? host : $('.workspace-header');
-  if (guide.parentElement !== parent) parent.append(guide);
+  if (cue.parentElement !== parent) parent.append(cue);
   host.hidden = !narrow.matches || !menuOpen;
   if (wasFocused) (narrow.matches && !menuOpen ? $('#menu-toggle') : guide).focus();
 }
@@ -107,12 +113,14 @@ $('#workspace-nav').addEventListener('click', event => {
 });
 // The narrow section menu also owns Guide notes; Escape must work from either
 // area and return focus to the visible trigger after the menu is hidden.
+// AUDHD-05: ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
 $('.sidebar').addEventListener('keydown', event => {
   if (event.key === 'Escape' && narrow.matches) { menuOpen = false; showMenu(); $('#menu-toggle').focus(); }
 });
 narrow.addEventListener('change', () => {
   // AUDHD-05/11: reflow can hide the focused navigation item. Return to the
   // named menu trigger instead of leaving keyboard focus on an invisible link.
+  // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
   const focusInMenu = $('#workspace-nav').contains(document.activeElement);
   menuOpen = false; showMenu();
   if (narrow.matches && focusInMenu) $('#menu-toggle').focus();
@@ -136,6 +144,7 @@ function navigation(path) {
   // Store explicit toggle choices separately; otherwise visiting several tasks
   // leaves every old branch open and obscures the current location. A manually
   // collapsed current branch keeps its location text and all breadcrumb links.
+  // See ../../GUIDE.md#audhd-01-keep-scope-and-location-visible.
   const item = page => {
     const children = pages.filter(p => p.parent === page.path && !p.record);
     const open = branches.has(page.path) ? branches.get(page.path) : chain.includes(page) || page === current;
@@ -156,12 +165,14 @@ function breadcrumbs(current) {
   // AUDHD-01/02: Harbor Team Hub is the home destination, not a decorative label.
   // Overview is that same page, so it must not appear as its own child. Native
   // hash links use the existing history/focus path and preserve task drafts.
+  // See ../../GUIDE.md#audhd-01-keep-scope-and-location-visible.
   const home = pages.find(page => page.path === 'overview');
   const atHome = current === home;
   const chain = ancestors(current);
   // AUDHD-01/05/11: long record ancestry must not consume a phone's first
   // viewport at enlarged text sizes. Home stays visible; a disclosure button
   // retains every ancestor link. The task heading identifies the current page.
+  // See ../../GUIDE.md#audhd-01-keep-scope-and-location-visible.
   const trail = `${chain.map(parent=>`<span aria-hidden="true">/</span><a href="${href(parent)}">${escape(parent.label)}</a>`).join('')}<span aria-hidden="true">/</span><span aria-current="page">${escape(current?.label || 'Destination not found')}</span>`;
   $('#breadcrumbs').innerHTML = `<a href="${href(home)}" ${atHome ? 'aria-current="page"' : ''}>Harbor Team Hub</a>${atHome ? '' : `<button id="breadcrumb-toggle" type="button" aria-label="Page path" aria-controls="breadcrumb-path" aria-expanded="false" ${narrow.matches ? '' : 'hidden'}>Path</button><span id="breadcrumb-path" ${narrow.matches ? 'hidden' : ''}>${trail}</span>`}`;
   if (!atHome) $('#breadcrumb-toggle').onclick = event => {
@@ -170,11 +181,14 @@ function breadcrumbs(current) {
     event.currentTarget.setAttribute('aria-expanded', String(!path.hidden));
   };
   document.title = `${current?.label || 'Destination not found'} · Harbor Team Hub demo`;
+  const teaching = document.getElementById('navigation-teaching');
+  if (!teaching.hasChildNodes()) teaching.innerHTML = guideNote('navigation-design', 'Location and ancestry', '<p>One destination registry supplies navigation and breadcrumbs, so parent links agree with the selected task. The mobile menu retains the complete hierarchy.</p>', ['AUDHD-01', 'AUDHD-05', 'AUDHD-11']);
 }
 
 // AUDHD-06/07/10: records are the saved simulation, drafts are independent per
 // person, and outcomes refer to a saved version. Route rendering is a view of
 // these owners, never a reset. No browser storage or real authorization exists.
+// See ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable.
 const drafts = new Map(), outcomes = new Map();
 const invalid = new Set(), unavailableChecks = new Set();
 let query = '', saveCount = 0;
@@ -191,6 +205,7 @@ function checkStatus(person) {
   // AUDHD-04/07: missing evidence is review work, not a detected access breach.
   // An unavailable checker is a warning about the check, not a failed save.
   // The same description is used on both account lists and the detail page.
+  // See ../../GUIDE.md#audhd-04-explain-effective-behavior.
   if (hasVerifiedSavedVersion(person)) return { level: 'success', title: 'Check passed', text: `Reading allowed; editing ${person.role === 'editor' ? 'allowed' : 'denied'}. This matches the saved role.`, target: 'verify', action: 'Recheck saved access' };
   if (outcomes.get(person.id)?.verified === false) return {
     level: 'warning', title: 'Warning · Check unavailable', text: 'The check could not run. Saved access is unchanged; no permission failure has been established.',
@@ -201,6 +216,7 @@ function checkStatus(person) {
 function attention(person) {
   // Count each account once even if it has both a draft and an unchecked save.
   // All states remain visible on its card; the strongest next step is primary.
+  // AUDHD-04: ../../GUIDE.md#audhd-04-explain-effective-behavior.
   if (invalid.has(person.id)) return { level: 'error', target: 'reason', action: 'Enter a reason', title: 'Error · Change not saved', text: 'A reason is required before this change can be saved.' };
   const check = checkStatus(person);
   if (check.level === 'warning') return check;
@@ -214,6 +230,7 @@ function updateNavigationAttention() {
   // but only observed errors/warnings raise the Overview indicator. Count each
   // affected account once, independently of filters and historical log events.
   // Patch the badge/name only; replacing navigation would lose keyboard focus.
+  // See ../../GUIDE.md#audhd-04-explain-effective-behavior.
   const accounts = people.filter(p => ['error', 'warning'].includes(attention(p)?.level)).length;
   const policy = requestSettingsSummary(), recovery = recoverySummary();
   const notesWork = noteWorkSummary(), toolWork = notesToolsSummary();
@@ -250,11 +267,15 @@ function pending() {
   }
 }
 function accountCard(person, headingLevel = 2) {
+  // AUDHD-02: the caller supplies the heading depth; this card does not own a
+  // page title. Keep its account name, saved state and remedies in one boundary
+  // so scanning by headings identifies what the subsequent actions affect.
+  // See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings.
   const check = checkStatus(person), next = attention(person);
   const draftIssue = invalid.has(person.id) ? { level: 'error', text: 'Change not saved: enter a reason.' }
     : changed(person) ? { level: 'review', text: `Unsaved change: proposed role ${roleName(draftFor(person).role)}. Saved access is unchanged.` } : null;
   const checkIsPrimary = next && ['verify','restore-check'].includes(next.target);
-  // AUDHD-02/07/09 / GUIDE.md#status-first-operational-overviews: identity,
+  // AUDHD-02/07/09 / ../../GUIDE.md#status-first-operational-overviews: identity,
   // saved role, check evidence and actions share one outline. The filtered
   // user list keeps the remedy attached to its account, never in a remote panel.
   // Links reveal the actual owning controls; visiting a card never runs a check.
@@ -282,6 +303,7 @@ const accountScope = () => `<details class="context-help account-scope"><summary
 // AUDHD-01/04/07/09: coordination is the home task. A problem row combines
 // subject, consequence and a route to the remedy. Drafts and unchecked evidence
 // stay separate, so the home screen never teaches that "not checked" means broken.
+// See ../../GUIDE.md#audhd-01-keep-scope-and-location-visible.
 function overviewItems() {
   const accountWork = people.map(person => {
     const item = attention(person);
@@ -303,9 +325,11 @@ function overview() {
   // AUDHD-01/08: make the next commitment readable without reconstructing a
   // small timeline mark. The schedule remains the authority; canceled/past
   // events cannot masquerade as an upcoming meeting. No attendance is inferred.
+  // See ../../GUIDE.md#audhd-01-keep-scope-and-location-visible.
   const nextMeeting = next ? `<div class="hub-next-meeting"><span>${new Date(`${next.date}T${next.startTime}`)<=now ? 'Scheduled now' : 'Next meeting'}</span><h3><a href="#meeting/${next.id}">${escape(next.title)}</a></h3><p><time datetime="${next.date}T${next.startTime}">${escape(new Date(`${next.date}T${next.startTime}`).toLocaleDateString([], {weekday:'short',month:'short',day:'numeric'}))} · ${next.startTime}–${next.endTime}</time> <strong>${(new Date(`${next.date}T${next.endTime}`)-new Date(`${next.date}T${next.startTime}`))/60000} minutes</strong></p><p>${escape(rooms.find(room=>room.id===next.roomId)?.name || 'Room unavailable')}</p></div>` : '<p>No upcoming meetings are scheduled.</p>';
   const row = item => `<li class="hub-work-item ${item.hasProblem?'hub-problem':''}"><span class="work-symbol" aria-hidden="true">${item.hasProblem?'!':'↪'}</span><div>${item.actionLabel ? `<strong>${escape(item.label || item.text)}</strong>${item.meta ? `<span class="hub-owner">${escape(item.meta)}</span>`:''}<p>${escape(item.text)}</p><a href="${item.href}">${escape(item.actionLabel)}</a>` : `<a href="${item.href}">${escape(item.label || item.text)}</a>${item.label && item.text ? `<p>${escape(item.text)}</p>`:''}`}</div></li>`;
   $('#main').innerHTML = heading('Team overview', 'Coordinate the Harbor project team’s meetings, notes and follow-up work.') + `
+    ${guideNote('overview-design', 'Let layout explain time and priorities', '<p>The timeline places meetings by their actual start and duration. Empty space means available time, not missing content. The adjacent queues separate observed problems from drafts and unchecked evidence; each row links to the owning task. These are fictional session records, not live organizational data.</p><p>The sidebar’s warning counts exclude unchecked access and routine drafts. The home page does not repeat the account directory or embed independent workflows. Appearance and view changes never mutate the records summarized here.</p>', ['AUDHD-01','AUDHD-02','AUDHD-04','AUDHD-07','AUDHD-08','AUDHD-09','AUDHD-12'])}
     <div class="hub-day-heading"><time datetime="${today}">${escape(new Date(`${today}T12:00`).toLocaleDateString([], {weekday:'long',month:'long',day:'numeric'}))}</time><span>${events.length} scheduled ${events.length===1?'meeting':'meetings'} today · ${escape(Intl.DateTimeFormat().resolvedOptions().timeZone)}</span></div>
     <div class="hub-overview-grid">
       <section class="ui-panel hub-today" aria-labelledby="today-title"><div class="panel-heading"><h2 id="today-title">Today’s meetings</h2><a href="#calendar/week">Open week calendar</a></div>
@@ -316,7 +340,7 @@ function overview() {
         <section class="ui-panel" aria-labelledby="resume-title"><h2 id="resume-title">Ready to continue</h2><ul class="hub-work-list" id="hub-resume">${resume.map(row).join('') || '<li>No unfinished coordination work.</li>'}</ul></section>
       </div>
     </div>
-    ${guideNote('overview-design', 'Let layout explain time and priorities', '<p>The timeline places meetings by their actual start and duration. Empty space means available time, not missing content. The adjacent queues separate observed problems from drafts and unchecked evidence; each row links to the owning task. These are fictional session records, not live organizational data.</p><p>The sidebar’s warning counts exclude unchecked access and routine drafts. The home page does not repeat the account directory or embed independent workflows. Appearance and view changes never mutate the records summarized here.</p>', ['AUDHD-01','AUDHD-02','AUDHD-04','AUDHD-07','AUDHD-08','AUDHD-09','AUDHD-12'])}`;
+`;
   const adminSection = document.createElement('section');
   adminSection.className = 'hub-administration';
   adminSection.setAttribute('aria-labelledby','admin-review-title');
@@ -332,6 +356,7 @@ function updateRecoverySummary() {
   // AUDHD-05/06: keep the receipt's actual link when its classification changes.
   // Moving a focused node can drop browser focus; restore that same link without
   // scrolling or replacing the surrounding timeline and other pending work.
+  // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
   let row = region.firstElementChild || problemRegion.firstElementChild;
   const focused = row?.contains(document.activeElement);
   if (recovery?.needsAttention || recovery?.hasProblem) {
@@ -348,7 +373,9 @@ function updateRecoverySummary() {
 function recordList() {
   const matches = people.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
   $('#people-count').textContent = `${matches.length} of ${people.length} configured accounts shown`;
-  $('#records').innerHTML = matches.map(person => accountCard(person)).join('') || '<li class="ui-panel">No matching users. Clear the filter to see everyone; drafts are retained.</li>';
+  $('#records').innerHTML = matches.map(person => accountCard(person)).join('') || (people.length
+    ? '<li class="ui-panel">No matching users. Clear the filter to see everyone; drafts are retained.</li>'
+    : '<li class="ui-panel"><h2>No configured accounts</h2><p>This empty workspace has no accounts to inspect. Account creation is outside this demo.</p><a href="#notes/new">Create the workspace’s first note</a><p>To practice access changes, load Normal or Busy workspace data through Guide notes.</p></li>');
 }
 function peoplePage() {
   $('#main').innerHTML = heading('Users & access', 'Check or change access to the Harbor project team’s meeting notes and decisions.') + `
@@ -399,6 +426,7 @@ function verify(person) {
   // repeat checks receive a fresh receipt even when the permissions are equal.
   // This synchronous simulation needs no invented loading delay. Ordinary
   // edits, appearance changes and restoring a checker never move focus here.
+  // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
   $('#check-title').focus({ preventScroll: true });
   $('#check-status').scrollIntoView({ block: 'nearest' });
 }
@@ -406,7 +434,8 @@ function detail(person) {
   const draft = draftFor(person);
   $('#main').innerHTML = `<a class="back-link" href="#people">← Back to users</a>` + heading(`${person.name}: permissions`, 'Choose whether this user can read or edit the Harbor project team’s meeting notes and decisions.') + `
     <!-- AUDHD-04/06: aligned saved/proposed panels separate effect from intention.
-         Input handlers update only the proposed text, retaining control identity. -->
+         Input handlers update only the proposed text, retaining control identity.
+         See ../../GUIDE.md#audhd-04-explain-effective-behavior. -->
     <div class="access-comparison" aria-label="Compare saved and proposed access"><section><h2>Saved access</h2><strong id="saved-role">${roleName(person.role)}</strong><p>${roleDescription(person.role)}</p></section><section><h2 id="comparison-state">Proposed · not saved</h2><strong id="proposed-role">${roleName(draft.role)}</strong><p id="proposed-access">${roleDescription(draft.role)}</p></section></div>
     <form class="ui-panel" novalidate aria-label="Edit this person's permissions"><h2>Change access</h2><div id="errors" role="alert"></div>
       <fieldset class="role-fieldset"><legend>Access to shared notes</legend><div class="role-choices" id="role">${['reader','editor'].map(role => `<label class="role-choice"><input type="radio" name="role" value="${role}" ${draft.role === role ? 'checked' : ''}><span><strong>${roleName(role)}</strong><span>${roleDescription(role)}</span></span></label>`).join('')}</div></fieldset>
@@ -437,6 +466,10 @@ function detail(person) {
     pending();
   };
   $('#reset').onclick = () => {
+    // AUDHD-06/13: this removes only this person's draft and restores saved
+    // values. It currently has neither a confirmation step nor an Undo store;
+    // focused feedback is not a guarantee that discarded input is recoverable.
+    // See ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable.
     drafts.delete(person.id); invalid.delete(person.id); detail(person); restoreGuideNotes($('#main'));
     $('[name="role"]:checked').focus();
     $('#announcement').textContent = `${person.name}’s draft discarded. Saved access and other drafts are unchanged.`;
@@ -447,6 +480,7 @@ function detail(person) {
     if (!draft.reason.trim()) { invalid.add(person.id); showErrors(person); pending(); $('#error-link').focus(); return; }
     // Saving is the only permission mutation. Invalidate prior evidence before
     // presenting a fresh check action, and retain every other person's draft.
+    // AUDHD-07: ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
     person.role = draft.role; person.reason = draft.reason; person.version++; saveCount++;
     invalid.delete(person.id); outcomes.delete(person.id);
     recordEvent({ description: `${person.name}’s ${roleName(person.role)} access was saved.`, subject: person.id, version: person.version, action: 'The saved access still needs its permission check.', href: `#people/${person.id}/verify`, actionLabel: 'Check saved access' });
@@ -465,6 +499,7 @@ function directory() {
     }).map(p => p.path));
     // AUDHD-02/03: retain ancestors when a child matches, not unrelated siblings.
     // Parent-first ordering is more informative than globally sorting every link.
+    // See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings.
     const visible = new Set(matches);
     for (const p of pages) if (matches.has(p.path)) for(const parent of ancestors(p)) visible.add(parent.path);
     const ordered = items => [...items].sort((a,b) => a.label.localeCompare(b.label));
@@ -501,12 +536,14 @@ function render() {
   $('#announcement').textContent = '';
   // AUDHD-05/10: appearance controls keep their actual DOM and radio focus.
   // Task views reconstruct from their owning draft/state, not from defaults.
+  // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
   $('#appearance-host').append($('#appearance-controls'));
   navigation(path);
   if (current?.path === 'overview') {
     overview();
     // AUDHD-05/08/11: time and label fitting are presentation updates only.
     // Patch the mounted timeline without replacing links, focus or task state.
+    // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
     const timeline = $('.hub-today');
     const refreshTimeline = () => updateCalendarPresentation(timeline);
     const observer = new ResizeObserver(refreshTimeline);
@@ -539,6 +576,7 @@ function render() {
 function hubChanged() {
   // AUDHD-05/10: a save can rename a record. Patch orientation and counts;
   // re-rendering main here would replace edited fields or steal result focus.
+  // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
   syncNotePages();
   updateNavigationAttention();
   const current=pageFor(location.hash.slice(1));
@@ -548,6 +586,7 @@ function notesChanged() {
   syncNotePages();
   updateNavigationAttention();
   // Save can rename a record without changing its URL or rebuilding its form.
+  // AUDHD-05: ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
   const current=pageFor(location.hash.slice(1));
   if(current?.noteId) {
     breadcrumbs(current);
@@ -556,6 +595,7 @@ function notesChanged() {
     $('#main .task-heading p').textContent=`${notebooks.find(book=>book.id===note.notebookId)?.name || 'Notebook unavailable'} · ${note.status==='active'?'Active note':note.status==='trash'?'In Trash':'Archived note'}`;
     // A saved move changes ancestry, not the draft controls. Patch the cues so
     // the current notebook stays truthful without disturbing keyboard focus.
+    // AUDHD-01: ../../GUIDE.md#audhd-01-keep-scope-and-location-visible.
     const chain=ancestors(current);
     for(const link of document.querySelectorAll('.nav-children a')) link.toggleAttribute('data-ancestor',chain.some(parent=>link.hash===href(parent)));
     const location=$('.nav-group[data-active] .nav-location');
@@ -579,35 +619,42 @@ function routeFocus(previous = '') {
     const suffix=location.hash.slice(1).slice(current.path.length+1);
     // Registry targets map to module-owned controls. Resolve the fieldset ID
     // before a repeated checkbox name, so dependency links focus the group.
+    // AUDHD-05: ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
     const prefix=current.domain==='schedule'?'meeting':current.path.startsWith('request')?'request':'task';
     control=suffix && ($('#main').querySelector(`#${CSS.escape(`${prefix}-${suffix}`)}`) || $('#main').querySelector(`[name="${CSS.escape(suffix)}"]`));
   }
   // A restored check no longer needs its recovery control. Old recovery links
   // still land on the next useful action, without performing it automatically.
+  // AUDHD-06: ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable.
   if (target === 'restore-check' && control?.hidden) control = $('#verify');
   // A disabled timing/quantity control cannot accept focus. Show its enabling
   // choice instead, so a saved direct link remains useful after state changes.
+  // AUDHD-05: ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
   if (control?.disabled) control = $('#restore-note') || $('#limit-enabled');
   const previousRecord = previous.split('/').slice(0, 2).join('/');
   const returnLink = location.hash === '#people' && [...document.querySelectorAll('#records h2 a')].find(link => link.hash === previousRecord);
   // AUDHD-05/11: explicit status links focus the real control, and Back to
   // people restores the matching row. If filtering excluded it, main is the
   // predictable fallback; do not erase the filter just to find a focus target.
+  // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
   const noteReturn = previous.startsWith('#note/') && [...document.querySelectorAll('#notebook-list a')].find(link=>link.hash===previousRecord);
   const destination = control || returnLink || noteReturn;
   if (destination) {
     // AUDHD-03/05: a control link must reveal all enclosing disclosures, even
     // when the URL is already current. Focus on a hidden field is no recovery.
+    // See ../../GUIDE.md#audhd-03-offer-manageable-detail-without-hiding-choices.
     for(let parent=destination.parentElement;parent;parent=parent.parentElement) if(parent.matches('details')) parent.open=true;
     destination.focus();
     // A targeted check can sit far below the record heading. Reveal its local
     // name/role with the action so the user never checks an unidentified account.
+    // AUDHD-01: ../../GUIDE.md#audhd-01-keep-scope-and-location-visible.
     if (['verify','restore-check'].includes(destination.id)) destination.closest('.access-verification')?.scrollIntoView({block:'start'});
   }
   else {
     // AUDHD-05/09: a new task starts with its breadcrumb and title in view.
     // Focusing main with default scrolling would hide the ancestor links just
     // as the user arrives. Direct control links still reveal their exact target.
+    // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
     $('#main').focus({ preventScroll: true });
     window.scrollTo(0, 0);
   }
@@ -617,19 +664,44 @@ $('#guide-toggle').onclick = () => setGuideNotes($('#guide-toggle').getAttribute
 window.addEventListener('hashchange', event => { render(); routeFocus(new URL(event.oldURL).hash); });
 // Reusing an already-current deep link does not emit hashchange. It must still
 // reveal focus at its named control, without rebuilding or clearing the draft.
+// AUDHD-05: ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
 document.addEventListener('click', event => {
   const link = event.target.closest('a[href^="#"]');
   if (link && link.hash === location.hash) { event.preventDefault(); routeFocus(); }
 });
+// AUDHD-10/13: only confirmed replacement clears visit state. Appearance and
+// teaching disclosures survive; a removed record falls back to the overview.
+// Permission and service changes deliberately do not rebuild the active form.
+// See ../../GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards.
+registerScenarioOwner('accounts', {reset: kind => {
+  const names = kind === 'empty' ? [] : kind === 'busy' ? ['Mira','Sam','Alex','Jordan','Taylor','Casey','Robin','Morgan','Avery','Drew','Lee','Quinn'] : ['Mira','Sam'];
+  people.splice(0, people.length, ...names.map((name,i)=>({id:name.toLowerCase(),name,role:i%2?'editor':'reader',reason:i%2?'Maintains shared notes':'Reviews completed work',version:1})));
+  drafts.clear(); outcomes.clear(); invalid.clear(); unavailableChecks.clear(); query=''; saveCount=0;
+  directoryQuery=''; branches.clear();
+}});
+subscribeScenario(event => {
+  if (event.type !== 'reset') return;
+  syncNotePages();
+  if (!pageFor(location.hash.slice(1) || 'overview')) location.hash='overview';
+  else render();
+});
+mountScenarios($('#scenario-controls'), $('#scenario-indicator'));
 render();
 if (location.hash.includes('/')) routeFocus();
 
 let skin = 'guillermo';
+// AUDHD-08/10 (../../GUIDE.md#adaptable-appearance): reuse the same canonical
+// color roles in the current-skin summary and every preview. The summary inherits
+// the applied tokens, so it follows selection without rebuilding controls. Its
+// swatches supplement the named live status; they add no focus stops or chatter.
+const skinSwatches = ['page','surface','text','action','active-accent','focus']
+  .map(token => `<i style="background:var(--ui-${token})"></i>`).join('');
+$('#appearance-colors').innerHTML = skinSwatches;
 try {
   const response = await fetch('../../packages/audhd-ui-framework/palette-data.json');
   if (!response.ok) throw Error('Palette registry could not be loaded');
   const palettes = await response.json();
-  // AUDHD-08/10/11 (GUIDE.md#adaptable-appearance): this demo deliberately
+  // AUDHD-08/10/11 (../../GUIDE.md#adaptable-appearance): this demo deliberately
   // offers complete looks, per the user's preference. Canonical expressive
   // typography pairs the skin's display heading with its body font. The kit's
   // independent type APIs remain available to other consumers. Each preview
@@ -643,17 +715,18 @@ try {
       <span class="preview-heading">${escape(p.name)}</span>
       <span class="preview-text-row"><span class="preview-copy">Body Text</span><strong class="palette-current">✓ Current</strong></span>
       <span class="preview-panel"><span class="preview-active">Notes</span><span class="preview-action">Open notes</span></span>
-      <span class="preview-colors">${['page','surface','text','action','active-accent','focus'].map(token=>`<i style="background:var(--ui-${token})"></i>`).join('')}</span>
+      <span class="preview-colors">${skinSwatches}</span>
     </span>
   </label>`).join('');
   // AUDHD-05/07: preview content is illustrative, not a second set of controls.
   // Selection changes attributes and a live summary only. Keep radio identity,
   // keyboard focus and gallery position stable; never rebuild task forms or
   // reorder this collection around the newly selected item.
+  // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
   $('#palettes').onchange = event => {
     skin = event.target.value;
     document.documentElement.dataset.skin = skin;
     const selected = palettes.find(p => p.id === skin);
-    $('#appearance-status').innerHTML = `Current skin: <strong>${escape(selected.name)}</strong> · ${selected.mode === 'dark' ? 'Dark' : 'Light'}`;
+    $('#appearance-name').innerHTML = `Current skin: <strong>${escape(selected.name)}</strong> · ${selected.mode === 'dark' ? 'Dark' : 'Light'}`;
   };
 } catch (error) { $('#appearance-status').textContent = `${error.message}. Serve this example over HTTP. The default skin and administration tasks remain available.`; }

@@ -1,6 +1,7 @@
 import { recordings } from '../../shared/fixtures.js';
 import { pages, recordViews } from '../../shared/navigation.js';
 
+// AUDHD-10 (../../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
 // URL state identifies location only. Drafts, preferences and search stay in the
 // app's in-memory workspace. Parsing is independent of the Svelte implementation.
 export function routeFromHash(hash) {

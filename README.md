@@ -12,7 +12,7 @@ Practical guidance for developers and AI agents building interfaces that are eas
 
 - **[Guide](GUIDE.md):** Rules for making context, relationships, actions and recovery understandable. Use it to design or review an interface, with or without AI.
 - **[Skill](SKILL.md):** A workflow for AI development agents: understand your codebase, apply the Guide and verify improvements.
-- **[Examples](EXAMPLES.md):** An [annotated screenshot gallery](examples/GALLERY.md), worked patterns, [runnable React and Svelte interfaces](examples/recording-review/README.md), and [24 skins with chart palettes](examples/skins/README.md). Explore the choices, see the rules in action and adapt useful patterns to your own stack.
+- **[Examples](EXAMPLES.md):** An [annotated screenshot gallery](examples/GALLERY.md), worked patterns, [runnable React and Svelte interfaces](examples/recording-review/README.md), and [45 skins with chart palettes](examples/skins/README.md). Explore the choices, see the rules in action and adapt useful patterns to your own stack.
 
 ## How do I use it?
 
@@ -53,7 +53,7 @@ Reading the Guide and using the Skill require no npm installation. [Run the exam
 
 The plugin built by `python scripts/package-plugin.py` contains:
 
-- **Included:** Guide, review checks, preferences, all 24 skins, runnable examples and tests, current gallery captures and the existing 256-pixel icon.
+- **Included:** Guide, review checks, preferences, all 45 skins, runnable examples and tests, current gallery captures and the existing 256-pixel icon.
 - **Repository only:** Evaluation inputs, rubrics, archived responses, historical captures and the large branding image. No source files or images are deleted or altered by packaging.
 
 Included resources retain their relative links. References to omitted material lead to its source-checkout path in the packaged README; they do not download it or imply online availability. Use the matching source checkout for that material and distribution-maintenance checks.
@@ -137,7 +137,7 @@ You can run either example independently. If a port is already in use, follow th
 |---|---|
 | React recording review | Implemented with provisional React Aria; independent state logic |
 | Svelte 5 recording review | Implemented with provisional Bits UI; independent state logic |
-| Skins and text styles | 24 named skins, 12 light/12 dark, four text styles; new interfaces reuse the full kit and default to Guillermo absent explicit preferences or established product defaults; see [appearance policy](GUIDE.md#adaptable-appearance) for exceptions |
+| Skins and text styles | 45 named skins, 28 light/17 dark, four text styles; new interfaces reuse the full kit and default to Guillermo absent explicit preferences or established product defaults; see [appearance policy](GUIDE.md#adaptable-appearance) for exceptions |
 | Preference version 2 | Schemas, strict validation, explicit migration, local preview/application/export; bounded supported fields |
 | Angular and Vue | Adapter documentation; full implementations and executable verification Pending |
 | Verification | [Acceptance record](examples/recording-review/ACCEPTANCE.md) separates runtime results from pending zoom, screen-reader and participant checks |

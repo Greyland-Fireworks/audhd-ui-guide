@@ -1,13 +1,15 @@
 @import "../../shared/visual-choices.css";
-/* Reference design rationale, not a universal AuDHD preset.
-   See ../../SPEC.md (REF-05, 06, 12-14) and
-   ../../SPEC.md. This stylesheet stays local
-   to its framework; only semantic token values are shared. Preserve the outcomes
+/* AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+   Reference design rationale, not a universal AuDHD preset.
+   See ../../SPEC.md (REF-05, 06, 12-14). This stylesheet owns its adapter
+   layout; ../../shared/tokens.css owns token roles and ../../shared/visual-choices.css
+   owns appearance-card presentation. Preserve the outcomes
    described here when changing the provisional sizes, colors or layout. */
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--page); color: var(--text); font-family: var(--ui-font-body, system-ui), sans-serif; line-height: 1.5; }
 .review-app { max-inline-size: 84rem; margin-inline: auto; padding: clamp(1rem, 3vw, 2.5rem); font-size: var(--review-text-size); }
-/* A user-selected font style and a short size/weight hierarchy distinguish page, record,
+/* AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+   A user-selected font style and a short size/weight hierarchy distinguish page, record,
    section and field without introducing another visual vocabulary. Reset margins
    so explicit group gaps express relationships consistently. Relative text sizes
    and wrapping allow enlargement; they do not replace actual zoom verification. */
@@ -18,7 +20,8 @@ h2 { font-size: 1.35em; line-height: 1.35; }
 h3 { font-size: 1.1em; }
 h4 { font-size: 1em; }
 p, h1, h2, h3, dt, dd, button, label, summary { overflow-wrap: anywhere; }
-/* Native controls inherit the surrounding typography so labels and values remain
+/* AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+   Native controls inherit the surrounding typography so labels and values remain
    one readable unit. Compact mode changes card padding and group gaps, not this 44px minimum
    control height. Actual width, target spacing and all interaction states still
    need measurement; the CSS value alone is not an accessibility pass. */
@@ -29,18 +32,22 @@ textarea { resize: vertical; }
 button { background: var(--raised); border: 1px solid var(--control-border); border-radius: 0.35rem; padding: 0.55em 0.9em; cursor: pointer; line-height: 1.4; }
 button:hover:not(:disabled) { border-color: var(--text); }
 button:disabled { cursor: default; background: var(--panel); color: var(--secondary); border-style: dashed; }
-/* Focus means "where keyboard interaction is now"; the active context accent
+/* AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
+   Focus means "where keyboard interaction is now"; the active context accent
    means "which recording is open." Keep both visible at once, including when
    focus leaves the selected card for search or display options. Programmatically
    focused headings retain keyboard cues without joining the normal tab order. */
-/* A library may put data-focus-visible on a focus-within container. Require
+/* AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
+   A library may put data-focus-visible on a focus-within container. Require
    actual focus so that wrapper does not acquire a second, competing outline. */
 :focus-visible, [data-focus-visible]:focus { outline: 3px solid var(--focus); outline-offset: 3px; }
-/* Navigation still focuses its heading for orientation. These base rules
+/* AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
+   Navigation still focuses its heading for orientation. These base rules
    preserve keyboard cues; the explicit navigation-origin rules below resolve
    browser differences for headings only. Never suppress control outlines. */
 [tabindex='-1']:focus-visible { outline-offset: 4px; }
-/* The main action has its own treatment: being selected does not mean "Save,"
+/* AUDHD-07 (../../../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status).
+   The main action has its own treatment: being selected does not mean "Save,"
    "successful" or "failed." Secondary copy is quieter, never absent; essential
    meanings and save boundaries must remain readable on every actual surface. */
 .primary { background: var(--action); color: var(--action-text); border-color: var(--action); font-weight: 650; }
@@ -48,7 +55,8 @@ button:disabled { cursor: default; background: var(--panel); color: var(--second
 .eyebrow { color: var(--secondary); font-size: 0.9em; font-weight: 600; }
 .page-header { display: grid; gap: 0.5rem; margin-block-end: 1.5rem; }
 .demo-boundary { border-inline-start: 3px solid var(--selected-edge); background: var(--panel); padding: 0.75em 1em; }
-/* Native disclosures keep optional navigation and simulator controls
+/* AUDHD-03 (../../../../GUIDE.md#audhd-03-offer-manageable-detail-without-hiding-choices).
+   Native disclosures keep optional navigation and simulator controls
    available on return without occupying the main task. Their modest border
    groups content; it does not turn every group into another active selection. */
 details { border: 1px solid var(--separator); border-radius: 0.4rem; }
@@ -57,14 +65,16 @@ summary h2 { display: inline; font-size: 1em; }
 .disclosure-body { padding: 0.5em 1em 1em; display: grid; gap: var(--review-group-gap); }
 .display-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--review-group-gap); }
 .display-fields label { display: grid; align-content: start; gap: 0.35rem; font-weight: 600; }
-/* Read source -> details on wide screens; give the editing area more room.
+/* AUDHD-02 (../../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+   Read source -> details on wide screens; give the editing area more room.
    DOM order stays source then details when stacked, so CSS does not create a
    different keyboard reading order. minmax(0, ...) and min-inline-size: 0 let
    long content wrap instead of forcing a wider viewport. Padding and gutter
    variables also locate the connector; changing spacing must keep it truthful. */
 .workspace { --workspace-gap: 1.25rem; --panel-padding: 1.25rem; display: grid; grid-template-columns: minmax(16rem, 0.85fr) minmax(0, 1.75fr); gap: var(--workspace-gap); align-items: start; }
 .panel { background: var(--panel); padding: var(--panel-padding, 1.25rem); border: 1px solid var(--separator); border-radius: 0.6rem; min-inline-size: 0; }
-/* The card and this panel present the SAME active recording. A shared surface
+/* AUDHD-02 (../../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+   The card and this panel present the SAME active recording. A shared surface
    and leading edge make that relationship visible across their spatial gap.
    The parent recordings panel stays neutral: its other children are not active.
    Identity text and control associations carry meaning when colors converge. */
@@ -75,7 +85,8 @@ summary h2 { display: inline; font-size: 1em; }
 .results-toolbar, .save-actions, .resolver-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
 .results-toolbar { justify-content: space-between; }
 .recording-list, .pending-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--review-group-gap); }
-/* Reserve the leading-border space on every card so selecting a different item
+/* AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
+   Reserve the leading-border space on every card so selecting a different item
    does not shift its text sideways. The selected border, underlined current
    label and changed action wording provide redundant cues beyond background hue. */
 .recording-list li { position: relative; border: 1px solid var(--separator); border-inline-start: 4px solid transparent; padding: var(--review-group-gap); display: grid; gap: calc(var(--review-group-gap) * .5); border-radius: 0.3rem; }
@@ -83,13 +94,15 @@ summary h2 { display: inline; font-size: 1em; }
 .record-identity { display: grid; gap: 0.35rem; }
 .current-label { font-size: 0.85em; font-weight: 600; text-decoration: underline; text-underline-offset: 0.25em; }
 .recording-list button { inline-size: 100%; text-align: start; }
-/* "Reviewing" remains a usable shortcut to the open review, not a disabled
+/* AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
+   "Reviewing" remains a usable shortcut to the open review, not a disabled
    dead end. Its current-state border is separate from the outer focus outline.
    Only the active card title and corresponding detail title receive this accent;
    unrelated headings retain the ordinary text role. */
 .recording-list button[aria-current='true'] { background: var(--selected); border: 2px solid var(--active-context-accent); font-weight: 650; }
 .current-record .record-title, .review-header h2 { color: var(--active-context-accent); }
-/* The decorative arrow spans the card's remaining panel padding and the gutter,
+/* AUDHD-08 (../../../../GUIDE.md#audhd-08-use-visuals-to-support-decisions).
+   The decorative arrow spans the card's remaining panel padding and the gutter,
    ending before the detail edge. It cannot intercept clicks or become a control.
    Its presence follows selectedId, so filtering out that card removes the arrow
    instead of drawing a false connection from another result. This reference's
@@ -99,7 +112,8 @@ summary h2 { display: inline; font-size: 1em; }
 .relationship-label { display: none; }
 .review-header { display: grid; gap: 0.35rem; padding-block-end: 1rem; border-block-end: 1px solid var(--separator); }
 .review-header .record-id { display: block; font-size: 0.75em; font-weight: 500; margin-block-start: 0.3em; }
-/* Time zone provides context for the group and spans both columns. The two
+/* AUDHD-08 (../../../../GUIDE.md#audhd-08-use-visuals-to-support-decisions).
+   Time zone provides context for the group and spans both columns. The two
    durations sit side by side for comparison: label -> meaning -> value. Flex
    distribution aligns their values despite different explanation lengths, without
    fixed heights that would clip enlarged text. Borders supplement the semantic
@@ -115,7 +129,8 @@ dd { margin: 0; display: grid; gap: 0.4rem; }
 .help-trigger { background: transparent; text-align: start; }
 .help-trigger > span { display: inline-block; inline-size: 1em; }
 .react-aria-DisclosurePanel p { margin-block-start: 0.75rem; max-inline-size: 65ch; }
-/* Separate immutable recording facts from the editable assessment, while keeping
+/* AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
+   Separate immutable recording facts from the editable assessment, while keeping
    both inside the active record's surface. Save feedback stays beside its action
    rather than in a distant toast. Error text and an edge survive loss of hue. */
 .review-form { border-block-start: 1px solid var(--separator); padding-block-start: 1rem; }
@@ -126,11 +141,13 @@ dd { margin: 0; display: grid; gap: 0.4rem; }
 .demo-controls { margin-block-start: 1.5rem; }
 .pending-list li { display: grid; gap: 0.65rem; border-block-start: 1px solid var(--separator); padding-block-start: 0.75rem; }
 footer { font-size: 0.9em; margin-block-start: 1.5rem; }
-/* The persistent status region is visually hidden, not display:none, so updates
+/* AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+   The persistent status region is visually hidden, not display:none, so updates
    remain available to assistive technology. Visible, scoped feedback also stays
    beside Save; actual screen-reader announcement quality is still unverified. */
 .visually-hidden { position: absolute; inline-size: 1px; block-size: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
-/* Once panels stack, a right-pointing arrow would lie about the destination.
+/* AUDHD-08 (../../../../GUIDE.md#audhd-08-use-visuals-to-support-decisions).
+   Once panels stack, a right-pointing arrow would lie about the destination.
    Return it to normal flow, point down and add "Details below." Reflow only
    changes presentation; it must not remount forms, reset drafts or move focus.
    Breakpoints are fixture choices, not research-backed AuDHD thresholds. */
@@ -145,7 +162,8 @@ footer { font-size: 0.9em; margin-block-start: 1.5rem; }
   .panel { --panel-padding: 1rem; }
   h1 { font-size: 1.7em; }
 }
-/* System colors outrank the decorative palette. Keep the native disabled-state
+/* AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+   System colors outrank the decorative palette. Keep the native disabled-state
    color and a structural current-button border; never force the purple/blue
    colors back on. A current border and keyboard focus outline remain separate. */
 @media (forced-colors: active) {
@@ -153,7 +171,8 @@ footer { font-size: 0.9em; margin-block-start: 1.5rem; }
   button[aria-current='true'] { border-width: 2px; }
 }
 
-/* Three levels answer different questions: breadcrumbs show ancestry, workspace
+/* AUDHD-02 (../../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+   Three levels answer different questions: breadcrumbs show ancestry, workspace
    links switch pages, local tabs switch views of ONE recording. Only the local
    view uses tab semantics. Wrapping and generous targets beat a clipped scroll
    strip; neither the header nor the compact footer is fixed over the task. */
@@ -178,7 +197,8 @@ nav a, .navigation-top > a, .footer-actions > a, .page-directory a, .skip-link {
 .page-directory ul { margin: 0; padding-inline-start: 1.25rem; display: grid; gap: var(--review-group-gap); }
 .page-directory li p { color: var(--secondary); }
 .directory-group-label { margin-block: 0.75rem 0.25rem; font-weight: 600; }
-/* A local tab is selected, not a primary action. Reuse the active-context role
+/* AUDHD-02 (../../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+   A local tab is selected, not a primary action. Reuse the active-context role
    but retain an underline and aria-selected so hue is never the only evidence.
    Focus stays independently visible on an unselected tab during arrow-key travel.
    Do not let our grid override a library's native hidden panel state. */
@@ -196,7 +216,8 @@ nav a, .navigation-top > a, .footer-actions > a, .page-directory a, .skip-link {
 .footer-sections nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; padding: 0 1rem 0.75rem; }
 .footer-sections a[aria-current='true'] { font-weight: 650; text-decoration-thickness: 3px; }
 
-/* Contextual help is opt-in and limited to unfamiliar meaning. Its trigger stays
+/* AUDHD-09 (../../../../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision).
+   Contextual help is opt-in and limited to unfamiliar meaning. Its trigger stays
    a full-size target. Inline expansion participates in reflow rather than hiding
    the next action behind a persistent overlay. Tooltip portals inherit root skin
    tokens; carry text scale explicitly because they are outside .review-app. */
@@ -210,7 +231,8 @@ nav a, .navigation-top > a, .footer-actions > a, .page-directory a, .skip-link {
   .context-tooltip, .context-help-detail { background: Canvas; color: CanvasText; border-color: CanvasText; box-shadow: none; }
 }
 
-/* Circled information and question icons explain context. Reserve caution icons for actual
+/* AUDHD-09 (../../../../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision).
+   Circled information and question icons explain context. Reserve caution icons for actual
    warnings, whose essential text must remain visible. Names and expanded state
    expose meaning without requiring someone to recognize the visual symbol. */
 .context-help-button { padding: 0.25em 0.45em; font-size: 1em; font-weight: 700; color: var(--action); }
@@ -219,7 +241,8 @@ nav a, .navigation-top > a, .footer-actions > a, .page-directory a, .skip-link {
 .context-help-button[data-help-kind='warning'] { color: var(--selected-edge); }
 .save-actions .context-help-detail { flex-basis: 100%; }
 
-/* Profile details explain application boundaries beside the deliberate action. */
+/* AUDHD-04 (../../../../GUIDE.md#audhd-04-explain-effective-behavior).
+   Profile details explain application boundaries beside the deliberate action. */
 .profile-controls { display: grid; gap: 0.75rem; margin-block-start: 1.5rem; padding: clamp(.75rem, 2vw, 1.25rem); border: 1px solid var(--control-border); border-block-start-width: 3px; border-radius: .5rem; background: var(--page); min-inline-size: 0; }
 .profile-controls > h3 { font-size: 1.35em; padding-block-end: .75rem; border-block-end: 1px solid var(--control-border); }
 .profile-preview { display: grid; gap: 0.75rem; }
@@ -227,7 +250,8 @@ nav a, .navigation-top > a, .footer-actions > a, .page-directory a, .skip-link {
 .profile-controls button { justify-self: start; }
 .profile-controls input[type=file] { max-inline-size: 100%; }
 
-/* AUDHD-05: only deliberate navigation destinations use this override. A click
+/* AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
+   Only deliberate navigation destinations use this override. A click
    retains semantic focus without a rectangle; keyboard/AT activation retains
    a visible cue even where the browser's heading heuristic omits it. */
 #page-heading[data-navigation-input='keyboard']:focus,
@@ -235,11 +259,13 @@ nav a, .navigation-top > a, .footer-actions > a, .page-directory a, .skip-link {
 #page-heading[data-navigation-input='pointer']:focus,
 #review-heading[data-navigation-input='pointer']:focus { outline: none; }
 
-/* AUDHD-09/11: vector help symbols inherit each skin's semantic colors,
+/* AUDHD-09 (../../../../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision).
+   Vector help symbols inherit each skin's semantic colors,
    including forced-color overrides; the named button owns interaction. */
 .context-help-button svg { display: block; inline-size: 1.375em; block-size: 1.375em; margin-inline: auto; }
 
-/* Status rows wrap at narrow widths; links retain touch targets without hero cards. */
+/* AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+   Status rows wrap at narrow widths; links retain touch targets without hero cards. */
 [aria-label="Review status"] section + section { margin-block-start: 1rem; }
 [aria-label="Review status"] ul { margin: .25rem 0; padding-inline-start: 1.25rem; }
 [aria-label="Review status"] a { display: inline-flex; align-items: center; min-height: 44px; overflow-wrap: anywhere; }

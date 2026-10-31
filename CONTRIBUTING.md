@@ -35,6 +35,10 @@ You do not need to disclose a diagnosis. Remove private account details and pers
 
 Code, CSS, schemas and tooling contributions use MIT as described in [LICENSE_SCOPE.md](LICENSE_SCOPE.md); documentation remains CC BY 4.0. Preserve upstream notices. Keep private research and personal profiles out of public changes. Run the root unit/build/browser checks and update evidence with the tested environment; do not carry historical Pass results onto changed implementations without verification. Full model evaluations remain opt-in.
 
+### Maintain accessibility rationale with the implementation
+
+In runnable examples, place intent-focused comments at the owning HTML, CSS or JavaScript boundary. A substantial rationale identifies the applicable `AUDHD-*` rule and a relative `GUIDE.md#anchor`, the intended benefit, the operational constraint and the failure it prevents. Document shared behavior once at its owner and reference that explanation where reused. **Update the rationale when its associated behavior changes**, alongside the example's existing source/check mapping. Describe delivered behavior and declared limits; label implementation gaps explicitly. Comments, passing checks and screenshots do not establish comprehension, universal AuDHD benefit or accessibility conformance.
+
 ## Review decisions
 
 Maintainers should record accepted changes, reasons and affected versions. Where user needs conflict, consider a predictable choice or scoped alternative rather than declaring one preference universally correct. Describe unresolved findings honestly.

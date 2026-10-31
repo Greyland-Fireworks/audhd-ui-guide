@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Harbor Team Hub — Administration demo</title>
   <link rel="icon" href="data:,">
+  <!-- AUDHD-10/11: canonical skin tokens precede the shared control baseline;
+       local sheets add layout. Keep this order so new layout rules do not need
+       replacement colors or smaller text that defeats the chosen appearance.
+       See ../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences. -->
   <link rel="stylesheet" href="../../packages/audhd-ui-framework/skins.css">
   <link rel="stylesheet" href="../../packages/audhd-ui-framework/controls.css">
   <link rel="stylesheet" href="style.css">
@@ -17,7 +21,8 @@
 </head>
 <body>
   <!-- AUDHD-01/11: application identity stays separate from the task title.
-       The first keyboard link bypasses the repeated shell, not a workflow step. -->
+       The first keyboard link bypasses the repeated shell, not a workflow step.
+       See ../../GUIDE.md#audhd-01-keep-scope-and-location-visible. -->
   <a class="skip-link" href="#main">Skip to main content</a>
   <div class="app-shell">
     <aside class="sidebar" aria-label="Workspace navigation">
@@ -30,17 +35,27 @@
     <div class="workspace">
       <header class="workspace-header">
         <nav id="breadcrumbs" aria-label="Breadcrumb"></nav>
-        <button id="guide-toggle" type="button" aria-pressed="false">Guide notes</button>
+        <div class="guide-toggle-cue">
+          <span class="guide-toggle-arrow" aria-hidden="true">→</span>
+          <button id="guide-toggle" type="button" aria-pressed="false">Guide notes</button>
+        </div>
       </header>
-      <div id="teaching-intro" class="guide-only"><p>Guide notes explain the design and let you try failures safely. This fictional hub simulates accounts, bookings and requests; it sends no invitations or messages. Refreshing or closing this page resets the workspace; JSON notes files you choose to download remain on your device. <a href="#settings">Explore capability examples</a>.</p></div>
+      <div id="navigation-teaching"></div>
+      <details id="teaching-intro" class="guide-only" data-guide-key="teaching-introduction"><summary>Using Guide notes</summary><p>Guide notes explain the design and let you try failures safely. This fictional hub simulates accounts, bookings and requests; it sends no invitations or messages. Refreshing or closing this page resets the workspace; JSON notes files you choose to download remain on your device. <a href="#settings">Explore capability examples</a> or read the <a href="README.md#worked-design-decisions">worked design decisions</a>.</p></details>
+      <div id="scenario-controls" class="guide-only"></div>
+      <p id="scenario-indicator" class="scenario-indicator" hidden></p>
       <main id="main" tabindex="-1"></main>
       <p id="announcement" class="announcement" role="status"></p>
     </div>
   </div>
   <!-- AUDHD-05/10: park this persistent view when inactive. Reusing its nodes
-       means changing tokens cannot rebuild a task or reset palette focus. -->
+       means changing tokens cannot rebuild a task or reset palette focus.
+       See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability. -->
   <div id="appearance-host" hidden><section id="appearance-controls">
-    <p id="appearance-status" class="appearance-current" role="status">Current skin: <strong>Guillermo</strong> · Dark</p>
+    <p id="appearance-status" class="appearance-current" role="status">
+      <span id="appearance-name">Current skin: <strong>Guillermo</strong> · Dark</span>
+      <span id="appearance-colors" class="preview-colors" aria-hidden="true"></span>
+    </p>
     <fieldset class="skin-collection" aria-describedby="skin-help">
       <legend>Choose a skin</legend>
       <p id="skin-help">Each preview shows the skin’s colors and paired typography. Fonts use local fallbacks when unavailable. Your choice lasts until you refresh or close this page.</p>

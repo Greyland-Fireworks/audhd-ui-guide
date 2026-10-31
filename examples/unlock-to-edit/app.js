@@ -5,9 +5,11 @@ const fields = {
   timeout: { label: 'response timeout', min: 1, max: 120, locked: true, before: null },
 };
 const $ = id => document.getElementById(id);
-// Drafts and restoration points belong to this page, not its visible section.
-// Reload reads browser storage, which may contain an unverified write.
-// Acknowledgment and restoration points are page-local; locks are not authorization.
+// AUDHD-06, AUDHD-10, AUDHD-13 — ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable
+// Drafts and each before-unlock snapshot belong to the page, not its visible
+// section. Hiding controls must not discard recoverable work. Reload reads storage
+// (possibly an unverified write) but starts fresh locks and restoration points;
+// those points are not durable history, and editing locks are not authorization.
 let draft = { ...defaults };
 let saved = null;
 const valid = (id, value) => typeof value === 'string' && /^\d+$/.test(value) && Number(value) >= fields[id].min && Number(value) <= fields[id].max;
@@ -16,7 +18,9 @@ const equal = (a, b) => b && Object.keys(fields).every(id => a[id] === b[id]);
 function renderField(id) {
   const field = fields[id];
   const input = $(id);
-  // Keep the actual input node, focus and partially typed text intact.
+  // AUDHD-05 — ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability
+  // Update the existing node only when needed: a status refresh must not replace
+  // the field, reset its selection or normalize a partially typed/invalid entry.
   if (input.value !== draft[id]) input.value = draft[id];
   input.readOnly = field.locked;
   $(`${id}-card`).dataset.editing = String(!field.locked);
@@ -34,8 +38,10 @@ function renderField(id) {
   fieldIssues();
 }
 
-// Error navigation reveals the existing field without unlocking or changing it.
-// Keep this separate from the live status text to avoid announcing every link.
+// AUDHD-09, AUDHD-05 — ../../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision
+// Reveal the owning section before focusing its existing field. The error route
+// must not unlock it or change its value. Links stay outside the live status text
+// so a save announcement does not repeat the entire correction navigation.
 function fieldIssues() {
   $('field-issues').replaceChildren();
   for (const id of Object.keys(fields).filter(id => !valid(id, draft[id]))) {
@@ -51,6 +57,11 @@ function fieldIssues() {
   }
 }
 function persist(values = draft) {
+  // AUDHD-06, AUDHD-07 — ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable
+  // This example's contract is a whole-draft local write plus immediate readback.
+  // Validate both strings before writing and acknowledge only a matching read;
+  // storage success proves neither a server save nor durable backup. Rewriting
+  // this local snapshot is retryable; that is not a safe-retry rule for other APIs.
   if (!Object.keys(fields).every(id => valid(id, values[id]))) {
     $('save-status').textContent = 'Not saved. Correct the highlighted value; both settings are saved together. Your draft remains on this page.';
     return false;
@@ -67,13 +78,19 @@ function persist(values = draft) {
     $('save-status').textContent = 'Both settings saved and verified in this browser. This is not a durable backup.';
     return true;
   } catch (error) {
-    // A failed verification can follow a successful write: invalidate old certainty.
+    // AUDHD-07 — ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status
+    // Verification may fail after the write succeeded. Clear old certainty rather
+    // than claiming rollback or marking the still-visible draft as verified.
     saved = null;
     $('save-status').textContent = `Save unverified. ${error.message} Your draft remains on this page. Retry saving or export it before leaving.`;
     return false;
   }
 }
 
+// AUDHD-06 — ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable
+// Read and validate before adopting stored values. A denied getter, corrupt JSON
+// or unsupported shape keeps example defaults visible without overwriting the
+// inaccessible source; this is a fallback, not recovery of the unread draft.
 try {
   const stored = localStorage.getItem(key);
   if (stored !== null) {
@@ -104,6 +121,10 @@ for (const [id, field] of Object.entries(fields)) {
   });
   $(id).addEventListener('change', () => persist());
   $(`${id}-lock`).addEventListener('click', () => {
+    // AUDHD-13 — ../../GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards
+    // Capture this field's baseline only on unlock. Autosave must not move that
+    // restoration point, and a failed whole-draft save must not imply the field
+    // finished editing. The other field keeps its independent lock/baseline.
     if (field.locked) {
       field.before = draft[id];
       field.locked = false;
@@ -124,12 +145,17 @@ for (const [id, field] of Object.entries(fields)) {
     renderField(id);
     persist();
     $('action-status').textContent = `Restored ${field.label} to ${draft[id]}. Editing remains enabled.`;
-    // Restoration disables its own action; return focus deliberately to its field.
+    // AUDHD-05 — ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability
+    // Restoration changes the page value even if its save is unverified. Its own
+    // button becomes disabled, so focus returns to the still-open restored field.
     $(id).focus();
   });
 }
 
-// Hide, do not recreate, inputs: tab and appearance changes preserve edits and focus.
+// AUDHD-10, AUDHD-05 — ../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences
+// Hide sections and change presentation attributes without rebuilding inputs.
+// Section navigation keeps focus on its trigger; appearance/text-size changes
+// leave their native selectors focused. Drafts, locks and baselines survive both.
 for (const section of ['settings', 'contract']) {
   $(`${section}-tab`).addEventListener('click', () => {
     for (const name of ['settings', 'contract']) {
@@ -143,6 +169,10 @@ $('appearance').addEventListener('change', event => document.documentElement.dat
 $('text-size').addEventListener('change', event => document.documentElement.style.fontSize = event.target.value);
 $('retry-save').addEventListener('click', () => { persist(); $('action-status').textContent = 'Editing states are unchanged.'; });
 $('defaults').addEventListener('click', () => {
+  // AUDHD-13, AUDHD-06 — ../../GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards
+  // This explicitly named replacement includes locked fields. Verify the write
+  // before replacing page values or clearing baselines; an uncertain storage write
+  // must not also destroy the user's still-recoverable on-page draft.
   if (!persist(defaults)) {
     $('action-status').textContent = 'Replacement was not applied to the page. Current edits and restoration points are retained.';
     return;
@@ -157,7 +187,10 @@ $('defaults').addEventListener('click', () => {
 });
 $('export').addEventListener('click', () => {
   const text = `Unlock-to-edit example — manual recovery\nRetry limit: ${draft.retries}\nResponse timeout (seconds): ${draft.timeout}\nValues may be incomplete or invalid. This is not an importable preset.\n`;
-  // Always offer a readable fallback; the explicit export request may move focus.
+  // AUDHD-06, AUDHD-05 — ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable
+  // Export deliberately captures raw current strings, including incomplete edits.
+  // Select a visible manual copy before requesting a download, so a blocked download
+  // still has a recovery path. This snapshot is not an importable settings file.
   $('manual-export').hidden = false;
   $('recovery').value = text;
   $('recovery').focus();

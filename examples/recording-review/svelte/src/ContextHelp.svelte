@@ -5,10 +5,11 @@
   const id = $props.id();
 </script>
 
-<!-- AUDHD-09: Bits owns hover/focus, description association, Escape and floating
-     placement. The same Help button opens inline text on click/tap, so reading
-     does not depend on hover or precise pointer placement. Local disclosure
-     state is independent of drafts, selection, navigation and pending saves. -->
+<!-- AUDHD-09 (../../../../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision).
+  Bits owns hover/focus, description association, Escape and floating
+  placement. The same Help button opens inline text on click/tap, so reading
+  does not depend on hover or precise pointer placement. Local disclosure
+  state is independent of drafts, selection, navigation and pending saves. -->
 <Tooltip.Provider delayDuration={500}>
   <Tooltip.Root disabled={expanded}>
     <Tooltip.Trigger type="button" class="context-help-button" aria-label={`About ${topic}`}
@@ -21,7 +22,8 @@
         </svg>
     </Tooltip.Trigger>
     <Tooltip.Portal>
-      <!-- This pinned primitive supplies association and placement; set the role explicitly. -->
+      <!-- AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+        This pinned primitive supplies association and placement; set the role explicitly. -->
       <Tooltip.Content role="tooltip" class="context-tooltip" side="top" sideOffset={6} collisionPadding={16} data-text-size={textSize}>
         {text}
       </Tooltip.Content>

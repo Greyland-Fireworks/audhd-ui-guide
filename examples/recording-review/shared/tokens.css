@@ -1,4 +1,5 @@
-/* Shared presentation inputs, not shared application logic. Both references map
+/* AUDHD-11 (../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+   Shared presentation inputs, not shared application logic. Both references map
    these roles to their own markup so the comparison uses the same visual starting
    point. The fallback palette predates selectable skins; particular
    hues and numerical settings are provisional choices, not an ideal AuDHD preset.
@@ -14,15 +15,18 @@
   --secondary: #aebcbd;
   --separator: #3b4b51;
   --control-border: #8caaae;
-  /* One shared surface ties the selected source to the detail it controls. It is
+  /* AUDHD-02 (../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+   One shared surface ties the selected source to the detail it controls. It is
      not used for every card in the surrounding collection. */
   --selected: #102d49;
   --selected-text: #edf5ff;
-  /* Historical token name: the yellow edge now marks the demo boundary and
+  /* AUDHD-11 (../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+   Historical token name: the yellow edge now marks the demo boundary and
      exclusion notice. Active card/detail edges use active-context-accent below;
      reusing this yellow for them would weaken that dedicated relationship role. */
   --selected-edge: #f1d76a;
-  /* Reserve this accent for the current card/detail titles, edges and connector.
+  /* AUDHD-11 (../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+   Reserve this accent for the current card/detail titles, edges and connector.
      Focus, the main action and errors have separate roles: working on an item,
      interacting with a control and receiving an outcome are different states. */
   --active-context-accent: #e2c5ff;
@@ -32,7 +36,8 @@
   --error: #ffb5ac;
 }
 
-/* Choices are temporary page settings. Apply through container variables so a
+/* AUDHD-10 (../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
+   Choices are temporary page settings. Apply through container variables so a
    presentation change neither rebuilds the form nor changes its business data.
    Larger text is not a substitute for browser zoom; compact spacing must not
    reduce the controls' target dimensions or remove labels and help. */
@@ -43,7 +48,8 @@
 .review-app[data-text-size='larger'] { --review-text-size: 1.25rem; }
 .review-app[data-spacing='compact'] { --review-group-gap: 0.5rem; }
 
-/* Respect the user's system palette, even when distinct hues collapse. Native
+/* AUDHD-11 (../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+   Respect the user's system palette, even when distinct hues collapse. Native
    controls, current text, repeated identity, edges and focus outlines must still
    communicate the relationship. Do not opt out with forced-color-adjust: none. */
 @media (forced-colors: active) {
@@ -66,7 +72,8 @@
   }
 }
 
-/* Adapter aliases retain existing component roles while consuming the standalone
+/* AUDHD-11 (../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+   Adapter aliases retain existing component roles while consuming the standalone
    skin contract. Apply at the document root so body margins and native popups
    match too. System forced colors flow through the skin tokens automatically.
    Sharing presentation values does not share either framework's state engine. */

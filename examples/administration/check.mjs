@@ -35,6 +35,9 @@ try {
     for(const group of groups) {const toggle=tab.locator(`[data-branch="${group}"]`); if(await toggle.getAttribute('aria-expanded')==='false') await toggle.click();}
   };
   const navigate = async name => {
+    // A viewport change can finish before the shell's matchMedia listener runs.
+    // Wait for the real responsive menu state, then exercise its visible control.
+    await page.waitForFunction(() => document.querySelector('#menu-toggle').hidden === !matchMedia('(width < 64rem)').matches);
     if (await page.locator('#menu-toggle').isVisible() && await page.locator('#menu-toggle').getAttribute('aria-expanded') === 'false') await page.locator('#menu-toggle').click();
     const link=page.locator('#workspace-nav').getByRole('link',{name:new RegExp(`^${name}(?:\\s|$)`),includeHidden:true});
     await revealNav(page,link); await link.click();
@@ -265,6 +268,14 @@ try {
   await page.locator('#reason').fill('A newer unsaved reason');
   await page.locator('#reason').evaluate(el=>{ window.originalReasonNode=el; });
   await openNote('verification-design');
+  await page.locator('#reason').evaluate(el=>{el.focus();el.setSelectionRange(2,7);});
+  await page.evaluate(async()=>{const {setGuideNotes}=await import('./guide-notes.js');setGuideNotes(false);setGuideNotes(true);});
+  assert.deepEqual(await page.locator('#reason').evaluate(el=>[el.selectionStart,el.selectionEnd,el===document.activeElement]),[2,7,true]);
+  await page.locator('#verification-design-toggle').focus();
+  await page.evaluate(async()=>{(await import('./guide-notes.js')).setGuideNotes(false);});
+  assert.equal(await page.evaluate(()=>document.activeElement.id),'guide-toggle');
+  await guide(true);
+  assert(await page.locator('#verification-design').evaluate(el=>el.open));
   assert(await page.locator('#reason').evaluate(el=>el===window.originalReasonNode));
   await page.getByLabel('Simulate permission service unavailable').check();
   await guide(false);
@@ -499,10 +510,11 @@ try {
   await page.waitForFunction(()=>document.querySelector('h1')?.textContent==='Harbor kickoff agenda');
   await page.setViewportSize({width:390,height:844});
   const guideToggle = page.locator('#guide-toggle'), menuButton = page.locator('#menu-toggle');
-  await page.waitForFunction(()=>document.querySelector('#guide-toggle').parentElement.id==='guide-menu-host');
+  await page.waitForFunction(()=>document.querySelector('#guide-menu-host').contains(document.querySelector('.guide-toggle-cue')));
   assert.equal(await guideToggle.isVisible(),false);
   await menuButton.click();
-  assert.equal(await guideToggle.evaluate(el=>el.parentElement.id),'guide-menu-host');
+  assert(await guideToggle.evaluate(el=>document.querySelector('#guide-menu-host').contains(el)));
+  assert.equal(await page.locator('.guide-toggle-cue [aria-hidden]').getAttribute('aria-hidden'),'true');
   await guideToggle.click();
   assert.equal(await guideToggle.getAttribute('aria-pressed'),'true');
   await menuButton.click();
@@ -524,7 +536,7 @@ try {
   assert.equal(new URL(page.url()).hash,'#notes/notebook-harbor-meetings');
   await menuButton.click(); await guideToggle.focus();
   await page.setViewportSize({width:1440,height:1000});
-  await page.waitForFunction(()=>document.querySelector('#guide-toggle').parentElement.classList.contains('workspace-header'));
+  await page.waitForFunction(()=>document.querySelector('.workspace-header').contains(document.querySelector('.guide-toggle-cue')));
   assert.equal(await guideToggle.getAttribute('aria-pressed'),'true');
   assert.equal(await page.evaluate(()=>document.activeElement.id),'guide-toggle');
   assert.equal(await page.locator('#breadcrumb-path').isVisible(),true);

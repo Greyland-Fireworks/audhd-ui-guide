@@ -1,7 +1,8 @@
 import { useId, useState } from 'react';
 import { Button, Tooltip, TooltipTrigger } from 'react-aria-components';
 
-// AUDHD-09: brief help supplements the visible label and scope. The library owns
+// AUDHD-09 (../../../../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision).
+// Brief help supplements the visible label and scope. The library owns
 // hover/focus, description association, Escape and collision-aware positioning.
 // Pressing the same button exposes an inline explanation for touch or sustained
 // reading; no interactive content is squeezed into the tooltip. This local state

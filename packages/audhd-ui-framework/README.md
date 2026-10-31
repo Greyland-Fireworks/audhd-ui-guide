@@ -14,7 +14,7 @@ const profile = parseProfile(fileText); // Validate before preview; does not app
 const merged = resolveProfiles(emptyProfile(), profile); // Merge requests; does not apply them.
 ```
 
-The registry includes 24 skins (12 light and 12 dark), including `green-ledger-light` and `green-ledger-dark`. See the [skin preview and Green Ledger notes](../../examples/skins/README.md#green-ledger-pair) for appearance details and token-check limits.
+The registry includes 45 skins (28 light and 17 dark), including `green-ledger-light` and `green-ledger-dark`. See the [skin preview and selected workbench skins](../../examples/skins/README.md#selected-workbench-skins) for appearance details and token-check limits.
 
 ## Public interface
 
@@ -123,11 +123,22 @@ import 'audhd-ui-framework/skins.css';
 </section>
 ```
 
-Use the marker, skin and typography attributes on the same root. The optional `ui-skin` class on that root supplies visible keyboard-focus outlines to descendants. The `--ui-*` CSS custom properties inherit within that region; typography supports system, expressive, serif and mono. Layout remains application-owned. Unmarked sibling regions are unaffected. Nesting an unmarked element inside a marked root still inherits its appearance; this is ordinary CSS inheritance, not an isolation boundary. Forced colors remain effective. No external font download or animation is introduced.
+Use the marker, skin and typography attributes on the same root. The optional `ui-skin` class on that root supplies visible keyboard-focus outlines to descendants. The `--ui-*` CSS custom properties inherit within that region; typography supports system, expressive, serif and mono. Layout remains application-owned. Unmarked sibling regions are unaffected. Nesting an unmarked element inside a marked root still inherits its appearance; this is ordinary CSS inheritance, not an isolation boundary. Forced colors remain effective. Fonts load from the package’s local assets; no third-party font request or animation is introduced. When copying styles directly, retain `fonts.css` and the `fonts/` directory beside `skins.css` so its relative import and font URLs resolve.
 
-The example follows the Guide's new-interface default: Guillermo with skin-matching headings and system body text. For an explicit System text choice use `data-type="system"`. System appearance maps light mode to Paperwhite and dark mode to Guillermo unless product requirements specify otherwise. Put the theme-matching choice first in a typography picker and preserve explicitly requested `system`, `serif` or `mono` values when changing skins. CSS itself does not select an application default or replace null profile fields; the application resolves preferences under the [appearance policy](../../GUIDE.md#adaptable-appearance).
+The example follows the Guide's new-interface default: Guillermo with skin-matching headings and system body text. The 21 selected workbench skins supply their chosen heading/body pairings by default; use `--ui-font-heading-weight` for their intended heading weights. For an explicit System text choice use `data-type="system"`. System appearance maps light mode to Paperwhite and dark mode to Guillermo unless product requirements specify otherwise. Put the theme-matching choice first in a typography picker and preserve explicitly requested `system`, `serif` or `mono` values when changing skins. CSS itself does not select an application default or replace null profile fields; the application resolves preferences under the [appearance policy](../../GUIDE.md#adaptable-appearance).
 
 Apply attributes without replacing the application tree. Preserve drafts, pending work, selection and focus. Applications must independently verify keyboard operation, accessible names, actual contrast, zoom and assistive-technology behavior. These assets do not certify accessibility or suitability for any person.
+
+## Consumer example and checks
+
+The [framework consumer](../../examples/framework-consumer/index.html) is a small import/preview/apply/export fixture. It applies supported skin and text-style choices for the current session, retains other valid choices for export, and keeps an unrelated text draft outside that profile. Its initial Paperwhite/serif presentation is a known test fixture, not a change to the new-interface default.
+
+| Boundary | Source owner | Rules and repeatable evidence |
+| --- | --- | --- |
+| Native file selection and labeled controls; preview separated from applied state; unmarked neighbor outside the styled root | [index.html](../../examples/framework-consumer/index.html) | [AUDHD-07](../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status), [AUDHD-11](../../GUIDE.md#audhd-11-keep-controls-readable-and-operable). The consumer check measures actual opt-in isolation, control text/targets and forced-color focus. |
+| Host-owned applied profile and draft; asynchronous preview lifecycle, cancellation focus and in-place appearance changes | [main.js](../../examples/framework-consumer/main.js), using [import-workflow.js](import-workflow.js) | [AUDHD-05](../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability), [AUDHD-06](../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable). Checks cover malformed imports, delayed stale success/failure, cancellation, all skins/styles, retained draft/focus, and exported profile content. |
+
+Run `npm run check:framework` from the repository root for the existing isolated package install/build/browser check and plugin distribution checks in [check-framework.mjs](../../scripts/check-framework.mjs). Source comments link these boundaries to the Guide and explain the failures they prevent. They are not evidence of durable profile storage, assistive-technology validation, participant testing or browser back/forward-cache behavior.
 
 ## Compatibility and status
 

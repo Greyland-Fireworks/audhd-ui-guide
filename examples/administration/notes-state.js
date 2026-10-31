@@ -1,6 +1,7 @@
 import { recordEvent } from './events.js';
+import { configurationAllowed, registerScenarioOwner } from './scenario-state.js';
 
-// AUDHD-06/07 / GUIDE.md#audhd-06-make-saving-and-recovery-understandable:
+// AUDHD-06/07 / ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable:
 // these saved records, separate drafts and immutable content revisions belong to
 // the visit, never to a rendered page. Reload resets this fictional workspace.
 export const notebooks = [
@@ -8,11 +9,15 @@ export const notebooks = [
   { id: 'harbor-decisions', name: 'Project decisions', description: 'Fictional Harbor decisions, their reasons and follow-up work.' },
   { id: 'harbor-reference', name: 'Reference', description: 'Fictional Harbor working agreements and reusable instructions.' },
 ];
+const notebookSeed = notebooks.map(notebook => ({ ...notebook }));
 export const settings = { defaultNotebookId: notebooks[0].id, maxNoteLength: 5000 };
 export const noteDrafts = new Map();
 export const noteErrors = new Map();
 const statuses = ['active', 'archived', 'trash'];
-const now = () => new Date().toISOString();
+// AUDHD-07: save receipts record observation time. Advancing the export-policy
+// teaching clock must not imply that a note was saved later than it really was.
+// See ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
+const now = () => new Date(Date.now()).toISOString();
 const newId = kind => `${kind}-${crypto.randomUUID()}`;
 const copyFields = ({ title, body, notebookId }) => ({ title, body, notebookId });
 const snapshot = note => Object.freeze({ version: note.version, ...copyFields(note), at: note.updatedAt });
@@ -40,6 +45,27 @@ const seed = [
   ['harbor-scratch', 'Temporary formatting scratchpad', 'Fictional scratch text used to try headings. It contains no information needed by the team.', 'harbor-reference', 'trash'],
 ];
 export const notes = seed.map(([id, title, body, notebookId, status], index) => makeNote(id, { title, body, notebookId }, status, `2026-10-29T${String(9 + Math.floor(index / 6)).padStart(2, '0')}:${String(index % 6 * 10).padStart(2, '0')}:00.000Z`));
+
+// AUDHD-07/13: ../../GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards.
+// Only the confirmed scenario replacement calls this owner. Splicing preserves
+// imported array identities; deterministic IDs keep links useful after reset.
+// Busy data exercises real note browsing/saves, not decorative count overrides.
+export function resetNotesState(kind = 'normal') {
+  notebooks.splice(0, notebooks.length, ...notebookSeed.map(book => ({ ...book })));
+  // Keep canonical record IDs: meeting-to-note links must still work in Busy.
+  const additions = notebookSeed.flatMap(book => Array.from({ length: 20 - seed.filter(row => row[3] === book.id).length }, (_, index) => [
+    `harbor-busy-${book.id}-${index + 1}`,
+    index % 7 === 0 ? `Harbor planning record ${index + 1}: accessibility review, decisions and follow-up responsibilities` : `Harbor team note ${String(index + 1).padStart(2, '0')}`,
+    `Fictional Harbor record ${index + 1}.\nDecision: document the next action with its owner.\nContext: ${'Keep meeting discussion separate from decisions. '.repeat(index % 5 + 1)}`,
+    book.id,
+    index % 10 === 8 ? 'archived' : index % 10 === 9 ? 'trash' : 'active',
+  ]));
+  const entries = kind === 'empty' ? [] : kind === 'busy' ? [...seed, ...additions] : seed;
+  notes.splice(0, notes.length, ...entries.map(([id, title, body, notebookId, status], index) => makeNote(id, { title, body, notebookId }, status, new Date(Date.UTC(2026, 9, 29, 9, index)).toISOString())));
+  Object.assign(settings, { defaultNotebookId: notebookSeed[0].id, maxNoteLength: 5000 });
+  noteDrafts.clear(); noteErrors.clear();
+}
+registerScenarioOwner('notes-model', { reset: resetNotesState });
 
 function validateNote(fields, books = notebooks, maxLength = settings.maxNoteLength) {
   const errors = {};
@@ -95,7 +121,7 @@ export function setNoteStatus(id, status) {
   if (!note) return fail({ note: 'This note is no longer available.' });
   if (!statuses.includes(status)) return fail({ status: 'Choose active, archived or trash.' });
   if (note.status === status) return { ok: true, errors: {}, note, unchanged: true };
-  // AUDHD-06/10 / GUIDE.md#audhd-10-support-interruptions-and-working-preferences:
+  // AUDHD-06/10 / ../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences:
   // moving a saved note does not save/discard its independent editor draft.
   // Content versions describe content edits; a location move updates its date only.
   note.status = status; note.updatedAt = now();
@@ -110,7 +136,7 @@ export function restoreNoteVersion(id, version, { replaceDirty = false } = {}) {
   const note = notes.find(item => item.id === id);
   const saved = getNoteVersion(id, version);
   if (!note || !saved) return fail({ version: 'This saved version is not available.' });
-  // AUDHD-13 / GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards:
+  // AUDHD-13 / ../../GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards:
   // the UI must confirm replacement of a dirty draft. Even confirmed restoration
   // prepares a draft only; it never silently replaces the current saved version.
   if (isNoteDirty(note) && !replaceDirty) return { ...fail({ draft: 'Restoring this version would replace your unsaved changes.' }), confirmationRequired: true, snapshot: saved };
@@ -120,19 +146,34 @@ export function restoreNoteVersion(id, version, { replaceDirty = false } = {}) {
   return { ok: true, errors: {}, draft, snapshot: saved };
 }
 
-export function saveWorkspaceSettings(value) {
+export function validateWorkspaceSettings(value) {
   const errors = {};
   if (!notebooks.some(book => book.id === value?.defaultNotebookId)) errors.defaultNotebookId = 'Choose an available default notebook.';
   if (!Number.isInteger(value?.maxNoteLength) || value.maxNoteLength < 100 || value.maxNoteLength > 50000) errors.maxNoteLength = 'Enter a whole number from 100 to 50,000 characters.';
+  return errors;
+}
+export function saveWorkspaceSettings(value) {
+  // AUDHD-04/13: ../../GUIDE.md#audhd-04-explain-effective-behavior.
+  // A disabled button is not a mutation guard. Check the simulated permission
+  // at the owning function so a permission change cannot commit an older draft.
+  // This demonstrates a boundary check, not production authentication.
+  if (!configurationAllowed()) return fail({ permission: 'Note settings are read-only in this scenario. Configuration permission is required; your proposed values are retained.' });
+  const errors = validateWorkspaceSettings(value);
   if (Object.keys(errors).length) return fail(errors);
+  const previous = { ...settings };
   const changed = settings.defaultNotebookId !== value.defaultNotebookId || settings.maxNoteLength !== value.maxNoteLength;
-  // AUDHD-04/06 / GUIDE.md#audhd-04-explain-effective-behavior: a new limit
+  // AUDHD-04/06 / ../../GUIDE.md#audhd-04-explain-effective-behavior: a new limit
   // governs future saves. Existing content and unfinished drafts are never truncated.
   Object.assign(settings, { defaultNotebookId: value.defaultNotebookId, maxNoteLength: value.maxNoteLength });
   if (changed) recordEvent({ description: `Saved workspace settings. New notes use “${notebooks.find(book => book.id === settings.defaultNotebookId).name}”; note bodies may contain up to ${settings.maxNoteLength.toLocaleString('en-US')} characters. Existing content was retained.`, subject: 'Workspace settings' });
-  return { ok: true, errors: {}, settings: { ...settings }, unchanged: !changed, overLimitNoteIds: notes.filter(note => note.body.length > settings.maxNoteLength).map(note => note.id) };
+  return { ok: true, errors: {}, settings: { ...settings }, previous, effectiveAt: now(), unchanged: !changed, overLimitNoteIds: notes.filter(note => note.body.length > settings.maxNoteLength).map(note => note.id) };
 }
 export function saveNotebook(value) {
+  // AUDHD-04/13: notebook metadata is configuration, even though browsing and
+  // editing note content remain available. Recheck the simulated permission at
+  // mutation time; a form submitted after permission changes must not slip through.
+  // See ../../GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards.
+  if (!configurationAllowed()) return fail({ permission: 'Notebook settings are read-only in this scenario. Configuration permission is required; your unfinished details are retained.' });
   const errors = {};
   const existing = value?.id === undefined ? null : notebooks.find(book => book.id === value.id);
   if (value?.id !== undefined && !existing) errors.notebook = 'This notebook is no longer available.';
@@ -150,7 +191,7 @@ export function saveNotebook(value) {
 }
 
 export function exportNotes() {
-  // AUDHD-07 / GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status:
+  // AUDHD-07 / ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status:
   // export saved data only. Copies prevent a preview/download consumer from
   // changing live records or immutable history through shared object references.
   return { format: 'shared-notes', version: 1, notebooks: notebooks.map(book => ({ ...book })), notes: notes.map(note => ({ ...note, history: note.history.map(entry => ({ ...entry })) })) };
@@ -184,7 +225,7 @@ export function analyzeImport(value) {
   return { ...result, counts: { notebooks: result.preview.notebooks.length, notes: result.preview.notes.length, ...Object.fromEntries(statuses.map(status => [status, result.preview.notes.filter(note => note.status === status).length])) }, warnings: ['Imported notes are new copies starting at version 1; earlier history is not carried into the copies.', 'Existing notebooks and notes are never overwritten. Colliding notebook names receive an “imported” suffix.'] };
 }
 export function importNotes(preview) {
-  // AUDHD-12/13 / GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards:
+  // AUDHD-12/13 / ../../GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards:
   // revalidate at commit: the workspace limit may have changed since preview.
   // Construct the entire copy batch before publishing it; rejected input cannot
   // leave partial notebooks or modify existing notes, histories or drafts.

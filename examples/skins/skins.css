@@ -1,1 +1,6 @@
+/* AUDHD-08, AUDHD-11 — ../../GUIDE.md#adaptable-appearance
+   Import the canonical tokens instead of copying palette rules into this preview.
+   Each marked root owns its skin; data-skin on an unmarked sibling is not opt-in.
+   This preserves consistent contrast/selection/focus definitions across consumers
+   without implying that a palette supplies semantics or task accessibility. */
 @import "../../packages/audhd-ui-framework/skins.css";

@@ -1,4 +1,9 @@
 import ContextHelp from './ContextHelp.jsx';
+// AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+// Native radios retain single-choice keyboard behavior inside full-card labels.
+// The label and description convey meaning; aria-hidden samples and ACTIVE text
+// do not create a second announced control or replace checked state. App owns the
+// effective value. ../../shared/visual-choices.css owns selection/focus geometry.
 export default function VisualChoices({name, value, options, kind, onChange, helpTopic, helpText, textSize, defaultSkin}) {
   return <div className="visual-choices" role="group" aria-labelledby={`${name.replaceAll(' ', '-')}-heading`}><div className="choice-heading"><h4 id={`${name.replaceAll(' ', '-')}-heading`}>{name}</h4>{helpTopic && <ContextHelp topic={helpTopic} text={helpText} textSize={textSize} />}</div>
     <div className="choice-grid">{options.map(option => <label className="choice-card" key={option.value}>

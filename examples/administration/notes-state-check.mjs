@@ -4,8 +4,9 @@ import {
   notebooks, notes, settings, noteDrafts, noteErrors, getNoteDraft, isNoteDirty,
   saveNote, discardNoteDraft, createNote, setNoteStatus, getNoteVersion,
   restoreNoteVersion, saveWorkspaceSettings, saveNotebook, exportNotes,
-  analyzeImport, importNotes,
+  analyzeImport, importNotes, resetNotesState,
 } from './notes-state.js';
+import { setConfigurationReadOnly, advanceScenarioTime } from './scenario-state.js';
 
 // AUDHD-12 / GUIDE.md#audhd-12-validate-complete-tasks-and-report-actual-evidence:
 // model checks prove state ownership and data boundaries. Browser tests separately
@@ -139,4 +140,28 @@ assert.equal(getNoteDraft(note.id), beforeDraft);
 assert.equal(note.body, savedBody);
 assert(getSessionEvents().some(event => event.subject === 'Notes import'));
 assert(getSessionEvents().every(event => !event.description.includes('Keep this unsaved work')));
+const beforeRestriction = { ...settings };
+const booksBeforeRestriction = notebooks.map(book => ({ ...book }));
+setConfigurationReadOnly(true);
+assert.equal(saveWorkspaceSettings({ ...settings, maxNoteLength: 100 }).ok, false);
+assert.deepEqual(settings, beforeRestriction);
+assert.equal(saveNotebook({ ...notebooks[0], name: 'Blocked rename' }).ok, false);
+assert.equal(saveNotebook({ name: 'Blocked new notebook', description: '' }).ok, false);
+assert.deepEqual(notebooks, booksBeforeRestriction);
+setConfigurationReadOnly(false);
+// Export allowance teaching time cannot falsify note-save or policy receipts.
+advanceScenarioTime(86_400_000);
+const observedBefore = Date.now();
+const timedNote = createNote({ title: 'Actual observation time', body: '', notebookId: notebooks[0].id });
+const timedSettings = saveWorkspaceSettings({ ...settings });
+assert(Date.parse(timedNote.note.updatedAt) >= observedBefore && Date.parse(timedNote.note.updatedAt) <= Date.now());
+assert(Date.parse(timedSettings.effectiveAt) >= observedBefore && Date.parse(timedSettings.effectiveAt) <= Date.now());
+resetNotesState('busy');
+assert.equal(notes.length, 60);
+assert.deepEqual(notebooks.map(book => notes.filter(note => note.notebookId === book.id).length), [20, 20, 20]);
+assert(notes.some(note => note.id === 'harbor-kickoff'));
+resetNotesState('empty');
+assert.equal(notes.length, 0); assert.equal(notebooks.length, 3);
+resetNotesState('normal');
+assert.equal(notes.length, 12); assert.equal(settings.maxNoteLength, 5000);
 console.log('PASS: fictional notes, separate drafts, immutable saved history, guarded restore, non-truncating settings, notebook uniqueness, saved-only export, schema-validated import preview and atomic copies with new identities.');

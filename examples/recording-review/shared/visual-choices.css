@@ -1,3 +1,7 @@
+/* AUDHD-02 (../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+   Both adapters reuse this appearance-control geometry. Boundaries group each
+   decision with its local help; wrapping and min(100%, ...) keep choices in the
+   reading flow when text grows instead of requiring a sideways tab strip. */
 .preference-sections { display:grid; gap:calc(1.5rem + var(--review-group-gap)); }
 .preference-sections > h3 { border-block-start:1px solid var(--separator); padding-block-start:1.5rem; }
 .visual-choices { margin:0; padding:var(--review-group-gap); border:1px solid var(--control-border); border-radius:.5rem; background:var(--page); min-inline-size:0; }
@@ -6,12 +10,21 @@
 .choice-heading .context-help-detail { flex-basis:100%; }
 .choice-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr)); gap:var(--review-group-gap); }
 .choice-card { position:relative; display:flex; flex-direction:column; gap:calc(var(--review-group-gap) * .75); min-inline-size:0; padding:var(--review-group-gap); border:2px solid var(--control-border); border-radius:.5rem; background:var(--panel); cursor:pointer; }
+/* AUDHD-05 (../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
+   Checked state uses an inner border and ACTIVE footer; focus has its own outer
+   outline. Compensating padding keeps card contents still as the border grows.
+   The transparent full-card radio remains the actual focusable/clickable control
+   so decorative samples cannot intercept a choice or duplicate keyboard stops. */
 .choice-card:has(input:checked) { border:4px solid var(--text); padding:calc(var(--review-group-gap) - 2px); }
 .choice-card:focus-within { outline:3px solid var(--focus); outline-offset:4px; }
 .choice-card input[type=radio] { position:absolute; inset:0; width:100%; height:100%; margin:0; opacity:0; cursor:pointer; }
 .choice-name { font-weight:700; }
 .choice-description { font-size:1em; }
 .choice-state { margin-block-start:auto; padding:.65rem .75rem; border:1px solid var(--separator); border-radius:.25rem; background:var(--panel); color:var(--text); font-weight:400; text-align:center; }
+/* AUDHD-08 (../../../GUIDE.md#audhd-08-use-visuals-to-support-decisions).
+   These decorative samples illustrate the choice, not a saved review or a live
+   task result. Preview skin/type attributes are scoped to the sample; surrounding
+   labels stay in the current appearance so browsing alternatives remains readable. */
 .choice-preview { display:flex; flex-direction:column; gap:.5rem; padding:.75rem; border:1px solid var(--control-border); border-radius:.25rem; overflow-wrap:anywhere; pointer-events:none; }
 .choice-preview[data-kind=appearance] { background:var(--ui-surface); color:var(--ui-text); border-color:var(--ui-control-border); font-family:system-ui,sans-serif; }
 .sample-heading { font-weight:700; }
@@ -34,6 +47,10 @@
 
 .choice-card:has(input:checked) .choice-state { background:var(--text); color:var(--panel); border-color:var(--text); font-weight:800; }
 
+/* AUDHD-03 (../../../GUIDE.md#audhd-03-offer-manageable-detail-without-hiding-choices).
+   Closing the large palette collection preserves its selected value and leaves
+   the current name/sample visible in summary. Disclosure hides alternatives,
+   not the user's orientation to the appearance already in effect. */
 .appearance-disclosure { border:1px solid var(--control-border); border-radius:.5rem; background:var(--page); }
 .appearance-disclosure > summary { padding:1rem; font-weight:700; cursor:pointer; }
 .appearance-disclosure-body { display:grid; gap:1rem; padding:0 1rem 1rem; }
@@ -50,6 +67,11 @@
 .appearance-summary-font { font-family:var(--ui-font-display); }
 
 .help-preference { display:grid; gap:.5rem; }
+/* AUDHD-11 (../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+   Use system color roles in forced-colors mode. Only the ACTIVE footer opts out
+   of automatic adjustment, with the system Highlight/HighlightText pair, to keep
+   its state cue visible; borders, labels and native checked state remain redundant
+   cues. Emulated checks do not establish assistive-technology usability. */
 @media (forced-colors:active) {
   .choice-card:has(input:checked) { border-color:Highlight; }
   .choice-card:focus-within { outline-color:Highlight; }

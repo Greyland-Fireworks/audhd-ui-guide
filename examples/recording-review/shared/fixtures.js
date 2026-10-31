@@ -1,3 +1,4 @@
+// AUDHD-01 (../../../GUIDE.md#audhd-01-keep-scope-and-location-visible).
 // Static comparison inputs only; each framework owns its behavior independently.
 // Stable IDs, not filtered positions or names, connect cards, details and drafts.
 // Dates deliberately fall in January: the displayed UTC-05:00 offset describes
@@ -11,10 +12,12 @@ export const recordings = [
 export const reviewStatuses = ['Not reviewed', 'Needs follow-up', 'Reviewed'];
 
 export const copy = {
+  // AUDHD-06 (../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
   // Put the retention boundary above the task, not in a tooltip: users need to
   // know that this page's "saved" review will still disappear on reload.
   boundary: 'Demo workspace. Reviews are stored only while this page is open. Reloading or closing it resets the demo.',
   searchHelp: 'Search by test name, date, map, seed or ID.',
+  // AUDHD-08 (../../../GUIDE.md#audhd-08-use-visuals-to-support-decisions).
   // This explains the relationship between two clocks and the editable review.
   // Concise per-value meanings remain visible even when this detail is closed.
   timingHelp: 'Simulation duration measures time in the simulated world. Execution time measures the real time used to produce this recording and includes its recorded pauses. These values describe the recording and do not change when you edit its review.',
@@ -22,7 +25,8 @@ export const copy = {
   failed: 'Save failed. Your edits remain in this page. Choose Save review to retry.',
 };
 
-// Brief, verified explanations for unfamiliar choices (AUDHD-09). Save and
+// AUDHD-09 (../../../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision).
+// Shared explanations for the implemented demo choices. Save and
 // retention consequences remain visible in the app rather than only in help.
 export const contextualHelp = {
   displayOptions: 'These choices last while this page is open. Changing appearance keeps your reviews and unfinished work in place. Reloading resets the demo. Skin headings use fonts installed on your device; a replacement font is used when one is unavailable.',

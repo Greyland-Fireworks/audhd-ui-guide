@@ -1,6 +1,11 @@
 import palettes from 'audhd-ui-framework/palettes' with { type: 'json' };
 
-// These declarations describe the recording demos, not every package consumer.
+// AUDHD-04 (../../../GUIDE.md#audhd-04-explain-effective-behavior).
+// This shared declaration is the import-preview contract for both recording
+// demos. Schema-valid does not mean applied: undeclared or unsupported requests
+// stay visible in the preview and survive export, while App applies only its
+// supported values. Keep this aligned with both App applyProfile functions so a
+// reader is not promised a change that the rendered interface cannot make.
 export const recordingCapabilities = {
   'display.appearance': [
     ...['system', 'light', 'dark'].map(mode => ({ mode })),

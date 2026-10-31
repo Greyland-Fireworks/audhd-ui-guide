@@ -1,5 +1,6 @@
 import { recordEvent } from './events.js';
 import { notes } from './notes-state.js';
+import { registerScenarioOwner } from './scenario-state.js';
 
 // AUDHD-06/07: bookings and drafts belong to this visit, not to a mounted view.
 // This single-process simulation checks conflicts at save; it is not a shared
@@ -34,6 +35,7 @@ export function calendarRange(date, view) {
 // AUDHD-04/08: placement represents actual minutes. Simultaneous meetings in
 // different rooms occupy separate columns, including chained overlaps; touching
 // endpoints reuse a column. No minimum visual duration changes the saved time.
+// See ../../GUIDE.md#audhd-04-explain-effective-behavior.
 export function layoutDayEvents(events) {
   const ordered = events.filter(item => item.status === 'scheduled')
     .map(item => ({ ...item, startMinute: minute(item.startTime), endMinute: minute(item.endTime) }))
@@ -53,15 +55,34 @@ export function layoutDayEvents(events) {
 }
 const copyFields = value => ({ title: value.title, description: value.description, date: value.date, startTime: value.startTime, endTime: value.endTime, roomId: value.roomId, attendees: String(value.attendees), requiredEquipment: [...value.requiredEquipment], noteId: value.noteId });
 const today = localDate();
-const meetings = [
+const initialMeetings = [
   { id: 'harbor-planning', title: 'Harbor planning meeting', description: 'Agree the next project steps and record decisions.', date: today, startTime: '09:00', endTime: '10:00', roomId: 'harbor', attendees: 6, requiredEquipment: ['whiteboard'], noteId: 'harbor-kickoff' },
   { id: 'research-conversation', title: 'Research check-in', description: 'Compare research notes and identify open questions.', date: today, startTime: '11:00', endTime: '11:45', roomId: 'focus', attendees: 3, requiredEquipment: ['video'], noteId: 'harbor-research-checkin' },
   { id: 'weekly-decisions', title: 'Project decision review', description: 'Review decisions that need follow-up.', date: addDays(today, 1), startTime: '10:00', endTime: '11:00', roomId: 'harbor', attendees: 7, requiredEquipment: ['screen'], noteId: 'harbor-note-structure' },
   { id: 'workshop-preparation', title: 'Workshop preparation', description: 'Check the shared agenda before the workshop.', date: addDays(today, 3), startTime: '14:00', endTime: '15:30', roomId: 'workshop', attendees: 10, requiredEquipment: ['whiteboard', 'video'], noteId: 'harbor-meeting-template' },
 ].map(item => ({ ...item, status: 'scheduled', version: 1, updatedAt: new Date().toISOString() }));
+const meetings = initialMeetings.map(item => ({ ...item, requiredEquipment: [...item.requiredEquipment] }));
 export const meetingDrafts = new Map();
 export const meetingErrors = new Map();
 let initialNewDraft;
+// AUDHD-07/10: fixture replacement is a confirmed teaching action owned by the
+// scenario controller. Stable IDs preserve linked tasks/notes; resetting clears
+// proposals and their errors together rather than attaching old work to new data.
+// See ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
+export function resetScheduleState(kind = 'normal') {
+  const records = kind === 'empty' ? [] : initialMeetings.map(item => ({ ...item, requiredEquipment: [...item.requiredEquipment] }));
+  if (kind === 'busy') {
+    for (let index = 0; index < 16; index++) {
+      // Two parallel 09:00 meetings on each day use different rooms. Stable
+      // seed reservations keep their IDs; new records never collide with them.
+      const room = rooms[1 + Math.floor(index / 7) % 2], start = index < 14 ? 540 : 750;
+      records.push({ id: `busy-meeting-${index + 1}`, title: index % 3 ? `Project coordination ${index + 1}` : `Harbor cross-team planning: research findings, delivery dependencies and next decisions ${index + 1}`, description: 'Fictional busy-workspace meeting for comparing time and room availability.', date: addDays(today, index % 7), startTime: time(start), endTime: time(start + (index % 4 === 0 ? 15 : 45)), roomId: room.id, attendees: Math.min(room.capacity, 3 + index % 5), requiredEquipment: [], noteId: '', status: 'scheduled', version: 1, updatedAt: new Date().toISOString() });
+    }
+  }
+  meetings.splice(0, meetings.length, ...records);
+  meetingDrafts.clear(); meetingErrors.clear(); initialNewDraft = undefined;
+}
+registerScenarioOwner('schedule', { reset: resetScheduleState });
 export function getCalendarEvents() {
   return meetings.map(item => ({ ...item, requiredEquipment: [...item.requiredEquipment] }));
 }
@@ -88,6 +109,7 @@ export function discardMeetingDraft(id) { meetingDrafts.delete(id); meetingError
 export function roomConflicts(roomId, date, startTime, endTime, exceptId) {
   const start = minute(startTime), end = minute(endTime);
   // Endpoints may touch: 09:00–10:00 and 10:00–11:00 are separate bookings.
+  // AUDHD-04: ../../GUIDE.md#audhd-04-explain-effective-behavior.
   return getCalendarEvents().filter(item => item.status === 'scheduled' && item.id !== exceptId && item.roomId === roomId && item.date === date && minute(item.startTime) < end && minute(item.endTime) > start);
 }
 function matchesRoom(room, fields) {
@@ -114,6 +136,10 @@ export function validateMeeting(fields) {
   return errors;
 }
 export function findAlternatives(fields, exceptId) {
+  // AUDHD-04/07: these are room/time candidates, not validated meeting records.
+  // The caller requests them only for an availability problem. A candidate does
+  // not repair unrelated title/note errors or reserve the room.
+  // See ../../GUIDE.md#audhd-04-explain-effective-behavior.
   const start = minute(fields.startTime), end = minute(fields.endTime);
   const errors = validateMeeting(fields);
   if (['date', 'startTime', 'endTime', 'requiredEquipment'].some(key => errors[key]) || !Number.isFinite(start) || !Number.isFinite(end)) return [];
@@ -129,6 +155,10 @@ export function findAlternatives(fields, exceptId) {
   return choices.slice(0, 3);
 }
 export function saveMeeting(id = 'new') {
+  // AUDHD-06/13: validate the retained draft and recheck the current reservations
+  // before any mutation. A previously free room is not a lock; this synchronous
+  // in-memory check prevents conflicts here, not concurrent production writes.
+  // See ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable.
   const fields = getMeetingDraft(id);
   const saved = meetings.find(item => item.id === id);
   if (!fields) return { ok: false, errors: { title: 'This meeting is no longer available.' } };
@@ -136,7 +166,12 @@ export function saveMeeting(id = 'new') {
   const errors = validateMeeting(fields);
   const conflicts = Object.keys(errors).length ? [] : roomConflicts(fields.roomId, fields.date, fields.startTime, fields.endTime, id);
   if (conflicts.length) errors.roomId = 'This room is already reserved during the proposed time. Choose another room or time below; your draft has not been saved.';
-  if (Object.keys(errors).length) { meetingErrors.set(id, errors); return { ok: false, errors, conflicts, alternatives: findAlternatives(fields, id) }; }
+  if (Object.keys(errors).length) {
+    const room = rooms.find(item => item.id === fields.roomId);
+    const availabilityProblem = conflicts.length || (room && Array.isArray(fields.requiredEquipment) && Number(fields.attendees) >= 1 && Number(fields.attendees) <= 12 && !matchesRoom(room, fields));
+    meetingErrors.set(id, errors);
+    return { ok: false, errors, conflicts, alternatives: availabilityProblem ? findAlternatives(fields, id) : [] };
+  }
   const unchanged = saved && !isMeetingDirty(id);
   const meeting = saved || { id: `meeting-${crypto.randomUUID()}`, version: 0 };
   if (!unchanged) {
@@ -157,6 +192,10 @@ export function cancelMeeting(id) {
   return { ok: true };
 }
 export function restoreMeeting(id) {
+  // AUDHD-06/07: restore tests the original saved room/time against today's
+  // constraints. It neither applies newer draft edits nor promises that a slot
+  // released by cancellation is still free; failure leaves cancellation intact.
+  // See ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable.
   const meeting = meetings.find(item => item.id === id);
   if (!meeting || meeting.status !== 'cancelled') return { ok: false, errors: { title: 'Choose a cancelled meeting to restore.' } };
   const errors = validateMeeting(copyFields(meeting));
@@ -171,6 +210,7 @@ export function prepareNewMeeting(fields, replace = false) {
   if (isMeetingDirty('new') && !replace) return { ok: false, confirmationRequired: true };
   // AUDHD-05/06: replacement is explicit. Start from a fresh draft so omitted
   // fields cannot leak the previous meeting's title, note or requirements.
+  // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
   if (replace) discardMeetingDraft('new');
   getMeetingDraft('new');
   Object.assign(meetingDrafts.get('new'), fields);
@@ -183,6 +223,7 @@ export function simulateRoomTaken(id) {
   const meeting = { ...copyFields(fields), title: 'Simulated competing reservation', noteId: '', attendees: 1, id: `meeting-${crypto.randomUUID()}`, version: 1, status: 'scheduled', updatedAt: new Date().toISOString() };
   // AUDHD-07/12: this is an explicit fixture mutation, not a claim of a live
   // colleague's activity. Save still uses the same overlap check as normal use.
+  // See ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
   meetings.push(meeting);
   recordEvent({ level: 'warning', description: 'Guide demonstration: another simulated booking took the proposed room and time. The current meeting draft remains unchanged.', action: 'Choose another room or time, then save to check availability again.', href: `#${id === 'new' ? 'calendar/new' : `meeting/${id}`}/roomId`, actionLabel: 'Review affected meeting draft' });
   return { ok: true };

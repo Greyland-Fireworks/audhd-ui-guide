@@ -1,10 +1,12 @@
 import { getSessionEvents, subscribeActivity } from './events.js';
 import { guideNote, restoreGuideNotes } from './guide-notes.js';
+import { registerScenarioOwner } from './scenario-state.js';
 
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
 
 // Fixed historical fixtures make review state reproducible. This is not a live
 // service feed: entries never change when the example's people are edited.
+// AUDHD-07: ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
 const sourceEntries = [
   { id: 'e12', at: '2026-10-20T14:12:00Z', level: 'error', code: 'export_failed', person: 'Sam' },
   { id: 'e11', at: '2026-10-20T14:11:00Z', level: 'warning', code: 'check_unavailable', person: 'Mira' },
@@ -22,6 +24,7 @@ const sourceEntries = [
 
 // Translate only this fixture's documented event codes. Unknown source text
 // stays available without inventing a cause, severity, or suggested repair.
+// AUDHD-04: ../../GUIDE.md#audhd-04-explain-effective-behavior.
 const descriptions = {
   export_failed: person => [`${person}'s permission report could not be exported.`, 'The report was not created. Check the destination before trying another export.'],
   check_unavailable: person => [`The permission check for ${person} could not reach its service.`, 'The saved change is unchanged. Retry the check when the service is available; do not save again just to verify.'],
@@ -41,7 +44,7 @@ const exampleEvents = sourceEntries.map(entry => {
   };
 });
 const needsReview = event => event.level === 'warning' || event.level === 'error';
-// AUDHD-01 / GUIDE.md#readable-activity-and-warning-review: never mix fictional
+// AUDHD-01 / ../../GUIDE.md#readable-activity-and-warning-review: never mix fictional
 // history with observations from this visit. Each source owns its review state.
 const sourceState = () => ({ acknowledged: new Set(), expandedEntries: new Set(), pages: {warnings:1, all:1}, pageSize:5, snapshot:null });
 const sources = { visit:sourceState(), example:sourceState() };
@@ -49,11 +52,15 @@ sources.example.snapshot = exampleEvents;
 let source = 'visit';
 let reviewHelpExpanded = false;
 let active = null;
+// AUDHD-07: current observations and fixed Example history have separate review
+// state. Replacing the workspace clears only the current visit, not that history.
+// See ../../GUIDE.md#readable-activity-and-warning-review.
+registerScenarioOwner('activity-view', {reset: () => { sources.visit = sourceState(); source='visit'; active=null; }});
 const stamp = new Intl.DateTimeFormat('en-US', {dateStyle:'medium', timeStyle:'medium', timeZone:'UTC'});
 const sourceEvents = () => source === 'visit' ? getSessionEvents() : exampleEvents;
 
 function updateArrivalNotice() {
-  // AUDHD-05 / GUIDE.md#audhd-05-preserve-focus-and-spatial-stability: update
+  // AUDHD-05 / ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability: update
   // only the count and arrival notice. Never replace rows under the reader.
   if (!active?.section.isConnected) return;
   const state = sources[source];
@@ -78,6 +85,10 @@ export function renderActivity(container, view = 'warnings') {
   const state = sources[source];
   if (state.snapshot === null) state.snapshot = sourceEvents();
   const matching = selected === 'warnings' ? state.snapshot.filter(needsReview) : state.snapshot;
+  // AUDHD-04/07: pagination counts the loaded snapshot, while the attention
+  // summary counts all events in this source, including arrivals not displayed.
+  // Keep these scopes explicit so an unseen row is not mistaken for a lost event.
+  // See ../../GUIDE.md#audhd-04-explain-effective-behavior.
   const pageCount = Math.max(1, Math.ceil(matching.length / state.pageSize));
   state.pages[selected] = Math.min(state.pages[selected], pageCount);
   const offset = (state.pages[selected] - 1) * state.pageSize;
@@ -116,6 +127,7 @@ export function renderActivity(container, view = 'warnings') {
   const rerender = (focusId, message) => {
     // Read disclosure state before replacing DOM: native toggle notifications
     // may still be queued when a user immediately acknowledges an open entry.
+    // AUDHD-05: ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
     reviewHelpExpanded = container.querySelector('#activity-help').open;
     for (const details of container.querySelectorAll('[data-original]')) {
       if (details.open) state.expandedEntries.add(details.dataset.original); else state.expandedEntries.delete(details.dataset.original);
@@ -123,15 +135,21 @@ export function renderActivity(container, view = 'warnings') {
     renderActivity(container, selected);
     // The action keeps its identity after acknowledgment; focus stays on the
     // same event. Page controls fall back to the table heading if unavailable.
+    // AUDHD-05: ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
     const target = container.querySelector(`#${focusId}`);
     if (target && !target.disabled) { if (focusId === 'activity-heading') target.tabIndex = -1; target.focus(); }
     else { const heading = container.querySelector('#activity-heading'); heading.tabIndex = -1; heading.focus(); }
+    // AUDHD-05/07: the announcement belongs to this rendered review. A source
+    // change or confirmed workspace replacement may remove it before the next
+    // frame; never deliver its old result into a newer screen's live region.
+    // See ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
+    const status = container.querySelector('#activity-announcement');
     requestAnimationFrame(() => {
-      const status = container.querySelector('#activity-announcement');
-      if (status) status.textContent = message;
+      if (status?.isConnected) status.textContent = message;
     });
   };
   // Acknowledgment updates the row, not the user's chosen reading detail.
+  // AUDHD-04: ../../GUIDE.md#audhd-04-explain-effective-behavior.
   container.querySelector('#activity-help').addEventListener('toggle', event => { if (event.target.isConnected) reviewHelpExpanded = event.target.open; });
   container.querySelectorAll('[data-original]').forEach(details => details.addEventListener('toggle', () => {
     if (!details.isConnected) return;
@@ -146,6 +164,7 @@ export function renderActivity(container, view = 'warnings') {
   container.querySelector('#activity-page-size').addEventListener('change', event => {
     // Keep the previously first event on the new page; retain each
     // view's place independently when switching between warning/all history.
+    // AUDHD-10: ../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences.
     const previousSize = state.pageSize;
     state.pageSize = Number(event.target.value);
     for (const key of Object.keys(state.pages)) state.pages[key] = Math.floor((state.pages[key] - 1) * previousSize / state.pageSize) + 1;

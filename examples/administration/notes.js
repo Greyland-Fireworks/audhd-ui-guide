@@ -1,5 +1,6 @@
 import { notes, notebooks, settings, noteErrors, getNoteDraft, isNoteDirty, saveNote, createNote, discardNoteDraft, setNoteStatus, restoreNoteVersion } from './notes-state.js';
 import { guideNote, restoreGuideNotes } from './guide-notes.js';
+import { dataMode, registerScenarioOwner, scenarioEpoch, subscribeScenario } from './scenario-state.js';
 
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const bookName = id => notebooks.find(book => book.id === id)?.name || 'Notebook unavailable';
@@ -8,15 +9,89 @@ const title = (name, description) => `<div class="task-heading"><h1>${escape(nam
 // AUDHD-05/06/10: browse filters and an unsubmitted new note outlive their view.
 // Existing-note drafts belong to notes-state.js. Never reconstruct either owner
 // from a saved value when a user returns from Appearance or follows a breadcrumb.
+// See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
 const filters = new Map();
 const historySelections = new Map();
 let newDraft = null;
 let newNotebookAtStart;
 const newErrors = {};
+const browsePages = new Map();
+let exampleDraft = false;
+let notebookResponse = { rows: null, unavailable: [], at: null, partial: false, error: '', loading: false, mode: null };
+let notebookRequest = 0;
+let browseView;
+
+export function resetNotesView() {
+  filters.clear(); historySelections.clear(); browsePages.clear(); newDraft = null;
+  newNotebookAtStart = undefined; exampleDraft = false;
+  for (const field of Object.keys(newErrors)) delete newErrors[field];
+  notebookRequest++; browseView = null;
+  notebookResponse = { rows: null, unavailable: [], at: null, partial: false, error: '', loading: false, mode: null };
+}
+registerScenarioOwner('notes-view', { reset: resetNotesView });
+
+// AUDHD-06/13: ../../GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards.
+// Teaching controls prepare an explicitly named draft only after an action.
+// They cannot replace unfinished new-note work or create a saved record. The
+// ordinary note save enforces the same current limit used by imports.
+export function prepareNoteLimitExample() {
+  if (hasNewWork()) return { ok: false, href: '#notes/new/body', message: 'Your existing new-note draft is retained. Finish or discard it before preparing the example.' };
+  newNotebookAtStart = settings.defaultNotebookId;
+  const introduction = 'Example note for testing the saved note-length limit. Shorten this draft before saving.\n';
+  newDraft = { title: 'Example: note length limit', notebookId: newNotebookAtStart, body: introduction.padEnd(settings.maxNoteLength + 1, 'x') };
+  exampleDraft = true;
+  for (const field of Object.keys(newErrors)) delete newErrors[field];
+  return { ok: true, href: '#notes/new/body', message: `Prepared an unsaved example with ${newDraft.body.length.toLocaleString()} characters, one above the saved maximum.` };
+}
+
+function receiveNotebookData(mode) {
+  const unavailable = mode === 'partial' ? notebooks.slice(-1).map(book => book.id) : [];
+  // Freshness is the actual observation time, independent of optional export
+  // allowance time advancement; a teaching control must not age this response.
+  return { rows: notes.filter(note => !unavailable.includes(note.notebookId)).map(note => ({ ...note })), unavailable, at: new Date(Date.now()).toISOString(), partial: mode === 'partial', error: '', loading: false, mode };
+}
+export async function refreshNotebookData() {
+  // AUDHD-05/07: ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
+  // The response is a snapshot, separate from filters and editor drafts. Failure
+  // retains its timestamp and records; a partial response never claims a full
+  // total. Generation and scenario checks reject obsolete asynchronous answers.
+  const request = ++notebookRequest, epoch = scenarioEpoch(), mode = dataMode('notebooks');
+  notebookResponse = { ...notebookResponse, loading: true, error: '', mode };
+  browseView?.draw();
+  await new Promise(resolve => setTimeout(resolve, mode === 'loading' ? 700 : 100));
+  if (request !== notebookRequest || epoch !== scenarioEpoch()) return;
+  notebookResponse = mode === 'failure'
+    ? { ...notebookResponse, loading: false, error: 'The notebook list could not be loaded.' }
+    : receiveNotebookData(mode);
+  browseView?.draw();
+}
+subscribeScenario(event => {
+  if (event.type === 'data' && browseView?.root.isConnected && notebookResponse.mode !== dataMode('notebooks')) refreshNotebookData();
+});
+export const notebookData = () => notebookResponse;
+export function notebookLoadMessage() {
+  const response = notebookResponse, retained = response.rows !== null;
+  const freshness = response.at ? ` Last successful load: ${new Date(response.at).toLocaleString()}.` : '';
+  return response.loading ? `Loading notebooks…${retained ? ' Previous results remain visible.' : ''}`
+    : response.error ? `${response.error}${retained ? ' Previous results are retained and may be out of date.' : ' No results are available yet; this does not mean the workspace is empty.'}${freshness}`
+    : response.partial ? `Partial results: ${response.unavailable.map(bookName).join(', ')} could not be loaded. Counts cover loaded notes only.${freshness}`
+    : `Notebook list loaded.${freshness}`;
+}
+export function attachNotebookBrowser(root, draw) {
+  // AUDHD-05/07: both the notebook directory and note browser share one response
+  // owner, but only the connected view redraws its result region. Editors and
+  // filters remain owned by their tasks; loading must never recreate controls.
+  // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
+  browseView = { root, draw };
+  if (dataMode('notebooks') === 'normal') { notebookRequest++; notebookResponse = receiveNotebookData('normal'); }
+  draw();
+  if (notebookResponse.mode !== dataMode('notebooks') || notebookResponse.rows === null && !notebookResponse.loading) refreshNotebookData();
+}
 // AUDHD-03/08: compare exact lines before rendering. Common outer context is
 // omitted from the change list, but both complete saved texts remain available.
 // ponytail: cap the LCS table at 200,000 cells; very large changed spans use an
 // explicitly labeled whole-span replacement instead of blocking the interface.
+// See ../../GUIDE.md#audhd-03-offer-manageable-detail-without-hiding-choices.
 export function compareNoteLines(before, after) {
   const left = before.split('\n'), right = after.split('\n');
   let start = 0, endLeft = left.length, endRight = right.length;
@@ -70,26 +145,50 @@ export function renderNotes(container, page) {
   container.innerHTML = title(book?.name || (status === 'active' ? 'Notes' : status === 'trash' ? 'Trash' : 'Archived notes'), description) + `
     <div class="panel-heading"><p id="note-count" role="status"></p>${status === 'active' ? '<a class="task-link ui-action" href="#notes/new">New note</a>' : ''}</div>
     <div class="filter-bar"><label for="notes-filter">Filter notes<input id="notes-filter" type="search" value="${escape(query)}" placeholder="For example, meeting"></label><button id="clear-notes">Clear filter</button></div>
+    <section class="notebook-load-state" aria-label="Notebook data"><p id="notebook-load-status" role="status"></p><button id="refresh-notebooks" type="button">Refresh notebooks</button></section>
     <div id="notebook-list" class="card-grid notebook-grid"></div>
     ${guideNote('notes-browse-design','Recognize the notebook before searching','<p>The initial view lists real notes grouped by notebook, with titles and excerpts. Filtering supplements browsing and retains notebook context. Active, archived and removed notes have separate destinations; a hidden draft remains owned by its note.</p>',['AUDHD-01','AUDHD-02','AUDHD-03','AUDHD-10'])}`;
   const draw = () => {
-    const scoped = notes.filter(note => note.status === status && (!book || note.notebookId === book.id));
+    if (!container.querySelector('#notebook-list')) return;
+    const response = notebookResponse;
+    const retained = response.rows !== null;
+    const missingNames = response.unavailable.map(bookName).join(', ');
+    container.querySelector('#notebook-load-status').textContent = notebookLoadMessage();
+    const refresh = container.querySelector('#refresh-notebooks');
+    refresh.textContent = response.error || response.partial ? 'Retry loading notebooks' : 'Refresh notebooks';
+    refresh.setAttribute('aria-busy', String(response.loading));
+    const scoped = (response.rows || []).filter(note => note.status === status && (!book || note.notebookId === book.id));
     const matches = scoped.filter(note => `${note.title} ${note.body} ${bookName(note.notebookId)}`.toLowerCase().includes(query.toLowerCase()));
-    container.querySelector('#note-count').textContent = `${matches.length} of ${scoped.length} ${status === 'active' ? 'active' : status === 'trash' ? 'removed' : 'archived'} notes`;
+    container.querySelector('#note-count').textContent = !retained ? response.loading ? 'Loading notes' : 'Note count unavailable' : `${matches.length} of ${scoped.length} ${status === 'active' ? 'active' : status === 'trash' ? 'removed' : 'archived'} notes${response.partial ? ' in loaded notebooks · incomplete result' : response.error ? ' in retained results' : ''}`;
     container.querySelector('#notebook-list').innerHTML = notebooks.filter(item => matches.some(note => note.notebookId === item.id)).map(item => {
       const collection = scoped.filter(note => note.notebookId === item.id);
       const shown = matches.filter(note => note.notebookId === item.id).sort((a,b)=>a.title.localeCompare(b.title));
+      const pageKey = `${page.path}/${item.id}`, pages = Math.ceil(shown.length / 6);
+      const selectedPage = Math.min(browsePages.get(pageKey) || 0, Math.max(0, pages - 1));
+      browsePages.set(pageKey, selectedPage);
+      const visible = shown.slice(selectedPage * 6, (selectedPage + 1) * 6);
       const draftCount = collection.filter(isNoteDirty).length;
       const errorCount = collection.filter(note => noteErrors.has(note.id)).length;
-      // AUDHD-02/07: counts describe this saved collection, not hidden search
-      // results or invented activity. Draft/error labels stay with their notes.
+      // AUDHD-02/07: the collection count includes matching-status saved notes
+      // hidden by the text filter; the separate shown count reflects that filter.
+      // Draft/error totals use the full collection, so filtering is not a repair.
+      // See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings.
       const summary = [query ? `${shown.length} of ${collection.length} shown` : '', draftCount ? `${draftCount} with unsaved changes` : '', errorCount ? `${errorCount} needing correction` : ''].filter(Boolean).join(' · ');
-      return `<section class="ui-panel notebook-card" data-notebook-id="${item.id}"><div class="notebook-heading"><h2>${book || status!=='active' ? escape(item.name) : `<a href="#notes/notebook-${item.id}">${escape(item.name)}</a>`}</h2><span class="notebook-count">${collection.length} ${status === 'trash' ? 'removed' : status} ${collection.length === 1 ? 'note' : 'notes'}</span></div>${!book ? `<p class="notebook-description">${escape(item.description)}</p>` : ''}${summary ? `<p class="notebook-summary">${summary}</p>` : ''}<ul class="note-rows">${shown.map(noteRow).join('')}</ul></section>`;
-    }).join('') || `<p class="ui-panel">${query ? 'No matching notes. Clear the filter to see this collection.' : 'No notes in this collection.'}</p>`;
+      return `<section class="ui-panel notebook-card" data-notebook-id="${item.id}"><div class="notebook-heading"><h2>${book || status!=='active' ? escape(item.name) : `<a href="#notes/notebook-${item.id}">${escape(item.name)}</a>`}</h2><span class="notebook-count">${collection.length} ${status === 'trash' ? 'removed' : status} ${collection.length === 1 ? 'note' : 'notes'}</span></div>${!book ? `<p class="notebook-description">${escape(item.description)}</p>` : ''}${summary ? `<p class="notebook-summary">${summary}</p>` : ''}<ul class="note-rows">${visible.map(noteRow).join('')}</ul>${pages > 1 ? `<nav class="actions notebook-pagination" aria-label="${escape(item.name)} note pages"><button type="button" data-note-page="${escape(pageKey)}" data-page="${selectedPage - 1}" ${selectedPage === 0 ? 'disabled' : ''}>Previous notes</button><span>Page ${selectedPage + 1} of ${pages}</span><button type="button" data-note-page="${escape(pageKey)}" data-page="${selectedPage + 1}" ${selectedPage + 1 === pages ? 'disabled' : ''}>Next notes</button></nav>` : ''}</section>`;
+    }).join('') || `<div class="ui-panel">${!retained ? response.loading ? '<p>Loading the notebook list…</p>' : '<p>Retry to load the notebook list.</p>' : response.partial ? `<p>No matching notes in the loaded portion. ${escape(missingNames)} remains unavailable.</p>` : query ? '<p>No matching notes. Clear the filter to see this collection.</p>' : `<p>No notes in this collection.</p>${status === 'active' ? '<a class="task-link" href="#notes/new">Create the first note</a>' : '<a href="#notes">Browse active notes</a>'}`}</div>`;
+    for (const button of container.querySelectorAll('[data-note-page]')) button.onclick = () => {
+      const key = button.dataset.notePage, direction = Number(button.dataset.page);
+      browsePages.set(key, direction); draw();
+      const card = [...container.querySelectorAll('[data-notebook-id]')].find(node => key.endsWith(`/${node.dataset.notebookId}`));
+      const focus = card?.querySelector('.note-row a'); focus?.focus();
+    };
   };
-  container.querySelector('#notes-filter').oninput = event => { query = event.target.value; filters.set(page.path,query); draw(); };
-  container.querySelector('#clear-notes').onclick = () => { query = ''; filters.set(page.path,''); container.querySelector('#notes-filter').value = ''; draw(); container.querySelector('#notes-filter').focus(); };
-  draw();
+  container.querySelector('#notes-filter').oninput = event => { query = event.target.value; filters.set(page.path,query); browsePages.clear(); draw(); };
+  container.querySelector('#clear-notes').onclick = () => { query = ''; filters.set(page.path,''); browsePages.clear(); container.querySelector('#notes-filter').value = ''; draw(); container.querySelector('#notes-filter').focus(); };
+  container.querySelector('#refresh-notebooks').onclick = refreshNotebookData;
+  // Local normal data is already available; do not manufacture a loading delay
+  // on every visit. The scenario boundary exercises delayed/unavailable data.
+  attachNotebookBrowser(container.querySelector('#notebook-list'), draw);
 }
 export function renderNote(container, id, history, changed) {
   const note = notes.find(item => item.id === id);
@@ -105,6 +204,7 @@ export function renderNote(container, id, history, changed) {
     ${history ? '<section id="note-history" class="ui-panel" aria-label="Saved versions"></section>' : `
     <form id="note-form" class="ui-panel note-editor" novalidate>
       <div class="note-editor-context"><strong>${creating ? 'New note draft' : editable ? 'Edit note' : note.status === 'trash' ? 'Read removed note' : 'Read archived note'}</strong><span id="note-saved-context"></span></div>
+      ${creating && exampleDraft ? '<p class="note-example-context">Example draft: try Create note to see the saved length limit reject excess text. Your text stays here so you can shorten it and try again.</p>' : ''}
       ${!editable ? '<div class="note-readonly"><p>This note is read-only. Restore it to active notes before editing.</p><button type="button" id="restore-note" class="ui-action">Restore to active notes</button></div>' : ''}
       <div id="note-errors" role="alert"></div>
       <label for="note-title">Title<input id="note-title" value="${escape(draft.title)}" ${editable ? '' : 'readonly'} aria-describedby="note-errors" required></label>
@@ -138,9 +238,10 @@ export function renderNote(container, id, history, changed) {
   if (history) {
     // AUDHD-06/13: historical snapshots are read-only. A confirmation names the
     // one draft at risk; no retry or page visit may overwrite an in-progress edit.
+    // See ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable.
     let selected = historySelections.get(id) || note.history.at(-2)?.version || note.version;
     if (!note.history.some(version => version.version === selected)) selected = note.version;
-    get('#note-history').innerHTML = `<h2>Compare saved versions</h2><p>Review what changed before restoring. Restore fills an unsaved draft; it does not save over the current note.</p><label class="version-picker" for="note-version">Version to review<select id="note-version">${[...note.history].reverse().map(version=>`<option value="${version.version}" ${version.version === selected ? 'selected' : ''}>Version ${version.version} · ${escape(new Date(version.at).toLocaleString())}${version.version === note.version ? ' · Current' : ''}</option>`).join('')}</select></label><div id="version-comparison"></div><div class="version-restore"><p id="version-draft-warning">${isNoteDirty(note) ? 'You also have unsaved changes. Restoring asks before replacing that draft.' : 'There are no unsaved changes to replace.'}</p><button id="restore-selected-version" ${editable ? '' : 'disabled'}></button><div id="restore-confirm" class="account-status" hidden></div><div id="note-result" class="status" role="status" tabindex="-1" hidden></div>${!editable ? '<p>Restore the note to active notes before restoring a saved version.</p>' : ''}</div>`;
+    get('#note-history').innerHTML = `<h2>Compare saved versions</h2><p>Review what changed before restoring. Restore fills an unsaved draft; it does not save over the current note.</p><label class="version-picker" for="note-version">Version to review<select id="note-version">${[...note.history].reverse().map(version=>`<option value="${version.version}" ${version.version === selected ? 'selected' : ''}>Version ${version.version} · ${escape(new Date(version.at).toLocaleString())}${version.version === note.version ? ' · Current' : ''}</option>`).join('')}</select></label><div id="version-comparison"></div><div class="version-restore"><p id="version-draft-warning">${isNoteDirty(note) ? 'You also have unsaved changes. Restoring asks before replacing that draft.' : 'There are no unsaved changes to replace.'}</p><button id="restore-selected-version" ${editable ? '' : 'disabled'}></button><div id="restore-confirm" class="account-status" hidden></div><div id="note-result" class="status" role="status" tabindex="-1" hidden></div>${!editable ? '<p>Restore the note to active notes before restoring a saved version.</p>' : ''}</div>${guideNote('note-version-design', 'Compare before restoring', '<p>Restoration fills a draft and protects an existing draft with confirmation. It does not replace the saved version until the user saves.</p>', ['AUDHD-06', 'AUDHD-08', 'AUDHD-13'])}`;
     const drawComparison = () => {
       const version = note.history.find(entry => entry.version === selected);
       const current = note.history.find(entry => entry.version === note.version);
@@ -153,6 +254,7 @@ export function renderNote(container, id, history, changed) {
       }).join('')}</section>`;
       // AUDHD-02/07/08: each changed span keeps its two sides together on a
       // phone. Complete saved snapshots remain separate from the editor draft.
+      // See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings.
       const diff = compareNoteLines(version.body, note.body);
       const side = (lines, label, line) => `<section class="version-change-side"><h4>${label}</h4>${lines.length ? `${line ? `<p class="muted">${lines.length === 1 ? `Line ${line}` : `Lines ${line}–${line + lines.length - 1}`}</p>` : ''}<pre class="note-copy">${escape(lines.join('\n') || '(Blank line)')}</pre>` : '<p>No text in this span.</p>'}</section>`;
       const changedFields = different.filter(([field])=>field !== 'body').map(([field,label])=>`<section class="version-change"><h3>${label}</h3><div class="version-change-pair">${side([field === 'notebookId' ? bookName(version[field]) : version[field]],`Selected version ${version.version}`,'')}${side([field === 'notebookId' ? bookName(note[field]) : note[field]],`Current saved version ${note.version}`,'')}</div></section>`).join('');
@@ -187,6 +289,7 @@ export function renderNote(container, id, history, changed) {
       if(creating) {for(const key of Object.keys(newErrors)) delete newErrors[key];Object.assign(newErrors,outcome.errors || {});}
       // Saving replaces the draft owner with a clean copy. Rebind it before
       // another keystroke so subsequent edits cannot live in a detached object.
+      // AUDHD-06: ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable.
       if(outcome.ok && !creating) {
         draft=getNoteDraft(id);
         for(const field of ['title','body','notebookId']) get(`#note-${field}`).value=draft[field];
@@ -194,14 +297,14 @@ export function renderNote(container, id, history, changed) {
       }
       showErrors(); update();
       if(!outcome.ok) {get('#note-errors a')?.focus();return;}
-      if(creating) {newDraft=null; changed(); location.hash=`note/${outcome.note.id}`;}
+      if(creating) {newDraft=null; exampleDraft=false; changed(); location.hash=`note/${outcome.note.id}`;}
       else {result(`Saved version ${note.version} for this visit. Your note is available in ${bookName(note.notebookId)}.`);}
     };
     if(editable) {
       get('#discard-note').onclick=()=>{get('#discard-confirm').hidden=false;get('#cancel-discard').focus();};
       get('#cancel-discard').onclick=()=>{get('#discard-confirm').hidden=true;get('#discard-note').focus();};
       get('#confirm-discard').onclick=()=>{
-        if(creating){newDraft=null;for(const key of Object.keys(newErrors))delete newErrors[key];}else discardNoteDraft(id);
+        if(creating){newDraft=null;exampleDraft=false;for(const key of Object.keys(newErrors))delete newErrors[key];}else discardNoteDraft(id);
         renderNote(container,id,false,changed);restoreGuideNotes(container);container.querySelector('#note-title').focus();
       };
     }

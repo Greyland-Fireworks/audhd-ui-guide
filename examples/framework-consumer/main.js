@@ -2,7 +2,10 @@ import { emptyProfile } from 'audhd-ui-framework';
 import { createImportWorkflow } from 'audhd-ui-framework/import-workflow';
 import palettes from 'audhd-ui-framework/palettes';
 
-// Fixture switches let the contract check distinguish importing CSS from opting in.
+// AUDHD-11, AUDHD-04 — ../../GUIDE.md#audhd-11-keep-controls-readable-and-operable
+// The fixture switches isolate two requirements: loading CSS and opting a root in.
+// Merely importing a stylesheet must not style matching unmarked neighbors; the
+// consumer check measures actual control text/targets after the host opts in.
 const params = new URLSearchParams(location.search);
 if (!params.has('no-css')) {
   await import('audhd-ui-framework/skins.css');
@@ -11,14 +14,21 @@ if (!params.has('no-css')) {
 const root = document.querySelector('#settings');
 if (!params.has('no-marker')) root.setAttribute('data-audhd-ui', '');
 const byId = id => document.getElementById(id);
-// Applied preferences stay separate from the import preview: cancel/error must
-// preserve current choices. This fixture has no durable profile storage.
+// AUDHD-06, AUDHD-07 — ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable
+// Applied preferences are owned separately from the pending import. Cancel/error
+// must not mutate current choices. Capabilities describe this small fixture, not
+// all framework features; unsupported valid choices stay in the exported profile.
+// Nothing here persists a profile or saves the separate textarea's document data.
 let current = emptyProfile();
 const workflow = createImportWorkflow({ capabilities: {
   'display.text_style': true,
   'display.appearance': palettes.map(({ id }) => ({ mode: 'skin', id })),
 } });
 workflow.subscribe(({ state, preview, error }) => {
+  // AUDHD-07 — ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status
+  // The workflow rejects stale file completions before publishing a snapshot.
+  // Render preview rows only; applying styles is an explicit later action. Plain
+  // text rendering also prevents imported values becoming executable markup.
   byId('preview').hidden = state !== 'ready';
   byId('cancel').hidden = !['reading', 'ready'].includes(state);
   byId('error').textContent = error ? `${error} Nothing applied.` : '';
@@ -35,15 +45,25 @@ workflow.subscribe(({ state, preview, error }) => {
     byId('choices').append(item);
   }
 });
-// A persisted page can resume from the back/forward cache; retain its controller.
+// AUDHD-10 — ../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences
+// A back/forward-cache page may resume with its DOM and draft intact. Retain its
+// controller; disposing it would leave visible controls attached to a dead import
+// workflow. A real teardown invalidates pending reads instead of publishing late.
 addEventListener('pagehide', event => { if (!event.persisted) workflow.dispose(); });
 byId('import').addEventListener('change', event => {
+  // AUDHD-06 — ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable
+  // Clear the native selection so choosing the same corrected file can fire again.
+  // An empty selection cancels pending work; it must not apply an older late read.
   const file = event.target.files[0];
   event.target.value = '';
   if (file) void workflow.importText(() => file.text());
   else workflow.cancel();
 });
 byId('apply').addEventListener('click', () => {
+  // AUDHD-04, AUDHD-05 — ../../GUIDE.md#audhd-04-explain-effective-behavior
+  // Apply supported appearance on the existing root, not a reconstructed tree:
+  // the draft and Apply button/focus survive. Retaining the complete profile for
+  // export does not mean its unsupported fields have taken effect in this host.
   const { preview } = workflow.getSnapshot();
   if (!preview) return;
   current = preview.profile;
@@ -53,10 +73,17 @@ byId('apply').addEventListener('click', () => {
   byId('status').textContent = 'Supported choices applied for this session. Other choices retained, not applied.';
 });
 byId('cancel').addEventListener('click', () => {
+  // AUDHD-05 — ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability
+  // Cancellation hides its own control, so return focus to the surviving file
+  // input where another import can begin rather than leaving focus on hidden UI.
   workflow.cancel();
   byId('import').focus();
 });
 byId('export').addEventListener('click', () => {
+  // AUDHD-06 — ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable
+  // Serialize only the applied profile, never a pending preview or document draft.
+  // Requesting a browser download is not evidence that a file reached a chosen
+  // folder; the status intentionally reports the request rather than durable save.
   const url = URL.createObjectURL(new Blob([JSON.stringify(current, null, 2)], {type:'application/json'}));
   const link = document.createElement('a'); link.href = url; link.download = 'audhd-preferences.local.json'; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);

@@ -1,0 +1,486 @@
+[
+  {
+    "id": "murica",
+    "name": "Murica",
+    "mode": "light",
+    "source": {
+      "palette": "M01 Union Paper",
+      "heading": "M02 Federal Ledger",
+      "body": "M02 Federal Ledger"
+    },
+    "heading": "Libre Baskerville",
+    "headingWeight": 700,
+    "body": "Public Sans",
+    "colors": {
+      "page": "#f7f2e8",
+      "surface": "#fffdf7",
+      "ink": "#142b48",
+      "action": "#a62c35",
+      "accent": "#244d72",
+      "ornament": "#d2a553",
+      "success": "#296a57",
+      "danger": "#a62c35"
+    }
+  },
+  {
+    "id": "canto",
+    "name": "Canto",
+    "mode": "light",
+    "source": {
+      "palette": "C01 Harbor Glass",
+      "heading": "C01 Harbor Glass",
+      "body": "C01 Harbor Glass"
+    },
+    "heading": "Space Grotesk",
+    "headingWeight": 600,
+    "body": "Noto Sans",
+    "colors": {
+      "page": "#eef6f3",
+      "surface": "#fcfffd",
+      "ink": "#163e3c",
+      "action": "#14665f",
+      "accent": "#b64b36",
+      "ornament": "#8ec9bd",
+      "success": "#23735a",
+      "danger": "#b43b37"
+    }
+  },
+  {
+    "id": "pearl-river",
+    "name": "Pearl River",
+    "mode": "light",
+    "source": {
+      "palette": "C07 Pearl River",
+      "heading": "C07 Pearl River",
+      "body": "C07 Pearl River"
+    },
+    "heading": "Sora",
+    "headingWeight": 600,
+    "body": "IBM Plex Sans",
+    "colors": {
+      "page": "#edf5f8",
+      "surface": "#faffff",
+      "ink": "#253e4b",
+      "action": "#216b80",
+      "accent": "#79466f",
+      "ornament": "#a6c6d2",
+      "success": "#347862",
+      "danger": "#a13e52"
+    }
+  },
+  {
+    "id": "porcelain-studio",
+    "name": "Porcelain Studio",
+    "mode": "light",
+    "source": {
+      "palette": "C09 Porcelain Studio",
+      "heading": "C09 Porcelain Studio",
+      "body": "C09 Porcelain Studio"
+    },
+    "heading": "Noto Sans HK",
+    "headingWeight": 600,
+    "body": "Noto Sans",
+    "colors": {
+      "page": "#f5f5ed",
+      "surface": "#fffffa",
+      "ink": "#263649",
+      "action": "#315f9e",
+      "accent": "#b5482d",
+      "ornament": "#cfb373",
+      "success": "#3b765a",
+      "danger": "#b13b40"
+    }
+  },
+  {
+    "id": "jade-tile",
+    "name": "Jade Tile",
+    "mode": "light",
+    "source": {
+      "palette": "C03 Jade Tile",
+      "heading": "C03 Jade Tile",
+      "body": "C03 Jade Tile",
+      "page": "C01 Harbor Glass"
+    },
+    "heading": "Chivo",
+    "headingWeight": 600,
+    "body": "Source Sans 3",
+    "colors": {
+      "page": "#eef6f3",
+      "surface": "#fafbef",
+      "ink": "#253d31",
+      "action": "#3d684f",
+      "accent": "#a44435",
+      "ornament": "#c6a253",
+      "success": "#416640",
+      "danger": "#ad3735"
+    }
+  },
+  {
+    "id": "szechuan",
+    "name": "Szechuan",
+    "mode": "light",
+    "source": {
+      "palette": "S01 Bamboo Manuscript",
+      "heading": "S03 Celadon Vessel",
+      "body": "S03 Celadon Vessel"
+    },
+    "heading": "Marcellus",
+    "headingWeight": 400,
+    "body": "Lato",
+    "colors": {
+      "page": "#f1efde",
+      "surface": "#fbfaed",
+      "ink": "#2d392c",
+      "action": "#496142",
+      "accent": "#a44532",
+      "ornament": "#b39757",
+      "success": "#436a46",
+      "danger": "#a2382e"
+    }
+  },
+  {
+    "id": "lacquer-cabinet",
+    "name": "Lacquer Cabinet",
+    "mode": "dark",
+    "source": {
+      "palette": "S06 Lacquer Cabinet",
+      "heading": "S06 Lacquer Cabinet",
+      "body": "S06 Lacquer Cabinet"
+    },
+    "heading": "Cormorant SC",
+    "headingWeight": 600,
+    "body": "Source Sans 3",
+    "colors": {
+      "page": "#221b19",
+      "surface": "#332521",
+      "ink": "#fff3dc",
+      "action": "#efbc73",
+      "accent": "#ef9c88",
+      "ornament": "#bcbf93",
+      "success": "#bbd39a",
+      "danger": "#ffb3a2"
+    }
+  },
+  {
+    "id": "tea-horse-road",
+    "name": "Tea Horse Road",
+    "mode": "light",
+    "source": {
+      "palette": "S04 Tea Horse Road",
+      "heading": "S04 Tea Horse Road",
+      "body": "S04 Tea Horse Road"
+    },
+    "heading": "Forum",
+    "headingWeight": 400,
+    "body": "Work Sans",
+    "colors": {
+      "page": "#f2e4cd",
+      "surface": "#fff3df",
+      "ink": "#493728",
+      "action": "#805035",
+      "accent": "#3a6970",
+      "ornament": "#bf9047",
+      "success": "#526d48",
+      "danger": "#a64233"
+    }
+  },
+  {
+    "id": "peony-album",
+    "name": "Peony Album",
+    "mode": "light",
+    "source": {
+      "palette": "S10 Peony Album",
+      "heading": "S10 Peony Album",
+      "body": "S10 Peony Album"
+    },
+    "heading": "GFS Didot",
+    "headingWeight": 400,
+    "body": "Figtree",
+    "colors": {
+      "page": "#f9efeb",
+      "surface": "#fffbf6",
+      "ink": "#44343a",
+      "action": "#964c61",
+      "accent": "#526e54",
+      "ornament": "#c9a66b",
+      "success": "#4c7351",
+      "danger": "#aa3c47"
+    }
+  },
+  {
+    "id": "souk",
+    "name": "Souk",
+    "mode": "light",
+    "source": {
+      "palette": "K02 Brass & Indigo",
+      "heading": "K02 Brass & Indigo",
+      "body": "K02 Brass & Indigo"
+    },
+    "heading": "El Messiri",
+    "headingWeight": 600,
+    "body": "Source Sans 3",
+    "colors": {
+      "page": "#f2e8d4",
+      "surface": "#fff6e5",
+      "ink": "#32394a",
+      "action": "#364d8a",
+      "accent": "#8a6131",
+      "ornament": "#c69c47",
+      "success": "#3d705a",
+      "danger": "#a33d3e"
+    }
+  },
+  {
+    "id": "damascus-inlay",
+    "name": "Damascus Inlay",
+    "mode": "light",
+    "source": {
+      "palette": "K04 Damascus Inlay",
+      "heading": "K04 Damascus Inlay",
+      "body": "K04 Damascus Inlay"
+    },
+    "heading": "Noto Naskh Arabic",
+    "headingWeight": 600,
+    "body": "Noto Sans",
+    "colors": {
+      "page": "#eee6d8",
+      "surface": "#fff7e8",
+      "ink": "#3c302b",
+      "action": "#73533c",
+      "accent": "#226b68",
+      "ornament": "#b99a60",
+      "success": "#426b4e",
+      "danger": "#a43c3a"
+    }
+  },
+  {
+    "id": "palm-shade",
+    "name": "Palm Shade",
+    "mode": "light",
+    "source": {
+      "palette": "K10 Palm Shade",
+      "heading": "K10 Palm Shade",
+      "body": "K10 Palm Shade"
+    },
+    "heading": "Spectral",
+    "headingWeight": 600,
+    "body": "Figtree",
+    "colors": {
+      "page": "#f4efdf",
+      "surface": "#fffbee",
+      "ink": "#303c32",
+      "action": "#3f6652",
+      "accent": "#7c536f",
+      "ornament": "#bba05e",
+      "success": "#416c4b",
+      "danger": "#a5433c"
+    }
+  },
+  {
+    "id": "night-bazaar",
+    "name": "Night Bazaar",
+    "mode": "dark",
+    "source": {
+      "palette": "K08 Night Bazaar",
+      "heading": "K08 Night Bazaar",
+      "body": "K08 Night Bazaar"
+    },
+    "heading": "Yeseva One",
+    "headingWeight": 400,
+    "body": "DM Sans",
+    "colors": {
+      "page": "#20293a",
+      "surface": "#2e394a",
+      "ink": "#fff2da",
+      "action": "#e4bd75",
+      "accent": "#91d5cb",
+      "ornament": "#c3b1e4",
+      "success": "#b3dca5",
+      "danger": "#ffb1a9"
+    }
+  },
+  {
+    "id": "hacienda",
+    "name": "Hacienda",
+    "mode": "light",
+    "source": {
+      "palette": "H01 Andean Weave",
+      "heading": "H01 Andean Weave",
+      "body": "H01 Andean Weave"
+    },
+    "heading": "Alegreya",
+    "headingWeight": 700,
+    "body": "Source Sans 3",
+    "colors": {
+      "page": "#f3e7d4",
+      "surface": "#fff6e8",
+      "ink": "#44352e",
+      "action": "#a0403b",
+      "accent": "#386c80",
+      "ornament": "#d5a544",
+      "success": "#526b43",
+      "danger": "#aa373b"
+    }
+  },
+  {
+    "id": "patio-moderno",
+    "name": "Patio Moderno",
+    "mode": "light",
+    "source": {
+      "palette": "H03 Patio Moderno",
+      "heading": "H03 Patio Moderno",
+      "body": "H03 Patio Moderno"
+    },
+    "heading": "Josefin Slab",
+    "headingWeight": 600,
+    "body": "Josefin Sans",
+    "colors": {
+      "page": "#fff0db",
+      "surface": "#fffaf0",
+      "ink": "#364346",
+      "action": "#a94a3d",
+      "accent": "#24767b",
+      "ornament": "#deb85b",
+      "success": "#387254",
+      "danger": "#ad3a40"
+    }
+  },
+  {
+    "id": "atacama-dusk",
+    "name": "Atacama Dusk",
+    "mode": "dark",
+    "source": {
+      "palette": "H08 Atacama Dusk",
+      "heading": "H08 Atacama Dusk",
+      "body": "H08 Atacama Dusk"
+    },
+    "heading": "Zilla Slab",
+    "headingWeight": 600,
+    "body": "IBM Plex Sans",
+    "colors": {
+      "page": "#352a32",
+      "surface": "#473641",
+      "ink": "#fff0df",
+      "action": "#f3bf86",
+      "accent": "#b8b4ec",
+      "ornament": "#dc9e9b",
+      "success": "#b9d8a2",
+      "danger": "#ffb4ad"
+    }
+  },
+  {
+    "id": "golden-child",
+    "name": "Golden Child",
+    "mode": "light",
+    "source": {
+      "palette": "G04 Gilded Play",
+      "heading": "G04 Gilded Play",
+      "body": "G04 Gilded Play"
+    },
+    "heading": "Dela Gothic One",
+    "headingWeight": 400,
+    "body": "Figtree",
+    "colors": {
+      "page": "#f8efd9",
+      "surface": "#fff9ea",
+      "ink": "#463539",
+      "action": "#885f29",
+      "accent": "#86537c",
+      "ornament": "#d3b464",
+      "success": "#556c44",
+      "danger": "#a83b40"
+    }
+  },
+  {
+    "id": "brass-cabinet",
+    "name": "Brass Cabinet",
+    "mode": "light",
+    "source": {
+      "palette": "G01 Brass Cabinet",
+      "heading": "G07 Brass Circuit",
+      "body": "G01 Brass Cabinet"
+    },
+    "heading": "Orbitron",
+    "headingWeight": 600,
+    "body": "Work Sans",
+    "colors": {
+      "page": "#f7efdc",
+      "surface": "#fffaec",
+      "ink": "#41351e",
+      "action": "#806024",
+      "accent": "#466059",
+      "ornament": "#bba169",
+      "success": "#556b3e",
+      "danger": "#a54235"
+    }
+  },
+  {
+    "id": "black-gold",
+    "name": "Black Gold",
+    "mode": "dark",
+    "source": {
+      "palette": "G02 Black Gold",
+      "heading": "G02 Black Gold",
+      "body": "G02 Black Gold"
+    },
+    "heading": "Cinzel Decorative",
+    "headingWeight": 700,
+    "body": "Manrope",
+    "colors": {
+      "page": "#1b1b18",
+      "surface": "#292820",
+      "ink": "#fff4d8",
+      "action": "#e6bf68",
+      "accent": "#c9ad7e",
+      "ornament": "#a4c4bd",
+      "success": "#c1d595",
+      "danger": "#ffb4a4"
+    }
+  },
+  {
+    "id": "astral-foundry",
+    "name": "Astral Foundry",
+    "mode": "dark",
+    "source": {
+      "palette": "G10 Astral Foundry",
+      "heading": "G10 Astral Foundry",
+      "body": "G10 Astral Foundry"
+    },
+    "heading": "Fascinate",
+    "headingWeight": 400,
+    "body": "Nunito Sans",
+    "colors": {
+      "page": "#2d2537",
+      "surface": "#3d3049",
+      "ink": "#fff1dc",
+      "action": "#e6be7f",
+      "accent": "#e1aac8",
+      "ornament": "#b7c4df",
+      "success": "#c1db9e",
+      "danger": "#ffb1af"
+    }
+  },
+  {
+    "id": "brass-circuit",
+    "name": "Brass Circuit",
+    "mode": "light",
+    "source": {
+      "palette": "G07 Brass Circuit",
+      "heading": "G07 Brass Circuit",
+      "body": "G07 Brass Circuit"
+    },
+    "heading": "Orbitron",
+    "headingWeight": 600,
+    "body": "IBM Plex Sans",
+    "colors": {
+      "page": "#eceee4",
+      "surface": "#fbfcee",
+      "ink": "#2d3d36",
+      "action": "#6d642e",
+      "accent": "#316c64",
+      "ornament": "#b6ab6c",
+      "success": "#45714b",
+      "danger": "#a44439"
+    }
+  }
+]

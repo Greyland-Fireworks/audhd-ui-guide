@@ -1,5 +1,10 @@
 <script>
   import ContextHelp from './ContextHelp.svelte';
+  // AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+  // Native radios retain single-choice keyboard behavior inside full-card labels.
+  // The label and description convey meaning; aria-hidden samples and ACTIVE text
+  // do not create a second announced control or replace checked state. App owns the
+  // effective value. ../../shared/visual-choices.css owns selection/focus geometry.
   let {name, value, options, kind, onChange, helpTopic, helpText, textSize, defaultSkin} = $props();
 </script>
 <div class="visual-choices" role="group" aria-labelledby={`${name.replaceAll(' ', '-')}-heading`}><div class="choice-heading"><h4 id={`${name.replaceAll(' ', '-')}-heading`}>{name}</h4>{#if helpTopic}<ContextHelp topic={helpTopic} text={helpText} {textSize} />{/if}</div>

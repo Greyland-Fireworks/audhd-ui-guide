@@ -1,3 +1,4 @@
+// AUDHD-01 (../../../GUIDE.md#audhd-01-keep-scope-and-location-visible).
 // Labels, destinations and ancestry are shared facts, not a shared router/state
 // engine. Both adapters independently interpret these destinations. Breadcrumbs
 // use this canonical parent path; category membership is not invented as ancestry.

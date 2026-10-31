@@ -5,7 +5,7 @@
 [hidden] { display: none !important; }
 body { margin: 0; min-height: 100vh; color: var(--ui-text); background: var(--ui-page); font-family: var(--ui-font-body); line-height: 1.55; }
 a { color: var(--ui-action); text-underline-offset: .18em; }
-h1,h2,h3 { font-family: var(--ui-font-heading); line-height: 1.25; margin: 0 0 .75rem; }
+h1,h2,h3 { font-family: var(--ui-font-heading); font-weight: var(--ui-font-heading-weight, 700); line-height: 1.25; margin: 0 0 .75rem; }
 h1 { font-size: 1.8rem; }
 h2 { font-size: 1.3rem; }
 h3 { font-size: 1.1rem; }
@@ -16,7 +16,8 @@ button,input,select { font: inherit; color: var(--ui-text); background: var(--ui
 button,input:not([type=radio]):not([type=checkbox]),select { min-height: 2.75rem; padding: .55rem .8rem; }
 button,summary { cursor: pointer; }
 /* AUDHD-11: unavailable actions remain legible; a dashed border and adjacent
-   state explain availability without fading text into an action-colored fill. */
+   state explain availability without fading text into an action-colored fill.
+   See ../../GUIDE.md#audhd-11-keep-controls-readable-and-operable. */
 button:disabled { cursor: default; border-style: dashed; color: var(--ui-muted); background: var(--ui-surface); }
 button:not(:disabled):hover { border-color: var(--ui-action); }
 button[aria-pressed=true] { background: var(--ui-active-surface); border-color: var(--ui-active-accent); box-shadow: inset 0 -.2rem var(--ui-active-accent); }
@@ -28,14 +29,15 @@ legend { font-weight: 600; padding-inline: .25rem; }
 .inline { display: flex; align-items: center; gap: .65rem; }
 :focus-visible { outline: 3px solid var(--ui-focus); outline-offset: 3px; }
 /* AUDHD-05/11: a keyboard bypass must have a visible landing position. Pointer
-   route changes still focus main, but do not paint a giant persistent outline. */
+   route changes still focus main, but do not paint a giant persistent outline.
+   See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability. */
 .skip-link { position: fixed; top: .5rem; left: 1rem; z-index: 10; transform: translateY(-200%); clip-path: inset(50%); padding: .75rem 1rem; background: var(--ui-surface); border: 2px solid var(--ui-focus); }
 .skip-link:focus { transform: none; clip-path: none; }
 main:focus-visible { outline-offset: .35rem; }
 .app-shell { display: grid; grid-template-columns: 15rem minmax(0,1fr); min-height: 100vh; }
 .sidebar { position: sticky; top: 0; align-self: start; height: 100vh; height: 100dvh; overflow-y: auto; background: var(--ui-surface); padding: 1.5rem 1rem; border-inline-end: 1px solid var(--ui-border); }
 .brand { display: flex; gap: .75rem; align-items: center; }
-.brand strong { display: block; font-family: var(--ui-font-heading); font-size: 1.35rem; }
+.brand strong { display: block; font-family: var(--ui-font-heading); font-weight: var(--ui-font-heading-weight, 700); font-size: 1.35rem; }
 .brand span:not(.brand-mark) { display: block; font-size: .9rem; color: var(--ui-muted); }
 .brand-mark { display: grid; place-content: center; width: 2.5rem; height: 2.75rem; flex-shrink: 0; border-radius: .4rem; color: var(--ui-on-action); background: var(--ui-action); font-family: var(--ui-font-heading); font-size: 1.5rem; }
 .workspace-context { color: var(--ui-muted); padding-block: .75rem 1rem; border-bottom: 1px solid var(--ui-border); }
@@ -47,7 +49,14 @@ main:focus-visible { outline-offset: .35rem; }
 #breadcrumb-path { display: contents; }
 #breadcrumb-toggle::after { content: ' +'; }
 #breadcrumb-toggle[aria-expanded="true"]::after { content: ' −'; }
-#guide-toggle { font-size: 1rem; }
+/* AUDHD-03/11: distinguish teaching commentary without changing task text.
+   See ../../GUIDE.md#audhd-11-keep-controls-readable-and-operable.
+   The static arrow stays with its button when the header wraps; it is hidden
+   from assistive technology because the button already has a complete name. */
+.guide-toggle-cue { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: flex-end; gap: .4rem; margin-inline-start: auto; }
+.guide-toggle-arrow { flex: none; font-family: system-ui, sans-serif; font-size: 2.25rem; font-weight: 900; line-height: 1; color: var(--ui-action); }
+#guide-toggle { font-size: 1rem; font-style: italic; }
+.guide-note, .guide-only { font-style: italic; }
 main { margin-block: .5rem 2rem; min-width: 0; scroll-margin-block-start: 1rem; }
 .task-heading { margin-block: 1rem 1.5rem; max-width: 75ch; }
 .task-heading p { margin: .5rem 0 0; }
@@ -71,13 +80,15 @@ main { margin-block: .5rem 2rem; min-width: 0; scroll-margin-block-start: 1rem; 
 .nav-count { display: inline-flex; align-items: center; justify-content: center; gap: .2rem; flex-shrink: 0; min-width: 1.6rem; padding-inline: .3rem; border: 1px solid var(--ui-border); border-radius: .3rem; background: var(--ui-surface); color: var(--ui-muted); font-weight: 400; }
 /* AUDHD-07/08/11: reserve warning color, a striped edge and a warning symbol
    for actual problems. Keep texture away from the number so it stays legible.
-   The symbol and double border survive forced colors without a background. */
+   The symbol and double border survive forced colors without a background.
+   See ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status. */
 .nav-count[data-kind=problem] { color: var(--ui-warning); border: 3px double currentColor; font-weight: 700; padding-inline-start: .65rem; background-image: repeating-linear-gradient(135deg,currentColor 0 2px,transparent 2px 5px); background-size: .3rem 100%; background-repeat: no-repeat; }
 .nav-count[data-kind=problem]::before { content: '⚠'; }
 #menu-toggle { width: 100%; text-align: start; }
 #menu-toggle::after { float: right; margin-inline-start: .75rem; }
 /* Related data shares a card; independent tasks receive a real gap. Cards and
-   their nested controls retain DOM order at every width (AUDHD-02/11). */
+   their nested controls retain DOM order at every width (AUDHD-02/11).
+   See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings. */
 .ui-panel { padding: 1.25rem; border: 1px solid var(--ui-border); border-radius: .7rem; background: var(--ui-surface); min-width: 0; margin-block: 0 1.25rem; }
 .card-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(min(100%,18rem),1fr)); gap: 1.25rem; max-width: 72rem; }
 .card-grid > .ui-panel { margin: 0; }
@@ -95,7 +106,8 @@ main { margin-block: .5rem 2rem; min-width: 0; scroll-margin-block-start: 1rem; 
 /* AUDHD-02/04/07/09: account identity, evidence and next action occupy the same
    card. Equal columns align comparable accounts without a second list of names.
    A text severity label and solid edge survive monochrome/forced-color views;
-   a missing check uses neutral review styling rather than a false danger alert. */
+   a missing check uses neutral review styling rather than a false danger alert.
+   See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings. */
 .attention-summary { padding: 1rem 1.25rem; margin-bottom: 1.25rem; background: var(--ui-surface); border-inline-start: .25rem solid var(--ui-active-accent); }
 .attention-summary h2 { margin-bottom: .4rem; }
 .attention-summary p { margin: .4rem 0; max-width: 75ch; }
@@ -125,7 +137,8 @@ main { margin-block: .5rem 2rem; min-width: 0; scroll-margin-block-start: 1rem; 
 .directory-card h2 { margin: 0 0 .5rem; }
 .directory-card { align-self: start; }
 /* AUDHD-02/05: category cards read down each column in document order. Long
-   notebook branches no longer impose their height on unrelated peer cards. */
+   notebook branches no longer impose their height on unrelated peer cards.
+   See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings. */
 #page-directory { display: block; columns: 19rem 3; column-gap: 1.25rem; }
 #page-directory > .directory-card { break-inside: avoid; margin-bottom: 1.25rem; }
 .hub-overview-grid { display: grid; grid-template-columns: minmax(19rem,1fr) minmax(22rem,1.15fr); align-items: start; gap: 1.25rem; margin-bottom: 1.25rem; }
@@ -142,13 +155,15 @@ main { margin-block: .5rem 2rem; min-width: 0; scroll-margin-block-start: 1rem; 
 .hub-next-meeting strong { white-space: nowrap; margin-inline-start: .5rem; }
 .hub-owner { display: block; color: var(--ui-muted); }
 /* AUDHD-02/03/07: administration review remains discoverable but cannot
-   compete with a blocked task or the next meeting as a false urgent alert. */
+   compete with a blocked task or the next meeting as a false urgent alert.
+   See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings. */
 .hub-administration { border-top: 1px solid var(--ui-border); padding-top: 1rem; margin-bottom: 1.25rem; }
 .hub-administration .hub-work-list { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,20rem),1fr)); gap: .5rem 1.25rem; }
 .hub-administration .hub-work-list li { border-top: 0; }
 .access-verification { scroll-margin-block-start: 1rem; }
 /* AUDHD-02/07/08: a symbol, edge and label carry priority together. Normal
-   continuation work uses the active accent, never a warning-colored badge. */
+   continuation work uses the active accent, never a warning-colored badge.
+   See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings. */
 .hub-work-item { display: grid; grid-template-columns: 1.75rem minmax(0,1fr); gap: .6rem; }
 .hub-work-item a { display: inline-flex; min-height: 2.75rem; align-items: center; font-weight: 700; }
 .work-symbol { display: grid; place-content: center; align-self: start; width: 1.65rem; height: 1.65rem; border: 1px solid currentColor; border-radius: .3rem; color: var(--ui-active-accent); margin-top: .55rem; }
@@ -192,12 +207,14 @@ main { margin-block: .5rem 2rem; min-width: 0; scroll-margin-block-start: 1rem; 
 .status { border-inline-start: .25rem solid var(--ui-active-accent); padding-inline-start: 1rem; }
 .permission-results { display: flex; flex-wrap: wrap; gap: .75rem; }
 /* AUDHD-11: result tiles may shrink below their preferred width when nested
-   inside the completion group at enlarged text sizes; no sideways reading. */
+   inside the completion group at enlarged text sizes; no sideways reading.
+   See ../../GUIDE.md#audhd-11-keep-controls-readable-and-operable. */
 .permission-results div { flex: 0 1 10rem; min-width: 0; max-width: 100%; overflow-wrap: anywhere; border: 1px solid var(--ui-border); border-radius: .35rem; padding: .75rem 1rem; }
 .permission-results dt { color: var(--ui-muted); }
 .permission-results dd { margin: .25rem 0 0; font-weight: 700; }
 /* AUDHD-09: decision help stays inside its subject's outline. Only teaching
-   notes obey the global switch; hiding them never hides units or recovery. */
+   notes obey the global switch; hiding them never hides units or recovery.
+   See ../../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision. */
 details { border: 1px solid var(--ui-border); border-radius: .45rem; padding: .6rem .85rem; margin-block: 1rem; }
 summary { min-height: 2.75rem; align-content: center; }
 details ul { padding-inline-start: 1.4rem; }
@@ -206,9 +223,9 @@ details li + li { margin-top: .65rem; }
 .guide-note summary { font-weight: 600; }
 .guide-note summary span { font-weight: 400; }
 .guide-note summary span::before { content: '— '; }
-.guide-note-body { max-width: 80ch; padding-block: .5rem; }
+.guide-note-body { max-width: 80ch; padding-block: .5rem; overflow-wrap: anywhere; font-size: 1rem; }
 .rule-links a { display: inline-flex; align-items: center; min-height: 2.75rem; }
-html:not([data-guide-notes=true]) :is(.guide-note,.guide-only) { display: none; }
+html:not([data-guide-notes=true]) :is(.guide-annotation,.guide-note,.guide-only) { display: none; }
 #teaching-intro { border-inline-start: .25rem solid var(--ui-active-accent); padding: .75rem 1rem; background: var(--ui-surface); margin-block: .5rem 1rem; }
 .coupled-fields { border-inline-start: .25rem solid var(--ui-active-accent); padding-inline-start: 1rem; margin-block: 1rem; }
 .quantity-unit { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1fr); gap: 1rem; }
@@ -219,7 +236,11 @@ html:not([data-guide-notes=true]) :is(.guide-note,.guide-only) { display: none; 
    surroundings. The samples are inert; the whole labeled card is one radio
    target. Selection has a named badge and a thick edge, independently of focus.
    See ../../GUIDE.md#label-clarify-and-show and #adaptable-appearance. */
-.appearance-current { padding: .8rem 1rem; border-inline-start: .3rem solid var(--ui-active-accent); background: var(--ui-active-surface); }
+/* AUDHD-02/08: keep the applied palette beside its name inside one boundary.
+   Wrap the strip below the label when space is tight; never shrink the text.
+   See ../../GUIDE.md#label-clarify-and-show. */
+.appearance-current { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem 1rem; padding: .8rem 1rem; border-inline-start: .3rem solid var(--ui-active-accent); background: var(--ui-active-surface); }
+.appearance-current .preview-colors { width: 13rem; max-width: 100%; margin: 0; }
 .skin-collection { padding: 0; margin: 1.5rem 0 0; border: 0; min-width: 0; }
 .skin-collection legend { font-weight: 700; }
 #skin-help { max-width: 75ch; margin-block: .5rem 1.25rem; }
@@ -229,7 +250,7 @@ html:not([data-guide-notes=true]) :is(.guide-note,.guide-only) { display: none; 
 .palette:has(:checked) { border-color: var(--ui-active-accent); box-shadow: 0 0 0 2px var(--ui-active-accent); background: var(--ui-active-surface); }
 .palette:has(:focus-visible) { outline: 3px solid var(--ui-focus); outline-offset: 5px; }
 .palette-preview { display: flex; flex-direction: column; gap: .6rem; padding: 1rem; border: 1px solid var(--ui-control-border); border-radius: .4rem; }
-.preview-heading { font-family: var(--ui-font-heading); font-weight: 700; font-size: 1.4rem; line-height: 1.3; overflow-wrap: anywhere; }
+.preview-heading { font-family: var(--ui-font-heading); font-weight: var(--ui-font-heading-weight, 700); font-size: 1.4rem; line-height: 1.3; overflow-wrap: anywhere; }
 .preview-copy { font-family: var(--ui-font-body); }
 .preview-text-row { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem; justify-content: space-between; }
 .preview-panel { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .6rem; padding: .6rem; margin-block: .3rem; background: var(--ui-surface); border: 1px solid var(--ui-control-border); border-radius: .3rem; }
@@ -241,12 +262,14 @@ html:not([data-guide-notes=true]) :is(.guide-note,.guide-only) { display: none; 
 .palette:has(:checked) .palette-current { visibility: visible; }
 .announcement:empty { margin: 0; }
 /* AUDHD-11: reflow is based on available space. Ordinary text/targets never
-   shrink to force a desktop arrangement into a phone or enlarged-text view. */
+   shrink to force a desktop arrangement into a phone or enlarged-text view.
+   See ../../GUIDE.md#audhd-11-keep-controls-readable-and-operable. */
 @media(width < 64rem) {
   .app-shell { display: block; }
   .sidebar { position: static; height: auto; padding: .5rem 1rem; border-inline-end: 0; border-bottom: 1px solid var(--ui-border); }
   /* The linked app name in the content header already identifies this screen.
-     Repeating the brand above the menu costs a whole task row at 200% text. */
+     Repeating the brand above the menu costs a whole task row at 200% text.
+     AUDHD-02: ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings. */
   .brand { display: none; }
   .workspace-context { display: none; }
   #workspace-nav { margin-top: .75rem; }
@@ -261,7 +284,8 @@ html:not([data-guide-notes=true]) :is(.guide-note,.guide-only) { display: none; 
   .workspace-header { align-items: start; }
   .ui-panel { padding: 1rem; }
   /* Keep the nested result readable at enlarged text sizes: reduce framing
-     space before sacrificing the width available to words and actions. */
+     space before sacrificing the width available to words and actions.
+     AUDHD-11: ../../GUIDE.md#audhd-11-keep-controls-readable-and-operable. */
   #check-status { padding: .5rem; }
   .permission-results div { padding: .5rem; }
   h1 { font-size: 1.6rem; }
@@ -272,3 +296,19 @@ html:not([data-guide-notes=true]) :is(.guide-note,.guide-only) { display: none; 
   .brand-mark { border: 1px solid CanvasText; }
   .task-link.ui-action { border: 2px solid LinkText; }
 }
+:root .scenario-indicator { padding: .5rem .75rem; border-inline-start: .25rem solid var(--ui-active-accent); background: var(--ui-surface); }
+/* AUDHD-02/09: optional teaching controls are one bounded group, separate from
+   the live task. Flexible columns preserve label/control proximity when zoomed.
+   See ../../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision. */
+.scenario-controls { margin-block: 1rem; padding: 1rem; border: 1px solid var(--ui-border); border-radius: .5rem; }
+.scenario-fields { display: flex; align-items: end; gap: 1rem; flex-wrap: wrap; margin-block: 1rem; }
+.scenario-fields label { flex: 1 1 15rem; display: grid; gap: .5rem; }
+.scenario-permission { display: flex; align-items: center; gap: .5rem; }
+
+/* AUDHD-02/09: the shared edge attaches teaching to its subject without using
+   error or selection styling. Native disclosures preserve keyboard operation.
+   See ../../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision. */
+.guide-annotation { margin-block: 1rem; padding-inline-start: .8rem; border-inline-start: 2px dashed var(--ui-border); font-style: italic; min-width: 0; }
+.guide-takeaway { max-width: 75ch; font-size: 1rem; line-height: 1.6; margin: 0 0 .5rem; }
+.guide-annotation .guide-note { margin: 0; border-inline-start: 0; }
+@media (forced-colors: active) { .guide-annotation { border-color: CanvasText; } }

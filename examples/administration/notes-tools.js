@@ -1,6 +1,8 @@
-import { notebooks, notes, settings, saveNotebook, saveWorkspaceSettings, exportNotes, analyzeImport, importNotes } from './notes-state.js';
+import { notebooks, notes, settings, saveNotebook, saveWorkspaceSettings, validateWorkspaceSettings, exportNotes, analyzeImport, importNotes } from './notes-state.js';
 import { recordEvent } from './events.js';
 import { guideNote, restoreGuideNotes } from './guide-notes.js';
+import { prepareNoteLimitExample, attachNotebookBrowser, notebookData, notebookLoadMessage, refreshNotebookData } from './notes.js';
+import { configurationAllowed, registerScenarioOwner, subscribeScenario } from './scenario-state.js';
 
 const escape = value => String(value).replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
 const heading = (title, description) => `<div class="task-heading"><h1>${title}</h1><p>${description}</p></div>`;
@@ -9,6 +11,7 @@ const newNotebook = { name: '', description: '' };
 const notebookErrors = new Map();
 // AUDHD-03/05: opening an editor is a presentation choice, not a mutation.
 // Each collapsed editor retains its own draft and exposes its unfinished state.
+// See ../../GUIDE.md#audhd-03-offer-manageable-detail-without-hiding-choices.
 const openNotebooks = new Set();
 let lastNotebookPath;
 let notebookNotice = '';
@@ -21,6 +24,27 @@ let downloadFailed = false;
 let transfer = { filename: '', preview: null, warnings: [], error: '', reading: false, notice: '' };
 let fileRead = 0;
 let transferView;
+let workspaceView;
+let notebookView;
+
+export function resetNotesTools() {
+  drafts.clear(); notebookErrors.clear(); openNotebooks.clear();
+  Object.assign(newNotebook, { name: '', description: '' });
+  lastNotebookPath = undefined; notebookNotice = ''; workspaceDraft = undefined;
+  workspaceErrors = {}; workspaceNotice = ''; workspaceView = null; notebookView = null;
+  downloadNotice = ''; downloadFailed = false;
+  transfer = { filename: '', preview: null, warnings: [], error: '', reading: false, notice: '' };
+  fileRead++; transferView = null;
+}
+registerScenarioOwner('notes-tools', { reset: resetNotesTools });
+subscribeScenario(event => {
+  // AUDHD-05/13: ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
+  // Permission changes update availability on existing nodes. Re-rendering from
+  // saved settings here would lose the proposal precisely when editing is blocked.
+  if (event.type !== 'permission') return;
+  if (workspaceView?.form.isConnected) workspaceView.permission();
+  if (notebookView?.root.isConnected) notebookView.permission();
+});
 
 function refreshTransfer(focusId, clearSelection = false) {
   if (!transferView?.section.isConnected) return;
@@ -32,6 +56,7 @@ function refreshTransfer(focusId, clearSelection = false) {
   // during an in-page update so a checked file does not appear to be unchosen.
   // Route changes cannot restore a native file selection; the named preview
   // remains in task state and can still be reviewed without selecting it again.
+  // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
   const replacement = container.querySelector('#import-notes-file');
   fileInput.setAttribute('aria-invalid', replacement.getAttribute('aria-invalid'));
   if (clearSelection) fileInput.value = '';
@@ -40,7 +65,7 @@ function refreshTransfer(focusId, clearSelection = false) {
   if (target) (container.querySelector(`#${target}`) || container.querySelector('#import-notes-file')).focus();
 }
 
-// AUDHD-05/10 / GUIDE.md#audhd-10-support-interruptions-and-working-preferences:
+// AUDHD-05/10 / ../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences:
 // views own drafts and the pending import choice; the model owns saved records.
 // Navigation only replaces markup. It neither saves nor discards either owner.
 const draftFor = notebook => {
@@ -88,16 +113,15 @@ export function renderNotebookSettings(container, onChange = () => {}) {
     const draft = notebook ? draftFor(notebook) : newNotebook;
     const id = notebook?.id || 'new';
     const prefix = `notebook-${id}`;
-    const savedNotes = notebook ? notes.filter(note => note.notebookId === notebook.id) : [];
-    const activeNotes = savedNotes.filter(note => note.status === 'active').sort((a,b)=>a.title.localeCompare(b.title));
     const errors = notebookErrors.get(id) || {};
     return `<form class="ui-panel" data-notebook="${escape(id)}" novalidate>
       <div class="panel-heading"><h2>${notebook ? escape(notebook.name) : 'Create a notebook'}</h2></div>
-      ${notebook ? `<div class="notebook-snapshot"><dl class="notebook-counts">${[['active','Active'],['archived','Archived'],['trash','In Trash']].map(([status,label])=>`<div><dt>${label}</dt><dd>${savedNotes.filter(note=>note.status===status).length}</dd></div>`).join('')}</dl>${activeNotes.length ? `<ul class="notebook-previews" aria-label="Active note examples in ${escape(notebook.name)}">${activeNotes.slice(0,2).map(note=>`<li><a href="#note/${note.id}">${escape(note.title)}</a></li>`).join('')}</ul>` : '<p>No active notes in this notebook.</p>'}<a href="#notes/notebook-${encodeURIComponent(notebook.id)}">View all active notes in ${escape(notebook.name)}</a></div>` : '<p>A notebook groups related notes. Example: Project planning.</p>'}
+      ${notebook ? `<div class="notebook-snapshot" data-notebook-snapshot="${escape(id)}"></div>` : '<p>A notebook groups related notes. Example: Project planning.</p>'}
+      <p id="${prefix}-permission" data-notebook-permission class="configuration-restriction" role="status" hidden>Notebook settings are read-only in this scenario. Configuration permission is required to create notebooks or change their details. Your unfinished details are retained.</p>
       ${notebook ? `<details class="notebook-editor" data-notebook-editor="${escape(id)}" ${openNotebooks.has(id) ? 'open' : ''}><summary>Edit notebook details <span data-summary-state>${Object.keys(errors).length ? '· needs correction' : changed(notebook) ? '· unsaved changes' : ''}</span></summary>` : ''}
-      <label for="${prefix}-name">Notebook name<input id="${prefix}-name" name="name" value="${escape(draft.name)}" maxlength="100" required aria-describedby="${prefix}-name-help ${prefix}-errors"></label>
+      <label for="${prefix}-name">Notebook name<input id="${prefix}-name" name="name" value="${escape(draft.name)}" maxlength="100" required aria-describedby="${prefix}-name-help ${prefix}-errors ${prefix}-permission"></label>
       <p id="${prefix}-name-help">Use a unique name, up to 100 characters.</p>
-      <label for="${prefix}-description">Description <span class="muted">(optional)</span><textarea id="${prefix}-description" name="description" maxlength="1000" rows="3" aria-describedby="${prefix}-description-help ${prefix}-errors">${escape(draft.description)}</textarea></label>
+      <label for="${prefix}-description">Description <span class="muted">(optional)</span><textarea id="${prefix}-description" name="description" maxlength="1000" rows="3" aria-describedby="${prefix}-description-help ${prefix}-errors ${prefix}-permission">${escape(draft.description)}</textarea></label>
       <p id="${prefix}-description-help">Explain what belongs here. Example: “Decisions and next steps for the website.” Leave blank if the name is enough.</p>
       <p id="${prefix}-errors" class="error" role="alert">${escape(Object.values(errors).join(' '))}</p>
       <p data-draft-status role="status">${notebook ? changed(notebook) ? 'Unsaved changes.' : 'Saved for this visit.' : draft.name || draft.description ? 'Not created yet.' : 'Enter a name to create a notebook.'}</p>
@@ -107,13 +131,53 @@ export function renderNotebookSettings(container, onChange = () => {}) {
   };
   container.innerHTML = `<section class="notes-tools">${heading('Notebooks', 'Group related notes and name each group clearly. Changes last for this visit only.')}
     <details class="new-notebook-editor" data-notebook-editor="new" ${openNotebooks.has('new') ? 'open' : ''}><summary>New notebook <span data-summary-state>${notebookErrors.get('new') && Object.keys(notebookErrors.get('new')).length ? '· needs correction' : newNotebook.name || newNotebook.description ? '· unfinished draft' : ''}</span></summary>${form(null)}</details>
-    <p id="notebook-notice" role="status">${escape(notebookNotice)}</p><div class="card-grid">${notebooks.map(form).join('')}</div>
+    <p id="notebook-notice" role="status">${escape(notebookNotice)}</p>
+    <section class="notebook-load-state" aria-label="Notebook data"><p id="notebook-load-status" role="status"></p><button id="refresh-notebooks" type="button">Refresh notebooks</button></section>
+    <div class="card-grid">${notebooks.map(form).join('')}</div>
     ${guideNote('notebooks-design', 'Connect notebook identity, contents and edits', '<p>The creation action comes before the notebook list. Each card pairs its saved active/archive/trash counts with note previews; its named disclosure opens one independent editor. Closing it retains the draft and exposes unfinished state. Saving or discarding one card leaves the others intact. Renaming a notebook does not move or delete its notes.</p>', ['AUDHD-02', 'AUDHD-03', 'AUDHD-05', 'AUDHD-06', 'AUDHD-07'])}</section>`;
   for (const disclosure of container.querySelectorAll('[data-notebook-editor]')) disclosure.ontoggle = () => {
     if (disclosure.open) openNotebooks.add(disclosure.dataset.notebookEditor);
     else openNotebooks.delete(disclosure.dataset.notebookEditor);
   };
   restoreGuideNotes(container);
+  const applyPermission = () => {
+    // AUDHD-04/05/13: a permission change changes availability, not ownership.
+    // Disable configuration edits on the same nodes and explain the restriction
+    // inside each notebook card; keep browsing and deliberate draft discard
+    // available. The saveNotebook boundary independently guards mutations.
+    // See ../../GUIDE.md#audhd-04-explain-effective-behavior.
+    const readOnly = !configurationAllowed();
+    for (const element of container.querySelectorAll('form[data-notebook]')) {
+      element.querySelector('[data-notebook-permission]').hidden = !readOnly;
+      for (const input of element.querySelectorAll('[name], button[type="submit"]')) input.disabled = readOnly;
+    }
+  };
+  notebookView = { root: container.querySelector('.notes-tools'), permission: applyPermission };
+  applyPermission();
+  const drawSnapshots = () => {
+    if (!container.querySelector('#notebook-load-status')) return;
+    const response = notebookData();
+    writeText(container.querySelector('#notebook-load-status'), notebookLoadMessage());
+    const refresh = container.querySelector('#refresh-notebooks');
+    refresh.textContent = response.error || response.partial ? 'Retry loading notebooks' : 'Refresh notebooks';
+    refresh.setAttribute('aria-busy', String(response.loading));
+    // AUDHD-05/07: only the saved-data summaries change when loading completes.
+    // An open rename form, focus and its unsaved values must remain untouched.
+    // Missing data is not zero; partial counts identify the unavailable notebook.
+    // See ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
+    for (const snapshot of container.querySelectorAll('[data-notebook-snapshot]')) {
+      const notebook = notebooks.find(book => book.id === snapshot.dataset.notebookSnapshot);
+      if (!response.rows || response.unavailable.includes(notebook.id)) {
+        snapshot.innerHTML = `<p>${response.loading ? 'Loading saved notes…' : 'Saved-note counts are unavailable for this notebook. Retry loading above.'}</p>`;
+        continue;
+      }
+      const savedNotes = response.rows.filter(note => note.notebookId === notebook.id);
+      const activeNotes = savedNotes.filter(note => note.status === 'active').sort((a,b)=>a.title.localeCompare(b.title));
+      snapshot.innerHTML = `<dl class="notebook-counts">${[['active','Active'],['archived','Archived'],['trash','In Trash']].map(([status,label])=>`<div><dt>${label}</dt><dd>${savedNotes.filter(note=>note.status===status).length}</dd></div>`).join('')}</dl>${response.error ? '<p>Retained counts; refresh failed.</p>' : ''}${activeNotes.length ? `<ul class="notebook-previews" aria-label="Active note examples in ${escape(notebook.name)}">${activeNotes.slice(0,2).map(note=>`<li><a href="#note/${note.id}">${escape(note.title)}</a></li>`).join('')}</ul>` : '<p>No active notes in this notebook.</p>'}<a href="#notes/notebook-${encodeURIComponent(notebook.id)}">View all active notes in ${escape(notebook.name)}</a>`;
+    }
+  };
+  container.querySelector('#refresh-notebooks').onclick = refreshNotebookData;
+  attachNotebookBrowser(container.querySelector('.notes-tools'), drawSnapshots);
   for (const element of container.querySelectorAll('form[data-notebook]')) {
     const id = element.dataset.notebook;
     const notebook = notebooks.find(item => item.id === id);
@@ -163,45 +227,65 @@ export function renderWorkspaceSettings(container, onChange = () => {}) {
   workspaceDraft ||= { defaultNotebookId: settings.defaultNotebookId, maxNoteLength: String(settings.maxNoteLength) };
   container.innerHTML = `<section class="notes-tools">${heading('Workspace settings', 'Choose the default notebook for new notes and the maximum length for saving any note.')}
     <form id="workspace-settings-form" class="ui-panel" novalidate>
+      <p id="note-settings-permission" class="configuration-restriction" role="status" hidden>Note settings are read-only in this scenario. Configuration permission is required to save. Your proposed values are retained.</p>
       <fieldset class="workspace-setting-group"><legend>New notes</legend>
-      <label for="default-notebook">Default notebook<select id="default-notebook" name="defaultNotebookId" aria-describedby="default-notebook-help workspace-settings-errors">${notebooks.map(notebook => `<option value="${escape(notebook.id)}" ${notebook.id === workspaceDraft.defaultNotebookId ? 'selected' : ''}>${escape(notebook.name)}</option>`).join('')}</select></label>
-      <p id="default-notebook-help">Preselect this notebook when creating a note. You can choose another notebook before saving; existing notes stay where they are.</p>
+      <p class="current-note-setting">Current default: <strong id="current-notebook">${escape(notebooks.find(book => book.id === settings.defaultNotebookId)?.name)}</strong></p>
+      <label for="default-notebook">Proposed default notebook<select id="default-notebook" name="defaultNotebookId" aria-describedby="default-notebook-help workspace-settings-errors">${notebooks.map(notebook => `<option value="${escape(notebook.id)}" ${notebook.id === workspaceDraft.defaultNotebookId ? 'selected' : ''}>${escape(notebook.name)}</option>`).join('')}</select></label>
+      <p id="default-notebook-help">Preselect this notebook for a new note. Change it when most new notes belong elsewhere. Existing notes and unfinished drafts keep their notebook; you can still choose another notebook in the note editor.</p>
       </fieldset>
       <fieldset class="workspace-setting-group"><legend>Note length</legend><div class="workspace-limit-layout"><div>
-      <label for="max-note-length">Maximum note length<input id="max-note-length" name="maxNoteLength" type="number" min="100" max="50000" step="1" value="${escape(workspaceDraft.maxNoteLength)}" aria-describedby="max-note-length-unit max-note-length-help workspace-settings-errors" required></label>
+      <p class="current-note-setting">Current maximum: <strong id="current-note-maximum">${settings.maxNoteLength.toLocaleString()} characters</strong></p>
+      <label for="max-note-length">Proposed maximum note length<input id="max-note-length" name="maxNoteLength" type="number" min="100" max="50000" step="1" value="${escape(workspaceDraft.maxNoteLength)}" aria-describedby="max-note-length-unit max-note-length-help workspace-settings-errors" required></label>
       <p id="max-note-length-unit" class="field-unit">Characters per note body</p>
       <p id="max-note-length-help">Accepts 100–50,000 whole characters. Example: 5000. A larger maximum allows longer note bodies; a smaller maximum limits future saves. Existing text is never cut to fit.</p>
       <details class="context-help" data-guide-key="workspace-defaults-help"><summary>ⓘ Choosing a note length</summary><ul><li>Keep the current value if it fits your notes. Increase it when a longer note needs to be saved.</li><li>A note above a newly lowered maximum stays readable and exportable. Shorten its body or raise the maximum before saving another edit.</li><li>This is a writing limit for this example, not a measure of server capacity or storage space.</li><li>The maximum applies to note bodies; notebook names and note titles have their own limits.</li></ul></details>
       </div><section id="note-length-impact" class="note-length-impact" aria-label="Saved notes compared with the proposed maximum"></section></div></fieldset>
       <p id="workspace-settings-errors" class="error" role="alert">${escape(Object.values(workspaceErrors).join(' '))}</p>
-      <p id="workspace-settings-draft" role="status">${workspaceChanged() ? 'Unsaved changes.' : 'No unsaved changes.'}</p>
-      <div class="actions"><button class="ui-action" type="submit">Save workspace settings</button><button id="discard-workspace-settings" type="button">Discard changes</button></div>
-      <p id="workspace-settings-saved" role="status">${escape(workspaceNotice || `Saved maximum: ${settings.maxNoteLength.toLocaleString()} characters. Settings last for this visit only.`)}</p>
-    </form>${guideNote('workspace-defaults-design', 'Show the effect on actual saved notes', '<p>The maximum has a visible unit, accepted range and example. The comparison uses actual saved body lengths against the proposed maximum; it excludes unsaved edits and never changes text. Draft settings stay separate from saved defaults, and validation cannot silently truncate existing content. These values describe this example’s supported behavior, not universal recommended limits.</p>', ['AUDHD-04', 'AUDHD-06', 'AUDHD-08', 'AUDHD-09'])}</section>`;
+      <div class="actions"><button id="save-note-settings" class="ui-action" type="submit">Save note settings</button><button id="discard-workspace-settings" type="button">Discard changes</button><p id="workspace-settings-draft" role="status">${workspaceChanged() ? 'Unsaved changes.' : 'No unsaved changes.'}</p></div>
+      <p>Saving immediately updates note creation, saves and imports for this visit.</p>
+      <p id="workspace-settings-saved" role="status" tabindex="-1">${escape(workspaceNotice || `Saved maximum: ${settings.maxNoteLength.toLocaleString()} characters. Settings last for this visit only.`)}</p>
+    </form>${guideNote('workspace-defaults-design', 'Show the effect on actual saved notes', '<p>The maximum has a visible unit, accepted range and example. The comparison uses actual saved body lengths against the proposed maximum; it excludes unsaved edits and never changes text. Draft settings stay separate from saved defaults, and validation cannot silently truncate existing content. These values describe this example’s supported behavior, not universal recommended limits.</p><h2>Try the note-length rule</h2><ol><li>Propose a smaller maximum, such as 100 characters, review the affected notes and save it.</li><li>Prepare the example draft below. It contains one character more than the currently saved maximum.</li><li>Try Create note. The rejection retains all of your text.</li><li>Shorten the body to fit the visible maximum and create the note successfully.</li></ol><button id="prepare-note-limit-example" type="button">Prepare example note draft</button><p id="note-example-result" role="status"></p>', ['AUDHD-04', 'AUDHD-06', 'AUDHD-08', 'AUDHD-09', 'AUDHD-12'])}</section>`;
   restoreGuideNotes(container);
   const form = container.querySelector('#workspace-settings-form');
+  const applyPermission = () => {
+    const allowed = configurationAllowed();
+    container.querySelector('#note-settings-permission').hidden = allowed;
+    for (const control of form.querySelectorAll('[name],#save-note-settings')) control.disabled = !allowed;
+    if (allowed && workspaceErrors.permission) { delete workspaceErrors.permission; formErrors(form, workspaceErrors, 'workspace-settings-errors'); }
+  };
+  workspaceView = { form, permission: applyPermission };
   const showImpact = () => {
     const priorOpen = container.querySelector('#note-length-impact details')?.open;
     const maximum = Number(workspaceDraft.maxNoteLength);
     const valid = Number.isInteger(maximum) && maximum >= 100 && maximum <= 50000;
     const affected = valid ? notes.filter(note => note.body.length > maximum) : [];
-    const largest = [...notes].sort((a,b)=>b.body.length-a.body.length || a.title.localeCompare(b.title)).slice(0,3);
+    const largest = [...notes].sort((a,b)=>b.body.length-a.body.length || a.title.localeCompare(b.title)).slice(0,1);
     // AUDHD-07/08/09: this is a proposed-limit preview from saved text, not a
-    // storage-capacity estimate or a mutation. Native meters retain an explicit
+    // storage-capacity estimate or a mutation. One longest-note comparison keeps
+    // Save near its inputs; the affected count and disclosed complete list retain
+    // coverage without repeating saturated bars. Native meters retain an explicit
     // count and over-limit wording so color and bar length are never the evidence.
-    container.querySelector('#note-length-impact').innerHTML = `<h2>Effect on saved notes</h2><p class="limit-scope">${notes.length} saved notes, including Archive and Trash. Unsaved text is not counted.</p><p id="note-limit-summary" role="status">${valid ? `${affected.length} ${affected.length === 1 ? 'note exceeds' : 'notes exceed'} the proposed ${maximum.toLocaleString()}-character maximum.` : 'Enter a whole number from 100 to 50,000 to compare existing notes.'}</p>${valid ? `<p>Three longest saved notes:</p><ul class="note-usage-list">${largest.map(note=>`<li class="${note.body.length>maximum ? 'over-limit' : ''}"><a href="#note/${note.id}/body">${escape(note.title)}</a><p>${note.body.length.toLocaleString()} characters${note.body.length>maximum ? ` · ${(note.body.length-maximum).toLocaleString()} over` : ` · ${(maximum-note.body.length).toLocaleString()} remaining`}</p><meter min="0" max="${maximum}" value="${Math.min(note.body.length,maximum)}" aria-label="${escape(note.title)}: ${note.body.length} characters against the proposed maximum of ${maximum}${note.body.length>maximum ? `; ${note.body.length-maximum} over` : ''}"></meter></li>`).join('')}</ul>${affected.length ? `<details class="context-help"><summary>Review all ${affected.length} notes above this maximum</summary><ul>${affected.map(note=>`<li><a href="#note/${note.id}/body">${escape(note.title)}</a> · ${note.body.length.toLocaleString()} characters</li>`).join('')}</ul><p>The text remains unchanged. Shorten it or raise the maximum before saving another edit.</p></details>` : ''}` : ''}`;
+    // See ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
+    container.querySelector('#note-length-impact').innerHTML = `<h2>Effect on saved notes</h2><p class="limit-scope">${notes.length} saved notes, including Archive and Trash. Unsaved text is not counted.</p><p id="note-limit-summary" role="status">${valid ? `${affected.length} ${affected.length === 1 ? 'note exceeds' : 'notes exceed'} the proposed ${maximum.toLocaleString()}-character maximum.` : 'Enter a whole number from 100 to 50,000 to compare existing notes.'}</p>${valid && notes.length ? `<p>Longest saved note:</p><ul class="note-usage-list">${largest.map(note=>`<li class="${note.body.length>maximum ? 'over-limit' : ''}"><a href="#note/${note.id}/body">${escape(note.title)}</a><p>${note.body.length.toLocaleString()} characters${note.body.length>maximum ? ` · ${(note.body.length-maximum).toLocaleString()} over` : ` · ${(maximum-note.body.length).toLocaleString()} remaining`}</p><meter min="0" max="${maximum}" value="${Math.min(note.body.length,maximum)}" aria-label="${escape(note.title)}: ${note.body.length} characters against the proposed maximum of ${maximum}${note.body.length>maximum ? `; ${note.body.length-maximum} over` : ''}"></meter></li>`).join('')}</ul>${affected.length ? `<details class="context-help"><summary>Review all ${affected.length} notes above this maximum</summary><ul>${affected.map(note=>`<li><a href="#note/${note.id}/body">${escape(note.title)}</a> · ${note.body.length.toLocaleString()} characters</li>`).join('')}</ul><p>The text remains unchanged. Shorten it or raise the maximum before saving another edit.</p></details>` : ''}` : valid ? '<p>No saved notes yet. This rule will apply when you create or import a note.</p>' : ''}`;
     const impact = container.querySelector('#note-length-impact');
     const affectedDisclosure = impact.querySelector('.context-help');
     if (affectedDisclosure) affectedDisclosure.dataset.guideKey = 'note-limit-affected';
     restoreGuideNotes(impact);
     // A native toggle event may still be queued when the number changes. Read
     // the current disclosure before replacement so an immediate edit retains it.
+    // AUDHD-05: ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
     if (affectedDisclosure && priorOpen !== undefined) affectedDisclosure.open = priorOpen;
   };
   formErrors(form, workspaceErrors, 'workspace-settings-errors');
   for (const input of form.querySelectorAll('[name]')) input.oninput = event => {
     workspaceDraft[input.name] = event.target.value;
-    delete workspaceErrors[input.name]; formErrors(form, workspaceErrors, 'workspace-settings-errors');
+    const validation = validateWorkspaceSettings({ ...workspaceDraft, maxNoteLength: Number(workspaceDraft.maxNoteLength) });
+    // AUDHD-06: a keystroke is not a correction. Retain an existing field error
+    // until the edited value passes the model's validation, without exposing new
+    // errors before submission. ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable.
+    if (!validation[input.name]) delete workspaceErrors[input.name];
+    else if (workspaceErrors[input.name]) workspaceErrors[input.name] = validation[input.name];
+    formErrors(form, workspaceErrors, 'workspace-settings-errors');
     writeText(container.querySelector('#workspace-settings-draft'), workspaceChanged() ? 'Unsaved changes.' : 'No unsaved changes.');
     if (input.name === 'maxNoteLength') showImpact();
     onChange();
@@ -211,18 +295,34 @@ export function renderWorkspaceSettings(container, onChange = () => {}) {
     const result = saveWorkspaceSettings({ ...workspaceDraft, maxNoteLength: Number(workspaceDraft.maxNoteLength) });
     workspaceErrors = result.errors || {};
     formErrors(form, workspaceErrors, 'workspace-settings-errors');
-    if (!result.ok) { form.elements.namedItem(Object.keys(workspaceErrors)[0])?.focus(); onChange(); return; }
+    if (!result.ok) { applyPermission(); form.elements.namedItem(Object.keys(workspaceErrors)[0])?.focus(); onChange(); return; }
     workspaceDraft = { defaultNotebookId: settings.defaultNotebookId, maxNoteLength: String(settings.maxNoteLength) };
-    workspaceNotice = `Saved for this visit: ${notebooks.find(notebook => notebook.id === settings.defaultNotebookId)?.name}; ${settings.maxNoteLength.toLocaleString()} characters maximum.${result.overLimitNoteIds.length ? ` ${result.overLimitNoteIds.length} existing notes exceed this maximum. Their text is retained; shorten them or raise the maximum before saving another edit.` : ''}`;
+    const changes = [];
+    if (result.previous.defaultNotebookId !== settings.defaultNotebookId) changes.push(`new-note default changed to ${notebooks.find(notebook => notebook.id === settings.defaultNotebookId)?.name}`);
+    if (result.previous.maxNoteLength !== settings.maxNoteLength) changes.push(`maximum changed from ${result.previous.maxNoteLength.toLocaleString()} to ${settings.maxNoteLength.toLocaleString()} characters`);
+    workspaceNotice = `Saved ${new Date(result.effectiveAt).toLocaleString()}: ${changes.join('; ') || 'no settings changed'}. Effective now for note creation, saves and imports in this visit.${result.overLimitNoteIds.length ? ` ${result.overLimitNoteIds.length} existing notes exceed this maximum; their text is retained.` : ''} Existing notes and unfinished drafts keep their notebook.`;
     writeText(container.querySelector('#workspace-settings-draft'), 'No unsaved changes.');
     writeText(container.querySelector('#workspace-settings-saved'), workspaceNotice);
+    writeText(container.querySelector('#current-notebook'), notebooks.find(book => book.id === settings.defaultNotebookId)?.name);
+    writeText(container.querySelector('#current-note-maximum'), `${settings.maxNoteLength.toLocaleString()} characters`);
     showImpact();
+    container.querySelector('#workspace-settings-saved').focus();
     onChange();
   };
   container.querySelector('#discard-workspace-settings').onclick = () => {
+    // AUDHD-06/13: discard rebuilds from the saved settings and clears their
+    // errors only. There is currently no Undo snapshot for the removed draft;
+    // retaining other task drafts must not be described as undoing this discard.
+    // See ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable.
     workspaceDraft = null; workspaceErrors = {}; workspaceNotice = '';
     renderWorkspaceSettings(container, onChange); container.querySelector('#default-notebook').focus(); onChange();
   };
+  container.querySelector('#prepare-note-limit-example').onclick = () => {
+    const result = prepareNoteLimitExample();
+    if (result.ok) { onChange(); location.hash = result.href; }
+    else container.querySelector('#note-example-result').innerHTML = `${escape(result.message)} <a href="${result.href}">Resume your note draft</a>`;
+  };
+  applyPermission();
   showImpact();
 }
 
@@ -256,6 +356,7 @@ export function renderTransfer(container, onChange = () => {}) {
   container.querySelector('#download-notes').onclick = () => {
     // AUDHD-07: this requests a real browser download. JavaScript cannot assert
     // that the person accepted it or which folder their browser selected.
+    // See ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
     const blob = new Blob([JSON.stringify(exportNotes(), null, 2)], { type: 'application/json' });
     const status = container.querySelector('#download-notes-status');
     if (blob.size > maxFileBytes) {
@@ -284,7 +385,7 @@ export function renderTransfer(container, onChange = () => {}) {
       if (file.size > maxFileBytes) throw Error('This file is larger than 10 MB. Choose a smaller Shared Notes export.');
       let value;
       try { value = JSON.parse(await file.text()); } catch { throw Error('This file could not be read as JSON. Choose a Shared Notes JSON export.'); }
-      // AUDHD-07 / GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status:
+      // AUDHD-07 / ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status:
       // a slower previous read cannot replace the user's newer file choice.
       if (sequence !== fileRead) return;
       const result = analyzeImport(value);
@@ -296,6 +397,7 @@ export function renderTransfer(container, onChange = () => {}) {
       if (sequence === fileRead) {
         transfer.reading = false;
         // Complete into task state while hidden, without replacing another page.
+        // AUDHD-05: ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
         refreshTransfer();
         onChange();
       }

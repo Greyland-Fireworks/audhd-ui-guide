@@ -118,5 +118,110 @@
     "id": "green-ledger-dark",
     "name": "Green Ledger Dark",
     "mode": "dark"
+  },
+  {
+    "id": "murica",
+    "name": "Murica",
+    "mode": "light"
+  },
+  {
+    "id": "canto",
+    "name": "Canto",
+    "mode": "light"
+  },
+  {
+    "id": "pearl-river",
+    "name": "Pearl River",
+    "mode": "light"
+  },
+  {
+    "id": "porcelain-studio",
+    "name": "Porcelain Studio",
+    "mode": "light"
+  },
+  {
+    "id": "jade-tile",
+    "name": "Jade Tile",
+    "mode": "light"
+  },
+  {
+    "id": "szechuan",
+    "name": "Szechuan",
+    "mode": "light"
+  },
+  {
+    "id": "lacquer-cabinet",
+    "name": "Lacquer Cabinet",
+    "mode": "dark"
+  },
+  {
+    "id": "tea-horse-road",
+    "name": "Tea Horse Road",
+    "mode": "light"
+  },
+  {
+    "id": "peony-album",
+    "name": "Peony Album",
+    "mode": "light"
+  },
+  {
+    "id": "souk",
+    "name": "Souk",
+    "mode": "light"
+  },
+  {
+    "id": "damascus-inlay",
+    "name": "Damascus Inlay",
+    "mode": "light"
+  },
+  {
+    "id": "palm-shade",
+    "name": "Palm Shade",
+    "mode": "light"
+  },
+  {
+    "id": "night-bazaar",
+    "name": "Night Bazaar",
+    "mode": "dark"
+  },
+  {
+    "id": "hacienda",
+    "name": "Hacienda",
+    "mode": "light"
+  },
+  {
+    "id": "patio-moderno",
+    "name": "Patio Moderno",
+    "mode": "light"
+  },
+  {
+    "id": "atacama-dusk",
+    "name": "Atacama Dusk",
+    "mode": "dark"
+  },
+  {
+    "id": "golden-child",
+    "name": "Golden Child",
+    "mode": "light"
+  },
+  {
+    "id": "brass-cabinet",
+    "name": "Brass Cabinet",
+    "mode": "light"
+  },
+  {
+    "id": "black-gold",
+    "name": "Black Gold",
+    "mode": "dark"
+  },
+  {
+    "id": "astral-foundry",
+    "name": "Astral Foundry",
+    "mode": "dark"
+  },
+  {
+    "id": "brass-circuit",
+    "name": "Brass Circuit",
+    "mode": "light"
   }
 ]

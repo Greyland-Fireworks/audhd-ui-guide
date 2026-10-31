@@ -6,7 +6,7 @@ Project attribution: AuDHD friendly interface guidance — Charles Beckwith, @fa
 
 ## Reusable implementation code
 
-[LICENSE-CODE](LICENSE-CODE) applies to original JavaScript/JSX/Svelte, CSS, HTML previews, Python tooling, machine-readable JSON Schemas, palette registry data, tests, package/build configuration and CI configuration in this repository. Markdown documentation, `preferences.example.json` and `preferences/fixtures/v1.json` remain CC BY 4.0. The logo retains the separate terms below. Third-party dependencies retain their own licenses and notices; neither project license replaces them. No font files are bundled; stacks use local fallbacks.
+[LICENSE-CODE](LICENSE-CODE) applies to original JavaScript/JSX/Svelte, CSS, HTML previews, Python tooling, machine-readable JSON Schemas, palette registry data, tests, package/build configuration and CI configuration in this repository. Markdown documentation, `preferences.example.json` and `preferences/fixtures/v1.json` remain CC BY 4.0. The logo retains the separate terms below. Third-party dependencies retain their own licenses and notices; neither project license replaces them. Bundled font files use their own SIL Open Font License notices, preserved in `packages/audhd-ui-framework/fonts/licenses/` and `examples/skin-workbench/fonts/licenses/`. Font manifests record source URLs, weights and file hashes; the project licenses do not replace those licenses.
 
 ## Separate logo permissions
 

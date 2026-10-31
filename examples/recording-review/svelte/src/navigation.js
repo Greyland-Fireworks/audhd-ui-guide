@@ -1,6 +1,7 @@
 import { recordings } from '../../shared/fixtures.js';
 import { pages, recordViews } from '../../shared/navigation.js';
 
+// AUDHD-10 (../../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
 // Only known locations may become the current page. A malformed address gets an
 // explicit missing-page view; it never silently displays a different recording.
 // No draft or preference is serialized into the URL. React owns its own parser.

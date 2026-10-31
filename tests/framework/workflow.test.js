@@ -163,7 +163,7 @@ test('Cancel, disposal, unsubscribe and independent instances isolate lifecycle'
 test('Recording declaration describes only its implemented choices', () => {
   validateCapabilities(recordingCapabilities);
   assert.deepEqual(Object.keys(recordingCapabilities).sort(), ['display.appearance', 'display.text_scale', 'display.text_style', 'layout.density', 'support.help_detail']);
-  assert.equal(recordingCapabilities['display.appearance'].length, 27);
+  assert.equal(recordingCapabilities['display.appearance'].length, 48);
   for (const [path, choices] of Object.entries(recordingCapabilities)) {
     if (choices === true) continue;
     for (const value of choices) {

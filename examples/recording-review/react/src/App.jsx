@@ -12,11 +12,11 @@ import { routeFromHash, recordingHref } from './navigation.js';
 import { createReviewState, editReview, filterRecordings, resolveSave, reviewFeedback, sameReview, startSave } from './review-state.js';
 
 export default function App() {
+  // AUDHD-10 (../../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
   // Keep task state above the conditional list/disclosure content: hiding a card
   // must not discard its draft. selectedId is the source of truth for the card,
   // detail identity, current action and connector; keyboard focus is separate.
-  // See ../../SPEC.md (REF-03-06) and
-  // ../../SPEC.md for the design contract.
+  // See ../../SPEC.md (REF-03-06) for the reference contract.
   const [state, setState] = useState(createReviewState);
   const [route, setRoute] = useState(() => routeFromHash(location.hash));
   const [selectedId, setSelectedId] = useState(() => routeFromHash(location.hash).id || recordings[0].id);
@@ -27,6 +27,7 @@ export default function App() {
   const [query, setQuery] = useState('');
   const [textSize, setTextSize] = useState('standard');
   const [spacing, setSpacing] = useState('comfortable');
+  // AUDHD-10 (../../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
   // Appearance has its own state. Never key/remount the workspace by skin:
   // drafts, pending saves, selected records and navigation must survive changes.
   const [profile, setProfile] = useState(emptyProfile);
@@ -44,6 +45,7 @@ export default function App() {
   function remember(group, key, value) {
     setProfile(current => ({ ...current, [group]: { ...current[group], [key]: value } }));
   }
+  // AUDHD-10 (../../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
   // Apply presentation only: no review reducer action, routing or focus request.
   // Unknown skins and unsupported numeric scales retain their effective value;
   // the imported request remains intact in the separate exportable profile.
@@ -71,6 +73,7 @@ export default function App() {
   const pageHeading = useRef(null);
   const pointerTarget = useRef(null);
   function fromPointer(event) {
+    // AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
     // Firefox may give keyboard-generated clicks a nonzero detail. Only a
     // preceding pointer event on this trigger establishes pointer navigation.
     const result = pointerTarget.current === event.currentTarget;
@@ -83,6 +86,7 @@ export default function App() {
   const dirty = !sameReview(review.draft, review.saved);
   const feedback = reviewFeedback(review);
   const pendingRecords = recordings.filter(item => state.reviews[item.id].pending);
+  // AUDHD-07 (../../../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status).
   // Summaries share the editor's authoritative state, including pending snapshots.
   // Higher-priority rows own each record once; pending feedback still reports
   // newer unsaved edits. Acknowledgment here is session-only, never verification.
@@ -97,6 +101,7 @@ export default function App() {
   const view = viewById[selectedId] || 'review';
   const isRecordings = route.page === 'recording' || route.page === 'recordings';
   const pageTitle = route.page === 'recording' ? 'Recording review desk' : route.page === 'workspace' ? 'Workspace' : pages[route.page]?.title || 'Page unavailable';
+  // AUDHD-01 (../../../../GUIDE.md#audhd-01-keep-scope-and-location-visible).
   // Resolve ancestry from the same static page records used by the index, so
   // labels and parent links have one owner. Local views do not become parents.
   const breadcrumbs = [];
@@ -104,6 +109,7 @@ export default function App() {
   if (route.page === 'recording') breadcrumbs.push({ title: record.name, href: recordingHref(selectedId, view) });
   if (route.page === 'missing') breadcrumbs.push({ title: 'Page unavailable' });
 
+  // AUDHD-10 (../../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
   // Hash destinations support direct links and Back/Forward without a routing
   // dependency. Each framework owns these transitions. Root-owned drafts remain
   // intact while pages unmount; only location (never draft text) enters history.
@@ -121,6 +127,7 @@ export default function App() {
     applyLocation(hash, focus, pointer);
   }
   function followLink(event) {
+    // AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
     // Keep ordinary modified-click/open-in-new-tab behavior for real links.
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
@@ -139,12 +146,14 @@ export default function App() {
   }, []);
   useEffect(() => { document.title = `${pageTitle} · React reference`; }, [pageTitle]);
 
+  // AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
   // Move focus only for an explicit action, after React updates the named target.
   // Deriving this effect from selection alone would also risk initial autofocus.
   // Presentation changes and background responses must not request review focus.
   useLayoutEffect(() => {
     if (focusRequest?.target === 'review' || focusRequest?.target === 'page') {
       const heading = focusRequest.target === 'review' ? reviewHeading.current : pageHeading.current;
+      // AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
       // Programmatic heading focus differs across browser heuristics. Preserve
       // orientation for both inputs, but explicitly distinguish deliberate keys
       // from pointer clicks. Control focus styles remain native/focus-visible.
@@ -154,12 +163,14 @@ export default function App() {
   }, [focusRequest]);
 
   function selectRecording(id, pointer) {
+    // AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
     // Selecting the current ID is intentional: "Reviewing" remains a shortcut
     // back to its open heading, especially when the panels are vertically stacked.
     navigate(recordingHref(id, viewById[id] || 'review'), true, pointer);
   }
 
   function resolve(id, attemptId, outcome, event) {
+    // AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
     // A focused simulator button disappears after resolution. Give that deliberate
     // action a surviving destination, without scrolling to the page top. A response
     // triggered while the editor is focused must leave the editor alone. The broader
@@ -172,8 +183,9 @@ export default function App() {
   return (
     <main onPointerDownCapture={event => { pointerTarget.current = event.target.closest('a,button'); }} onKeyDownCapture={() => { pointerTarget.current = null; }} className="review-app" data-text-size={textSize} data-spacing={spacing}>
       <a className="skip-link" href="#page-heading" onClick={toTop}>Skip navigation</a>
-      {/* Breadcrumbs express canonical page ancestry; the local Review/Details
-          view is not an invented parent. Both copies receive this same path. */}
+      {/* AUDHD-01 (../../../../GUIDE.md#audhd-01-keep-scope-and-location-visible).
+        Breadcrumbs express canonical page ancestry; the local Review/Details
+        view is not an invented parent. Both copies receive this same path. */}
       <div className="navigation-top">
         <Breadcrumbs items={breadcrumbs} position="top" onNavigate={followLink} />
         <a href={pages.workspace.href} onClick={followLink}>Workspace overview</a>
@@ -187,12 +199,14 @@ export default function App() {
         {route.page !== 'workspace' && <p>{route.page === 'recording' ? 'Review a recording and save your assessment.' : pages[route.page]?.summary || 'This address does not name a page in this reference. Use Workspace overview to find a destination.'}</p>}
       </header>
 
-      {/* Retention is essential task context, so it stays visible outside optional
-          help. The simulated Saved state must not imply persistence across reload. */}
+      {/* AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
+        Retention is essential task context, so it stays visible outside optional
+        help. The simulated Saved state must not imply persistence across reload. */}
       <p className="demo-boundary">{copy.boundary}</p>
 
-      {/* Preferences have a real destination. They still change only presentation,
-          not review state. The same help Boolean controls the timing disclosure. */}
+      {/* AUDHD-10 (../../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
+        Preferences have a real destination. They still change only presentation,
+        not review state. The same help Boolean controls the timing disclosure. */}
       {route.page === 'preferences' && <section className="preferences-panel panel" aria-labelledby="preferences-heading">
         <div className="display-options-heading"><h2 id="preferences-heading">Display options</h2><ContextHelp topic="display options" text={contextualHelp.displayOptions} textSize={textSize} /></div>
 
@@ -244,8 +258,9 @@ export default function App() {
       </section>}
       {route.page === 'workspace' && <section className="page-directory panel" aria-labelledby="directory-heading">
         <h2 id="directory-heading">Workspace pages</h2>
-        {/* Nest recordings under their actual parent, matching the breadcrumb
-            path. Indentation and list semantics express the same relationship. */}
+        {/* AUDHD-02 (../../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+          Nest recordings under their actual parent, matching the breadcrumb
+          path. Indentation and list semantics express the same relationship. */}
         <ul>{workspaceSections.map(id => <li key={id}>
           <a href={pages[id].href} onClick={followLink}>{pages[id].title}</a><p>{pages[id].summary}</p>
           {id === 'recordings' && <>
@@ -255,9 +270,10 @@ export default function App() {
         </li>)}</ul>
       </section>}
 
-      {/* Source precedes details in DOM order at every width. CSS can stack these
-          regions without creating a second form or reordering keyboard navigation.
-          Named sections make the same grouping available beyond visual borders. */}
+      {/* AUDHD-02 (../../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+        Source precedes details in DOM order at every width. CSS can stack these
+        regions without creating a second form or reordering keyboard navigation.
+        Named sections make the same grouping available beyond visual borders. */}
       {isRecordings && <div className={route.page === 'recording' ? 'workspace' : 'library-layout'}>
         <section className="recordings-panel panel" aria-labelledby="recordings-heading">
           <h2 id="recordings-heading">Recordings</h2>
@@ -267,16 +283,18 @@ export default function App() {
             <input id="recording-search" ref={searchInput} type="search" value={query}
               aria-describedby="search-help" onChange={event => setQuery(event.target.value)} />
           </div>
-          {/* The colon introduces actual children; aria-labelledby on the list
-              carries the association beyond punctuation. Zero results do not
-              introduce nonexistent cards. The polite count reports search scope,
-              not a change to the still-open recording or its draft. */}
+          {/* AUDHD-02 (../../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+            The colon introduces actual children; aria-labelledby on the list
+            carries the association beyond punctuation. Zero results do not
+            introduce nonexistent cards. The polite count reports search scope,
+            not a change to the still-open recording or its draft. */}
           <div className="results-toolbar">
             <p id="recording-count" role="status" aria-live="polite">{results.length} {results.length === 1 ? 'recording' : 'recordings'}{results.length > 0 ? ':' : ''}</p>
             {query && <button type="button" onClick={() => { setQuery(''); searchInput.current.focus(); }}>Clear search</button>}
           </div>
-          {/* Filtering never silently selects a replacement. Explain why details
-              can remain visible even when their source card is absent. */}
+          {/* AUDHD-03 (../../../../GUIDE.md#audhd-03-offer-manageable-detail-without-hiding-choices).
+            Filtering never silently selects a replacement. Explain why details
+            can remain visible even when their source card is absent. */}
           {route.page === 'recording' && !results.some(item => item.id === selectedId) && <p className="notice">Current recording is outside these search results.</p>}
           {results.length === 0 && <p>No recordings match this search</p>}
           <ul className="recording-list" aria-labelledby="recording-count">
@@ -285,16 +303,18 @@ export default function App() {
                 <div className="record-identity"><strong className="record-title">{item.name}</strong>{route.page === 'recording' && item.id === selectedId && <span className="current-label">Current recording</span>}</div>
                 <p className="record-id">{item.id} · <time dateTime={item.date}>{item.date}</time></p>
                 <p className="muted">Map: {item.map} · Seed: {item.seed}</p>
-                {/* This is navigation to a review, not a toggle or listbox option.
-                    "Reviewing" and aria-current expose the already-open state;
-                    aria-controls names the target. Keep it enabled so returning
-                    to the same review is useful without resetting its contents. */}
+                {/* AUDHD-01 (../../../../GUIDE.md#audhd-01-keep-scope-and-location-visible).
+                  This is navigation to a review, not a toggle or listbox option.
+                  "Reviewing" and aria-current expose the already-open state;
+                  aria-controls names the target. Keep it enabled so returning
+                  to the same review is useful without resetting its contents. */}
                 <button type="button" aria-current={route.page === 'recording' && item.id === selectedId ? 'true' : undefined} aria-controls={route.page === 'recording' ? 'review-panel' : undefined}
                   onClick={event => selectRecording(item.id, fromPointer(event))}>{route.page === 'recording' && item.id === selectedId ? 'Reviewing' : 'Review'} {item.name}</button>
-                {/* The arrow supplements repeated identity/current text and the
-                    control association; it is not another focus stop or accessible
-                    name. CSS points it right when adjacent, down when stacked.
-                    Render only for the current source, never an unrelated result. */}
+                {/* AUDHD-08 (../../../../GUIDE.md#audhd-08-use-visuals-to-support-decisions).
+                  The arrow supplements repeated identity/current text and the
+                  control association; it is not another focus stop or accessible
+                  name. CSS points it right when adjacent, down when stacked.
+                  Render only for the current source, never an unrelated result. */}
                 {route.page === 'recording' && item.id === selectedId && <span className="relationship-cue" aria-hidden="true">
                   <span className="relationship-label">Details below</span>
                   <svg viewBox="0 0 32 24"><path d="M2 8H16V2L30 12 16 22V16H2Z" /></svg>
@@ -304,10 +324,11 @@ export default function App() {
           </ul>
         </section>
 
-        {/* Repeat the name and stable ID so the relationship survives scrolling,
-            filtering and loss of color. CSS shares the source card's surface and
-            title accent. tabindex=-1 permits deliberate heading focus without
-            adding a noninteractive heading to the ordinary tab sequence. */}
+        {/* AUDHD-01 (../../../../GUIDE.md#audhd-01-keep-scope-and-location-visible).
+          Repeat the name and stable ID so the relationship survives scrolling,
+          filtering and loss of color. CSS shares the source card's surface and
+          title accent. tabindex=-1 permits deliberate heading focus without
+          adding a noninteractive heading to the ordinary tab sequence. */}
         {route.page === 'recording' && <section id="review-panel" className="review-panel panel" aria-labelledby="review-heading">
           <div className="review-header">
             <p className="eyebrow">Current recording · {record.date}</p>
@@ -315,38 +336,42 @@ export default function App() {
           </div>
           <section aria-labelledby="timing-heading" className="timing-section">
             <h3 id="timing-heading">Timing</h3>
-            {/* Definition-list terms, concise meanings and values express the
-                relationship without inventing a chart. Essential explanations
-                remain visible when detailed help is closed; UTC-05:00 is specific
-                to these January fixtures, not a live timezone calculation. */}
+            {/* AUDHD-08 (../../../../GUIDE.md#audhd-08-use-visuals-to-support-decisions).
+              Definition-list terms, concise meanings and values express the
+              relationship without inventing a chart. Essential explanations
+              remain visible when detailed help is closed; UTC-05:00 is specific
+              to these January fixtures, not a live timezone calculation. */}
             <dl className="timing-facts">
               <div><dt>Time zone</dt><dd><span className="meaning">Used for recording timestamps</span><strong>America/New_York · UTC−05:00</strong></dd></div>
               <div><dt>Simulation duration</dt><dd><span className="meaning">Time elapsed inside the simulation</span><strong>{record.simulation}</strong></dd></div>
               <div><dt>Execution time</dt><dd><span className="meaning">Real elapsed time, including recorded pauses</span><strong>{record.execution}</strong></dd></div>
             </dl>
-            {/* React Aria supplies this controlled disclosure's interaction and
-                semantics. The app owns its expansion preference. Keep the trigger
-                in the heading and use the library slot/panel composition directly;
-                a tooltip would not suit this persistent, multi-sentence help. */}
+            {/* AUDHD-09 (../../../../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision).
+              React Aria supplies this controlled disclosure's interaction and
+              semantics. The app owns its expansion preference. Keep the trigger
+              in the heading and use the library slot/panel composition directly;
+              a tooltip would not suit this persistent, multi-sentence help. */}
             <Disclosure isExpanded={helpExpanded} onExpandedChange={setHelpExpanded} className="timing-help">
               <Heading level={4}><Button slot="trigger" className="help-trigger"><span aria-hidden="true">{helpExpanded ? '−' : '+'}</span> About these timings</Button></Heading>
               <DisclosurePanel><p>{copy.timingHelp}</p></DisclosurePanel>
             </Disclosure>
           </section>
 
-          {/* A named form separates editable assessment from recording facts within
-              the same context. Native fields cover this small task. Persistent
-              labels and associated descriptions do not vanish when typing, unlike
-              placeholder-only help. Submission captures a snapshot; it does not
-              navigate away or claim that a pending request has already succeeded. */}
+          {/* AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+            A named form separates editable assessment from recording facts within
+            the same context. Native fields cover this small task. Persistent
+            labels and associated descriptions do not vanish when typing, unlike
+            placeholder-only help. Submission captures a snapshot; it does not
+            navigate away or claim that a pending request has already succeeded. */}
           <form className="review-form" aria-labelledby="assessment-heading" onSubmit={event => {
             event.preventDefault();
             setState(current => startSave(current, selectedId));
           }}>
-            {/* Local tabs belong inside this recording, not beside workspace
-                navigation. Manual activation keeps arrow-key focus independent of
-                the selected view. Feedback/Save stay outside hidden panels, and
-                React state owns the draft even when a TabPanel unmounts. */}
+            {/* AUDHD-02 (../../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+              Local tabs belong inside this recording, not beside workspace
+              navigation. Manual activation keeps arrow-key focus independent of
+              the selected view. Feedback/Save stay outside hidden panels, and
+              React state owns the draft even when a TabPanel unmounts. */}
             <h3 id="assessment-heading" className="local-view-label">Recording workspace</h3>
             <Tabs selectedKey={view} onSelectionChange={key => navigate(recordingHref(selectedId, key), false)} keyboardActivation="manual">
               <TabList aria-label="Recording views" className="record-tabs">
@@ -379,10 +404,11 @@ export default function App() {
                 <p className="muted">{copy.metadataHelp}</p>
               </TabPanel>
             </Tabs>
-            {/* Keep scope, actual result and disabled reason beside Save. Only the
-                duplicate save is blocked while pending: the note remains editable,
-                and feedback distinguishes newer edits from the submitted snapshot.
-                Neither a spinner nor button color is sufficient evidence of saving. */}
+            {/* AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
+              Keep scope, actual result and disabled reason beside Save. Only the
+              duplicate save is blocked while pending: the note remains editable,
+              and feedback distinguishes newer edits from the submitted snapshot.
+              Neither a spinner nor button color is sufficient evidence of saving. */}
             <div className="save-area">
               <p id="save-scope" className="muted">Saves the status and note for {record.id} in this demo only. Reloading resets it.</p>
               <p id="save-feedback" className={`save-feedback ${review.outcome === 'failed' && dirty ? 'error' : ''}`}>{feedback}</p>
@@ -396,10 +422,11 @@ export default function App() {
         </section>}
       </div>}
 
-      {/* Deliberate test controls make delays/failures reproducible without timers.
-          Keep them separate from the real task and label the simulation honestly.
-          Attempt groups identify the originating record, even after selection moves.
-          The surviving heading is the focus fallback when a resolver is removed. */}
+      {/* AUDHD-07 (../../../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status).
+        Deliberate test controls make delays/failures reproducible without timers.
+        Keep them separate from the real task and label the simulation honestly.
+        Attempt groups identify the originating record, even after selection moves.
+        The surviving heading is the focus fallback when a resolver is removed. */}
       {route.page === 'recording' && <details className="demo-controls">
         <summary><h2 tabIndex={-1} ref={demoHeading}>Demo save controls</h2></summary>
         <div className="disclosure-body">
@@ -419,12 +446,14 @@ export default function App() {
           </ul>
         </div>
       </details>}
-      {/* One persistent region reports scoped save events, not every keystroke.
-          It supplements visible feedback; actual screen-reader announcement
-          usefulness remains pending in the acceptance record. */}
+      {/* AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+        One persistent region reports scoped save events, not every keystroke.
+        It supplements visible feedback; actual screen-reader announcement
+        usefulness remains pending in the acceptance record. */}
       <div className="visually-hidden" role="status" aria-live="polite" aria-atomic="true">{state.announcement}</div>
-      {/* Footer links reuse the same destinations; they are not a second tablist
-          competing to own the local panels. Nothing is fixed over the editor. */}
+      {/* AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+        Footer links reuse the same destinations; they are not a second tablist
+        competing to own the local panels. Nothing is fixed over the editor. */}
       <footer className="page-footer">
         <Breadcrumbs items={breadcrumbs} position="bottom" onNavigate={followLink} />
         <div className="footer-actions">

@@ -1,10 +1,12 @@
 import { recordings, copy } from '../../shared/fixtures.js';
 
+// AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
 // This reference mutates its own Svelte-proxied workspace. No React transitions
 // or shared state engine are imported; only static comparison inputs are shared.
 // State gives the UI's context and save cues their meaning. Keep DOM/focus work in
 // the component, after Svelte has rendered the result of these local operations.
 export function createWorkspace() {
+  // AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
   // Keep drafts keyed by domain ID, outside any filtered/conditional card. Layout
   // changes and record switching must not erase work or attach it to another item.
   const records = {};
@@ -35,6 +37,7 @@ export function updateDraft(workspace, id, field, value) {
 }
 
 export function requestSave(workspace, id) {
+  // AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
   // The model guard backs up the disabled button. The separate submitted content
   // lets the editor remain usable while feedback identifies which edits are pending.
   const review = workspace.records[id];
@@ -42,6 +45,7 @@ export function requestSave(workspace, id) {
   const token = workspace.nextToken++;
   review.attempt = {
     token,
+    // AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
     // Copy primitive fields; never keep a reference to the live draft proxy.
     content: { status: review.draft.status, note: review.draft.note },
   };
@@ -51,6 +55,7 @@ export function requestSave(workspace, id) {
 }
 
 export function settleSave(workspace, id, token, succeeded) {
+  // AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
   // A response belongs to its original record/attempt, even if another panel is
   // now current. Ignore stale tokens without announcing a false change. Success
   // confirms the captured content, never overwrites a newer draft with that copy.
@@ -69,6 +74,7 @@ export function settleSave(workspace, id, token, succeeded) {
 }
 
 export function feedbackFor(review) {
+  // AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
   // Visible feedback is derived from content and acknowledgment, not a cosmetic
   // success flag. This distinction also feeds the scoped status announcement.
   if (review.attempt) {

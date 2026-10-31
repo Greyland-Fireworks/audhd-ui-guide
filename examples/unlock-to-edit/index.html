@@ -4,6 +4,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Unlock to edit · AuDHD UI Guide</title>
 <style>
+  /* AUDHD-11 — ../../GUIDE.md#audhd-11-keep-controls-readable-and-operable
+     Inherited control text follows the user's text-size choice. Wrapping toolbars
+     and a bounded grid keep labels with their controls instead of requiring
+     sideways navigation; the lock retains a 44px target at every text size. */
   :root { color-scheme: light; --bg:#f4f4ef; --panel:#fff; --ink:#172b2a; --muted:#435754; --line:#637672; --accent:#065d54; --tint:#e1f1ec; --error:#9b2424; font:100%/1.6 system-ui,sans-serif; }
   :root[data-theme=dark] { color-scheme:dark; --bg:#121c20; --panel:#1c292e; --ink:#f0f5f2; --muted:#c0d0cb; --line:#9bafa8; --accent:#83e4c3; --tint:#273f3b; --error:#ffb4ab; }
   * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--ink); overflow-wrap:anywhere; }
@@ -18,6 +22,10 @@
   .toolbar { margin:1.5rem 0; justify-content:space-between; } .toolbar label { display:inline-flex; flex-wrap:wrap; gap:.5rem; align-items:center; max-width:100%; min-width:0; }
   nav { margin-bottom:1.5rem; } nav button[aria-current=page] { background:var(--tint); border-color:var(--accent); font-weight:750; }
   .fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr)); gap:1.25rem; }
+  /* AUDHD-02, AUDHD-05 — ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings
+     Each boundary owns one field and its restoration action. Compensating padding
+     keeps the thicker editing border from shifting the card's contents. Padlock
+     shape and state text supplement color; keyboard focus uses a separate outline. */
   article,.save-state,details { background:var(--panel); border:1px solid var(--line); border-radius:.6rem; padding:20px; }
   article[data-editing=true] { border:3px solid var(--accent); padding:18px; }
   .field-header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; margin-bottom:1rem; }
@@ -26,6 +34,10 @@
   .lock-toggle { display:grid; place-items:center; width:44px; height:44px; padding:8px; color:var(--accent); }
   .lock-toggle svg { width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
   .lock-hint { display:none; position:absolute; top:calc(100% + 6px); right:0; z-index:1; width:max-content; max-width:200px; background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:.3rem; padding:.35rem .6rem; font-size:1rem; }
+  /* AUDHD-09, AUDHD-11 — ../../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision
+     Hover and keyboard focus expose the same short memory cue; it can be dismissed
+     with Escape in app.js. The action name is also on the native button, so the
+     hover hint is not the only way to discover what the icon does. */
   .lock-control:hover .lock-hint,.lock-toggle:focus-visible + .lock-hint { display:block; }
   .lock-control[data-hint-dismissed] .lock-hint { display:none; }
   .state { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
@@ -44,6 +56,10 @@
     <label for="appearance">Appearance <select id="appearance"><option value="light">Light</option><option value="dark">Dark</option></select></label>
     <label for="text-size">Text size <select id="text-size"><option value="100%">100%</option><option value="150%">150%</option><option value="200%">200%</option></select></label>
   </div>
+  <!-- AUDHD-01, AUDHD-11 — ../../GUIDE.md#audhd-01-keep-scope-and-location-visible
+       These native buttons switch two example sections and expose the current one.
+       They are ordinary navigation buttons, not an ARIA tab widget with implied
+       arrow-key behavior. Hiding a section leaves its editing state owned by app.js. -->
   <nav aria-label="Example sections">
     <button id="settings-tab" aria-current="page" aria-controls="settings">Settings</button>
     <button id="contract-tab" aria-controls="contract">How saving works</button>
@@ -51,6 +67,11 @@
   <section id="settings" aria-label="Delivery settings">
     <p class="muted">Use the lock in each card’s upper-right corner to enable or finish editing. Unlocking opens only that field. Edits save when you leave the field or commit a change. Re-locking verifies both values in browser storage. “Changed” compares with the example defaults.</p>
     <div class="fields">
+      <!-- AUDHD-13, AUDHD-11 — ../../GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards
+           Native readonly inputs remain focusable and selectable while preventing
+           direct edits. The named button controls only its associated field; its
+           decorative SVG does not duplicate the accessible action/state names.
+           This protects against accidental editing, not unauthorized access. -->
       <article id="retries-card" aria-labelledby="retries-heading">
         <div class="field-header">
           <h2 id="retries-heading">Retry limit</h2>
@@ -103,6 +124,10 @@
     <p>Other tabs can overwrite this browser-local draft; conflict handling and cross-device synchronization are not provided. A lock protects direct editing, not permissions or security.</p>
   </section>
   <div class="save-state">
+    <!-- AUDHD-06, AUDHD-09 — ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable
+         One status owns the whole-draft write because both values save together.
+         Field issue links remain outside the live region and reveal the existing
+         control; correcting an error must not silently unlock or replace it. -->
     <strong>Whole-draft storage</strong>
     <p id="save-status" role="status" aria-live="polite" aria-atomic="true">Example defaults loaded; no draft saved yet.</p>
     <ul id="field-issues" aria-label="Fields needing attention"></ul>
@@ -112,6 +137,10 @@
     <div id="manual-export" hidden><label for="recovery">Last export snapshot — copy manually</label><textarea id="recovery" readonly></textarea></div>
   </div>
   <details>
+    <!-- AUDHD-03, AUDHD-07 — ../../GUIDE.md#audhd-03-offer-manageable-detail-without-hiding-choices
+         Optional failure controls stay secondary to ordinary editing. Native
+         details supplies disclosure behavior; the visible copy distinguishes a
+         simulated fault from real browser storage, including uncertain writes. -->
     <summary>Try failure and replacement</summary>
     <p>These controls simulate failures for this example. Normal saves use real browser storage. A verification mismatch may occur after a write; “unverified” does not promise the stored value is unchanged.</p>
     <label for="failure">Next save attempt</label>

@@ -184,7 +184,7 @@ try {
   await navigate('workspace-settings');
   await page.locator('#default-notebook').selectOption({ label: 'Reference' });
   await page.locator('#max-note-length').fill('99');
-  await page.getByRole('button', { name: 'Save workspace settings', exact: true }).click();
+  await page.getByRole('button', { name: 'Save note settings', exact: true }).click();
   assert.equal(await page.locator('#max-note-length').getAttribute('aria-invalid'), 'true');
   assert.equal(await page.evaluate(() => document.activeElement.id), 'max-note-length');
   await page.locator('#max-note-length').fill('100');
@@ -193,8 +193,8 @@ try {
   assert.equal(await usage.locator('meter').getAttribute('max'), '100');
   assert.equal(await usage.locator('meter').getAttribute('value'), '100');
   assert.match(await usage.locator('meter').getAttribute('aria-label'), new RegExp(`${secondBody.length-100} over`));
-  await page.getByRole('button', { name: 'Save workspace settings', exact: true }).click();
-  assert.match(await page.locator('#workspace-settings-saved').innerText(), /Reference; 100 characters maximum/);
+  await page.getByRole('button', { name: 'Save note settings', exact: true }).click();
+  assert.match(await page.locator('#workspace-settings-saved').innerText(), /new-note default changed to Reference; maximum changed from 5,000 to 100 characters/);
   await navigate('notes/new');
   assert.equal(await page.locator('#note-notebookId').inputValue(), 'harbor-reference');
   await page.locator('#note-title').fill('Browser workflow note');
@@ -208,7 +208,7 @@ try {
   assert.match(await page.locator('#note-draft-status').innerText(), /Saved version 1/);
   await navigate('workspace-settings');
   await page.locator('#max-note-length').fill('5000');
-  await page.getByRole('button', { name: 'Save workspace settings', exact: true }).click();
+  await page.getByRole('button', { name: 'Save note settings', exact: true }).click();
   await notesCount(9);
 
   // Parse the real browser download. The current editor draft is deliberately
@@ -237,14 +237,14 @@ try {
   // Rejection leaves every existing record and the reviewable preview intact.
   await navigate('workspace-settings');
   await page.locator('#max-note-length').fill('100');
-  await page.getByRole('button', { name: 'Save workspace settings', exact: true }).click();
+  await page.getByRole('button', { name: 'Save note settings', exact: true }).click();
   await navigate('exports');
   await page.locator('#import-copies').click();
   assert.match(await page.locator('#import-notes-error').innerText(), /100 characters/);
   await notesCount(9);
   await navigate('workspace-settings');
   await page.locator('#max-note-length').fill('5000');
-  await page.getByRole('button', { name: 'Save workspace settings', exact: true }).click();
+  await page.getByRole('button', { name: 'Save note settings', exact: true }).click();
   await navigate('exports');
   await page.locator('#import-copies').click();
   assert.match(await page.locator('#import-notes-status').innerText(), /Imported 13 note copies in 3 new notebooks/);

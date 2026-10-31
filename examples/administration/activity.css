@@ -20,6 +20,10 @@
 .activity-table details { margin: 0; padding: .5rem; }
 .activity-table pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: inherit; }
 .activity-table [data-severity="warning"] .activity-severity { color: var(--ui-warning); }
+/* AUDHD-04/08: acknowledgment removes the attention outline, not the severity
+   label. Text and row structure still distinguish a reviewed warning from an
+   ordinary event when color is unavailable; styling cannot imply resolution.
+   See ../../GUIDE.md#audhd-04-explain-effective-behavior. */
 .activity-table [data-severity="error"] .activity-severity { color: var(--ui-danger); }
 .activity-severity { display: block; font-weight: bold; }
 .activity-acknowledged { display: block; }
@@ -29,7 +33,8 @@
 
 /* AUDHD-03/08: show the event's meaning before metadata on every screen.
    Mobile cards keep the table's source order and header semantics; concise
-   timestamp/severity rows replace four repeated labels. Raw data stays last. */
+   timestamp/severity rows replace four repeated labels. Raw data stays last.
+   See ../../GUIDE.md#audhd-03-offer-manageable-detail-without-hiding-choices. */
 @media (max-width: 48rem) {
   .activity-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .activity-table,.activity-table caption,.activity-table tbody,.activity-table td { display: block; width: 100%; }

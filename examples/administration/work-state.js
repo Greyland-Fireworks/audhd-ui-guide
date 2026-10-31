@@ -1,6 +1,7 @@
 import { notes } from './notes-state.js';
 import { getCalendarEvents } from './schedule-state.js';
 import { recordEvent } from './events.js';
+import { registerScenarioOwner } from './scenario-state.js';
 
 export const owners = ['Mira', 'Sam'];
 export const taskStatuses = { open: 'Not started', doing: 'In progress', blocked: 'Blocked', done: 'Complete' };
@@ -24,6 +25,7 @@ const requests = [{ id: 'harbor-request-cable', fields: { ...emptyRequest(), tit
 // Fictional starting records demonstrate the different stages without writing
 // invented actions into This visit's activity log. Each submitted snapshot has
 // the same ownership boundary as a real local Submit operation below.
+// AUDHD-07: ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
 for (const [key, fields, status, reason] of [
   ['harbor-request-whiteboard', { ...emptyRequest(), title: 'Improve whiteboard visibility', type: 'workspace', location: 'Harbor meeting room', change: 'Move the whiteboard where everyone at the table can see it.', reason: 'People at the far end cannot read the current board.' }, 'pending', ''],
   ['harbor-request-adapter', { ...emptyRequest(), title: 'Add spare display adapters', item: 'USB-C display adapter', quantity: 2, reason: 'Keep two adapters with the shared meeting kit.' }, 'approved', ''],
@@ -42,6 +44,33 @@ export const taskDrafts = new Map();
 export const requestDrafts = new Map();
 export const taskErrors = new Map();
 export const requestErrors = new Map();
+const startingTasks = copy(tasks), startingRequests = copy(requests);
+// AUDHD-07/10/13: confirmed fixture replacement resets owning records and drafts
+// together. Busy data is deterministic, with explicit IDs linking prerequisites;
+// titles are never used to infer dependencies. Seeding creates no session events.
+// See ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
+export function resetWorkState(kind = 'normal') {
+  taskDrafts.clear(); requestDrafts.clear(); taskErrors.clear(); requestErrors.clear();
+  tasks.splice(0); requests.splice(0); owners.splice(0, owners.length, 'Mira', 'Sam');
+  if (kind === 'normal') { tasks.push(...copy(startingTasks)); requests.push(...copy(startingRequests)); }
+  if (kind !== 'busy') return;
+  owners.push('Alex', 'Jordan', 'Taylor', 'Casey', 'Robin', 'Morgan', 'Avery', 'Drew', 'Lee', 'Quinn');
+  const stages = ['draft','pending','approved','returned'];
+  for (let i=0;i<12;i++) {
+    const fields = { ...emptyRequest(), title: `Meeting equipment request ${i+1}${i===3?' — confirm accessible placement and compatibility before the workshop':''}`, requester: owners[i], item: 'Display adapter', quantity: 1, reason: 'Support the team workshop.' };
+    const status = stages[i%4], at = '2026-10-20T14:00:00.000Z';
+    const submitted = status === 'draft' ? null : Object.freeze({version:1,savedVersion:1,fields:Object.freeze(copy(fields)),at});
+    const review = ['approved','returned'].includes(status) ? Object.freeze({submissionVersion:1,decision:status,reason:status==='returned'?'Specify the device connector before resubmitting.':'',at}) : null;
+    requests.push({id:`busy-request-${i+1}`,fields,savedVersion:1,status,submitted,review,submissions:submitted?[submitted]:[],decisions:review?[review]:[]});
+  }
+  const events = getCalendarEvents(), states = ['blocked','open','doing','done'];
+  // Seed only links that the task editor can retain. A crowded fixture should
+  // exercise navigation and dependencies, not fail a routine save because its
+  // starting note link already violates the editor's Trash restriction.
+  const linkedNotes = notes.filter(note => note.status !== 'trash');
+  for (let i=0;i<24;i++) tasks.push({id:`busy-task-${i+1}`,...emptyTask(),title:`Workshop follow-up ${i+1}${i===0?' — prepare the accessible presentation setup for remote and in-room participants':''}`,owner:owners[i%owners.length],dueDate:dueIn(i%7),status:states[i%4],blockedReason:i%4===0?'Waiting for the linked equipment request.':'',dependencies:i%4===1?[`busy-task-${i}`]:[],requestId:i%4===0?`busy-request-${i%12+1}`:'',noteId:linkedNotes[i%Math.max(1,linkedNotes.length)]?.id || '',meetingId:events[i%Math.max(1,events.length)]?.id || '',version:1});
+}
+registerScenarioOwner('work-records', {reset:resetWorkState});
 export const getTasks = () => copy(tasks);
 export const getRequests = () => copy(requests);
 export const getTask = key => copy(tasks.find(task => task.id === key) || null);
@@ -71,6 +100,7 @@ function validateTask(value, key) {
   else {
     // AUDHD-04: a prerequisite is an actual constraint, not merely a related
     // link. Walk the saved graph with the proposed edges to reject any cycle.
+    // See ../../GUIDE.md#audhd-04-explain-effective-behavior.
     const visit = (node, trail = new Set()) => {
       if (trail.has(node)) return true;
       const next = new Set([...trail, node]);
@@ -138,6 +168,7 @@ export function submitRequest(key) {
   if (request.submitted?.savedVersion === request.savedVersion) return fail({ title: 'Save a correction or change before submitting another version.' });
   // AUDHD-07/13: the approval target is an immutable submission. Subsequent
   // saved drafts cannot change what a reviewer is deciding or imply approval.
+  // See ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
   const submission = Object.freeze({ version: request.submissions.length + 1, savedVersion: request.savedVersion, fields: Object.freeze(copy(request.fields)), at: now() });
   request.submitted = submission; request.submissions.push(submission); request.status = 'pending'; request.review = null;
   recordEvent({ description: `Submitted “${submission.fields.title}”, submission ${submission.version}, for local review.`, subject: key, version: submission.version, action: 'This submission is awaiting a local review decision.', href: `#request/${key}`, actionLabel: 'Review request status' });
@@ -151,10 +182,12 @@ export function reviewRequest(key, submissionVersion, decision, reason = '') {
   request.review = Object.freeze({ submissionVersion, decision, reason: reason.trim(), at: now() }); request.status = decision;
   // AUDHD-06/07: keep each decision with the version it reviewed. Submitting a
   // correction clears only the current decision, not why an older one returned.
+  // See ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable.
   request.decisions.push(request.review);
   // AUDHD-04/07: request approval is not equipment delivery or task completion.
   // Related tasks keep their saved blocked/progress state until someone updates
   // the task after doing the work; no hidden cross-record mutation occurs here.
+  // See ../../GUIDE.md#audhd-04-explain-effective-behavior.
   recordEvent({ level: decision === 'returned' ? 'warning' : 'info', description: `${decision === 'approved' ? 'Approved' : 'Returned for correction'} “${request.submitted.fields.title}”, submission ${submissionVersion}.`, subject: key, version: submissionVersion,
     action: decision === 'returned' ? `Correction requested: ${request.review.reason}` : 'Approval applies to this submission only; equipment delivery and linked tasks are unchanged.',
     href: `#request/${key}${decision === 'returned' ? '/draft' : ''}`, actionLabel: decision === 'returned' ? 'Review the requested correction' : 'Review request status' });

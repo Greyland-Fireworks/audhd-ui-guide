@@ -1,6 +1,7 @@
 /* AUDHD-02/08/11: notebook outlines express task groups. Titles, descriptions
    and draft states share a reading column; color never substitutes for labels.
-   A single-column phone layout preserves the same document and keyboard order. */
+   A single-column phone layout preserves the same document and keyboard order.
+   See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings. */
 .notebook-grid { margin-block: 1rem; }
 .notebook-card { align-self:start; border-top:3px solid var(--ui-active-accent); }
 .notebook-heading { display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:.25rem 1rem; }
@@ -24,7 +25,8 @@
 .note-readonly { border-inline-start:3px solid var(--ui-active-accent); padding-inline-start:1rem; margin-bottom:1rem; }
 .note-readonly p { margin-top:0; }
 /* AUDHD-05/07: the draft state, outcome and commit controls share the editor's
-   boundary. A highlighted draft is unfinished work, not a warning or error. */
+   boundary. A highlighted draft is unfinished work, not a warning or error.
+   See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability. */
 .note-save-bar { border-top:1px solid var(--ui-border); padding-block-start:1rem; margin-block-start:1rem; }
 .note-save-bar > p { margin-block-start:0; }
 .note-editor[data-draft="true"] .note-save-bar { border-inline-start:3px solid var(--ui-active-accent); padding-inline-start:1rem; }
@@ -59,13 +61,15 @@ textarea { display:block; width:100%; min-width:0; resize:vertical; padding:.75r
 .version-change-side .note-copy { margin:.5rem 0 0; }
 .version-full-text .version-columns { margin-top:1rem; }
 /* AUDHD-02/08/11: each changed span keeps its selected/current pair together
-   on a phone. The optional full snapshots stack in the same reading order. */
+   on a phone. The optional full snapshots stack in the same reading order.
+   See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings. */
 @media(max-width:60rem) {
   .version-columns, .version-change-pair { grid-template-columns:minmax(0,1fr); }
   .version-change-side + .version-change-side { border-inline-start:0; border-top:1px solid var(--ui-border); }
 }
 @media(max-width:40rem) {
-  /* Nested comparison frames must not consume the text column at 200% size. */
+  /* Nested comparison frames must not consume the text column at 200% size.
+     AUDHD-11: ../../GUIDE.md#audhd-11-keep-controls-readable-and-operable. */
   #note-history { padding:.65rem; }
   .version-column-heading, .version-field { padding:.65rem; }
 }

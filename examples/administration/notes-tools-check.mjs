@@ -45,7 +45,7 @@ try {
   await navigate('workspace-settings'); await heading('Workspace settings');
   assert.match(await page.locator('.task-heading p').innerText(), /saving any note/);
   assert.match(await page.locator('#note-limit-summary').innerText(), /0 notes exceed.*5,000/);
-  assert.equal(await page.locator('#note-length-impact meter').count(), 3);
+  assert.equal(await page.locator('#note-length-impact meter').count(), 1);
   await page.locator('#max-note-length').fill('100');
   assert.match(await page.locator('#note-limit-summary').innerText(), /notes exceed.*100-character/);
   assert(await page.locator('#note-length-impact .over-limit').count() > 0);
@@ -128,8 +128,136 @@ try {
   assert.equal(downloads, 0);
   assert.equal(await page.evaluate(async () => (await import('./notes-state.js')).notes[0].history.length), 2100);
   assert.match(await page.locator('#download-notes-status').innerText(), /10 MB/);
+
+  // The teaching walkthrough uses the same save boundary as an ordinary note.
+  // Changing permission mid-edit must retain proposed values and guard a direct
+  // mutation as well as the visible button; an explanation alone is not a guard.
+  await page.reload(); await heading('Import & export notes');
+  await navigate('workspace-settings'); await heading('Workspace settings');
+  await page.locator('#max-note-length').fill('100');
+  const affected = await page.evaluate(async () => (await import('./notes-state.js')).notes.filter(note => note.body.length > 100).length);
+  assert.match(await page.locator('#note-limit-summary').innerText(), new RegExp(`^${affected} notes exceed`));
+  await page.evaluate(async () => (await import('./scenario-state.js')).setConfigurationReadOnly(true));
+  assert(await page.locator('#note-settings-permission').isVisible());
+  assert(await page.locator('#save-note-settings').isDisabled());
+  assert.equal(await page.locator('#max-note-length').inputValue(), '100');
+  assert.equal(await page.evaluate(async () => {
+    const model = await import('./notes-state.js');
+    return model.saveWorkspaceSettings({ ...model.settings, maxNoteLength:100 }).ok;
+  }), false);
+  assert.equal(await page.evaluate(async () => (await import('./notes-state.js')).settings.maxNoteLength), 5000);
+  await page.evaluate(async () => (await import('./scenario-state.js')).setConfigurationReadOnly(false));
+  assert(await page.locator('#save-note-settings').isEnabled());
+  await page.locator('#save-note-settings').click();
+  assert.match(await page.locator('#workspace-settings-saved').innerText(), /Effective now for note creation, saves and imports/);
+  assert.equal(await page.evaluate(async () => (await import('./notes-state.js')).notes.filter(note => note.body.length > 100).length), affected, 'A reduced limit must not truncate stored text');
+  await page.locator('#guide-toggle').click();
+  await page.locator('#workspace-defaults-design > summary').click();
+  await page.locator('#prepare-note-limit-example').click();
+  await heading('New note');
+  assert.equal((await page.locator('#note-body').inputValue()).length, 101);
+  const exampleBody = await page.locator('#note-body').inputValue();
+  await page.locator('#save-note').click();
+  assert.equal(await page.locator('#note-body').inputValue(), exampleBody);
+  assert.equal(await page.locator('#note-body').getAttribute('aria-invalid'), 'true');
+  await navigate('workspace-settings'); await heading('Workspace settings');
+  await page.locator('#prepare-note-limit-example').click();
+  assert.match(await page.locator('#note-example-result').innerText(), /existing new-note draft is retained/);
+  await page.locator('#note-example-result a').click(); await heading('New note');
+  assert.equal(await page.locator('#note-body').inputValue(), exampleBody);
+  await page.locator('#note-body').fill('A corrected example note that fits the saved limit.');
+  await page.locator('#save-note').click();
+  await heading('Example: note length limit');
+  assert.match(await page.locator('#note-draft-status').innerText(), /Saved version 1/);
+
+  // Notebook responses are deliberately controlled here. The rendered directory
+  // must preserve its rename editor during loading, distinguish a partial reply
+  // from an empty one, retain stale results and ignore an older delayed answer.
+  await navigate('notebooks'); await heading('Notebooks');
+  await page.locator('[data-notebook-editor="harbor-meetings"] > summary').click();
+  await page.locator('#notebook-harbor-meetings-name').fill('Keep this notebook draft');
+  await page.locator('[data-notebook-editor="new"] > summary').click();
+  await page.locator('#notebook-new-name').fill('Keep this new notebook');
+  const notebookInput = page.locator('#notebook-harbor-meetings-name');
+  await notebookInput.evaluate(input => window.permissionNotebookInput = input);
+  await page.evaluate(async () => (await import('./scenario-state.js')).setConfigurationReadOnly(true));
+  for (const id of ['harbor-meetings','new']) {
+    assert(await page.locator(`#notebook-${id}-permission`).isVisible());
+    assert(await page.locator(`#notebook-${id}-name`).isDisabled());
+    assert(await page.locator(`#notebook-${id}-description`).isDisabled());
+    assert(await page.locator(`[data-notebook="${id}"] button[type=submit]`).isDisabled());
+    assert(await page.locator(`[data-notebook="${id}"] [data-discard]`).isEnabled(), 'Read-only configuration still permits deliberate local draft discard');
+  }
+  assert.equal(await notebookInput.evaluate(input => input === window.permissionNotebookInput), true, 'Permission changes must update availability without recreating edited fields');
+  assert.deepEqual(await page.evaluate(async () => {
+    const model = await import('./notes-state.js');
+    const before = JSON.stringify(model.notebooks);
+    return [model.saveNotebook({ ...model.notebooks[0], name:'Forbidden rename' }).ok, model.saveNotebook({ name:'Forbidden create', description:'' }).ok, JSON.stringify(model.notebooks) === before];
+  }), [false,false,true]);
+  await navigate('overview'); await heading('Team overview');
+  await navigate('notebooks'); await heading('Notebooks');
+  assert(await notebookInput.isDisabled(), 'Returning while read-only retains the restriction');
+  assert.equal(await notebookInput.inputValue(), 'Keep this notebook draft');
+  assert.equal(await page.locator('#notebook-new-name').inputValue(), 'Keep this new notebook');
+  await page.evaluate(async () => (await import('./scenario-state.js')).setConfigurationReadOnly(false));
+  assert(await notebookInput.isEnabled());
+  assert(await page.locator('[data-notebook="new"] button[type=submit]').isEnabled());
+  assert.equal(await page.locator('#notebook-harbor-meetings-permission').isVisible(), false);
+  await page.locator('#notebook-harbor-meetings-name').evaluate(input => window.retainedNotebookInput = input);
+  await page.evaluate(async () => (await import('./scenario-state.js')).setDataMode('notebooks', 'loading'));
+  assert.match(await page.locator('#notebook-load-status').innerText(), /Loading notebooks/);
+  await page.evaluate(async () => (await import('./scenario-state.js')).setDataMode('notebooks', 'partial'));
+  await page.waitForFunction(() => document.querySelector('#notebook-load-status').textContent.startsWith('Partial results:'));
+  assert.match(await page.locator('#notebook-load-status').innerText(), /Reference.*loaded notes only/);
+  assert.equal(await page.locator('[data-notebook="harbor-reference"] .notebook-counts').count(), 0);
+  assert.match(await page.locator('[data-notebook="harbor-reference"] .notebook-snapshot').innerText(), /counts are unavailable/);
+  await page.waitForTimeout(750);
+  assert.match(await page.locator('#notebook-load-status').innerText(), /^Partial results:/, 'An older delayed success cannot replace the newer partial response');
+  assert.equal(await page.locator('#notebook-harbor-meetings-name').inputValue(), 'Keep this notebook draft');
+  assert.equal(await page.locator('#notebook-harbor-meetings-name').evaluate(input => input === window.retainedNotebookInput), true);
+  const retainedCounts = await page.locator('[data-notebook="harbor-meetings"] .notebook-counts dd').allTextContents();
+  await page.evaluate(async () => (await import('./scenario-state.js')).setDataMode('notebooks', 'failure'));
+  await page.waitForFunction(() => document.querySelector('#notebook-load-status').textContent.includes('may be out of date'));
+  assert.match(await page.locator('#notebook-load-status').innerText(), /Last successful load:/);
+  assert.deepEqual(await page.locator('[data-notebook="harbor-meetings"] .notebook-counts dd').allTextContents(), retainedCounts);
+  assert(await page.getByRole('button', {name:'Retry loading notebooks', exact:true}).isVisible());
+  await page.evaluate(async () => (await import('./scenario-state.js')).setDataMode('notebooks', 'normal'));
+  await page.waitForFunction(() => document.querySelector('#notebook-load-status').textContent.startsWith('Notebook list loaded.'));
+  assert.equal(await page.locator('[data-notebook="harbor-reference"] .notebook-counts dd').count(), 3);
+  const realBefore = Date.now();
+  await page.evaluate(async () => (await import('./scenario-state.js')).advanceScenarioTime(86_400_000));
+  await page.locator('#refresh-notebooks').click();
+  await page.waitForFunction(() => document.querySelector('#notebook-load-status').textContent.startsWith('Notebook list loaded.'));
+  const actualObservation = await page.evaluate(async () => Date.parse((await import('./notes.js')).notebookData().at));
+  assert(actualObservation >= realBefore && actualObservation <= Date.now(), 'Notebook freshness uses observation time rather than the export allowance clock');
+
+  await navigate('overview'); await heading('Team overview');
+  await page.evaluate(async () => {
+    const scenarios = await import('./scenario-state.js');
+    scenarios.replaceScenario('normal'); scenarios.setDataMode('notebooks','failure');
+  });
+  await navigate('notebooks'); await heading('Notebooks');
+  await page.waitForFunction(() => document.querySelector('#notebook-load-status').textContent.includes('does not mean the workspace is empty'));
+  assert.equal(await page.locator('.notebook-counts').count(), 0, 'Failed first load cannot fabricate zero counts');
+  await page.evaluate(async () => (await import('./scenario-state.js')).replaceScenario('empty'));
+  assert.deepEqual(await page.locator('.notebook-counts dd').allTextContents(), Array(9).fill('0'));
+  assert.match(await page.locator('#notebook-load-status').innerText(), /^Notebook list loaded/);
+  await page.evaluate(async () => (await import('./scenario-state.js')).replaceScenario('busy'));
+  await navigate('notes'); await heading('Notes');
+  assert.equal(await page.locator('[data-notebook-id="harbor-meetings"] .note-row').count(), 6);
+  const firstTitle = await page.locator('[data-notebook-id="harbor-meetings"] .note-row a').first().innerText();
+  await page.locator('[data-notebook-id="harbor-meetings"]').getByRole('button', {name:'Next notes',exact:true}).click();
+  assert.notEqual(await page.locator('[data-notebook-id="harbor-meetings"] .note-row a').first().innerText(), firstTitle);
+  assert.match(await page.locator('[data-notebook-id="harbor-meetings"] .notebook-pagination').innerText(), /Page 2 of/);
+  await page.locator('#notes-filter').fill('Harbor');
+  await page.evaluate(async () => (await import('./scenario-state.js')).setDataMode('notebooks', 'partial'));
+  await page.waitForFunction(() => document.querySelector('#note-count').textContent.includes('incomplete result'));
+  assert.equal(await page.locator('#notes-filter').inputValue(), 'Harbor');
   assert.deepEqual(errors, []);
-  console.log('PASS: notebook counts/previews, independent drafts and validation, proposed-limit impact and retained settings, deep-link focus, import size/JSON checks, hidden-page completion, stale-read protection, retained file selection, narrow enlarged layout and oversize export without truncation.');
+  console.log('PASS: notebook counts/previews, independent drafts and validation, note-limit walkthrough and mutation restrictions, partial/stale/empty/loading notebook results and response races, busy pagination, deep-link focus, import size/JSON checks, hidden-page completion, stale-read protection, retained file selection, narrow enlarged layout and oversize export without truncation.');
+} catch (error) {
+  console.error(await page.locator('main').innerText());
+  throw error;
 } finally {
   await browser.close();
 }

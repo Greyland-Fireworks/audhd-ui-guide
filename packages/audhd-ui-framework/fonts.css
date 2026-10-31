@@ -1,0 +1,221 @@
+/* Bundled Latin subsets, SIL Open Font License. See fonts-manifest.json and
+   fonts/licenses/. Namespaced families preserve existing skin fallbacks.
+   AUDHD-10 / ../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences: fonts swap locally;
+   readable fallbacks remain available while loading or for missing glyphs. */
+@font-face {
+  font-family: 'AuDHD Alegreya';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./fonts/alegreya-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Chivo';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/chivo-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Cinzel Decorative';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./fonts/cinzeldecorative-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Cormorant SC';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/cormorantsc-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Dela Gothic One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/delagothicone-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD DM Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/dmsans-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD El Messiri';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/elmessiri-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Fascinate';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/fascinate-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Figtree';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/figtree-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Forum';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/forum-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD GFS Didot';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/gfsdidot-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/ibmplexsans-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Josefin Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/josefinsans-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Josefin Slab';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/josefinslab-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Lato';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/lato-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Libre Baskerville';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./fonts/librebaskerville-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Manrope';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/manrope-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Marcellus';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/marcellus-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Noto Naskh Arabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/notonaskharabic-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Noto Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/notosans-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Noto Sans HK';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/notosanshk-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Nunito Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/nunitosans-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Orbitron';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/orbitron-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Public Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/publicsans-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Sora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/sora-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Source Sans 3';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/sourcesans3-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Space Grotesk';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/spacegrotesk-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Spectral';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/spectral-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Work Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/worksans-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Yeseva One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/yesevaone-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'AuDHD Zilla Slab';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/zillaslab-600.woff2') format('woff2');
+}

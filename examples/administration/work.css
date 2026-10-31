@@ -1,5 +1,6 @@
 /* AUDHD-02/09/11: related choices share one boundary; essential help stays
-   beside its control, including when the pair stacks at enlarged text sizes. */
+   beside its control, including when the pair stacks at enlarged text sizes.
+   See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings. */
 .work-tools { min-width: 0; container-type: inline-size; }
 .work-tools textarea { width: 100%; min-width: 0; resize: vertical; font: inherit; font-weight: 400; color: var(--ui-text); background: var(--ui-surface); border: 1px solid var(--ui-control-border); border-radius: .4rem; padding: .55rem .8rem; }
 .work-pair,.work-filter { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; }
@@ -44,7 +45,8 @@
 .work-draft-flag { font-weight: 600; padding-inline-start: .6rem; border-inline-start: 3px double var(--ui-active-accent); }
 .lane-empty { margin: .2rem 0; color: var(--ui-muted); }
 /* AUDHD-05/08: changing representation keeps the same source order and
-   controls. A filtered single lane is compact; no board requires side-scroll. */
+   controls. A filtered single lane is compact; no board requires side-scroll.
+   See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability. */
 .task-collection:has(>.task-lane:only-child) { grid-template-columns: minmax(0,24rem); }
 .task-collection[data-view=list] { grid-template-columns: minmax(0,1fr); }
 .task-collection[data-view=list] .task-card { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(12rem,1fr); gap: .5rem 1.2rem; }
@@ -100,7 +102,8 @@
   .request-state-banner { padding: .65rem .75rem; gap: .5rem; }
 }
 @container (max-width: 18rem) {
-  /* Enlarged text needs a compact vertical index, not squeezed three-up prose. */
+  /* Enlarged text needs a compact vertical index, not squeezed three-up prose.
+     AUDHD-11: ../../GUIDE.md#audhd-11-keep-controls-readable-and-operable. */
   .request-stages:not(.is-compact) { grid-template-columns: minmax(0,1fr); }
   .request-stages:not(.is-compact) > li { flex-direction: row; align-items: center; }
 }

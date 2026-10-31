@@ -1,5 +1,6 @@
 /* AUDHD-02/11: related import contents share one boundary; notebook forms use
-   the existing card grid and canonical skin tokens rather than another theme. */
+   the existing card grid and canonical skin tokens rather than another theme.
+   See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings. */
 .notes-tools textarea { width: 100%; min-width: 0; resize: vertical; font: inherit; font-weight: 400; color: var(--ui-text); background: var(--ui-surface); border: 1px solid var(--ui-control-border); border-radius: .4rem; padding: .55rem .8rem; }
 .notes-tools form[data-notebook] { display:flex; flex-direction:column; align-self:start; }
 .new-notebook-editor { margin-bottom:1.25rem; }
@@ -7,8 +8,11 @@
 .new-notebook-editor > form { max-width:75ch; margin-top:.75rem; }
 .notebook-editor [data-summary-state], .new-notebook-editor [data-summary-state] { font-weight:600; }
 .notebook-snapshot { border-bottom:1px solid var(--ui-border); padding-block-end:1rem; margin-block-end:1rem; }
-.notebook-counts { display:flex; flex-wrap:wrap; gap:.5rem 1.25rem; margin:0 0 1rem; }
-.notebook-counts > div { display:flex; flex-direction:column-reverse; }
+/* AUDHD-02/11: each count shares a visible boundary with its label, so the
+   relationship survives wrapping and does not depend on column alignment.
+   See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings. */
+.notebook-counts { display:flex; flex-wrap:wrap; gap:.5rem; margin:0 0 1rem; }
+.notebook-counts > div { display:flex; flex-direction:column-reverse; flex:1 1 4.5rem; gap:.15rem; padding:.5rem .625rem; border:1px solid var(--ui-border); border-radius:.35rem; background:var(--ui-page); }
 .notebook-counts dt { color:var(--ui-muted); }
 .notebook-counts dd { margin:0; font-weight:700; font-size:1.3em; }
 .notebook-previews { padding-inline-start:1.25rem; }
@@ -16,6 +20,18 @@
 .notes-tools form[data-notebook] .actions { margin-top: auto; padding-top: .75rem; }
 .workspace-setting-group { min-width:0; margin:0 0 1.25rem; border:1px solid var(--ui-border); border-radius:.5rem; padding:1rem; }
 .workspace-setting-group legend { font-weight:700; padding-inline:.4rem; }
+/* AUDHD-02/07: ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
+   The saved value stays inside the same boundary as its proposal. A stable
+   receipt and local restriction avoid making users infer when rules took effect. */
+.current-note-setting { margin-block:0 .75rem; padding:.6rem .75rem; background:var(--ui-page); border:1px solid var(--ui-border); border-radius:.35rem; }
+.configuration-restriction { border-inline-start:3px solid var(--ui-warning); padding:.75rem; }
+#workspace-settings-saved:not(:empty) { padding:.75rem; border-inline-start:3px solid var(--ui-active-accent); background:var(--ui-page); }
+/* AUDHD-05/07: loading and retained-data feedback occupies one local region;
+   records remain browsable while a refresh fails, and pagination stays within
+   its notebook. ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability. */
+.notebook-load-state { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; margin-block:1rem; padding:.75rem; border:1px solid var(--ui-border); border-radius:.4rem; }
+.notebook-load-state p { flex:1 1 25rem; margin:0; }
+.notebook-pagination { margin-block-start:.75rem; padding-block-start:.75rem; border-top:1px solid var(--ui-border); }
 .workspace-limit-layout { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.5rem; align-items:start; }
 .workspace-limit-layout > * { min-width:0; }
 .field-unit { margin-block:.35rem .75rem; font-weight:600; }
@@ -33,13 +49,15 @@
 .note-usage-list meter::-moz-meter-bar { background:var(--ui-active-accent); }
 .note-usage-list .over-limit meter::-moz-meter-bar { background:var(--ui-warning); }
 /* AUDHD-08/11: the numerical comparison remains readable when meters cannot
-   convey color. Narrow layouts keep the consequence within its owning group. */
+   convey color. Narrow layouts keep the consequence within its owning group.
+   See ../../GUIDE.md#audhd-08-use-visuals-to-support-decisions. */
 @media(max-width:65rem) {
   .workspace-limit-layout { grid-template-columns:minmax(0,1fr); }
   .note-length-impact { border-inline-start:0; padding-inline-start:0; border-top:1px solid var(--ui-border); padding-block-start:1rem; }
 }
 @media(max-width:40rem) {
-  /* Retain the shared boundary while leaving room for enlarged decision text. */
+  /* Retain the shared boundary while leaving room for enlarged decision text.
+     AUDHD-11: ../../GUIDE.md#audhd-11-keep-controls-readable-and-operable. */
   #workspace-settings-form, .workspace-setting-group { padding:.5rem; }
 }
 @media(forced-colors:active) { .note-usage-list .over-limit { border-inline-start-color:Highlight; } }

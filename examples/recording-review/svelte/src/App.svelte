@@ -12,11 +12,11 @@ import ProfileControls from './ProfileControls.svelte';
   import { parseLocation, reviewAddress } from './navigation.js';
   import { createWorkspace, feedbackFor, isDirty, matchingRecordings, requestSave, settleSave, updateDraft } from './review-workspace.js';
 
+  // AUDHD-10 (../../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
   // Keep task state above conditional list/disclosure content: hiding a card must
   // not discard its draft. selectedId drives the source, detail, current action
   // and connector, independently of keyboard focus. This workspace uses Svelte's
-  // own reactivity, not the React state engine. See ../../SPEC.md
-  // (REF-03-06) and ../../SPEC.md.
+  // own reactivity, not the React state engine. See ../../SPEC.md (REF-03-06).
   let workspace = $state(createWorkspace());
   const initialLocation = parseLocation(location.hash);
   let route = $state(initialLocation);
@@ -25,6 +25,7 @@ import ProfileControls from './ProfileControls.svelte';
   let query = $state('');
   let textSize = $state('standard');
   let spacing = $state('comfortable');
+  // AUDHD-10 (../../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
   // Presentation is independent of workspace state. Updating root attributes
   // never reconstructs drafts, pending saves, selection or the navigation tree.
   let profile = $state(emptyProfile());
@@ -40,6 +41,7 @@ import ProfileControls from './ProfileControls.svelte';
     return () => media.removeEventListener('change', update);
   });
   function remember(group, key, value) { profile[group][key] = value; }
+  // AUDHD-10 (../../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
   // This adapter changes its own presentation state, never review workspace,
   // route or focus. Unsupported intent remains exportable without false claims.
   function applyProfile(next) {
@@ -65,12 +67,14 @@ import ProfileControls from './ProfileControls.svelte';
   let pageHeading = $state();
   let pointerTarget = null;
   function fromPointer(event) {
+    // AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
     // Native keyboard clicks have differing detail values across browsers.
     const result = pointerTarget === event.currentTarget;
     pointerTarget = null;
     return result;
   }
 
+  // AUDHD-07 (../../../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status).
   // Derive the visible view from the authoritative workspace instead of keeping
   // separate dirty/current flags that can drift after a response or search change.
   let record = $derived(recordings.find(item => item.id === selectedId));
@@ -80,6 +84,7 @@ import ProfileControls from './ProfileControls.svelte';
   let feedback = $derived(feedbackFor(current));
   let pendingRecords = $derived(recordings.filter(item => workspace.records[item.id].attempt));
 
+  // AUDHD-07 (../../../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status).
   // This adapter derives summaries independently; pending content can coexist
   // with newer drafts. Higher-priority rows represent each record once.
   // Acknowledgment is session-only, not verification or durable persistence.
@@ -95,6 +100,7 @@ import ProfileControls from './ProfileControls.svelte';
   let isRecordings = $derived(route.page === 'recording' || route.page === 'recordings');
   let pageTitle = $derived(route.page === 'recording' ? 'Recording review desk' : route.page === 'workspace' ? 'Workspace' : pages[route.page]?.title || 'Page unavailable');
   let breadcrumbs = $derived.by(() => {
+    // AUDHD-01 (../../../../GUIDE.md#audhd-01-keep-scope-and-location-visible).
     // Use the same titles and parent IDs as the index; no second breadcrumb map.
     const path = [pages[isRecordings ? 'recordings' : route.page] || pages.workspace];
     while (path[0].parentId) path.unshift(pages[path[0].parentId]);
@@ -103,6 +109,7 @@ import ProfileControls from './ProfileControls.svelte';
     return path;
   });
 
+  // AUDHD-10 (../../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
   // Location is shareable; draft text never enters the URL. This adapter owns its
   // transitions independently of React. Root-owned state survives page/panel
   // unmounting; Back/Forward restores location without loading another document.
@@ -116,6 +123,7 @@ import ProfileControls from './ProfileControls.svelte';
     await tick();
     if (moveFocus) {
       const target = destination.page === 'recording' ? reviewHeading : pageHeading;
+      // AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
       // Keep navigation focus; explicit input origin avoids inconsistent browser
       // heading heuristics without suppressing keyboard focus on controls.
       if (target) { target.dataset.navigationInput = pointer ? 'pointer' : 'keyboard'; target.focus(); }
@@ -126,6 +134,7 @@ import ProfileControls from './ProfileControls.svelte';
     return applyLocation(fragment, moveFocus, pointer);
   }
   function followLink(event) {
+    // AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
     // Real hrefs retain modified-click and open-in-new-tab browser behavior.
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
@@ -143,11 +152,13 @@ import ProfileControls from './ProfileControls.svelte';
     return () => window.removeEventListener('hashchange', restore);
   });
   function selectRecording(id, pointer) {
+    // AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
     // The already-current action is still a useful shortcut to its heading.
     return navigate(reviewAddress(id, viewById[id] || 'review'), true, pointer);
   }
 
   async function clearSearch() {
+    // AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
     // Clear removes its own button; return focus to the surviving search field
     // after that update instead of leaving keyboard position on the document body.
     query = '';
@@ -156,6 +167,7 @@ import ProfileControls from './ProfileControls.svelte';
   }
 
   async function resolve(id, token, succeeded, event) {
+    // AUDHD-05 (../../../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability).
     // Recover focus only if settlement really removes the deliberately activated
     // control and leaves focus on the body. Background responses and a newer focus
     // destination should remain undisturbed. preventScroll keeps the user's place.
@@ -171,7 +183,8 @@ import ProfileControls from './ProfileControls.svelte';
 
 <svelte:head><title>{pageTitle} · Svelte reference</title></svelte:head>
 
-<!-- Both copies use one canonical path. A local view is not a false ancestor. -->
+<!-- AUDHD-01 (../../../../GUIDE.md#audhd-01-keep-scope-and-location-visible).
+  Both copies use one canonical path. A local view is not a false ancestor. -->
 {#snippet breadcrumbTrail(position)}
   <nav class="breadcrumbs" aria-label={`Breadcrumbs ${position}`}><ol>
     {#each breadcrumbs as item, index (item.title)}
@@ -201,12 +214,14 @@ import ProfileControls from './ProfileControls.svelte';
     {#if route.page !== 'workspace'}<p>{route.page === 'recording' ? 'Review a recording and save your assessment.' : pages[route.page]?.summary || 'This address does not name a page in this reference. Use Workspace overview to find a destination.'}</p>{/if}
   </header>
 
-  <!-- Retention is essential task context, so it stays visible outside optional
-       help. The simulated Saved state must not imply persistence across reload. -->
+  <!-- AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
+    Retention is essential task context, so it stays visible outside optional
+    help. The simulated Saved state must not imply persistence across reload. -->
   <p class="demo-boundary">{copy.boundary}</p>
 
-  <!-- Preferences are a real destination, not an overlay. Navigation keeps the
-       root-owned task state. The help setting and timing disclosure share a value. -->
+  <!-- AUDHD-10 (../../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
+    Preferences are a real destination, not an overlay. Navigation keeps the
+    root-owned task state. The help setting and timing disclosure share a value. -->
   {#if route.page === 'preferences'}
   <section class="preferences-panel panel" aria-labelledby="preferences-heading">
     <div class="display-options-heading"><h2 id="preferences-heading">Display options</h2><ContextHelp topic="display options" text={contextualHelp.displayOptions} textSize={textSize} /></div>
@@ -265,8 +280,9 @@ import ProfileControls from './ProfileControls.svelte';
     </section>
     <section class="page-directory panel" aria-labelledby="directory-heading">
       <h2 id="directory-heading">Workspace pages</h2>
-      <!-- Nested list structure and indentation agree with the real breadcrumb
-           parent; the directory should not imply an unrelated flat collection. -->
+      <!-- AUDHD-02 (../../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+        Nested list structure and indentation agree with the real breadcrumb
+        parent; the directory should not imply an unrelated flat collection. -->
       <ul>{#each workspaceSections as id (id)}<li>
         <a href={pages[id].href} onclick={followLink}>{pages[id].title}</a><p>{pages[id].summary}</p>
         {#if id === 'recordings'}
@@ -277,9 +293,10 @@ import ProfileControls from './ProfileControls.svelte';
     </section>
   {/if}
 
-  <!-- Source precedes details in DOM order at every width. CSS stacks these same
-       regions without duplicating inputs or changing keyboard reading order.
-       Named sections make the grouping available beyond visual borders. -->
+  <!-- AUDHD-02 (../../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+    Source precedes details in DOM order at every width. CSS stacks these same
+    regions without duplicating inputs or changing keyboard reading order.
+    Named sections make the grouping available beyond visual borders. -->
   {#if isRecordings}
   <div class={route.page === 'recording' ? 'workspace' : 'library-layout'}>
     <section class="recordings-panel panel" aria-labelledby="recordings-heading">
@@ -289,15 +306,17 @@ import ProfileControls from './ProfileControls.svelte';
         <p id="search-help" class="muted">{copy.searchHelp}</p>
         <input id="recording-search" bind:this={searchInput} type="search" bind:value={query} aria-describedby="search-help" />
       </div>
-      <!-- The colon introduces actual children; aria-labelledby on the list carries
-           the relationship beyond punctuation. Zero results introduce no cards.
-           The polite count reports search scope, not a change to the open review. -->
+      <!-- AUDHD-02 (../../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+        The colon introduces actual children; aria-labelledby on the list carries
+        the relationship beyond punctuation. Zero results introduce no cards.
+        The polite count reports search scope, not a change to the open review. -->
       <div class="results-toolbar">
         <p id="recording-count" role="status" aria-live="polite">{results.length} {results.length === 1 ? 'recording' : 'recordings'}{results.length > 0 ? ':' : ''}</p>
         {#if query}<button type="button" onclick={clearSearch}>Clear search</button>{/if}
       </div>
-      <!-- Filtering never silently selects another record. Explain why details
-           remain visible when their source card is outside the result set. -->
+      <!-- AUDHD-03 (../../../../GUIDE.md#audhd-03-offer-manageable-detail-without-hiding-choices).
+        Filtering never silently selects another record. Explain why details
+        remain visible when their source card is outside the result set. -->
       {#if route.page === 'recording' && !results.some(item => item.id === selectedId)}
         <p class="notice">Current recording is outside these search results.</p>
       {/if}
@@ -311,16 +330,18 @@ import ProfileControls from './ProfileControls.svelte';
             </div>
             <p class="record-id">{item.id} · <time datetime={item.date}>{item.date}</time></p>
             <p class="muted">Map: {item.map} · Seed: {item.seed}</p>
-            <!-- This navigates to a review; it is not a toggle or listbox option.
-                 Reviewing and aria-current identify the already-open state, while
-                 aria-controls names the detail target. Keep the current action
-                 enabled as a useful return shortcut that preserves the draft. -->
+            <!-- AUDHD-01 (../../../../GUIDE.md#audhd-01-keep-scope-and-location-visible).
+              This navigates to a review; it is not a toggle or listbox option.
+              Reviewing and aria-current identify the already-open state, while
+              aria-controls names the detail target. Keep the current action
+              enabled as a useful return shortcut that preserves the draft. -->
             <button type="button" aria-current={route.page === 'recording' && item.id === selectedId ? 'true' : undefined} aria-controls={route.page === 'recording' ? 'review-panel' : undefined}
               onclick={event => selectRecording(item.id, fromPointer(event))}>{route.page === 'recording' && item.id === selectedId ? 'Reviewing' : 'Review'} {item.name}</button>
-            <!-- The arrow supplements identity/current text and control semantics.
-                 It is not another focus stop or accessible name. CSS points right
-                 when adjacent and down when stacked; no unrelated result receives
-                 a connector when filtering hides the selected source. -->
+            <!-- AUDHD-08 (../../../../GUIDE.md#audhd-08-use-visuals-to-support-decisions).
+              The arrow supplements identity/current text and control semantics.
+              It is not another focus stop or accessible name. CSS points right
+              when adjacent and down when stacked; no unrelated result receives
+              a connector when filtering hides the selected source. -->
             {#if route.page === 'recording' && item.id === selectedId}<span class="relationship-cue" aria-hidden="true">
               <span class="relationship-label">Details below</span>
               <svg viewBox="0 0 32 24"><path d="M2 8H16V2L30 12 16 22V16H2Z" /></svg>
@@ -330,10 +351,11 @@ import ProfileControls from './ProfileControls.svelte';
       </ul>
     </section>
 
-    <!-- Repeat name and stable ID so the connection survives scrolling, filtering
-         and loss of color. CSS matches the active card's surface and title accent.
-         tabindex=-1 supports deliberate heading focus without adding a plain
-         heading to the ordinary tab sequence. -->
+    <!-- AUDHD-01 (../../../../GUIDE.md#audhd-01-keep-scope-and-location-visible).
+      Repeat name and stable ID so the connection survives scrolling, filtering
+      and loss of color. CSS matches the active card's surface and title accent.
+      tabindex=-1 supports deliberate heading focus without adding a plain
+      heading to the ordinary tab sequence. -->
     {#if route.page === 'recording'}
     <section id="review-panel" class="review-panel panel" aria-labelledby="review-heading">
       <div class="review-header">
@@ -342,35 +364,39 @@ import ProfileControls from './ProfileControls.svelte';
       </div>
       <section aria-labelledby="timing-heading" class="timing-section">
         <h3 id="timing-heading">Timing</h3>
-        <!-- Terms, concise meanings and values express the relationship without an
-             unnecessary chart. Essential explanations remain when help is closed.
-             UTC-05:00 describes these January fixtures, not a live conversion. -->
+        <!-- AUDHD-08 (../../../../GUIDE.md#audhd-08-use-visuals-to-support-decisions).
+          Terms, concise meanings and values express the relationship without an
+          unnecessary chart. Essential explanations remain when help is closed.
+          UTC-05:00 describes these January fixtures, not a live conversion. -->
         <dl class="timing-facts">
           <div><dt>Time zone</dt><dd><span class="meaning">Used for recording timestamps</span><strong>America/New_York · UTC−05:00</strong></dd></div>
           <div><dt>Simulation duration</dt><dd><span class="meaning">Time elapsed inside the simulation</span><strong>{record.simulation}</strong></dd></div>
           <div><dt>Execution time</dt><dd><span class="meaning">Real elapsed time, including recorded pauses</span><strong>{record.execution}</strong></dd></div>
         </dl>
-        <!-- Bits supplies disclosure interaction/semantics; the app owns the bound
-             expansion value. Keep the trigger in a heading and use ordinary parts.
-             Persistent multi-sentence help belongs in a disclosure, not a tooltip
-             that disappears as the pointer moves. No custom snippet is needed. -->
+        <!-- AUDHD-09 (../../../../GUIDE.md#audhd-09-put-essential-explanations-beside-the-decision).
+          Bits supplies disclosure interaction/semantics; the app owns the bound
+          expansion value. Keep the trigger in a heading and use ordinary parts.
+          Persistent multi-sentence help belongs in a disclosure, not a tooltip
+          that disappears as the pointer moves. No custom snippet is needed. -->
         <Collapsible.Root bind:open={helpExpanded} class="timing-help">
           <h4><Collapsible.Trigger type="button" class="help-trigger"><span aria-hidden="true">{helpExpanded ? '−' : '+'}</span> About these timings</Collapsible.Trigger></h4>
           <Collapsible.Content class="timing-help-panel"><p>{copy.timingHelp}</p></Collapsible.Content>
         </Collapsible.Root>
       </section>
 
-      <!-- A named form separates editable assessment from recording facts within
-           one active context. Native fields cover this task. Labels/descriptions
-           stay available while typing; placeholders would not. Submission captures
-           a snapshot without navigating away or claiming a pending save succeeded. -->
+      <!-- AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+        A named form separates editable assessment from recording facts within
+        one active context. Native fields cover this task. Labels/descriptions
+        stay available while typing; placeholders would not. Submission captures
+        a snapshot without navigating away or claiming a pending save succeeded. -->
       <form class="review-form" aria-labelledby="assessment-heading" onsubmit={event => {
         event.preventDefault();
         requestSave(workspace, selectedId);
       }}>
-        <!-- Bits owns tab roles and manual keyboard activation. Keep source facts
-             separate from assessment fields, while identity/timing and Save remain
-             outside hidden panels. State belongs to the workspace, not the panel. -->
+        <!-- AUDHD-02 (../../../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings).
+          Bits owns tab roles and manual keyboard activation. Keep source facts
+          separate from assessment fields, while identity/timing and Save remain
+          outside hidden panels. State belongs to the workspace, not the panel. -->
         <h3 id="assessment-heading" class="local-view-label">Recording workspace</h3>
         <Tabs.Root value={view} onValueChange={value => navigate(reviewAddress(selectedId, value), false)} activationMode="manual">
           <Tabs.List aria-label="Recording views" class="record-tabs">
@@ -403,10 +429,11 @@ import ProfileControls from './ProfileControls.svelte';
             <p class="muted">{copy.metadataHelp}</p>
           </Tabs.Content>
         </Tabs.Root>
-        <!-- Put scope, actual result and disabled reason beside Save. Only duplicate
-             saving is blocked while pending; inputs remain editable. Feedback must
-             distinguish the submitted snapshot from newer work, not just display
-             a spinner or a success-colored button. -->
+        <!-- AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
+          Put scope, actual result and disabled reason beside Save. Only duplicate
+          saving is blocked while pending; inputs remain editable. Feedback must
+          distinguish the submitted snapshot from newer work, not just display
+          a spinner or a success-colored button. -->
         <div class="save-area">
           <p id="save-scope" class="muted">Saves the status and note for {record.id} in this demo only. Reloading resets it.</p>
           <p id="save-feedback" class="save-feedback" class:error={current.lastResult === 'failed' && dirty}>{feedback}</p>
@@ -422,10 +449,11 @@ import ProfileControls from './ProfileControls.svelte';
   </div>
   {/if}
 
-  <!-- Test controls make failure/delay reproducible without timers. Their separate
-       disclosure keeps simulation machinery out of the ordinary review task.
-       Attempt groups name the originating record after selection moves; the
-       surviving heading receives focus when a focused resolver disappears. -->
+  <!-- AUDHD-07 (../../../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status).
+    Test controls make failure/delay reproducible without timers. Their separate
+    disclosure keeps simulation machinery out of the ordinary review task.
+    Attempt groups name the originating record after selection moves; the
+    surviving heading receives focus when a focused resolver disappears. -->
   {#if route.page === 'recording'}
   <details class="demo-controls">
     <summary><h2 tabindex="-1" bind:this={demoHeading}>Demo save controls</h2></summary>
@@ -447,12 +475,14 @@ import ProfileControls from './ProfileControls.svelte';
     </div>
   </details>
   {/if}
-  <!-- One persistent region supplements visible feedback with scoped save events,
-       not every keystroke. Actual screen-reader announcement quality is still
-       pending; having these attributes is not proof that it has been verified. -->
+  <!-- AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+    One persistent region supplements visible feedback with scoped save events,
+    not every keystroke. Actual screen-reader announcement quality is still
+    pending; having these attributes is not proof that it has been verified. -->
   <div class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">{workspace.announcement}</div>
-  <!-- A compact disclosure repeats destinations without a second competing
-       tablist or a fixed bar covering content. Back to top restores keyboard focus. -->
+  <!-- AUDHD-11 (../../../../GUIDE.md#audhd-11-keep-controls-readable-and-operable).
+    A compact disclosure repeats destinations without a second competing
+    tablist or a fixed bar covering content. Back to top restores keyboard focus. -->
   <footer class="page-footer">
     {@render breadcrumbTrail('bottom')}
     <div class="footer-actions">

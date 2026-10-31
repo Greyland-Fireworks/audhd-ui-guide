@@ -57,6 +57,20 @@ Adapt the [administration request policy](../examples/administration/request-set
 
 Inspect both closed and open states, reading order, visual grouping, expanded state and keyboard/touch operation. Opening help must not activate the setting; dismissal must preserve drafts and useful focus. A detached help card and a nearby control do not establish that the participant recognizes their connection. This is an application of AUDHD-02, 05, 09 and 11, not a new rule ID.
 
+## Make group membership visible
+
+Apply [AUDHD-02](../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings) at the relationship's owner. A notebook count and its label can share one outlined description-list entry; an agenda date and its meetings can share a panel with inset contents or a continuous edge. Keep siblings aligned and gaps between groups stronger than gaps within a group. The particular border is optional; recognizable membership and its semantic equivalent must survive wrapping, enlarged text and forced colors.
+
+Inspect a boundary case rather than only an evenly filled layout: a multi-line label, one group with a single item beside another with several, or a count of zero. Follow each label to its value and each heading through its complete contents. See the administration [notebook presentation](../examples/administration/notes-tools.css) and [agenda presentation](../examples/administration/schedule.css); source rationale describes their constraints, not proven comprehension.
+
+## Search criteria, comparison and selected detail
+
+Use [AUDHD-07](../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status) to separate a composed availability request from immediate collection filtering. A multi-field search has editable criteria, an explicit initiating action and the criteria snapshot belonging to its results. After an edit, old results identify that snapshot and require another search; incomplete input does not become a plausible proposal. Recheck availability before commitment. A simple name filter can still update a browsable collection immediately.
+
+Under [AUDHD-03](../GUIDE.md#audhd-03-offer-manageable-detail-without-hiding-choices) and [AUDHD-08](../GUIDE.md#audhd-08-use-visuals-to-support-decisions), compact choices retain the information needed for comparison while the selected detail has a clear connection and return path. Selecting a room reveals its schedule; continuing prepares a draft; saving books it. Preserve those distinctions and the user's criteria, selection and drafts. Test an edit during a pending search, no matches, invalid input and a choice followed by Back/Forward. The administration example connects this contract to [submitted room searches and their recovery](../examples/administration/README.md#worked-design-decisions). Its optional scenarios distinguish an empty successful response from unavailable or partial data; refresh failures retain the last successful snapshot and its timestamp.
+
+A configuration illustration must describe the same policy that the consuming operation enforces. Compare current and proposed values, explain scope and effects, then exercise acceptance, rejection and correction through that operation. Revalidate an earlier preview before committing against changed rules. See the [note settings and export-request examples](../examples/administration/README.md#worked-design-decisions) and [AUDHD-12](../GUIDE.md#audhd-12-validate-complete-tasks-and-report-actual-evidence).
+
 ## Capability states and next actions
 
 Use the distinctions a task needs; these are examples of truthful language, not mandatory badges or a runtime schema. A read-only presentation describes interaction, not the reason a capability is unavailable.
@@ -91,11 +105,11 @@ During visual review, inspect both desktop and narrow task entry. Common work an
 
 ## Status to control
 
-Operational overviews route users to work: a failed save links to its record, an invalid value links to the revealed field, and saved permissions awaiting verification link to their read-only check. Use the same state owner as the editor; avoid parallel counters that drift after resets or asynchronous responses. Preserve filters and drafts when following links or returning through browser history. Focus the revealed task heading or exact control after rendering, with a surviving fallback if the previous item is filtered out. Appearance changes and background responses must not steal focus.
+Operational overviews route users to work: a failed save links to its record, an invalid value links to the revealed field, and saved permissions awaiting verification link to their read-only check. Keep subject, severity, consequence and remedy together; distinguish confirmed problems from routine unfinished work and unchecked evidence. Use the same state owner as the editor; avoid parallel counters that drift after resets or asynchronous responses. Preserve filters and drafts when following links or returning through browser history. Focus the revealed task heading or exact control after rendering, with a surviving fallback if the previous item is filtered out. Appearance changes and background responses must not steal focus.
 
 Ordinary configurable status needs the same connection: “Report retention: 30 days” can offer “Change report retention” leading to that control, rather than leaving the user to search a general Settings page. Derive readiness labels from established criteria, not the existence of a settings category. On arrival, the heading, selected navigation and any breadcrumb should identify the owning task as well as the affected scope. Purely informational values need no artificial link. Use [AUDHD-02](../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings) to check ownership and [AUDHD-04](../GUIDE.md#audhd-04-explain-effective-behavior) to explain platform or dependency limits before an unavailable action.
 
-Follow the Guide’s [language](../GUIDE.md#practical-interface-language) and [overview](../GUIDE.md#status-first-operational-overviews) requirements. A focused editor or preview needs no additional overview. Put intent-focused comments beside state, navigation, persistence and verification boundaries in runnable examples; explain non-obvious requirements without narrating each line.
+Follow the Guide’s [language](../GUIDE.md#practical-interface-language) and [overview](../GUIDE.md#status-first-operational-overviews) requirements. A focused editor or preview needs no additional overview. Completion belongs beside its action as well as in relevant summaries: show what was observed and update the checked time when repeating the same check. Clear corrected errors and stale remedies without erasing newer work. Follow the [source-rationale maintenance convention](../CONTRIBUTING.md#maintain-accessibility-rationale-with-the-implementation) when documenting these boundaries in examples.
 
 
 ## Unlock to edit interaction pattern

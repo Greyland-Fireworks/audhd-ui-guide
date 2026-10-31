@@ -1,4 +1,6 @@
-/* Dashboard skins: 24 named palettes, with no runtime or external font dependency.
+@import url("./fonts.css");
+
+/* Dashboard skins: 45 named palettes; local fonts, no third-party font requests.
    Apply data-skin to an app root; tokens inherit into HTML and inline SVG.
    Flat, opaque surfaces keep reading and plot contrast predictable. These are
    adapted palettes, not exact reproductions of decorative backgrounds.
@@ -8,6 +10,7 @@
   --ui-font-body: system-ui, sans-serif;
   --ui-font-heading: var(--ui-font-body);
   --ui-font-display: var(--ui-font-body);
+  --ui-font-heading-weight: 700;
   --ui-chart-surface: var(--ui-surface);
   --ui-chart-label: var(--ui-text);
   --ui-chart-grid: var(--ui-border);
@@ -17,8 +20,9 @@
   background: var(--ui-page);
   font-family: var(--ui-font-body);
 }
-/* Opt-in typography is independent of palette. Skin display fonts are used
-   only in headings, never in dense data. No font download is triggered here. */
+/* Explicit typography stays independent of palette. Selected workbench skins
+   supply paired defaults; display faces are used in headings, never dense data.
+   Matching local font files load on demand; no third-party request is made. */
 [data-audhd-ui][data-type="expressive"] { --ui-font-heading: var(--ui-font-display); }
 [data-audhd-ui][data-type="serif"] { --ui-font-body: Georgia, serif; }
 [data-audhd-ui][data-type="mono"] { --ui-font-body: ui-monospace, Consolas, monospace; }
@@ -890,6 +894,852 @@
 /* Small opt-in hooks, not a component library. Layout remains the adapter's job.
    Share the active surface/title between a selected source and its detail panel.
    The border and explicit current label preserve meaning without hue perception. */
+/* Murica — light. Selected palette: M01 Union Paper. */
+[data-audhd-ui][data-skin="murica"] {
+  --ui-mode: light;
+  --ui-page: #f7f2e8;
+  --ui-surface: #fffdf7;
+  --ui-text: #142b48;
+  --ui-muted: #46576b;
+  --ui-border: #b9bec2;
+  --ui-control-border: #848d98;
+  --ui-action: #a62c35;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #faf9f4;
+  --ui-active-accent: #244d72;
+  --ui-focus: #244d72;
+  --ui-ornament: #d2a553;
+  --ui-success: #296a57;
+  --ui-warning: #866a35;
+  --ui-danger: #a62c35;
+  --ui-chart-series-1: #a62c35;
+  --ui-chart-series-2: #244d72;
+  --ui-chart-series-3: #aa8643;
+  --ui-chart-series-4: #296a57;
+  --ui-chart-series-5: #a62c35;
+  --ui-chart-series-6: #1b3a5b;
+  --ui-chart-seq-1: #f6e8e4;
+  --ui-chart-seq-2: #e4bebd;
+  --ui-chart-seq-3: #d39596;
+  --ui-chart-seq-4: #c16b6f;
+  --ui-chart-seq-5: #af4148;
+  --ui-chart-div-1: #244d72;
+  --ui-chart-div-2: #92a5b5;
+  --ui-chart-div-3: #e8e8e6;
+  --ui-chart-div-4: #d39596;
+  --ui-chart-div-5: #a62c35;
+  --ui-font-body: 'AuDHD Public Sans', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Libre Baskerville', Georgia, serif;
+  --ui-font-display: 'AuDHD Libre Baskerville', Georgia, serif;
+  --ui-font-heading-weight: 700;
+}
+
+/* Canto — light. Selected palette: C01 Harbor Glass. */
+[data-audhd-ui][data-skin="canto"] {
+  --ui-mode: light;
+  --ui-page: #eef6f3;
+  --ui-surface: #fcfffd;
+  --ui-text: #163e3c;
+  --ui-muted: #466664;
+  --ui-border: #b7c5c3;
+  --ui-control-border: #7e908e;
+  --ui-action: #14665f;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #fafbf8;
+  --ui-active-accent: #b64b36;
+  --ui-focus: #b64b36;
+  --ui-ornament: #8ec9bd;
+  --ui-success: #23735a;
+  --ui-warning: #52756e;
+  --ui-danger: #b43b37;
+  --ui-chart-series-1: #14665f;
+  --ui-chart-series-2: #b64b36;
+  --ui-chart-series-3: #69958c;
+  --ui-chart-series-4: #23735a;
+  --ui-chart-series-5: #b43b37;
+  --ui-chart-series-6: #5e4439;
+  --ui-chart-seq-1: #e5f0ed;
+  --ui-chart-seq-2: #b6d1ce;
+  --ui-chart-seq-3: #88b3ae;
+  --ui-chart-seq-4: #5a948e;
+  --ui-chart-seq-5: #2b756f;
+  --ui-chart-div-1: #b64b36;
+  --ui-chart-div-2: #d9a59a;
+  --ui-chart-div-3: #e5ecea;
+  --ui-chart-div-4: #88b3ae;
+  --ui-chart-div-5: #14665f;
+  --ui-font-body: 'AuDHD Noto Sans', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Space Grotesk', system-ui, sans-serif;
+  --ui-font-display: 'AuDHD Space Grotesk', system-ui, sans-serif;
+  --ui-font-heading-weight: 600;
+}
+
+/* Pearl River — light. Selected palette: C07 Pearl River. */
+[data-audhd-ui][data-skin="pearl-river"] {
+  --ui-mode: light;
+  --ui-page: #edf5f8;
+  --ui-surface: #faffff;
+  --ui-text: #253e4b;
+  --ui-muted: #516671;
+  --ui-border: #bac5c9;
+  --ui-control-border: #828f95;
+  --ui-action: #216b80;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #f7fafb;
+  --ui-active-accent: #79466f;
+  --ui-focus: #79466f;
+  --ui-ornament: #a6c6d2;
+  --ui-success: #347862;
+  --ui-warning: #5f7178;
+  --ui-danger: #a13e52;
+  --ui-chart-series-1: #216b80;
+  --ui-chart-series-2: #79466f;
+  --ui-chart-series-3: #799199;
+  --ui-chart-series-4: #347862;
+  --ui-chart-series-5: #a13e52;
+  --ui-chart-series-6: #4b425b;
+  --ui-chart-seq-1: #e4f0f2;
+  --ui-chart-seq-2: #b9d3d9;
+  --ui-chart-seq-3: #8eb5c0;
+  --ui-chart-seq-4: #6297a6;
+  --ui-chart-seq-5: #377a8d;
+  --ui-chart-div-1: #79466f;
+  --ui-chart-div-2: #baa3b7;
+  --ui-chart-div-3: #e5eced;
+  --ui-chart-div-4: #8eb5c0;
+  --ui-chart-div-5: #216b80;
+  --ui-font-body: 'AuDHD IBM Plex Sans', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Sora', system-ui, sans-serif;
+  --ui-font-display: 'AuDHD Sora', system-ui, sans-serif;
+  --ui-font-heading-weight: 600;
+}
+
+/* Porcelain Studio — light. Selected palette: C09 Porcelain Studio. */
+[data-audhd-ui][data-skin="porcelain-studio"] {
+  --ui-mode: light;
+  --ui-page: #f5f5ed;
+  --ui-surface: #fffffa;
+  --ui-text: #263649;
+  --ui-muted: #54606d;
+  --ui-border: #bec3c5;
+  --ui-control-border: #868e93;
+  --ui-action: #315f9e;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #fdfaf5;
+  --ui-active-accent: #b5482d;
+  --ui-focus: #b5482d;
+  --ui-ornament: #cfb373;
+  --ui-success: #3b765a;
+  --ui-warning: #7e6d46;
+  --ui-danger: #b13b40;
+  --ui-chart-series-1: #315f9e;
+  --ui-chart-series-2: #b5482d;
+  --ui-chart-series-3: #9f8a59;
+  --ui-chart-series-4: #3b765a;
+  --ui-chart-series-5: #b13b40;
+  --ui-chart-series-6: #663e3c;
+  --ui-chart-seq-1: #eaeff1;
+  --ui-chart-seq-2: #c1cfde;
+  --ui-chart-seq-3: #98afcc;
+  --ui-chart-seq-4: #6f8fba;
+  --ui-chart-seq-5: #466fa7;
+  --ui-chart-div-1: #b5482d;
+  --ui-chart-div-2: #daa494;
+  --ui-chart-div-3: #e9ebe8;
+  --ui-chart-div-4: #98afcc;
+  --ui-chart-div-5: #315f9e;
+  --ui-font-body: 'AuDHD Noto Sans', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Noto Sans HK', system-ui, sans-serif;
+  --ui-font-display: 'AuDHD Noto Sans HK', system-ui, sans-serif;
+  --ui-font-heading-weight: 600;
+}
+
+/* Jade Tile — light. Selected palette: C03 Jade Tile. */
+[data-audhd-ui][data-skin="jade-tile"] {
+  --ui-mode: light;
+  --ui-page: #eef6f3;
+  --ui-surface: #fafbef;
+  --ui-text: #253d31;
+  --ui-muted: #51665c;
+  --ui-border: #bac2b6;
+  --ui-control-border: #859085;
+  --ui-action: #3d684f;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #f8f6ea;
+  --ui-active-accent: #a44435;
+  --ui-focus: #a44435;
+  --ui-ornament: #c6a253;
+  --ui-success: #416640;
+  --ui-warning: #856d38;
+  --ui-danger: #ad3735;
+  --ui-chart-series-1: #3d684f;
+  --ui-chart-series-2: #a44435;
+  --ui-chart-series-3: #a68846;
+  --ui-chart-series-4: #416640;
+  --ui-chart-series-5: #ad3735;
+  --ui-chart-series-6: #5e4033;
+  --ui-chart-seq-1: #e7ecdf;
+  --ui-chart-seq-2: #c1cfbf;
+  --ui-chart-seq-3: #9cb29f;
+  --ui-chart-seq-4: #76947f;
+  --ui-chart-seq-5: #50775f;
+  --ui-chart-div-1: #a44435;
+  --ui-chart-div-2: #cfa092;
+  --ui-chart-div-3: #e5e8dc;
+  --ui-chart-div-4: #9cb29f;
+  --ui-chart-div-5: #3d684f;
+  --ui-font-body: 'AuDHD Source Sans 3', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Chivo', system-ui, sans-serif;
+  --ui-font-display: 'AuDHD Chivo', system-ui, sans-serif;
+  --ui-font-heading-weight: 600;
+}
+
+/* Szechuan — light. Selected palette: S01 Bamboo Manuscript. */
+[data-audhd-ui][data-skin="szechuan"] {
+  --ui-mode: light;
+  --ui-page: #f1efde;
+  --ui-surface: #fbfaed;
+  --ui-text: #2d392c;
+  --ui-muted: #586153;
+  --ui-border: #bdc0b3;
+  --ui-control-border: #868a7f;
+  --ui-action: #496142;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #f9f5e8;
+  --ui-active-accent: #a44532;
+  --ui-focus: #a44532;
+  --ui-ornament: #b39757;
+  --ui-success: #436a46;
+  --ui-warning: #7d6a3d;
+  --ui-danger: #a2382e;
+  --ui-chart-series-1: #496142;
+  --ui-chart-series-2: #a44532;
+  --ui-chart-series-3: #9f864d;
+  --ui-chart-series-4: #436a46;
+  --ui-chart-series-5: #a2382e;
+  --ui-chart-series-6: #633e2f;
+  --ui-chart-seq-1: #e9ebdc;
+  --ui-chart-seq-2: #c6ccba;
+  --ui-chart-seq-3: #a2ae98;
+  --ui-chart-seq-4: #7e8f75;
+  --ui-chart-seq-5: #5b7053;
+  --ui-chart-div-1: #a44532;
+  --ui-chart-div-2: #d0a090;
+  --ui-chart-div-3: #e6e7da;
+  --ui-chart-div-4: #a2ae98;
+  --ui-chart-div-5: #496142;
+  --ui-font-body: 'AuDHD Lato', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Marcellus', Georgia, serif;
+  --ui-font-display: 'AuDHD Marcellus', Georgia, serif;
+  --ui-font-heading-weight: 400;
+}
+
+/* Lacquer Cabinet — dark. Selected palette: S06 Lacquer Cabinet. */
+[data-audhd-ui][data-skin="lacquer-cabinet"] {
+  --ui-mode: dark;
+  --ui-page: #221b19;
+  --ui-surface: #332521;
+  --ui-text: #fff3dc;
+  --ui-muted: #cec3b1;
+  --ui-border: #706359;
+  --ui-control-border: #95887b;
+  --ui-action: #efbc73;
+  --ui-on-action: #111111;
+  --ui-active-surface: #382824;
+  --ui-active-accent: #ef9c88;
+  --ui-focus: #ef9c88;
+  --ui-ornament: #bcbf93;
+  --ui-success: #bbd39a;
+  --ui-warning: #bcbf93;
+  --ui-danger: #ffb3a2;
+  --ui-chart-series-1: #efbc73;
+  --ui-chart-series-2: #ef9c88;
+  --ui-chart-series-3: #bcbf93;
+  --ui-chart-series-4: #bbd39a;
+  --ui-chart-series-5: #ffb3a2;
+  --ui-chart-series-6: #f8ccb6;
+  --ui-chart-seq-1: #463429;
+  --ui-chart-seq-2: #6b523a;
+  --ui-chart-seq-3: #91714a;
+  --ui-chart-seq-4: #b78f5a;
+  --ui-chart-seq-5: #dcad6b;
+  --ui-chart-div-1: #ef9c88;
+  --ui-chart-div-2: #916155;
+  --ui-chart-div-3: #473a34;
+  --ui-chart-div-4: #91714a;
+  --ui-chart-div-5: #efbc73;
+  --ui-font-body: 'AuDHD Source Sans 3', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Cormorant SC', Georgia, serif;
+  --ui-font-display: 'AuDHD Cormorant SC', Georgia, serif;
+  --ui-font-heading-weight: 600;
+}
+
+/* Tea Horse Road — light. Selected palette: S04 Tea Horse Road. */
+[data-audhd-ui][data-skin="tea-horse-road"] {
+  --ui-mode: light;
+  --ui-page: #f2e4cd;
+  --ui-surface: #fff3df;
+  --ui-text: #493728;
+  --ui-muted: #6e5d4c;
+  --ui-border: #c8bba8;
+  --ui-control-border: #8d8171;
+  --ui-action: #805035;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #faf0dc;
+  --ui-active-accent: #3a6970;
+  --ui-focus: #3a6970;
+  --ui-ornament: #bf9047;
+  --ui-success: #526d48;
+  --ui-warning: #806030;
+  --ui-danger: #a64233;
+  --ui-chart-series-1: #805035;
+  --ui-chart-series-2: #3a6970;
+  --ui-chart-series-3: #a47c3d;
+  --ui-chart-series-4: #526d48;
+  --ui-chart-series-5: #a64233;
+  --ui-chart-series-6: #424e48;
+  --ui-chart-seq-1: #f2e3ce;
+  --ui-chart-seq-2: #d9c2ac;
+  --ui-chart-seq-3: #c0a28a;
+  --ui-chart-seq-4: #a68168;
+  --ui-chart-seq-5: #8d6046;
+  --ui-chart-div-1: #3a6970;
+  --ui-chart-div-2: #9daea8;
+  --ui-chart-div-3: #ede0cd;
+  --ui-chart-div-4: #c0a28a;
+  --ui-chart-div-5: #805035;
+  --ui-font-body: 'AuDHD Work Sans', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Forum', Georgia, serif;
+  --ui-font-display: 'AuDHD Forum', Georgia, serif;
+  --ui-font-heading-weight: 400;
+}
+
+/* Peony Album — light. Selected palette: S10 Peony Album. */
+[data-audhd-ui][data-skin="peony-album"] {
+  --ui-mode: light;
+  --ui-page: #f9efeb;
+  --ui-surface: #fffbf6;
+  --ui-text: #44343a;
+  --ui-muted: #6c5d61;
+  --ui-border: #c7bfbe;
+  --ui-control-border: #918889;
+  --ui-action: #964c61;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #fbf7f2;
+  --ui-active-accent: #526e54;
+  --ui-focus: #526e54;
+  --ui-ornament: #c9a66b;
+  --ui-success: #4c7351;
+  --ui-warning: #816a44;
+  --ui-danger: #aa3c47;
+  --ui-chart-series-1: #964c61;
+  --ui-chart-series-2: #526e54;
+  --ui-chart-series-3: #a38657;
+  --ui-chart-series-4: #4c7351;
+  --ui-chart-series-5: #aa3c47;
+  --ui-chart-series-6: #4a4e46;
+  --ui-chart-seq-1: #f5eae7;
+  --ui-chart-seq-2: #e0c7c9;
+  --ui-chart-seq-3: #cba4ac;
+  --ui-chart-seq-4: #b6818e;
+  --ui-chart-seq-5: #a15e70;
+  --ui-chart-div-1: #526e54;
+  --ui-chart-div-2: #a9b5a5;
+  --ui-chart-div-3: #ece7e3;
+  --ui-chart-div-4: #cba4ac;
+  --ui-chart-div-5: #964c61;
+  --ui-font-body: 'AuDHD Figtree', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD GFS Didot', Georgia, serif;
+  --ui-font-display: 'AuDHD GFS Didot', Georgia, serif;
+  --ui-font-heading-weight: 400;
+}
+
+/* Souk — light. Selected palette: K02 Brass & Indigo. */
+[data-audhd-ui][data-skin="souk"] {
+  --ui-mode: light;
+  --ui-page: #f2e8d4;
+  --ui-surface: #fff6e5;
+  --ui-text: #32394a;
+  --ui-muted: #5c6068;
+  --ui-border: #c2bdb6;
+  --ui-control-border: #878585;
+  --ui-action: #364d8a;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #fcf2e1;
+  --ui-active-accent: #8a6131;
+  --ui-focus: #8a6131;
+  --ui-ornament: #c69c47;
+  --ui-success: #3d705a;
+  --ui-warning: #81652e;
+  --ui-danger: #a33d3e;
+  --ui-chart-series-1: #364d8a;
+  --ui-chart-series-2: #8a6131;
+  --ui-chart-series-3: #a2803a;
+  --ui-chart-series-4: #3d705a;
+  --ui-chart-series-5: #a33d3e;
+  --ui-chart-series-6: #5a4b3f;
+  --ui-chart-seq-1: #ebe5dc;
+  --ui-chart-seq-2: #c3c3ca;
+  --ui-chart-seq-3: #9ba2b8;
+  --ui-chart-seq-4: #7280a5;
+  --ui-chart-seq-5: #4a5e93;
+  --ui-chart-div-1: #8a6131;
+  --ui-chart-div-2: #c5ac8b;
+  --ui-chart-div-3: #ebe3d6;
+  --ui-chart-div-4: #9ba2b8;
+  --ui-chart-div-5: #364d8a;
+  --ui-font-body: 'AuDHD Source Sans 3', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD El Messiri', Georgia, serif;
+  --ui-font-display: 'AuDHD El Messiri', Georgia, serif;
+  --ui-font-heading-weight: 600;
+}
+
+/* Damascus Inlay — light. Selected palette: K04 Damascus Inlay. */
+[data-audhd-ui][data-skin="damascus-inlay"] {
+  --ui-mode: light;
+  --ui-page: #eee6d8;
+  --ui-surface: #fff7e8;
+  --ui-text: #3c302b;
+  --ui-muted: #635851;
+  --ui-border: #c5bbaf;
+  --ui-control-border: #8c837b;
+  --ui-action: #73533c;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #f9f4e5;
+  --ui-active-accent: #226b68;
+  --ui-focus: #226b68;
+  --ui-ornament: #b99a60;
+  --ui-success: #426b4e;
+  --ui-warning: #78643e;
+  --ui-danger: #a43c3a;
+  --ui-chart-series-1: #73533c;
+  --ui-chart-series-2: #226b68;
+  --ui-chart-series-3: #9a8050;
+  --ui-chart-series-4: #426b4e;
+  --ui-chart-series-5: #a43c3a;
+  --ui-chart-series-6: #304b46;
+  --ui-chart-seq-1: #f1e7d7;
+  --ui-chart-seq-2: #d5c6b4;
+  --ui-chart-seq-3: #b9a592;
+  --ui-chart-seq-4: #9d8470;
+  --ui-chart-seq-5: #81634d;
+  --ui-chart-div-1: #226b68;
+  --ui-chart-div-2: #91b1a8;
+  --ui-chart-div-3: #ece3d5;
+  --ui-chart-div-4: #b9a592;
+  --ui-chart-div-5: #73533c;
+  --ui-font-body: 'AuDHD Noto Sans', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Noto Naskh Arabic', Georgia, serif;
+  --ui-font-display: 'AuDHD Noto Naskh Arabic', Georgia, serif;
+  --ui-font-heading-weight: 600;
+}
+
+/* Palm Shade — light. Selected palette: K10 Palm Shade. */
+[data-audhd-ui][data-skin="palm-shade"] {
+  --ui-mode: light;
+  --ui-page: #f4efdf;
+  --ui-surface: #fffbee;
+  --ui-text: #303c32;
+  --ui-muted: #5b6358;
+  --ui-border: #c1c2b6;
+  --ui-control-border: #888a81;
+  --ui-action: #3f6652;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #fcf7eb;
+  --ui-active-accent: #7c536f;
+  --ui-focus: #7c536f;
+  --ui-ornament: #bba05e;
+  --ui-success: #416c4b;
+  --ui-warning: #7d6b3f;
+  --ui-danger: #a5433c;
+  --ui-chart-series-1: #3f6652;
+  --ui-chart-series-2: #7c536f;
+  --ui-chart-series-3: #9d864f;
+  --ui-chart-series-4: #416c4b;
+  --ui-chart-series-5: #a5433c;
+  --ui-chart-series-6: #52464d;
+  --ui-chart-seq-1: #ececde;
+  --ui-chart-seq-2: #c5cebf;
+  --ui-chart-seq-3: #9fb1a0;
+  --ui-chart-seq-4: #799381;
+  --ui-chart-seq-5: #527562;
+  --ui-chart-div-1: #7c536f;
+  --ui-chart-div-2: #bea7af;
+  --ui-chart-div-3: #eae8db;
+  --ui-chart-div-4: #9fb1a0;
+  --ui-chart-div-5: #3f6652;
+  --ui-font-body: 'AuDHD Figtree', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Spectral', Georgia, serif;
+  --ui-font-display: 'AuDHD Spectral', Georgia, serif;
+  --ui-font-heading-weight: 600;
+}
+
+/* Night Bazaar — dark. Selected palette: K08 Night Bazaar. */
+[data-audhd-ui][data-skin="night-bazaar"] {
+  --ui-mode: dark;
+  --ui-page: #20293a;
+  --ui-surface: #2e394a;
+  --ui-text: #fff2da;
+  --ui-muted: #cec6b7;
+  --ui-border: #6d7175;
+  --ui-control-border: #92928f;
+  --ui-action: #e4bd75;
+  --ui-on-action: #111111;
+  --ui-active-surface: #303d4d;
+  --ui-active-accent: #91d5cb;
+  --ui-focus: #91d5cb;
+  --ui-ornament: #c3b1e4;
+  --ui-success: #b3dca5;
+  --ui-warning: #c3b1e4;
+  --ui-danger: #ffb1a9;
+  --ui-chart-series-1: #e4bd75;
+  --ui-chart-series-2: #91d5cb;
+  --ui-chart-series-3: #c3b1e4;
+  --ui-chart-series-4: #b3dca5;
+  --ui-chart-series-5: #ffb1a9;
+  --ui-chart-series-6: #cee5d3;
+  --ui-chart-seq-1: #40464e;
+  --ui-chart-seq-2: #656157;
+  --ui-chart-seq-3: #897b60;
+  --ui-chart-seq-4: #ad9568;
+  --ui-chart-seq-5: #d2b071;
+  --ui-chart-div-1: #91d5cb;
+  --ui-chart-div-2: #60878b;
+  --ui-chart-div-3: #434c58;
+  --ui-chart-div-4: #897b60;
+  --ui-chart-div-5: #e4bd75;
+  --ui-font-body: 'AuDHD DM Sans', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Yeseva One', Georgia, serif;
+  --ui-font-display: 'AuDHD Yeseva One', Georgia, serif;
+  --ui-font-heading-weight: 400;
+}
+
+/* Hacienda — light. Selected palette: H01 Andean Weave. */
+[data-audhd-ui][data-skin="hacienda"] {
+  --ui-mode: light;
+  --ui-page: #f3e7d4;
+  --ui-surface: #fff6e8;
+  --ui-text: #44352e;
+  --ui-muted: #6b5c53;
+  --ui-border: #c7bcb0;
+  --ui-control-border: #8c827a;
+  --ui-action: #a0403b;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #faf3e5;
+  --ui-active-accent: #386c80;
+  --ui-focus: #386c80;
+  --ui-ornament: #d5a544;
+  --ui-success: #526b43;
+  --ui-warning: #806329;
+  --ui-danger: #aa373b;
+  --ui-chart-series-1: #a0403b;
+  --ui-chart-series-2: #386c80;
+  --ui-chart-series-3: #a47f34;
+  --ui-chart-series-4: #526b43;
+  --ui-chart-series-5: #aa373b;
+  --ui-chart-series-6: #3f4e53;
+  --ui-chart-seq-1: #f6e4d7;
+  --ui-chart-seq-2: #e3bfb4;
+  --ui-chart-seq-3: #d09b92;
+  --ui-chart-seq-4: #bd776f;
+  --ui-chart-seq-5: #aa524c;
+  --ui-chart-div-1: #386c80;
+  --ui-chart-div-2: #9cb1b4;
+  --ui-chart-div-3: #ece3d5;
+  --ui-chart-div-4: #d09b92;
+  --ui-chart-div-5: #a0403b;
+  --ui-font-body: 'AuDHD Source Sans 3', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Alegreya', Georgia, serif;
+  --ui-font-display: 'AuDHD Alegreya', Georgia, serif;
+  --ui-font-heading-weight: 700;
+}
+
+/* Patio Moderno — light. Selected palette: H03 Patio Moderno. */
+[data-audhd-ui][data-skin="patio-moderno"] {
+  --ui-mode: light;
+  --ui-page: #fff0db;
+  --ui-surface: #fffaf0;
+  --ui-text: #364346;
+  --ui-muted: #626967;
+  --ui-border: #c3c3bd;
+  --ui-control-border: #898b88;
+  --ui-action: #a94a3d;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #faf7ed;
+  --ui-active-accent: #24767b;
+  --ui-focus: #24767b;
+  --ui-ornament: #deb85b;
+  --ui-success: #387254;
+  --ui-warning: #816b35;
+  --ui-danger: #ad3a40;
+  --ui-chart-series-1: #a94a3d;
+  --ui-chart-series-2: #24767b;
+  --ui-chart-series-3: #a48843;
+  --ui-chart-series-4: #387254;
+  --ui-chart-series-5: #ad3a40;
+  --ui-chart-series-6: #2e5a5e;
+  --ui-chart-seq-1: #f6e8de;
+  --ui-chart-seq-2: #e5c5ba;
+  --ui-chart-seq-3: #d4a297;
+  --ui-chart-seq-4: #c37f73;
+  --ui-chart-seq-5: #b25c4f;
+  --ui-chart-div-1: #24767b;
+  --ui-chart-div-2: #92b8b6;
+  --ui-chart-div-3: #ebe8df;
+  --ui-chart-div-4: #d4a297;
+  --ui-chart-div-5: #a94a3d;
+  --ui-font-body: 'AuDHD Josefin Sans', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Josefin Slab', Georgia, serif;
+  --ui-font-display: 'AuDHD Josefin Slab', Georgia, serif;
+  --ui-font-heading-weight: 600;
+}
+
+/* Atacama Dusk — dark. Selected palette: H08 Atacama Dusk. */
+[data-audhd-ui][data-skin="atacama-dusk"] {
+  --ui-mode: dark;
+  --ui-page: #352a32;
+  --ui-surface: #473641;
+  --ui-text: #fff0df;
+  --ui-muted: #d3c4b9;
+  --ui-border: #7e6e70;
+  --ui-control-border: #9f8f8d;
+  --ui-action: #f3bf86;
+  --ui-on-action: #111111;
+  --ui-active-surface: #4a3945;
+  --ui-active-accent: #b8b4ec;
+  --ui-focus: #b8b4ec;
+  --ui-ornament: #dc9e9b;
+  --ui-success: #b9d8a2;
+  --ui-warning: #dc9e9b;
+  --ui-danger: #ffb4ad;
+  --ui-chart-series-1: #f3bf86;
+  --ui-chart-series-2: #b8b4ec;
+  --ui-chart-series-3: #dc9e9b;
+  --ui-chart-series-4: #b9d8a2;
+  --ui-chart-series-5: #ffb4ad;
+  --ui-chart-series-6: #dfd5e5;
+  --ui-chart-seq-1: #584448;
+  --ui-chart-seq-2: #7b5f56;
+  --ui-chart-seq-3: #9d7b64;
+  --ui-chart-seq-4: #bf9671;
+  --ui-chart-seq-5: #e2b17f;
+  --ui-chart-div-1: #b8b4ec;
+  --ui-chart-div-2: #807597;
+  --ui-chart-div-3: #594951;
+  --ui-chart-div-4: #9d7b64;
+  --ui-chart-div-5: #f3bf86;
+  --ui-font-body: 'AuDHD IBM Plex Sans', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Zilla Slab', Georgia, serif;
+  --ui-font-display: 'AuDHD Zilla Slab', Georgia, serif;
+  --ui-font-heading-weight: 600;
+}
+
+/* Golden Child — light. Selected palette: G04 Gilded Play. */
+[data-audhd-ui][data-skin="golden-child"] {
+  --ui-mode: light;
+  --ui-page: #f8efd9;
+  --ui-surface: #fff9ea;
+  --ui-text: #463539;
+  --ui-muted: #6d5e5c;
+  --ui-border: #c8beb5;
+  --ui-control-border: #928883;
+  --ui-action: #885f29;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #fcf5e7;
+  --ui-active-accent: #86537c;
+  --ui-focus: #86537c;
+  --ui-ornament: #d3b464;
+  --ui-success: #556c44;
+  --ui-warning: #7c6a3b;
+  --ui-danger: #a83b40;
+  --ui-chart-series-1: #885f29;
+  --ui-chart-series-2: #86537c;
+  --ui-chart-series-3: #9e874b;
+  --ui-chart-series-4: #556c44;
+  --ui-chart-series-5: #a83b40;
+  --ui-chart-series-6: #634357;
+  --ui-chart-seq-1: #f3ead7;
+  --ui-chart-seq-2: #dbcbb0;
+  --ui-chart-seq-3: #c4ac8a;
+  --ui-chart-seq-4: #ac8d63;
+  --ui-chart-seq-5: #946e3c;
+  --ui-chart-div-1: #86537c;
+  --ui-chart-div-2: #c3a6b3;
+  --ui-chart-div-3: #ede5d8;
+  --ui-chart-div-4: #c4ac8a;
+  --ui-chart-div-5: #885f29;
+  --ui-font-body: 'AuDHD Figtree', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Dela Gothic One', system-ui, sans-serif;
+  --ui-font-display: 'AuDHD Dela Gothic One', system-ui, sans-serif;
+  --ui-font-heading-weight: 400;
+}
+
+/* Brass Cabinet — light. Selected palette: G01 Brass Cabinet. */
+[data-audhd-ui][data-skin="brass-cabinet"] {
+  --ui-mode: light;
+  --ui-page: #f7efdc;
+  --ui-surface: #fffaec;
+  --ui-text: #41351e;
+  --ui-muted: #695e48;
+  --ui-border: #c6bfae;
+  --ui-control-border: #908879;
+  --ui-action: #806024;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #faf6e8;
+  --ui-active-accent: #466059;
+  --ui-focus: #466059;
+  --ui-ornament: #bba169;
+  --ui-success: #556b3e;
+  --ui-warning: #7b6a45;
+  --ui-danger: #a54235;
+  --ui-chart-series-1: #806024;
+  --ui-chart-series-2: #466059;
+  --ui-chart-series-3: #9d8758;
+  --ui-chart-series-4: #556b3e;
+  --ui-chart-series-5: #a54235;
+  --ui-chart-series-6: #434839;
+  --ui-chart-seq-1: #f2ebd8;
+  --ui-chart-seq-2: #d9ccb0;
+  --ui-chart-seq-3: #c0ad88;
+  --ui-chart-seq-4: #a68e60;
+  --ui-chart-seq-5: #8d6f38;
+  --ui-chart-div-1: #466059;
+  --ui-chart-div-2: #a3ada3;
+  --ui-chart-div-3: #ece6d7;
+  --ui-chart-div-4: #c0ad88;
+  --ui-chart-div-5: #806024;
+  --ui-font-body: 'AuDHD Work Sans', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Orbitron', system-ui, sans-serif;
+  --ui-font-display: 'AuDHD Orbitron', system-ui, sans-serif;
+  --ui-font-heading-weight: 600;
+}
+
+/* Black Gold — dark. Selected palette: G02 Black Gold. */
+[data-audhd-ui][data-skin="black-gold"] {
+  --ui-mode: dark;
+  --ui-page: #1b1b18;
+  --ui-surface: #292820;
+  --ui-text: #fff4d8;
+  --ui-muted: #cdc4ae;
+  --ui-border: #696557;
+  --ui-control-border: #908a78;
+  --ui-action: #e6bf68;
+  --ui-on-action: #111111;
+  --ui-active-surface: #2d2b22;
+  --ui-active-accent: #c9ad7e;
+  --ui-focus: #c9ad7e;
+  --ui-ornament: #a4c4bd;
+  --ui-success: #c1d595;
+  --ui-warning: #a4c4bd;
+  --ui-danger: #ffb4a4;
+  --ui-chart-series-1: #e6bf68;
+  --ui-chart-series-2: #c9ad7e;
+  --ui-chart-series-3: #a4c4bd;
+  --ui-chart-series-4: #c1d595;
+  --ui-chart-series-5: #ffb4a4;
+  --ui-chart-series-6: #e7d4b0;
+  --ui-chart-seq-1: #3c3727;
+  --ui-chart-seq-2: #625536;
+  --ui-chart-seq-3: #887444;
+  --ui-chart-seq-4: #ad9252;
+  --ui-chart-seq-5: #d3b061;
+  --ui-chart-div-1: #c9ad7e;
+  --ui-chart-div-2: #796b4f;
+  --ui-chart-div-3: #3e3c32;
+  --ui-chart-div-4: #887444;
+  --ui-chart-div-5: #e6bf68;
+  --ui-font-body: 'AuDHD Manrope', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Cinzel Decorative', Georgia, serif;
+  --ui-font-display: 'AuDHD Cinzel Decorative', Georgia, serif;
+  --ui-font-heading-weight: 700;
+}
+
+/* Astral Foundry — dark. Selected palette: G10 Astral Foundry. */
+[data-audhd-ui][data-skin="astral-foundry"] {
+  --ui-mode: dark;
+  --ui-page: #2d2537;
+  --ui-surface: #3d3049;
+  --ui-text: #fff1dc;
+  --ui-muted: #d1c4b8;
+  --ui-border: #776a75;
+  --ui-control-border: #9a8d90;
+  --ui-action: #e6be7f;
+  --ui-on-action: #111111;
+  --ui-active-surface: #41334c;
+  --ui-active-accent: #e1aac8;
+  --ui-focus: #e1aac8;
+  --ui-ornament: #b7c4df;
+  --ui-success: #c1db9e;
+  --ui-warning: #b7c4df;
+  --ui-danger: #ffb1af;
+  --ui-chart-series-1: #e6be7f;
+  --ui-chart-series-2: #e1aac8;
+  --ui-chart-series-3: #b7c4df;
+  --ui-chart-series-4: #c1db9e;
+  --ui-chart-series-5: #ffb1af;
+  --ui-chart-series-6: #f2d1d3;
+  --ui-chart-seq-1: #4e3e4e;
+  --ui-chart-seq-2: #705b59;
+  --ui-chart-seq-3: #927764;
+  --ui-chart-seq-4: #b3936f;
+  --ui-chart-seq-5: #d5b07a;
+  --ui-chart-div-1: #e1aac8;
+  --ui-chart-div-2: #8f6d89;
+  --ui-chart-div-3: #504358;
+  --ui-chart-div-4: #927764;
+  --ui-chart-div-5: #e6be7f;
+  --ui-font-body: 'AuDHD Nunito Sans', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Fascinate', system-ui, sans-serif;
+  --ui-font-display: 'AuDHD Fascinate', system-ui, sans-serif;
+  --ui-font-heading-weight: 400;
+}
+
+/* Brass Circuit — light. Selected palette: G07 Brass Circuit. */
+[data-audhd-ui][data-skin="brass-circuit"] {
+  --ui-mode: light;
+  --ui-page: #eceee4;
+  --ui-surface: #fbfcee;
+  --ui-text: #2d3d36;
+  --ui-muted: #57645c;
+  --ui-border: #bdc3b7;
+  --ui-control-border: #838a81;
+  --ui-action: #6d642e;
+  --ui-on-action: #ffffff;
+  --ui-active-surface: #f6f8eb;
+  --ui-active-accent: #316c64;
+  --ui-focus: #316c64;
+  --ui-ornament: #b6ab6c;
+  --ui-success: #45714b;
+  --ui-warning: #736c44;
+  --ui-danger: #a44439;
+  --ui-chart-series-1: #6d642e;
+  --ui-chart-series-2: #316c64;
+  --ui-chart-series-3: #928956;
+  --ui-chart-series-4: #45714b;
+  --ui-chart-series-5: #a44439;
+  --ui-chart-series-6: #2f524b;
+  --ui-chart-seq-1: #ededdb;
+  --ui-chart-seq-2: #d0ceb4;
+  --ui-chart-seq-3: #b4b08e;
+  --ui-chart-seq-4: #989268;
+  --ui-chart-seq-5: #7b7341;
+  --ui-chart-div-1: #316c64;
+  --ui-chart-div-2: #96b4a9;
+  --ui-chart-div-3: #e6e9dc;
+  --ui-chart-div-4: #b4b08e;
+  --ui-chart-div-5: #6d642e;
+  --ui-font-body: 'AuDHD IBM Plex Sans', system-ui, sans-serif;
+  --ui-font-heading: 'AuDHD Orbitron', system-ui, sans-serif;
+  --ui-font-display: 'AuDHD Orbitron', system-ui, sans-serif;
+  --ui-font-heading-weight: 600;
+}
+
+/* Explicit accessibility/text preferences override paired defaults, including
+   higher-specificity skin selectors. These change presentation, never task state. */
+[data-audhd-ui][data-skin][data-type="system"] { --ui-font-body: system-ui, sans-serif; --ui-font-heading: var(--ui-font-body); --ui-font-heading-weight: 700; }
+[data-audhd-ui][data-skin][data-type="serif"] { --ui-font-body: Georgia, serif; --ui-font-heading: var(--ui-font-body); --ui-font-heading-weight: 700; }
+[data-audhd-ui][data-skin][data-type="mono"] { --ui-font-body: ui-monospace, Consolas, monospace; --ui-font-heading: var(--ui-font-body); --ui-font-heading-weight: 700; }
+
 :where([data-audhd-ui]) .ui-panel { background: var(--ui-surface); border: 1px solid var(--ui-border); }
 :where([data-audhd-ui]) .ui-active { background: var(--ui-active-surface); border-inline-start: 4px solid var(--ui-active-accent); }
 :where([data-audhd-ui]) .ui-active-title { color: var(--ui-active-accent); }

@@ -1,10 +1,15 @@
 import palettes from 'audhd-ui-framework/palettes';
+// AUDHD-10 (../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences).
+// This is the shared choice vocabulary, sourced from the full skin registry so
+// the adapters cannot silently offer different palettes. App owns the effective
+// selection and device-mode mapping; samples do not save preferences or review
+// work. Typography and spacing remain independent choices, not skin side effects.
 export const appearanceChoices = [
   { value: 'system', label: 'Default', description: 'Use the default appearance for this device.' },
   ...palettes.map(p => ({ value: `skin:${p.id}`, label: `${p.name} (${p.mode})`, skin: p.id, description: `${p.mode === 'light' ? 'Light' : 'Dark'} surface. Sample shows text, action and selection colors.` }))
 ];
 export const styleChoices = [
-  {value:'expressive',label:'Skin headings',description:'Use the selected skin’s heading font; body text keeps the device’s usual interface font.'},
+  {value:'expressive',label:'Skin headings',description:'Use the selected skin’s paired typography where supplied, with local fallbacks.'},
   {value:'serif',label:'Serif',description:'Use Georgia or the available serif fallback.'},
   {value:'mono',label:'Monospace',description:'Use letters and symbols that each take the same width.'},
   {value:'system',label:'System',description:'Use the system font.'}

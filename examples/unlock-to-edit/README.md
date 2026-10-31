@@ -30,6 +30,16 @@ Edits save on the native `change` event, not every keystroke. Each save writes b
 
 Intentional default replacement includes locked fields, then re-locks both after verification. Failure preserves the page's draft and restoration points. All settings are always applicable in this small example; dependent/inactive settings, arbitrary imports, multiple baselines and asynchronous server persistence are outside its scope.
 
+## Source owners and review checks
+
+Comments beside the implementation explain the invariant and the failure it prevents; the linked Guide rules remain authoritative.
+
+| Boundary | Source owner | Rules and repeatable evidence |
+| --- | --- | --- |
+| Field scope, native readonly controls, associated help, editing/focus cues and responsive spacing | [index.html](index.html), including its inline CSS | [AUDHD-11](../../GUIDE.md#audhd-11-keep-controls-readable-and-operable), [AUDHD-13](../../GUIDE.md#audhd-13-protect-consequential-edits-with-scoped-safeguards). [check.mjs](check.mjs) exercises selection, blocked typing, keyboard unlock, independent locks, enlarged text and forced-color focus. |
+| Draft ownership, committed-change save, readback uncertainty, before-unlock restoration and intentional default replacement | [app.js](app.js): `renderField`, `persist` and field handlers | [AUDHD-06](../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable), [AUDHD-07](../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status). The check covers autosave, mismatch/write failure, retry, reload and failed/successful replacement. It does not establish cross-tab or durable server recovery. |
+| Error-to-control links, retained nodes during section/appearance changes, and export fallback | [app.js](app.js): `fieldIssues`, navigation and export handlers | [AUDHD-05](../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability), [AUDHD-10](../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences). The check follows an invalid-field link, verifies retained values/locks and restoration focus, and requests a recovery download. Clipboard permissions remain outside its evidence. |
+
 ## Observed checks — October 21, 2026
 
 Chromium 156.0.8078.4, Node 22.22.2, Windows. The runnable check passed selection and blocked typing while locked; keyboard unlock; independent fields; committed-edit persistence; navigation/appearance continuity; restoration after autosave; blocked writes and mismatched verification; retry; recovery download; reload/fresh restoration points; invalid input; failed/successful bulk replacement; and an injected Storage.setItem denial reaching the real error path. These are synthetic application checks, not intended-user research or an independent model trial.
@@ -41,3 +51,5 @@ Initial verification found horizontal overflow at 320 pixels with enlarged text:
 Actual browser zoom, operating-system high contrast, screen-reader announcements, clipboard permission, other browser engines, cross-tab conflicts and intended-user understanding remain untested. No conformance certification, durable-storage guarantee or universal usability claim follows from these checks.
 
 The save summary links invalid entries to their fields, revealing Settings and placing focus without unlocking or replacing values. The editor remains the entry task; no overview is added.
+
+October 30, 2026 comment audit: the existing isolated Chromium check passed again, including its recovery, error-link, enlarged-text and forced-color assertions. A comparison with the pre-audit source confirmed that executable code and markup were unchanged after comments were removed. This pass did not add participant, screen-reader or browser-zoom evidence.

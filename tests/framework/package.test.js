@@ -14,7 +14,7 @@ test('Public API remains browser-independent and legacy exports are identical', 
   assert.equal(api.validateProfile(api.emptyProfile()).schema_version, 2);
   assert.equal(v1.properties.schema_version.const, 1);
   assert.equal(v2.properties.schema_version.const, 2);
-  assert.equal(palettes.length, 24);
+  assert.equal(palettes.length, 45);
 });
 
 test('Schema and palette compatibility copies cannot drift', async () => {

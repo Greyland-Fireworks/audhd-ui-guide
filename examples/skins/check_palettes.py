@@ -18,8 +18,8 @@ ASSETS = ROOT.parent.parent / 'packages/audhd-ui-framework'
 skins = json.loads((ASSETS / 'palette-data.json').read_text())
 assert (ROOT / 'palette-data.json').read_bytes() == (ASSETS / 'palette-data.json').read_bytes()
 css = (ASSETS / 'skins.css').read_text(encoding='utf-8')
-assert len(skins) == 24 and len({s['id'] for s in skins}) == 24
-assert sum(s['mode'] == 'light' for s in skins) == 12
+assert len(skins) == 45 and len({s['id'] for s in skins}) == 45
+assert sum(s['mode'] == 'light' for s in skins) == 28
 preview = (ROOT / 'preview.html').read_text(encoding='utf-8')
 assert re.findall(r'data-pick="([^"]+)"', preview) == [s['id'] for s in skins]
 for skin in skins:
@@ -36,4 +36,4 @@ for skin in skins:
     ramp = [luminance(tokens[f'chart-seq-{i}']) for i in range(1, 6)]
     assert ramp == sorted(ramp) or ramp == sorted(ramp, reverse=True), skin['id']
     assert f'data-audhd-ui data-skin="{skin["id"]}" data-pick="{skin["id"]}"' in preview
-print('PASS: 24 skins; 12 light / 12 dark; text, controls, focus, series contrast; monotonic sequential scales; preview coverage.')
+print('PASS: 45 skins; 28 light / 17 dark; text, controls, focus, series contrast; monotonic sequential scales; preview coverage.')

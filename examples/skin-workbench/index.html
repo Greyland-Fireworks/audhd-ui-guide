@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skin studies — color & type workbench</title>
+  <link rel="stylesheet" href="../../packages/audhd-ui-framework/skins.css">
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="data.js"></script>
+  <script defer src="font-weights.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body data-audhd-ui data-skin="guillermo" data-type="expressive">
+  <a class="skip" href="#collection">Skip to skin collection</a>
+  <header class="topbar">
+    <a class="wordmark" href="#murica"><span aria-hidden="true">◧</span> Skin studies</a>
+    <span class="edition">60 color & type studies</span>
+    <a href="#selections" id="selection-link">Your selections <span id="selection-count">0 / 6</span></a>
+  </header>
+  <main>
+    <div class="intro">
+      <p class="eyebrow">Appearance workbench · proposed additions</p>
+      <h1>Color & typography studies</h1>
+      <p>Choose a collection, compare ten looks, then mix its colors and typefaces. Your selections become a copyable brief at the bottom.</p>
+    </div>
+    <!-- AUDHD-01 / ../../GUIDE.md#audhd-01-keep-scope-and-location-visible:
+         collection links are addressable and remain fully visible when wrapped.
+         A selected collection and a chosen skin are different states. -->
+    <nav id="collections" aria-label="Skin collections"></nav>
+    <section id="collection" tabindex="-1" aria-labelledby="collection-title">
+      <header class="collection-heading">
+        <div><p class="eyebrow" id="collection-kicker"></p><h2 id="collection-title"></h2></div>
+        <p id="collection-description"></p>
+      </header>
+      <details class="context"><summary>Design references</summary><p id="collection-note"></p></details>
+      <div id="combination" class="mixer" tabindex="-1">
+        <section class="mix-controls" aria-labelledby="mix-title">
+          <h3 id="mix-title">Mix your combination</h3>
+          <p class="helper">Each control changes only its named part.</p>
+          <label for="palette-choice">Color palette</label><select id="palette-choice"></select>
+          <label for="heading-choice">Title typeface</label><select id="heading-choice"></select>
+          <label for="body-choice">Body typeface</label><select id="body-choice"></select>
+          <div id="finish-control" hidden><label for="finish-choice">Metal finish</label><select id="finish-choice"><option value="brushed">Brushed brass</option><option value="polished">Polished gold</option><option value="flat">Flat color</option></select></div>
+          <label class="include"><input id="include-choice" type="checkbox"> Include this combination in my selections</label>
+          <p class="helper" id="font-state" role="status"></p>
+        </section>
+        <section id="live-preview" class="live-preview" aria-label="Your combination preview">
+          <div class="preview-identity"><span id="preview-label">M01</span><span>Live preview</span></div>
+          <h3 id="preview-heading"></h3>
+          <p class="sample-body">Body Text · Clear decisions, useful details.</p>
+          <div class="sample-workspace">
+            <div class="sample-location"><span class="sample-active">Overview</span><span>Calendar</span><span>Notes</span></div>
+            <div class="sample-content"><span class="sample-caption">Next meeting</span><strong>Project review</strong><p>10:30–11:15 · Harbor room</p><div class="sample-bottom"><span class="sample-success">✓ Room confirmed</span><span class="sample-action">View meeting <span aria-hidden="true">↗</span></span></div></div>
+          </div>
+          <div id="live-swatches" class="swatches" aria-label="Current palette colors"></div>
+          <p id="preview-fonts" class="preview-fonts"></p>
+          <p class="preview-caption">Visual sample · choose the parts using the controls.</p>
+        </section>
+      </div>
+      <div class="gallery-heading"><h3>Ten starting looks</h3><p>Use a complete look, or take just its colors, title or body font.</p></div>
+      <div id="variants" class="variant-grid"></div>
+      <p id="mix-feedback" class="mix-feedback" role="status" aria-live="polite"></p>
+    </section>
+    <!-- AUDHD-06 / ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable:
+         the readout names exact IDs, roles and fonts; copying is explicit and its
+         result is reported. A selectable textarea survives clipboard denial. -->
+    <section id="selections" class="selections" aria-labelledby="selections-title" tabindex="-1">
+      <div class="section-top"><div><p class="eyebrow">Your implementation brief</p><h2 id="selections-title">Selections to bring back</h2></div><span id="chosen-total"></span></div>
+      <p>One combination per collection. Review the choices, then copy the brief and paste it into the chat.</p>
+      <div id="selection-summary" class="selection-summary"></div>
+      <div class="readout-toolbar"><button id="copy" class="primary" type="button">Copy selections</button><button id="select-text" type="button">Select text</button><span id="copy-result" role="status"></span></div>
+      <label class="sr-only" for="selection-output">Selection brief</label><textarea id="selection-output" rows="12" readonly spellcheck="false"></textarea>
+      <p id="storage-status" class="helper"></p>
+    </section>
+    <footer><p>Exploratory palettes, not installed kit skins. Fonts are locally bundled Latin subsets; this page does not preview Chinese or Arabic script coverage.</p><a href="README.md">Design and font provenance</a></footer>
+  </main>
+</body>
+</html>

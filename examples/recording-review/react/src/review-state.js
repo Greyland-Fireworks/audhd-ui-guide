@@ -1,5 +1,6 @@
 import { recordings, copy } from '../../shared/fixtures.js';
 
+// AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
 // These transitions supply the meaning behind the formatted review and save cues.
 // Keep them independent from Svelte: the reference comparison shares observable
 // outcomes, not a state engine. Functions return new state without DOM effects;
@@ -8,6 +9,7 @@ import { recordings, copy } from '../../shared/fixtures.js';
 export const sameReview = (a, b) => a.status === b.status && a.note === b.note;
 
 export function createReviewState() {
+  // AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
   // Per-ID drafts outlive their visible cards. A filter, layout change or selection
   // switch must never transfer edits to a different recording or erase them.
   return {
@@ -33,6 +35,7 @@ export function editReview(state, id, field, value) {
 }
 
 export function startSave(state, id) {
+  // AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
   // Guard here as well as in the disabled button: appearance alone cannot prevent
   // duplicate attempts. Capture a detached snapshot so editing can continue while
   // the UI truthfully distinguishes pending content from newer unsaved work.
@@ -51,6 +54,7 @@ export function startSave(state, id) {
 }
 
 export function resolveSave(state, id, attemptId, outcome) {
+  // AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
   // Resolve the originating record/attempt, not the currently displayed panel.
   // A stale response must not update another context or replay its announcement.
   // Only the submitted snapshot becomes saved; the current draft stays intact.
@@ -71,6 +75,7 @@ export function resolveSave(state, id, attemptId, outcome) {
 }
 
 export function reviewFeedback(review) {
+  // AUDHD-06 (../../../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable).
   // Derive wording from actual content and acknowledgment. A green treatment or
   // resolved promise alone cannot justify "Saved" while newer edits remain.
   const dirty = !sameReview(review.draft, review.saved);

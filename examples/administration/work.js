@@ -2,6 +2,7 @@ import { owners, taskStatuses, getTasks, getRequests, getTask, getRequest, taskD
 import { notes } from './notes-state.js';
 import { getCalendarEvents } from './schedule-state.js';
 import { guideNote, restoreGuideNotes } from './guide-notes.js';
+import { registerScenarioOwner } from './scenario-state.js';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
 const heading = (title, description) => `<div class="task-heading"><h1>${escape(title)}</h1><p>${description}</p></div>`;
@@ -9,10 +10,18 @@ const taskTargets = ['title', 'owner', 'dueDate', 'status', 'blockedReason', 'de
 const requestTargets = ['title', 'requester', 'type', 'item', 'quantity', 'location', 'change', 'reason', 'submit', 'review', 'saved', 'draft'];
 const requestStatus = { draft: 'Draft only', pending: 'Awaiting review', approved: 'Submitted version approved', returned: 'Returned for correction' };
 const filters = { tasks: { owner: '', status: '' }, requests: { owner: '', status: '' } };
+// AUDHD-05/10: view preferences and reviewer input outlive a mounted page, while
+// work-state.js owns editable records. Rerendering a board must not silently
+// clear another request's correction reason or reset the returning user's filter.
+// See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
 const filtersExpanded = { tasks: false, requests: false };
 const taskOrder = ['blocked', 'open', 'doing', 'done'];
 let taskView = 'board';
 const notices = new Map(), reviewDrafts = new Map(), reviewFailures = new Map();
+registerScenarioOwner('work-view', {reset: () => {
+  for (const key of ['tasks','requests']) { filters[key] = {owner:'',status:''}; filtersExpanded[key] = false; }
+  taskView = 'board'; notices.clear(); reviewDrafts.clear(); reviewFailures.clear();
+}});
 const dateText = date => new Date(`${date}T12:00:00`).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 const option = (value, label, current) => `<option value="${escape(value)}" ${String(value) === String(current) ? 'selected' : ''}>${escape(label)}</option>`;
 
@@ -50,6 +59,7 @@ const textarea = (prefix, name, value, max) => `<textarea id="${prefix}-${name}"
 function displayErrors(container, prefix, errors, focus = false) {
   // AUDHD-06/09: a control describes only its own error. The summary is a set
   // of routes back to those controls, not a paragraph repeated at every field.
+  // See ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable.
   const summary = container.querySelector(`#${prefix}-errors`);
   const entries = Object.entries(errors);
   summary.hidden = !entries.length;
@@ -83,9 +93,13 @@ function taskCard(task) {
     <a class="task-card-action" href="#task/${task.id}/${task.status === 'blocked' ? 'blockedReason' : 'status'}">${action}<span aria-hidden="true"> →</span></a></li>`;
 }
 function taskCollection(rows, statusFilter) {
+  // AUDHD-02/04: lane headings own their task cards. Each lane count describes
+  // the already-filtered rows; the separate shown/total result explains scope.
+  // A zero lane count therefore does not establish that no saved tasks exist.
   // AUDHD-02/08/11: the board is a real status grouping, not draggable decoration.
   // The list uses the same order and records. Both keep prerequisite links and
   // record-edit actions available to keyboard and touch users.
+  // See ../../GUIDE.md#audhd-02-make-hierarchy-clear-without-repetitive-headings.
   return `<div class="task-collection" data-view="${taskView}">${taskOrder.filter(status => !statusFilter || statusFilter === status).map(status => {
     const tasks = rows.filter(task => task.status === status);
     return `<section class="task-lane" data-status="${status}" data-tone="${tone(status)}" aria-labelledby="lane-${status}"><div class="task-lane-heading"><h2 id="lane-${status}">${taskStatuses[status]}</h2><span class="lane-count" aria-label="${tasks.length} ${taskStatuses[status].toLowerCase()} tasks">${tasks.length}</span></div><ul class="task-cards">${tasks.map(taskCard).join('')}</ul>${tasks.length ? '' : '<p class="lane-empty">No matching tasks.</p>'}</section>`;
@@ -104,6 +118,7 @@ function requestCard(request) {
   const action = correction ? 'Correct request' : request.status === 'pending' ? 'Review submission' : newer ? 'Review newer draft' : request.status === 'approved' ? 'View decision' : 'Review draft';
   // AUDHD-07: the title belongs to the saved draft. An older approval cannot
   // lend its success color or label to content it never covered.
+  // See ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status.
   return `<li class="request-card" data-request-id="${request.id}" data-tone="${correction ? 'problem' : newer ? 'neutral' : tone(request.status)}"><span class="work-status-label">${newer ? 'Newer saved draft — not submitted' : requestStatus[request.status]}</span><h2><a href="#request/${request.id}">${escape(request.fields.title)}</a></h2><dl class="work-card-facts"><div><dt>Requested by</dt><dd>${escape(request.fields.requester)}</dd></div><div><dt>Type</dt><dd>${request.fields.type === 'equipment' ? 'Equipment' : 'Workspace'}</dd></div></dl>${requestStages(request, true)}${newer ? `<p class="request-previous-outcome">Submission ${request.submitted.version}, “${escape(request.submitted.fields.title)}”: ${requestStatus[request.status].toLowerCase()}.</p>` : ''}${correction ? `<p class="task-next"><strong>Correct:</strong> ${escape(request.review.reason)}</p>` : ''}${requestDirty(request.id) ? '<p class="work-draft-flag">Unsaved request changes</p>' : ''}<a class="task-card-action" href="#request/${request.id}${request.status === 'pending' ? '/review' : ''}">${action}<span aria-hidden="true"> →</span></a></li>`;
 }
 function list(container, kind) {
@@ -114,7 +129,7 @@ function list(container, kind) {
   container.innerHTML = `<section class="work-tools">${heading(taskList ? 'Tasks' : 'Requests', taskList ? 'Assign work, set a due date and track what is blocking completion.' : 'Prepare an equipment or workspace request, then review its submitted version.')}
     <div class="work-toolbar"><a class="task-link ui-action" href="#${kind}/new">${taskList ? 'New task' : 'New request'}</a>${taskList ? `<div class="work-view-switch" role="group" aria-label="Task view"><button id="work-board-view" aria-pressed="${taskView === 'board'}">Status board</button><button id="work-list-view" aria-pressed="${taskView === 'list'}">Grouped list</button></div>` : ''}</div>
     <details class="work-filters" ${filtersExpanded[kind] ? 'open' : ''}><summary id="work-filter-toggle">Filter ${kind} <span>· ${escape(current.owner || 'Everyone')} · ${escape((taskList ? taskStatuses : requestStatus)[current.status] || 'All statuses')}</span></summary><fieldset class="work-filter"><legend>Filter ${kind}</legend><label>Person<select id="work-person-filter">${option('', 'Everyone', current.owner)}${owners.map(owner => option(owner, owner, current.owner)).join('')}</select></label><label>Status<select id="work-status-filter">${option('', 'All statuses', current.status)}${Object.entries(taskList ? taskStatuses : requestStatus).map(([value, label]) => option(value, label, current.status)).join('')}</select></label><button type="button" id="work-filter-reset" ${current.owner || current.status ? '' : 'disabled'}>Reset filters</button></fieldset></details>
-    <p id="work-result-count" role="status">${rows.length} of ${records.length} ${kind} shown.</p>${taskList ? taskCollection(rows, current.status) : `<ul class="work-list requests-grid">${rows.map(requestCard).join('')}</ul>`}${rows.length ? '' : '<p>No matching records. Choose another filter to see the other work.</p>'}</section>`;
+    <p id="work-result-count" role="status">${rows.length} of ${records.length} ${kind} shown.</p>${taskList ? taskCollection(rows, current.status) : `<ul class="work-list requests-grid">${rows.map(requestCard).join('')}</ul>`}${rows.length ? '' : '<p>No matching records. Choose another filter to see the other work.</p>'}${taskList ? guideNote('task-board-design', 'Compare work by status', '<p>The board and list use the same records and explicit links. View changes do not change task status.</p>', ['AUDHD-02', 'AUDHD-08', 'AUDHD-10']) : ''}</section>`;
   const disclosure = container.querySelector('.work-filters');
   disclosure.ontoggle = () => { if (disclosure.isConnected) filtersExpanded[kind] = disclosure.open; };
   for (const [id, key] of [['work-person-filter', 'owner'], ['work-status-filter', 'status']]) container.querySelector(`#${id}`).onchange = event => { filtersExpanded[kind] = disclosure.open; current[key] = event.target.value; list(container, kind); container.querySelector(`#${id}`).focus(); };
@@ -163,10 +178,15 @@ function taskForm(container, key, path, changed) {
     notices.set(`task/${result.task.id}`, `Saved. Task is ${taskStatuses[result.task.status].toLowerCase()}.`);
     // AUDHD-05: report a save beside its action instead of taking the reader
     // back to the first field. Only creation changes to a new record route.
+    // See ../../GUIDE.md#audhd-05-preserve-focus-and-spatial-stability.
     if (key === 'new') location.hash = `task/${result.task.id}/saved`;
     else { taskForm(container, key, `task/${key}`, changed); container.querySelector('#task-saved').focus(); }
   };
   container.querySelector('#discard-task').onclick = () => { discardTask(key); changed(); taskForm(container, key, key === 'new' ? 'tasks/new' : `task/${key}`, changed); container.querySelector('#task-title').focus(); };
+  // AUDHD-06/13: task and request discard handlers restore saved fields directly.
+  // They do not retain an Undo snapshot; submission history protects submitted
+  // versions only, not text discarded from the current editable draft.
+  // See ../../GUIDE.md#audhd-06-make-saving-and-recovery-understandable.
   restoreGuideNotes(container);
 }
 
@@ -185,6 +205,7 @@ function submissionHtml(request) {
 function requestProgress(request, key) {
   // AUDHD-04/07/08: the rail follows the submitted version, not the latest
   // keystroke. A newer draft is a separate branch, never implied approval.
+  // See ../../GUIDE.md#audhd-04-explain-effective-behavior.
   const status = request?.status || 'draft';
   const title = status === 'approved' ? `Submission ${request.submitted.version} approved` : requestStatus[status];
   const explanation = status === 'returned' ? request.review.reason : status === 'pending' ? `Submission ${request.submitted.version} is awaiting a local review decision.` : status === 'approved' ? 'Approval does not mean equipment has arrived or linked tasks are complete.' : request ? 'Review the saved details, then submit when ready.' : 'Complete the draft and save it before submitting.';

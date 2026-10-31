@@ -84,7 +84,7 @@ try {
   await go('note/harbor-weekly-review'); await page.locator('#restore-note').click();
 
   await go('meeting/harbor-planning');
-  await page.getByRole('link', { name: 'Create a task for this meeting', exact: true }).click();
+  await page.getByRole('link', { name: 'Create follow-up task', exact: true }).click();
   assert.equal(await page.locator('#task-meetingId').inputValue(), 'harbor-planning');
   assert.equal(await page.locator('#task-noteId').inputValue(), 'harbor-kickoff');
   await taskSave(); assert.equal(await page.evaluate(() => document.activeElement.id), 'task-title');

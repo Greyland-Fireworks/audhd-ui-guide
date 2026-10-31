@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
-import { localDate, addDays, rooms, getCalendarEvents, getMeeting, getMeetingDraft, isMeetingDirty, saveMeeting, cancelMeeting, restoreMeeting, discardMeetingDraft, prepareNewMeeting, simulateRoomTaken, roomConflicts, layoutDayEvents, calendarRange } from './schedule-state.js';
+import { localDate, addDays, rooms, getCalendarEvents, getMeeting, getMeetingDraft, isMeetingDirty, saveMeeting, cancelMeeting, restoreMeeting, discardMeetingDraft, prepareNewMeeting, simulateRoomTaken, roomConflicts, layoutDayEvents, calendarRange, resetScheduleState } from './schedule-state.js';
 
 // AUDHD-12: exercise the booking outcome, not just a calendar heading. Model
 // checks use a separate Node visit; browser checks use visible task controls.
@@ -73,6 +73,15 @@ assert.equal(getMeetingDraft().date, date);
 const copy = getCalendarEvents(); copy[0].title = 'Not a model edit';
 assert.notEqual(getCalendarEvents()[0].title, copy[0].title);
 assert(getCalendarEvents().length > seedCount);
+Object.assign(getMeetingDraft(), proposal, { date: addDays(date, 5), title: '' });
+assert.deepEqual(saveMeeting().alternatives, [], 'Missing a title is not an availability problem');
+resetScheduleState('busy');
+assert.equal(getCalendarEvents().length, 20);
+assert.equal(new Set(getCalendarEvents().map(item => item.date)).size, 7);
+assert(getCalendarEvents().some(item => item.endTime === '09:15'), 'Busy data includes short meetings');
+assert(getCalendarEvents().every(item => !roomConflicts(item.roomId, item.date, item.startTime, item.endTime, item.id).length), 'Busy fixtures demonstrate simultaneous meetings without double-booking');
+resetScheduleState('empty'); assert.equal(getCalendarEvents().length, 0);
+resetScheduleState('normal'); assert.equal(getCalendarEvents().length, 4);
 console.log('PASS: calendar model validates dates, duration, capacity, equipment and overlap; keeps drafts; prevents repeated conflicting saves; releases and rechecks reservations; guards new drafts.');
 
 if (process.argv[2]) {
@@ -93,8 +102,17 @@ if (process.argv[2]) {
     await page.clock.install({ time: new Date(`${localDate()}T10:15:00`) });
     await page.goto(`${base}#calendar`);
     await page.getByRole('heading', { name: 'Week calendar', exact: true }).waitFor();
+    await page.evaluate(() => {
+      // Vite may add a version query to a served module. Import that same URL
+      // so model probes do not create a second owner and replace reset hooks.
+      window.importExampleModule = path => {
+        const pathname = new URL(path, location.href).pathname;
+        const loaded = performance.getEntriesByType('resource').find(entry => new URL(entry.name).pathname === pathname);
+        return import(loaded?.name || path);
+      };
+    });
     const compact = await page.evaluate(async () => {
-      const { renderDayTimeline } = await import('./schedule.js'), { localDate, getCalendarEvents } = await import('./schedule-state.js');
+      const { renderDayTimeline } = await window.importExampleModule('./schedule.js'), { localDate, getCalendarEvents } = await window.importExampleModule('./schedule-state.js');
       return [renderDayTimeline(localDate(), getCalendarEvents(), { compact: true }), renderDayTimeline(localDate(), [], { compact: true })];
     });
     assert.match(compact[0], /data-time-start="510" data-time-end="750"/, 'Overview frames 09–11:45 meetings with half-hour context');
@@ -208,6 +226,11 @@ if (process.argv[2]) {
     await page.locator('#meeting-change-preview').scrollIntoViewIfNeeded();
     await shot('calendar-meeting-changes');
     await page.locator('#discard-meeting').click();
+    await page.locator('#keep-meeting-changes').click();
+    assert.equal(await page.locator('#meeting-endTime').inputValue(), '10:30', 'Canceling discard retains the complete draft');
+    assert.equal(await page.evaluate(() => document.activeElement.id), 'discard-meeting');
+    await page.locator('#discard-meeting').click();
+    await page.locator('#confirm-discard-meeting').click();
     assert.equal(await page.locator('#meeting-endTime').inputValue(), '10:00');
     assert.equal(await page.locator('#meeting-noteId').inputValue(), 'harbor-kickoff');
     assert.equal(await page.locator('#meeting-change-preview').innerText(), '');
@@ -216,7 +239,7 @@ if (process.argv[2]) {
     await page.locator('#meeting-description').fill('A second save without leaving the editor.');
     await page.locator('#save-meeting').click();
     assert.match(await page.locator('.meeting-summary').innerText(), /A second save without leaving the editor\./);
-    assert.equal(await page.evaluate(async path => (await import('./schedule-state.js')).getMeeting(path.split('/')[1]).version, meetingPath), 3, 'Both saves update the same record even though the UI does not expose internal version numbers');
+    assert.equal(await page.evaluate(async path => (await window.importExampleModule('./schedule-state.js')).getMeeting(path.split('/')[1]).version, meetingPath), 3, 'Both saves update the same record even though the UI does not expose internal version numbers');
     await page.getByRole('link', { name: /Open notes: Harbor kickoff/ }).click();
     await page.locator('#note-title').waitFor();
     assert.match(await page.locator('#note-title').inputValue(), /Harbor kickoff/);
@@ -242,7 +265,7 @@ if (process.argv[2]) {
     assert.equal(await page.locator('[data-alternative]').count(), 0, 'Changing a failed proposal removes stale alternatives');
     assert.equal(await page.locator('#meeting-errors li').count(), 0);
     assert.equal(await page.locator('#meeting-roomId').getAttribute('aria-describedby'), 'selected-room-description', 'Clearing a conflict retains the selected room description');
-    assert.match(await page.locator('#meeting-draft-state').innerText(), /Earlier conflict results cleared/);
+    assert.match(await page.locator('#meeting-draft-state').innerText(), /Save to check availability again/);
     await page.locator('#meeting-date').fill(date);
     await page.locator('#save-meeting').click();
     assert(await page.locator('[data-alternative]').count() > 0, 'A new save checks the current proposal and restores current alternatives');
@@ -294,13 +317,29 @@ if (process.argv[2]) {
     await go('calendar/rooms');
     assert.equal(await page.locator('#main .schedule-nav').count(), 0, 'Room availability does not repeat calendar destinations');
     await page.locator('#rooms-date').fill('');
+    await page.locator('#find-rooms').click();
     assert.equal(await page.locator('.room-time-lane').count(), 0, 'An unknown date cannot look like an empty/free schedule');
-    assert.equal(await page.locator('[data-book-room="harbor"]').isDisabled(), true);
+    assert.equal(await page.evaluate(() => document.activeElement.id), 'rooms-date');
+    assert.equal(await page.locator('#rooms-date').getAttribute('aria-invalid'), 'true');
+    assert.equal(await page.locator('[data-book-room]').count(), 0);
+    await shot('calendar-rooms-invalid');
     await page.locator('#rooms-date').fill(date);
     await page.locator('#rooms-start').fill('09:00');
     await page.locator('#rooms-end').fill('10:00');
     await page.locator('#rooms-people').fill('6');
+    const roomSearch = async () => { await page.locator('#find-rooms').click(); await page.waitForFunction(() => !document.querySelector('#room-search-progress').textContent); };
+    assert.equal(await page.locator('.room-comparison-row').count(), 0, 'Editing requirements alone does not search');
+    await page.evaluate(async () => (await window.importExampleModule('./scenario-state.js')).setDataMode('rooms', 'failure'));
+    await roomSearch();
+    assert.match(await page.locator('#room-search-failure').innerText(), /could not be checked/);
+    assert.equal(await page.locator('#room-summary li').count(), 0, 'Failed initial search cannot claim empty or available rooms');
+    await page.evaluate(async () => (await window.importExampleModule('./scenario-state.js')).setDataMode('rooms', 'normal'));
+    await page.locator('#retry-room-search').click();
+    await page.waitForFunction(() => !document.querySelector('#room-search-progress').textContent);
+    assert.match(await page.locator('#rooms-range').innerText(), /09:00–10:00.*6 people/);
+    assert(await page.locator('#rooms-range').evaluate(node => parseFloat(getComputedStyle(node).borderInlineStartWidth) > 0), 'The result snapshot has a visible shared boundary');
     assert.equal(await page.locator('.room-comparison-row').count(), 3);
+    assert.equal(await page.locator('.room-comparison-row:visible').count(), 0, 'Full schedules wait for an explicit room choice');
     assert.equal(await page.locator('#room-summary li').count(), 3);
     assert.match(await page.locator('#room-summary li').filter({ hasText: 'Harbor room' }).innerText(), /Reserved during this time/);
     assert.match(await page.locator('#room-summary li').filter({ hasText: 'Focus room' }).innerText(), /Too small/);
@@ -308,6 +347,14 @@ if (process.argv[2]) {
     assert.equal(await page.evaluate(() => document.activeElement.id), 'room-workshop');
     assert.equal(new URL(page.url()).hash, '#calendar/rooms');
     assert.equal(await page.locator('#rooms-date').inputValue(), date);
+    assert.equal(await page.locator('.room-comparison-row:visible').count(), 1);
+    assert.equal(await page.locator('[data-room-jump="workshop"]').getAttribute('aria-pressed'), 'true');
+    await page.locator('[data-room-return="workshop"]').click();
+    assert.equal(await page.evaluate(() => document.activeElement.dataset.roomJump), 'workshop');
+    const beforeRoomSelection = await page.evaluate(async () => (await window.importExampleModule('./schedule-state.js')).getCalendarEvents().length);
+    await page.locator('[data-room-jump="harbor"]').press('Enter');
+    assert.equal(await page.evaluate(() => document.activeElement.id), 'room-harbor');
+    assert.equal(await page.evaluate(async () => (await window.importExampleModule('./schedule-state.js')).getCalendarEvents().length), beforeRoomSelection, 'Inspecting a room cannot reserve it');
     const roomLane = page.locator('[data-room="harbor"] .room-time-lane');
     const roomEvent = roomLane.locator('.room-reservation').first();
     const laneBox = await roomLane.boundingBox(), roomEventBox = await roomEvent.boundingBox();
@@ -319,14 +366,36 @@ if (process.argv[2]) {
     assert.equal(await page.locator('[data-book-room="focus"]').isDisabled(), true);
     await page.locator('#rooms-start').fill('13:00');
     await page.locator('#rooms-end').fill('14:00');
+    assert.equal(await page.locator('[data-book-room="harbor"]').isDisabled(), true, 'Edited criteria cannot use older availability');
+    assert.match(await page.locator('#room-search-status').innerText(), /Requirements changed/);
+    assert.match(await page.locator('#rooms-range').innerText(), /09:00–10:00/, 'Results keep the submitted criteria visible');
+    await shot('calendar-rooms-stale');
+    await page.evaluate(async () => (await window.importExampleModule('./scenario-state.js')).setDataMode('rooms', 'failure'));
+    await roomSearch();
+    assert.match(await page.locator('#room-search-failure').innerText(), /could not be checked/);
+    assert.match(await page.locator('#rooms-range').innerText(), /09:00–10:00/, 'Failure retains the last successful result');
+    await page.evaluate(async () => (await window.importExampleModule('./scenario-state.js')).setDataMode('rooms', 'loading'));
+    await page.locator('#find-rooms').click();
+    assert.match(await page.locator('#room-search-progress').innerText(), /Checking/);
+    await shot('calendar-rooms-loading');
+    await page.locator('#rooms-end').fill('15:00');
+    await page.evaluate(async () => (await window.importExampleModule('./scenario-state.js')).setDataMode('rooms', 'normal'));
+    await roomSearch();
+    await page.clock.runFor(1100);
+    assert.match(await page.locator('#rooms-range').innerText(), /13:00–15:00/, 'A late response cannot replace a newer submitted search');
+    assert.equal(await page.locator('#rooms-end').inputValue(), '15:00', 'Responses cannot overwrite edited controls');
+    await page.locator('#rooms-end').fill('14:00');
+    await roomSearch();
     assert.equal(await page.locator('[data-book-room="harbor"]').isEnabled(), true);
-    const beforeProposal = await page.evaluate(async () => (await import('./schedule-state.js')).getCalendarEvents().length);
+    const beforeProposal = await page.evaluate(async () => (await window.importExampleModule('./schedule-state.js')).getCalendarEvents().length);
     await page.locator('[data-book-room="harbor"]').click();
-    assert.equal(await page.evaluate(async () => (await import('./schedule-state.js')).getCalendarEvents().length), beforeProposal, 'Selecting a room does not reserve it');
+    assert.equal(await page.evaluate(async () => (await window.importExampleModule('./schedule-state.js')).getCalendarEvents().length), beforeProposal, 'Selecting a room does not reserve it');
     await page.locator('#meeting-title').waitFor();
     assert.equal(await page.locator('#meeting-startTime').inputValue(), '13:00');
     await page.locator('#meeting-title').fill('Do not replace this draft silently');
     await go('calendar/rooms');
+    assert.equal(await page.locator('[data-room-jump="harbor"]').getAttribute('aria-pressed'), 'true', 'Room choice survives navigation');
+    await page.locator('[data-room-jump="workshop"]').click();
     await page.locator('[data-book-room="workshop"]').click();
     await page.locator('#keep-meeting-draft').click();
     await page.locator('#meeting-title').waitFor();
@@ -371,23 +440,28 @@ if (process.argv[2]) {
     await shot('calendar-meeting-narrow');
     await go('calendar/rooms');
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-    assert.equal(await page.locator('.room-comparison-row:visible').count(), 3, 'Narrow screens retain every room for comparison');
-    assert.equal(await page.locator('#rooms-selected').count(), 0, 'A redundant room switcher cannot hide alternatives');
-    const stackedRooms = await page.locator('.room-comparison-row').evaluateAll(rows => rows.map(row => {
+    assert.equal(await page.locator('#room-summary button:visible').count(), 3, 'Every room remains a visible choice on narrow screens');
+    assert.equal(await page.locator('.room-comparison-row:visible').count(), 1, 'Only the selected schedule competes for attention');
+    const selectedRooms = [];
+    for (const roomId of ['harbor', 'focus', 'workshop']) {
+      await page.locator(`[data-room-jump="${roomId}"]`).click();
+      assert.equal(await page.evaluate(() => document.activeElement.id), `room-${roomId}`);
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+      selectedRooms.push(await page.locator('.room-comparison-row:visible').evaluate(row => {
       const bounds = row.getBoundingClientRect(), lane = row.querySelector('.room-time-lane').getBoundingClientRect();
       const proposal = row.querySelector('.room-proposal').getBoundingClientRect();
       return { top: bounds.top, bottom: bounds.bottom, left: lane.left, width: lane.width, height: lane.height, proposalOffset: (proposal.top - lane.top) / lane.height, proposalDuration: proposal.height / lane.height,
         decisionBottom: row.querySelector('.room-choice').getBoundingClientRect().bottom, laneTop: lane.top,
         hours: [...row.querySelectorAll('.calendar-hour-axis > span')].map(node => node.textContent), equipment: row.querySelectorAll('.room-equipment-list li').length };
-    }));
-    assert(stackedRooms.every((room, index) => !index || room.top >= stackedRooms[index - 1].bottom), 'Room timelines stack without overlapping');
-    assert(stackedRooms.every(room => room.left === stackedRooms[0].left && room.width === stackedRooms[0].width && room.height === stackedRooms[0].height), 'Every room uses aligned, equally sized time geometry');
-    assert(stackedRooms.every(room => room.proposalOffset === stackedRooms[0].proposalOffset && room.proposalDuration === stackedRooms[0].proposalDuration), 'The same proposed interval appears in every room');
-    assert(stackedRooms.every(room => room.hours[0] === '08:00' && room.hours.at(-1) === '18:00' && room.equipment === 3));
-    assert(stackedRooms.every(room => room.decisionBottom <= room.laneTop), 'Room availability and its action precede the full timeline at every width');
+      }));
+    }
+    assert(selectedRooms.every(room => room.left === selectedRooms[0].left && room.width === selectedRooms[0].width && room.height === selectedRooms[0].height), 'Switching rooms preserves the time scale and alignment');
+    assert(selectedRooms.every(room => room.proposalOffset === selectedRooms[0].proposalOffset && room.proposalDuration === selectedRooms[0].proposalDuration), 'The same proposed interval appears in every room');
+    assert(selectedRooms.every(room => room.hours[0] === '08:00' && room.hours.at(-1) === '18:00' && room.equipment === 3));
+    assert(selectedRooms.every(room => room.decisionBottom <= room.laneTop), 'Room availability and its action precede the full timeline at every width');
     assert(await page.locator('#room-summary').evaluate(node => node.getBoundingClientRect().bottom <= document.querySelector('#room-results').getBoundingClientRect().top), 'The three-room comparison precedes all full plots');
-    assert.equal(await page.locator('[data-book-room]:visible').count(), 3, 'Every room retains its booking action and availability state');
-    assert(await page.locator('#room-summary a').evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().width >= 120)), 'Enlarged comparison labels retain readable line widths, not one-letter columns');
+    assert.equal(await page.locator('[data-book-room]:visible').count(), 1, 'The booking action belongs to the selected room');
+    assert(await page.locator('#room-summary button').evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().width >= 120)), 'Enlarged comparison labels retain readable line widths, not one-letter columns');
     await shot('calendar-rooms-narrow');
     await go('calendar/week');
     assert.equal(await page.locator('.calendar-week-desktop').first().isVisible(), false);
@@ -412,6 +486,17 @@ if (process.argv[2]) {
     assert(await page.locator('.calendar-week-grid .calendar-meeting').first().evaluate(node => getComputedStyle(node).color !== getComputedStyle(node).backgroundColor));
     assert(await page.locator('.calendar-week-grid .calendar-now:not([hidden])').evaluate(node => getComputedStyle(node).borderTopColor !== getComputedStyle(document.body).backgroundColor));
     await shot('calendar-week-forced-colors');
+    // A scenario replacement invalidates pending service replies as well as
+    // visible records. The old search must not populate the new empty workspace.
+    await page.emulateMedia({ forcedColors: 'none' });
+    await go('calendar/rooms');
+    await page.evaluate(async () => (await window.importExampleModule('./scenario-state.js')).setDataMode('rooms', 'loading'));
+    await page.locator('#find-rooms').click();
+    await page.evaluate(async () => (await window.importExampleModule('./scenario-state.js')).replaceScenario('empty'));
+    await page.clock.runFor(1100);
+    assert.equal(await page.locator('#room-summary li').count(), 0);
+    assert.equal(await page.locator('#rooms-range').innerText(), '');
+    assert.match(await page.locator('#room-search-status').innerText(), /Set your requirements/);
     assert.deepEqual(errors, []);
     console.log('PASS: calendar geometry and compact overview span; first-viewport meeting visibility, current-time marker, full-text compact-event previews, selected-date draft handoff, existing-draft protection, focus across responsive views, explicit day navigation; fresh conflict alternatives, room comparison and actions before aligned plots; create/edit/cancel/restore outcomes, retained drafts and linked notes, overview correction links, and 390px/200% text reflow.');
   } finally { await browser.close(); }
