@@ -95,6 +95,31 @@ try {
   await problems(0);
   await count(1);
   assert.match(await page.locator('#operation-message').innerText(), /Weekly notes/);
+  // Historical success is not current evidence after a failed recheck. A newer
+  // draft, accepted identity and mutation count survive every read-only retry.
+  const confirmedAt = await page.locator('#confirmation-history time').getAttribute('datetime');
+  await scenario('receipt-missing');
+  await page.locator('#advance-export-time').click();
+  await notes(false);
+  await page.locator('#verify-export').click();
+  await state('accepted');
+  await problems(1);
+  assert.match(await page.locator('#confirmation-history').innerText(), /Historical confirmation only/);
+  assert.equal(await page.locator('#confirmation-history time').getAttribute('datetime'), confirmedAt);
+  assert.doesNotMatch(await page.locator('#operation-message').innerText(), /^Confirmed:/);
+  assert.equal(await page.locator('#export-name').inputValue(), 'Newer draft');
+  assert.equal(await page.locator('#request-id').textContent(), submittedId);
+  await count(1);
+  await page.locator('#restore-service').click();
+  await page.locator('#verify-export').click();
+  await state('confirmed');
+  await problems(0);
+  assert.notEqual(await page.locator('#confirmation-history time').getAttribute('datetime'), confirmedAt);
+  const previousCheck = await page.locator('#confirmation-history').innerText();
+  await page.locator('#verify-export').click();
+  assert.notEqual(await page.locator('#confirmation-history').innerText(), previousCheck);
+  await count(1);
+  assert.equal(await page.locator('#export-name').inputValue(), 'Newer draft');
   await page.locator('#new-export').click();
   assert.equal(await page.locator('#export-name').inputValue(), 'Newer draft');
   assert.equal(await page.evaluate(() => document.activeElement.id), 'export-name');

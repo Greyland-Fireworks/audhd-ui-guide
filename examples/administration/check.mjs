@@ -253,7 +253,11 @@ try {
   assert(await page.locator('#records h2 a').evaluate(el=>el===document.activeElement));
   assert.equal(await page.locator('#search').inputValue(),'Mira');
   await page.locator('#records h2 a').click();
+  const errorRoute = page.url();
   await page.locator('#error-link').click();
+  assert.equal(await page.evaluate(()=>document.activeElement.id),'reason');
+  await page.locator('#error-link').click();
+  assert.equal(page.url(),errorRoute,'Repeated error recovery must work without a route change');
   assert.equal(await page.evaluate(()=>document.activeElement.id),'reason');
   await page.locator('#reason').fill('Mira will update the meeting notes');
   assert.equal(await page.locator('#reason').getAttribute('aria-invalid'),'false');
@@ -339,6 +343,9 @@ try {
   await page.goBack();
   assert.equal(await selectedRole(),'reader');
   assert.equal(await page.locator('#reason').inputValue(),'A newer unsaved reason');
+  await guide(true);
+  assert(await page.locator('#verification-design').evaluate(el=>el.open),'Appearance return retains previously opened local teaching help');
+  await guide(false);
   await page.getByRole('link',{name:'← Back to users',exact:true}).click();
   assert.equal(await page.locator('#search').inputValue(),'Mira');
   assert.equal(await page.locator('#records .person-card').count(),1);
@@ -401,6 +408,11 @@ try {
   assert(await page.locator('#page-directory').getByRole('link',{name:'Users & access',exact:true}).isVisible());
   await page.locator('#page-filter').fill('request');
   await page.locator('#page-directory').getByRole('link',{name:'Request limits',exact:true}).click();
+  await page.getByLabel('Time to allow one more request',{exact:true}).waitFor();
+  assert.equal(await page.evaluate(()=>document.activeElement.id),'main','A dynamically filtered directory link focuses its destination');
+  await page.goBack();
+  assert.equal(await page.locator('#page-filter').inputValue(),'request');
+  await page.goForward();
   await page.getByLabel('Time to allow one more request',{exact:true}).waitFor();
   assert.match(await page.locator('#breadcrumbs').innerText(),/Administration.*Note transfers.*Request limits/s);
   assert.equal(await page.locator('#workspace-nav [aria-current="page"]').innerText(),'Request limits');

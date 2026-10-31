@@ -35,6 +35,13 @@ root_files = {
     'audhd_uiux_icon_v2.svg', 'audhd_uiux_icon_256.png', 'agents/openai.yaml',
     'package.json', 'package-lock.json', 'playwright.config.js',
     'scripts/check-docs.js', 'scripts/check-framework.mjs',
+    # Explicit additions support validation before staging a change. Do not
+    # sweep arbitrary untracked files into the distribution (they may be private).
+    'references/autonomous-implementation.md',
+    'scripts/check-source-references.mjs', 'scripts/validate-toolkit.mjs',
+    'tests/persistent-recovery-check.mjs',
+    'tests/fixtures/persistent-recovery/index.html',
+    'tests/fixtures/persistent-recovery/fixture.js',
 }
 repository_files = {
     'SKILL_EVALUATIONS.md', 'EVALUATION_INPUTS.md', 'EVALUATION_RUBRIC.md',

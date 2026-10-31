@@ -1,7 +1,7 @@
 import { recordEvent } from './events.js';
 import { guideNote, restoreGuideNotes } from './guide-notes.js';
 import { createExportRequestService, requestPolicy } from './request-policy.js';
-import { scenarioEpoch, advanceScenarioTime, registerScenarioOwner, subscribeScenario } from './scenario-state.js';
+import { scenarioEpoch, scenarioClockNow, advanceScenarioTime, registerScenarioOwner, subscribeScenario } from './scenario-state.js';
 
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let draftName = 'Weekly notes';
@@ -113,10 +113,11 @@ export function renderRecovery(container, onChange = () => {}) {
     ${operation ? `<section class="ui-panel" aria-labelledby="submitted-heading"><h2 id="submitted-heading">Submitted request</h2>
       <p><strong>${escape(operation.snapshot.name)}</strong> · <span id="operation-state" data-state="${state}">${stateLabels[state]}</span></p>
       <p id="operation-message" role="status" tabindex="-1">${escape(operation.message)}</p>
+      ${operation.lastConfirmation ? `<p id="confirmation-history">${state === 'confirmed' ? 'Last confirmed' : 'Historical confirmation only; current confirmation unavailable'}: <time datetime="${new Date(operation.lastConfirmation.at).toISOString()}">${escape(new Date(operation.lastConfirmation.at).toLocaleString())}</time> · Check ${operation.lastConfirmation.number}. This confirms request acceptance, not a file download.</p>` : ''}
       <div class="actions">
         ${state === 'unknown' ? '<button id="reconcile">Check whether this request was accepted</button>' : ''}
         ${['rejected', 'limited'].includes(state) ? '<button id="retry-export">Retry the same submitted request</button>' : ''}
-        ${state === 'accepted' ? '<button id="verify-export">Confirm accepted request</button>' : ''}
+        ${['accepted', 'confirmed'].includes(state) ? `<button id="verify-export">${state === 'confirmed' ? 'Check confirmation again' : 'Confirm accepted request'}</button>` : ''}
         ${['rejected', 'limited', 'confirmed'].includes(state) ? '<button id="new-export">Start a new request from my draft</button>' : ''}
       </div>
       ${scenario !== 'normal' && state !== 'pending' ? '<p>The simulated service has a failure condition selected.</p><button id="restore-service">Restore simulated service</button>' : ''}
@@ -128,6 +129,7 @@ export function renderRecovery(container, onChange = () => {}) {
       <option value="lost-before">Connection fails before acceptance</option>
       <option value="reject">Service rejects before acceptance</option>
       <option value="verify-fail">Request accepted; confirmation unavailable</option>
+      <option value="receipt-missing">Previously confirmed receipt is no longer available</option>
     </select></label><p id="export-writes">Accepted request records: ${exportRequestService.count()}</p><p>The count increases only when the simulated service accepts a new request ID. Outcome checks and confirmation cannot increase it. The current failure condition is captured when submission starts.</p><p>Accepted requests spend one allowance, including a request whose reply was lost. Rejected requests and failures before acceptance spend none. A retry of an accepted ID returns the existing record without spending again.</p><button type="button" id="advance-export-time">Advance demo clock by 10 seconds</button><p id="export-clock-message" role="status"></p><p>Acceptance lookup reads the existing request by ID. A real service without lookup or duplicate protection needs a different recovery path, not a blind retry.</p>`, ['AUDHD-06', 'AUDHD-07', 'AUDHD-12'])}`;
   const get = id => container.querySelector(`#${id}`);
   restoreGuideNotes(container);
@@ -163,14 +165,20 @@ export function renderRecovery(container, onChange = () => {}) {
     // AUDHD-07 / ../../GUIDE.md#audhd-07-distinguish-previews-results-and-runtime-status:
     // confirmation compares the accepted record to its snapshot. It cannot mutate
     // that record, clear a newer draft, or claim that an export file was generated.
-    const result = exportRequestService.lookup(operation.id);
-    if (scenario === 'verify-fail') {
+    // Historical evidence survives a failed read, but cannot remain current-success
+    // presentation. This scenario removes access to the receipt, not the accepted
+    // mutation. Rechecking is read-only and cannot spend another allowance.
+    const result = scenario === 'receipt-missing' ? null : exportRequestService.lookup(operation.id);
+    operation.checkNumber = (operation.checkNumber || 0) + 1;
+    if (scenario === 'verify-fail' || !result || result.name !== operation.snapshot.name) {
       operation.confirmationFailed = true;
+      operation.state = 'accepted';
       operation.message = 'The request remains accepted. Confirmation is unavailable. Restore the simulated service, then retry confirmation; do not submit again.';
       report('warning', `Confirmation for “${operation.snapshot.name}” was unavailable. The request remains accepted.`, 'Restore the simulated service, then retry confirmation.');
     } else if (result?.name === operation.snapshot.name) {
       operation.confirmationFailed = false;
       operation.state = 'confirmed';
+      operation.lastConfirmation = { at: scenarioClockNow(), number: operation.checkNumber };
       operation.message = `Confirmed: the accepted request is named “${operation.snapshot.name}”, matching what you submitted. No file was produced.`;
       report('info', `Confirmed the accepted request “${operation.snapshot.name}” matches the submitted name. No file was produced.`);
     }

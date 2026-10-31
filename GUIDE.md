@@ -373,13 +373,19 @@ Appearance changes must preserve current work and context. Offer selectable skin
 
 ### AUDHD-12 Validate complete tasks and report actual evidence
 
-**Requirement:** Review the applicable stages of entry, editing, preview, save, failure, recovery and return as a workflow. Include users when suitability depends on preference. Distinguish implementation, deployment and verification. Keep historical observations dated.
+**Requirement:** Review the applicable stages of entry, editing, preview, save, failure, recovery and return as a workflow. Honor explicit preferences and distinguish optional participant feedback from agent verification. Distinguish implementation, deployment and verification. Keep historical observations dated.
 
 Define completion by the requested user outcome, not the number of exposed fields. Configuring a data source, declaring desired state and inspecting or managing existing records are distinct tasks. Provide the stages needed for the requested workflow through supported interfaces; do not silently substitute raw provisioning fields or directions to another tool for an in-scope management interface. Document concrete scope or environment constraints and unfinished capabilities separately. Disclosing a gap is necessary but does not make that task complete; preserve option accounting without treating it as proof of task coverage.
 
 Verify configuration through the workflow that consumes it: saving a limit is not evidence that requests obey it, and an impact illustration is not enforcement. Exercise an allowed action, a rejected action and correction with retained work where applicable. Revalidate earlier previews at commitment against current rules. Enforce restrictions in the mutation boundary as well as the controls; if permission changes during editing, explain the restriction and retain proposed values. A simulation can teach these transitions but cannot establish production authorization, durability or reliability.
 
 Include a returning-without-memory review: using only the interface and its help, identify purpose, selected scope, what happened, the effect and timing of actions, save state, recovery and available next steps where applicable. Where possible, involve someone unfamiliar with the implementation; an author may unconsciously fill in missing context. Record what the person had to remember or infer and any friction introduced by the proposed fix. Label an agent walkthrough as inspection, not a user study. When user access or execution is unavailable, report supported findings and pending checks without inferring user benefit.
+
+For substantial implementation, prove a complete representative workflow and its relevant failure/recovery states before repeating the pattern. Evaluate functional coverage and state integrity separately from navigation quality, practical explanations and rendered visual relationships. Neither source inspection, a screenshot nor startup success establishes all of these outcomes. Use [autonomous implementation gates](references/autonomous-implementation.md) to sequence the work; keep evidence in the existing review record. A required outcome with a known unresolved defect remains unfinished.
+
+Agents own implementation and verification. Continue within the authorized scope when checks pass; ask for input only when a consequential unresolved decision needs the user's authority or knowledge. Participant feedback is optional evidence, not a mandatory navigation quiz or a condition for continuing implementation. Independent review is useful when available; identify a sequential self-review as such. Unperformed participant and assistive-technology checks remain pending, without implying universal suitability.
+
+Simplify implementation only while preserving the complete task, usable explanations, visual relationships, accessible operation and recovery. A time limit, failed check or preference for fewer components does not justify removing required capabilities or shifting the missing work to the user.
 
 **Why:** A good-looking panel can still be part of a confusing or exhausting task.
 

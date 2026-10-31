@@ -17,6 +17,8 @@
     "test": "node --test preferences/tests/*.test.js examples/recording-review/react/tests/*.test.js examples/recording-review/svelte/tests/*.test.js tests/framework/*.test.js",
     "test:browser": "playwright test",
     "check:docs": "node scripts/check-docs.js",
+    "check:source-references": "node scripts/check-source-references.mjs",
+    "validate:toolkit": "node scripts/validate-toolkit.mjs",
     "check:palettes": "python examples/skins/check_palettes.py",
     "preferences": "node preferences/cli.js",
     "check:framework": "node scripts/check-framework.mjs"
