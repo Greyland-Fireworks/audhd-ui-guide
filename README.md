@@ -4,7 +4,9 @@
 
 Practical guidance for developers and AI agents building interfaces that are easier to understand, use, pause, resume and correct.
 
-**Version:** v1.01 · Updated October 19, 2026
+**Toolkit version:** 1.1.2 · Updated November 1, 2026
+
+Guide rules remain v1.01. Toolkit and plugin releases share version 1.1.2; preference schemas and the framework retain their own versions.
 
 [What is this?](#what-is-this) · [Use it](#how-do-i-use-it) · [Install it](#how-do-i-install-it) · [What else?](#what-else-should-i-know)
 
@@ -54,7 +56,9 @@ Reading the Guide and using the Skill require no npm installation. [Run the exam
 The plugin built by `python scripts/package-plugin.py` contains:
 
 - **Included:** Guide, review checks, preferences, all 45 skins, runnable examples and tests, current gallery captures and the existing 256-pixel icon.
-- **Repository only:** Evaluation inputs, rubrics, archived responses, historical captures and the large branding image. No source files or images are deleted or altered by packaging.
+- **Repository only:** Evaluation inputs, rubrics, archived responses, historical captures and larger branding images. Packaging leaves the source files unchanged.
+
+Local dependencies, build output, test reports, scratch work and generated packages are ignored by Git and excluded from the kit. A working folder can therefore be much larger than either the tracked repository or the downloadable package. Example source, behavior checks and bundled fonts with their license notices are included.
 
 Included resources retain their relative links. References to omitted material lead to its source-checkout path in the packaged README; they do not download it or imply online availability. Use the matching source checkout for that material and distribution-maintenance checks.
 
@@ -222,7 +226,9 @@ AuDHD commonly refers to the co-occurrence of autism and ADHD. Some people want 
 
 This is a practitioner guide, not a clinical intervention or certification. Its specific patterns have not been established here through research with a representative group of AuDHD users. No skin, font or information density is claimed to suit every AuDHD person.
 
-Version **v1.01** is being prepared for publication. The Guide remains practitioner guidance with the evidence limits described above. The earlier supplied-review dataset covers six of 35 authored cases, with 29 Pending in that dataset; see its [evidence and limits](SKILL_EVALUATIONS.md#current-evidence). The newer [framework skill comparison](references/evaluations/2026-10-24-framework/README.md) records separate baseline/candidate trials, a failed first gate and a repaired candidate. Four additional design-default cases (E36–E39) bring the authored pack to 39 cases; all four remain unrun. New trials require a separate explicit request and are not required for ordinary use or feedback. Successful text reviews do not prove real-interface usability.
+Toolkit **1.1.2** is being prepared for publication. Its stronger acceptance requirements and recovery checks do not establish real-interface usability.
+
+The [historical supplied-review dataset](SKILL_EVALUATIONS.md#current-evidence) covers six of 35 authored cases, with 29 Pending. Four later design-default cases (E36–E39) bring the pack to 39; those four remain unrun. The separate [framework skill comparison](references/evaluations/2026-10-24-framework/README.md) preserves baseline/candidate trials, a failed first gate and a repaired candidate. New trials require an explicit request and are not required for ordinary use or feedback.
 
 > [!NOTE]
 > **Why I developed this guide**
@@ -275,6 +281,8 @@ This standalone guide combines 13 interaction rules and a visual standard, with 
 This repository includes the [license scope and attribution](LICENSE_SCOPE.md) and [contribution terms](CONTRIBUTING.md#contribution-terms-and-attribution). This practitioner draft retains the evidence limits described above.
 
 ### Version history
+
+- **1.1.2 — November 1, 2026:** Strengthened acceptance gates, rendered-review evidence requirements and recovery regression checks, including thrown status-read failures, missing receipts, replay prevention and preservation of newer drafts across reload.
 
 - **v1.01 — October 19, 2026:** Accessible selectable appearance, connected context/navigation/help, portable v2 preferences, React/Svelte references, chart skins and explicit adapter/evidence boundaries. Profile schema version 2 is not a Guide release number.
 

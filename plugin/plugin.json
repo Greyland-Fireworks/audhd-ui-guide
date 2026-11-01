@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "audhd-ui-guide",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Design, audit and improve interfaces using the AuDHD UI Guide, with cognitive accessibility, workflow continuity and individual preferences.",
   "author": {
     "name": "Greyland Fireworks Corporation",
@@ -44,7 +44,7 @@
         "termsOfServiceURL": "https://github.com/Greyland-Fireworks/audhd-ui-guide/blob/main/LICENSE_SCOPE.md"
       },
       "publication": {
-        "release_notes": "Clarify skill completion criteria, require inspectable demonstrations for exploratory requests, and add a compact execution checklist, consequential decision tracking and proportional reporting. Guide rules remain v1.01."
+        "release_notes": "Strengthen acceptance gates and rendered-review evidence requirements. Preserve acknowledged operations and newer drafts across failed status reads, missing receipts and reload; prevent replay during recovery. Clarify package contents and align toolkit/plugin release versions. Guide rules remain v1.01."
       }
     }
   }

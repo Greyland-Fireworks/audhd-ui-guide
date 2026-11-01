@@ -18,6 +18,8 @@ For these cases, supply only the skill, Guide and the individual input. Use the 
 
 ## Explicitly requested model testing
 
+For implementation comparisons, preserve the first completed output and its evidence before coaching or repair. Record subsequent audit/fix/retest stages separately; compare equivalent stages and retain failures. Record functional coverage, recovery, navigation, explanation quality and rendered organization separately rather than ranking by option counts, test totals or test number. Keep the exact prompt, environment assistance, toolkit content hashes and reviewer input boundaries with each run. An uncommitted toolkit snapshot needs its patch and packaged-file hashes as well as its base commit. Provisioning a new folder does not authorize launching its model trial.
+
 Further trials are deferred work, not a requirement for using or publishing this practitioner draft. Do not ask contributors to run the whole pack before giving ordinary feedback. See [current evidence](#current-evidence) for the supplied review results and their limits.
 
 Start with E03, E07 and E08 in fresh conversations. Give each model the standard request, skill, guide and one scenario; for E21–E26, include the preference documentation and example JSON specified below. Save its first response without coaching, then have a separate reviewer use the rubric. Record model/date, inputs, document revisions and outcomes. If practical, compare with the same scenarios without the skill, recording exactly which references each condition receives, and later expand to other cases or configurations. Report missed problems, disproportionate fixes and unsupported claims separately. Do not infer demonstrated user benefit from successful text reviews.

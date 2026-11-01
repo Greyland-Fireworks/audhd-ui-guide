@@ -30,11 +30,126 @@ try {
   await page.locator('#recover').click();
   assert.equal((await state()).service.mutations, 1);
 
+  // Receiving an acknowledgment before a failed status read is distinct from
+  // losing the acknowledgment itself. Both evidence and later work survive.
+  await reset();
+  await page.locator('#draft').fill('Acknowledged proposal');
+  await page.evaluate(() => fixture.faults(null, true, true));
+  await page.locator('#save').click();
+  assert.match(await status(), /Change accepted; status refresh unavailable/);
+  const acknowledged = (await state()).journal.pending;
+  assert.equal(acknowledged.acknowledgment.text, 'Acknowledged proposal');
+  assert.equal(await page.locator('#conflict').isVisible(), false);
+  await page.locator('#draft').fill('Newer draft after acknowledgment');
+  await page.reload();
+  assert.deepEqual((await state()).journal.pending, acknowledged);
+  assert.match(await page.locator('#acknowledgment').textContent(), /Acknowledged proposal/);
+  await page.evaluate(() => fixture.faults(null, true));
+  await page.locator('#recover').click();
+  assert.match(await status(), /Change accepted; status refresh unavailable/);
+  assert.deepEqual((await state()).journal.pending, acknowledged);
+  assert.equal(await page.locator('#draft').inputValue(), 'Newer draft after acknowledgment');
+  assert.equal(await page.locator('#conflict').isVisible(), false);
+  await page.screenshot({ path: 'output/playwright/persistent-recovery/acknowledged-reload.png', fullPage: true });
+  await page.locator('#save').click();
+  assert.match(await status(), /Check the existing submitted change first/);
+  assert.equal((await state()).service.mutations, 1);
+  await page.evaluate(() => fixture.faults(null));
+  await page.locator('#recover').click();
+  assert.equal((await state()).journal.baseline.text, 'Acknowledged proposal');
+  assert.equal(await page.locator('#draft').inputValue(), 'Newer draft after acknowledgment');
+  await page.locator('#recover').click();
+  assert.equal((await state()).service.mutations, 1);
+
+  // Exercise an actual storage exception after acceptance, independently of
+  // the fixture's fault flag. A shared save/verify catch used to erase identity.
+  await reset();
+  await page.locator('#draft').fill('Accepted before thrown read');
+  await page.evaluate(() => {
+    fixture.faults(null, false, true);
+    const original = Storage.prototype.getItem;
+    let serviceReads = 0;
+    Storage.prototype.getItem = function (key) {
+      if (key === 'recovery-fixture-service' && ++serviceReads === 2) {
+        Storage.prototype.getItem = original;
+        throw new Error('Status read failed after acceptance');
+      }
+      return original.call(this, key);
+    };
+  });
+  await page.locator('#save').click();
+  const thrownReadPending = (await state()).journal.pending;
+  assert.equal(thrownReadPending.acknowledgment.text, 'Accepted before thrown read');
+  assert.match(await status(), /Change accepted; status refresh unavailable/);
+  assert.equal(await page.locator('#conflict').isVisible(), false);
+  await page.locator('#save').click();
+  assert.deepEqual((await state()).journal.pending, thrownReadPending);
+  assert.equal((await state()).service.mutations, 1);
+  await page.locator('#recover').click();
+  assert.equal((await state()).journal.pending, null);
+  assert.equal((await state()).service.mutations, 1);
+
+  // An exception at submission can also hide an accepted effect. Only an
+  // explicit revision rejection may clear the pending identity.
+  await reset();
+  await page.locator('#draft').fill('Accepted before submission error');
+  await page.evaluate(() => {
+    const original = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key, value) {
+      original.call(this, key, value);
+      if (key === 'recovery-fixture-service') {
+        Storage.prototype.setItem = original;
+        throw new Error('Acknowledgment lost after service write');
+      }
+    };
+  });
+  await page.locator('#save').click();
+  const uncertain = (await state()).journal.pending;
+  assert.equal(uncertain.text, 'Accepted before submission error');
+  assert.match(await status(), /Submission outcome unavailable/);
+  assert.equal(await page.locator('#conflict').isVisible(), false);
+  await page.locator('#save').click();
+  assert.equal((await state()).service.mutations, 1);
+  await page.locator('#recover').click();
+  assert.equal((await state()).journal.pending, null);
+  assert.equal((await state()).service.mutations, 1);
+
+  // Missing receipts must not downgrade historical acknowledgment to unknown,
+  // or invent acceptance when no acknowledgment was received.
+  for (const received of [true, false]) {
+    await reset();
+    await page.locator('#draft').fill('Proposal with missing receipt');
+    await page.evaluate(received => fixture.faults(null, true, received), received);
+    await page.locator('#save').click();
+    const pending = (await state()).journal.pending;
+    await page.locator('#draft').fill('Newer work while receipt is missing');
+    await page.evaluate(id => fixture.removeReceipt(id), pending.id);
+    await page.reload();
+    for (let check = 0; check < 2; check++) {
+      await page.locator('#recover').click();
+      assert.match(await status(), received ? /Previously accepted; receipt unavailable. Current verification unavailable/ : /Outcome remains unknown/);
+      assert.equal(await page.locator('#conflict').isVisible(), false);
+      assert.equal(await page.locator('#draft').inputValue(), 'Newer work while receipt is missing');
+      assert.deepEqual((await state()).journal.pending, pending);
+      assert.equal((await state()).service.mutations, 1);
+    }
+    const acknowledgment = await page.locator('#acknowledgment').textContent();
+    if (received) assert.match(acknowledgment, /Historical acceptance; current verification pending/);
+    else assert.equal(acknowledgment, '');
+    await page.screenshot({ path: `output/playwright/persistent-recovery/missing-receipt-${received ? 'acknowledged' : 'unknown'}.png`, fullPage: true });
+    await page.locator('#save').click();
+    assert.match(await status(), /Check the existing submitted change first/);
+    assert.equal((await state()).service.mutations, 1);
+  }
+
   await reset();
   await page.locator('#draft').fill('Local edit');
   await page.locator('#refresh').click();
   assert.equal(await page.locator('#draft').inputValue(), 'Local edit');
   await page.evaluate(() => fixture.otherWriter('Remote edit'));
+  await page.locator('#refresh').click();
+  assert.match(await status(), /Conflict/);
+  await page.reload();
   await page.locator('#refresh').click();
   assert.match(await status(), /Conflict/);
   assert.equal((await state()).journal.baseline.text, 'Original');
@@ -86,7 +201,7 @@ try {
   await page.reload();
   assert.match(await page.locator('#storage').textContent(), /Read denied/);
   assert.equal(await page.locator('#draft').inputValue(), 'Original');
-  console.log('PASS: isolated persistent fixture: accepted identity/reload/newer draft, exactly one mutation, dirty conflict, clean refresh, retained stale record and separate read/write/removal failures.');
+  console.log('PASS: isolated persistent fixture: thrown status-read failures, lost outcome and acknowledged recovery, missing receipts with/without acknowledgment, reload/newer draft, exactly one mutation, dirty conflict across reload, clean refresh, retained stale record and separate read/write/removal failures.');
 } catch (error) {
   await page.screenshot({ path: 'output/playwright/persistent-recovery/failure.png', fullPage: true });
   throw error;

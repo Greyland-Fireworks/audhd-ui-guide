@@ -6,17 +6,23 @@ Continue automatically when the applicable exit evidence is established. Give co
 
 ## Phase exits
 
+For each exit, attach the task/control and route, build, reviewer, evidence method, observed result and repair/retest reference to the existing review rows. Use Pass, Fail, Pending or Not applicable with a reason. A required failed or unperformed check blocks acceptance of that outcome; unrelated passes cannot offset it. Continue independent authorized work, but do not replicate a layout whose representative slice failed or declare the integrated task verified while required evidence is missing. If tooling is unavailable, name the blocked check and dependency; a self-review fallback still requires the same rendered interactions. These are agent-owned checks, not requests for user approval.
+
 ### A — Establish capabilities and complete tasks
 
 Inspect supported application interfaces and existing behavior before choosing screens. For each requested task identify the intended outcome, capabilities, platform restrictions, records/settings, state ownership and visible completion/recovery path. Distinguish draft, saved, effective, submitted and verified state. Trace discovery through completion and return, grouping destinations by decisions rather than configuration-key prefixes.
 
 **Exit evidence:** every in-scope task has a supported implementation path or a specific limitation with its dependency. Editable fields do not establish record management. An identified limitation remains a gap, not completion or permission to reduce scope.
 
+Keep option inventory and task completion separate in the same record: for each requested outcome, identify discovery, decision, action, observed effect and recovery. Logging configuration does not establish event reading or warning triage; an account database path does not establish account administration. Classify limitations as platform restrictions, missing dependencies or unfinished implementation rather than counting all three as delivered coverage.
+
 ### B — Build and inspect a representative slice
 
 Implement one complete relevant workflow before repeating its layout. Include navigation and current location, practical help for an unfamiliar choice, units and combined effects for coupled values, applicable loading/empty/unavailable/error states, and an action with observable completion and recovery. Do not add irrelevant states or controls merely to populate the slice.
 
 **Exit evidence:** exercise the workflow in a browser and inspect desktop and narrow renderings. Subject, purpose, important state and next action belong together. Record interaction results and visual observations separately; code review or a screenshot alone cannot satisfy this gate.
+
+Choose a slice that exposes the difficult design decisions: an unfamiliar choice and coupled values where the product has them. Follow primary and secondary navigation without relying on a remembered search term. Open help, inspect below the first viewport, and change each coupled value to check its combined effect. Repair unclear grouping, unexplained terminology or detached feedback before repeating the pattern. Do not choose only the easiest form to justify every other layout.
 
 ### C — Challenge state and recovery before scaling
 
@@ -26,9 +32,11 @@ Use controlled fixtures to challenge acceptance followed by a failed response or
 
 ### D — Extend proven patterns
 
-Complete remaining authorized tasks. Reuse working patterns while preserving differences in decisions, timing and consequences. Review generated labels and fallback help individually for purpose, use/off cases, units and examples where needed. Avoid mechanically repeating one large form or hiding every advanced capability.
+Complete remaining authorized tasks. Reuse working patterns while preserving differences in decisions, timing and consequences. Avoid mechanically repeating one large form or hiding every advanced capability.
 
 **Exit evidence:** coverage accounts for the complete requested outcomes, coherent destinations and task-specific verification. Configuration uses its consuming workflow, access uses effective permissions and delivery uses the intended destination. A generic health check cannot certify unrelated behavior.
+
+Review unfamiliar labels and explanations individually, including generated, fallback and read-only entries. Explain purpose, when to use or leave off, units, consequences and a concrete example where needed; do not substitute another unexplained term. Keep essential information visible when help is closed. Record deficient fields and their corrections in the existing rows; populated help metadata is not a pass. Inspect directory category membership and sibling order, and group coupled controls as one visibly bounded decision with their combined effect. A complete list or zero document overflow does not establish understandable organization.
 
 ### E — Independently accept the integrated result
 
@@ -40,6 +48,8 @@ Where available, a reviewer who did not implement the relevant change inspects t
 - Accuracy and limits of verification claims.
 
 **Exit evidence:** resolve required-outcome defects and rerun affected checks after integration. Record the reviewer, scope, findings and retests. If no independent agent is available, perform these responsibilities sequentially and identify the self-review fallback. Unperformed screen-reader/platform or participant checks remain pending. Neither fallback nor pending evidence may be presented as independent review or proven comprehension.
+
+Give the reviewer access to the rendered build and controlled fixtures. Require evidence for task discovery, explanations, coupled-control relationships and visible completion/recovery as well as source findings. Exercise consequential forms through their browser controls; API success cannot close their interaction checks. Record source-only review as source-only, leaving rendered acceptance Pending. Keep functional coverage, recovery, navigation, explanations and visual organization as separate results; a later test number, more options or a larger test suite establishes no overall improvement.
 
 ## Ownership and coordination
 
@@ -57,6 +67,21 @@ Establish shared state contracts and explicit file ownership before parallel edi
 ## Evidence and automation
 
 Before extending regression coverage, classify proposed cases as covered, partially covered, missing or not applicable to the example's persistence model. Identify the owning implementation/check and extend it rather than duplicate suites. A consumer defect under an existing rule does not establish a missing toolkit requirement.
+
+### Recovery coverage to preserve
+
+The following existing owners are starting points, not certification of a consumer. Record applicability and current execution evidence in the same review rows. Preserve substantive assertions when adapting labels or layout. All listed checks run through `npm run validate:toolkit`.
+
+| Transition and invariant | Existing check and boundary |
+|---|---|
+| Lost save outcome versus received acknowledgment followed by failed status read; newer draft; reload; visible read-only recovery; one mutation | [Persistent fixture check](../tests/persistent-recovery-check.mjs). Persistent simulated service/journal, not a production backend or Harbor persistence. |
+| Dirty baseline survives another writer and reload until deliberate reconciliation; clean refresh adopts current data without a false conflict | [Persistent fixture check](../tests/persistent-recovery-check.mjs). Consumers must exercise their actual concurrency contract. |
+| Accepted identity and submitted snapshot survive verification failure; missing receipt retains historical evidence; repeated checks update evidence without resending | [Harbor recovery check](../examples/administration/recovery-check.mjs). Memory-only simulation, explicitly resets on reload. |
+| Initial load failure differs from empty results; failed refresh retains records/freshness; older responses cannot replace newer results | [Notebook checks](../examples/administration/notes-tools-check.mjs) and [room-search checks](../examples/administration/schedule-check.mjs). In-memory collections. |
+| Storage access, write and removal fail separately; useful memory work and truthful persistence warnings survive unrelated updates | [Persistent fixture check](../tests/persistent-recovery-check.mjs). A failed removal must not claim erasure. |
+| Dynamic results, same-route error focus and appearance/help detours preserve useful context | [Harbor navigation checks](../examples/administration/check.mjs) and [recovery checks](../examples/administration/recovery-check.mjs). Consumer reload/return-anchor behavior remains a separate check where durable recovery is promised. |
+
+Do not replace one failure with a superficially similar case: a lost acknowledgment differs from a failed read after acknowledgment; recovered values differ from a recovered task location. For durable consumers, combine two drafts and open help with an Appearance detour, reload and named return, checking field/section/overview origins. Harbor's declared reset cannot stand in for that evidence.
 
 Use existing deterministic runners, deferred responses, injectable faults and clocks where supported. Check mutation counts and retained work; avoid arbitrary timing sleeps. Preserve substantive existing assertions when labels or markup change. Routine aggregate validation must retain failure output/artifacts, fail for required executed failures, identify unavailable/skipped checks and avoid rewriting tracked gallery captures or historical records.
 
