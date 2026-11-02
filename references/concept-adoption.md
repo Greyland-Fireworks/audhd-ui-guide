@@ -13,3 +13,11 @@ Substantive guidance remains grounded in [our Guide](../GUIDE.md) and its eviden
 No numeric UX grade, fixed choice limit, automatic ship approval, compulsory animation or code-only definition of a valid finding is adopted. The framework extracts our own preference utilities and appearance assets, not upstream implementation.
 
 Framework code remains MIT; this documentation remains CC BY 4.0 under the [existing license scope](../LICENSE_SCOPE.md). See [framework evidence](framework-evidence.md) for execution results and pending checks.
+
+## Hallmark: engineering influence, independently implemented
+
+Inspected upstream: [Nutlope/hallmark](https://github.com/Nutlope/hallmark), revision `4f6a46c6dc325d40ab268c93e25c7b96676ebccd`. Observed ideas include executable checks, explicit verification methods, before/after capability accounting and separation of workflow compliance from output quality.
+
+The AuDHD toolkit already required A–E phase exits, representative-workflow review, practical explanations, accessibility, recovery, honest evidence limits and visible review lights. The additions independently implement these existing requirements as a shared acceptance core, build-bound schema-2 record, explicit local adapters, capability inventory and separate trial stages. Regressions cover missing/wrong/stale evidence, mutation recovery requirements, invalidation, timing, concurrent updates and capability loss.
+
+No Hallmark prose, reviewer prompts, gate catalog, code, themes, assets, naming conventions or numerical scoring were copied or translated. Its aesthetic rules, marketing-page rules, forced variation and arbitrary navigation limits are not adopted. This attribution identifies influence, not endorsement, shared validation or proven improvement in generated-dashboard quality.

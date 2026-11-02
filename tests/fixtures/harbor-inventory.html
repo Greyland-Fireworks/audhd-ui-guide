@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Harbor capability regression fixture</title>
+<h1>Harbor capability regression fixture</h1>
+<p>Synthetic controls only. No real service or mutation is connected.</p>
+<nav aria-label="Workspace"><a data-capability="navigation" href="#directory">All pages</a></nav>
+<button data-capability="recovery" type="button">Check request outcome</button>
+<a data-capability="return" href="#settings/requests">Return to Request limits</a>
+<script>
+  const scenario = new URLSearchParams(location.search);
+  const removed = scenario.get('remove');
+  if (['navigation', 'recovery', 'return'].includes(removed)) document.querySelector(`[data-capability="${removed}"]`).remove();
+  if (scenario.has('rename')) document.querySelector('[data-capability="navigation"]').textContent = 'Browse all pages';
+</script></html>

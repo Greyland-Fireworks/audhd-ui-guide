@@ -68,3 +68,11 @@ The [supplied October 20 review archive and October 21 assessment](references/ev
 The report describes separate subagent contexts with first responses reviewed by the parent. Precise model build/settings and execution logs are unavailable; no repeated runs or without-skill comparison were provided. The standard prompt itself requests many assessed behaviors. Do not present these results as an isolated measure of skill benefit, an independently reproduced run, implementation reliability or user suitability. The separately reported unreadable Light demonstration remains unresolved; successful text reviews do not erase it.
 
 This evaluation material is guide text under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
+## Saved trial records and comparisons
+
+Use repository-only `scripts/trial-report.mjs RECORD.json [RECORD.json ...]` to produce a compact Markdown comparison from saved observations. Schema version 1 requires `id`, exact `prompt`, `toolkitHash`, `firstCompleted` and `repairs`. Record `modelSettings` and `environmentAssistance` when known; absent information remains Unknown.
+
+Each stage records `stage` (`first-completed` for the first output, distinct repair names afterward), `build`, `reviewerMethod`, `evidence`, `workflowTiming` (timely, retrospective or unknown), and separate `outcomes` for functional coverage, recovery, navigation, explanations and organization. Preserve the original first-output artifact before coaching. A report cannot establish provenance that was never recorded; missing transcript evidence remains unknown. Do not substitute the repaired output for the first output or rank trials by test number, option counts, aggregate passes or aesthetic scores.
+
+Only synthetic records exercise the reporting helper. Trial outputs, reviewer datasets and this helper stay out of the consumer package. Running the helper is not authorization for a model evaluation.

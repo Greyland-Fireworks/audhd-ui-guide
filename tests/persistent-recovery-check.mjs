@@ -142,6 +142,50 @@ try {
     assert.equal((await state()).service.mutations, 1);
   }
 
+  // Persist useful task context independently of the immutable submission.
+  // Exercise all supported return origins, not only the field-level shortcut.
+  for (const [origin, target, label] of [
+    ['field', 'draft', 'proposed record'],
+    ['section', 'record-heading', 'record editor'],
+    ['overview', 'overview', 'workspace'],
+  ]) {
+    await reset();
+    await page.locator('#draft').fill('Submitted before detour');
+    await page.evaluate(() => fixture.faults(null, true, true));
+    await page.locator('#save').click();
+    const submitted = (await state()).journal.pending;
+    await page.locator('#draft').fill('Newer record draft');
+    await page.locator('#notes').fill('Independent notes draft');
+    await page.locator('#help summary').click();
+    await page.locator(`#${origin}-appearance`).click();
+    await page.locator('#color-scheme').selectOption('dark');
+    await page.reload();
+    assert.equal(await page.locator('#appearance').isVisible(), true);
+    assert.equal(await page.locator('#workspace').isVisible(), false);
+    assert.equal(await page.locator('#color-scheme').inputValue(), 'dark');
+    assert.deepEqual((await state()).journal.pending, submitted);
+    await page.getByRole('button', { name: `Return to ${label}`, exact: true }).press('Enter');
+    assert.equal(await page.evaluate(() => document.activeElement.id), target);
+    assert.equal(await page.locator('#help').evaluate(el => el.open), true);
+    assert.equal(await page.locator('#draft').inputValue(), 'Newer record draft');
+    assert.equal(await page.locator('#notes').inputValue(), 'Independent notes draft');
+    assert.equal((await state()).journal.baseline.text, 'Original');
+    assert.deepEqual((await state()).journal.pending, submitted);
+    await page.screenshot({ path: `output/playwright/persistent-recovery/return-${origin}.png`, fullPage: true });
+    await page.locator('#recover').press('Enter');
+    assert.equal((await state()).journal.baseline.text, 'Submitted before detour');
+    assert.equal(await page.locator('#draft').inputValue(), 'Newer record draft');
+    assert.equal(await page.locator('#notes').inputValue(), 'Independent notes draft');
+    assert.equal((await state()).service.mutations, 1);
+    const retained = (await state()).journal;
+    const freshness = await page.locator('#freshness').textContent();
+    await page.evaluate(() => fixture.faults(null, true));
+    await page.locator('#refresh').click();
+    assert.match(await status(), /Previously loaded record retained/);
+    assert.deepEqual((await state()).journal, retained);
+    assert.equal(await page.locator('#freshness').textContent(), freshness);
+  }
+
   await reset();
   await page.locator('#draft').fill('Local edit');
   await page.locator('#refresh').click();
@@ -187,6 +231,14 @@ try {
   await page.locator('#recover').click();
   assert.match(await page.locator('#storage').textContent(), /storage unavailable/);
   assert.equal(await page.locator('#draft').inputValue(), 'Memory survives write denial');
+  await page.locator('#notes').fill('Notes survive write denial');
+  await page.locator('#field-appearance').click();
+  assert.equal(await page.locator('#storage').isVisible(), true);
+  assert.match(await page.locator('#storage').textContent(), /reload recovery is not guaranteed/);
+  await page.getByRole('button', { name: 'Return to proposed record', exact: true }).click();
+  assert.equal(await page.locator('#draft').inputValue(), 'Memory survives write denial');
+  assert.equal(await page.locator('#notes').inputValue(), 'Notes survive write denial');
+  assert.equal(await page.locator('#storage').isVisible(), true);
   await reset();
   await page.locator('#draft').fill('Stored draft');
   await page.evaluate(() => fixture.faults('removeItem'));
@@ -201,7 +253,7 @@ try {
   await page.reload();
   assert.match(await page.locator('#storage').textContent(), /Read denied/);
   assert.equal(await page.locator('#draft').inputValue(), 'Original');
-  console.log('PASS: isolated persistent fixture: thrown status-read failures, lost outcome and acknowledged recovery, missing receipts with/without acknowledgment, reload/newer draft, exactly one mutation, dirty conflict across reload, clean refresh, retained stale record and separate read/write/removal failures.');
+  console.log('PASS: isolated persistent fixture: thrown status-read failures, lost outcome and acknowledged recovery, missing receipts with/without acknowledgment, reload/two drafts/help/named return from field, section and overview, exactly one mutation, dirty conflict across reload, clean refresh, retained stale record and separate read/write/removal failures.');
 } catch (error) {
   await page.screenshot({ path: 'output/playwright/persistent-recovery/failure.png', fullPage: true });
   throw error;

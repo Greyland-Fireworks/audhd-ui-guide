@@ -2,11 +2,25 @@
 <html lang="en"><meta charset="utf-8"><title>Persistent recovery contract fixture</title>
 <body><main><h1>Persistent recovery contract fixture</h1>
 <p>Automated teaching fixture. This browser origin stores a fictional record, operation receipts and a separate draft. It is not Harbor workspace persistence or a production server.</p>
-<label>Proposed record <input id="draft"></label>
-<button id="save">Submit change</button><button id="recover">Check submitted change</button>
-<button id="refresh">Refresh record</button><button id="clear">Remove stored draft</button>
-<p id="status" role="status"></p><p id="storage" role="alert"></p><p id="saved"></p>
+<p id="storage" role="alert"></p>
+<div id="workspace">
+<h2 id="overview" tabindex="-1">Record workspace</h2>
+<button id="overview-appearance">Appearance from workspace</button>
+<section aria-labelledby="record-heading">
+<h2 id="record-heading" tabindex="-1">Record editor</h2>
+<p><button id="section-appearance">Appearance from record editor</button></p>
+<p><label>Proposed record <input id="draft"></label>
+<button id="field-appearance">Appearance from proposed record</button></p>
+<details id="help"><summary>About the proposed record</summary><p>Submit sends this proposal to the simulated service. Check submitted change only reads the original operation's receipt; it does not submit your newer text.</p></details>
+<p><button id="save">Submit change</button><button id="recover">Check submitted change</button>
+<button id="refresh">Refresh record</button><button id="clear">Remove stored draft</button></p>
+<p id="status" role="status"></p><p id="saved"></p>
 <p id="acknowledgment"></p>
 <p id="freshness">No successful service read this visit.</p>
 <section id="conflict" hidden aria-label="Review conflicting change"><p id="remote"></p><button id="reconcile">Adopt this baseline and keep my proposal</button></section>
+<p><label>Working notes (separate local draft) <input id="notes"></label></p>
+</section></div>
+<section id="appearance" hidden aria-labelledby="appearance-heading"><h2 id="appearance-heading" tabindex="-1">Appearance</h2>
+<label>Color scheme <select id="color-scheme"><option value="light">Light</option><option value="dark">Dark</option></select></label>
+<button id="return">Return to workspace</button></section>
 </main><script type="module" src="./fixture.js"></script></body></html>

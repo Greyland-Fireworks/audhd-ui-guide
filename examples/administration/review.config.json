@@ -1,0 +1,111 @@
+{
+  "root": "../..",
+  "task": "Harbor fictional in-memory administration workflows",
+  "sources": [
+    "examples/administration",
+    "packages/audhd-ui-framework",
+    "package.json",
+    "package-lock.json",
+    "scripts/review-core.js",
+    "scripts/review-bar.js",
+    "scripts/review-io.mjs",
+    "scripts/review.mjs",
+    "scripts/review-inventory.mjs",
+    "tests/review",
+    "tests/fixtures/harbor-inventory.html"
+  ],
+  "exclude": [
+    "examples/administration/acceptance.json"
+  ],
+  "record": "output/review/harbor/review.json",
+  "identity": "output/review/harbor/build.json",
+  "evidenceDir": "output/review/harbor/evidence",
+  "contract": {
+    "mode": "memory",
+    "mutations": {
+      "applicable": true,
+      "reason": "Fictional records and recovery mutate this page's in-memory service."
+    },
+    "durableRecovery": {
+      "applicable": false,
+      "reason": "Harbor explicitly resets its simulated workspace on reload; durable recovery is covered by the separate persistent fixture."
+    },
+    "concurrentWrites": {
+      "applicable": false,
+      "reason": "This page owns one in-memory workspace, not a shared persistent backend."
+    },
+    "browserStorage": {
+      "applicable": false,
+      "reason": "Harbor does not promise browser persistence for workspace records."
+    },
+    "existingInterface": {
+      "applicable": true,
+      "reason": "Repairs must preserve the existing Harbor navigation, controls and recovery actions."
+    },
+    "stage": "repair",
+    "mutationTasks": [
+      "request-save",
+      "request-transition",
+      "note-save"
+    ],
+    "verificationScope": "Harbor simulated in-memory workflows",
+    "unverified": [
+      "Production persistence and external integrations are not implemented"
+    ],
+    "coverage": [
+      {
+        "id": "harbor-workflows",
+        "required": "local"
+      }
+    ]
+  },
+  "adapters": {
+    "review-lights": {
+      "executable": "node",
+      "args": [
+        "examples/administration/acceptance-check.mjs",
+        "http://127.0.0.1:4189/examples/administration/",
+        "--evidence",
+        "{checkId}",
+        "{build}",
+        "{result}"
+      ],
+      "cwd": ".",
+      "timeoutMs": 120000,
+      "result": "result.json",
+      "runner": "Playwright Chromium",
+      "inputs": [
+        "examples/administration/acceptance-check.mjs",
+        "scripts/review-bar.js",
+        "tests/review/fixtures.js"
+      ]
+    }
+  },
+  "inventory": {
+    "baseURL": "http://127.0.0.1:4189/",
+    "states": [
+      {
+        "id": "harbor-overview",
+        "route": "/examples/administration/#overview",
+        "synthetic": true,
+        "ready": ".sidebar a[href='#overview']",
+        "capabilities": [
+          {
+            "id": "workspace.overview",
+            "selector": ".sidebar a[href='#overview']",
+            "behavior": [
+              "examples/administration/check.mjs"
+            ]
+          },
+          {
+            "id": "workspace.directory",
+            "selector": ".sidebar a[href='#directory']",
+            "behavior": [
+              "examples/administration/check.mjs"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

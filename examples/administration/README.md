@@ -24,6 +24,19 @@ node examples/administration/scenario-check.mjs
 
 Each browser check accepts the example URL as its first argument when using another port. Use an isolated preview server; the notes checks also exercise temporary JSON files. A plain static server avoids development hot reloads resetting visit-memory state during verification. Run the model assertions separately with `node examples/administration/notes-state-check.mjs` and `node --test examples/administration/request-policy.test.js`.
 
+## Visible build review
+
+The compact A–E bar shows recorded acceptance outcomes, not guaranteed quality. Open it by keyboard or touch to see required checks, their evidence methods and the correction guidance. It refreshes every 30 seconds without changing drafts. Missing or changed evidence clears passes and makes the bar visible.
+
+Run `npm run review:init` from the toolkit root before serving Harbor. `npm run build` also invokes the hook. The [configuration](review.config.json) selects real source inputs and emits the expected SHA-256 identity and Pending schema-2 record under ignored `output/review/harbor/`. Reinitialize after source edits. The old `acceptance.json` remains legacy historical evidence and does not close current checks.
+
+Follow the [local review workflow](../../references/review-tooling.md) to configure consumer-specific assertions and record actual rendered evidence. The [state entry point](acceptance-state.js) and [CLI entry point](acceptance-update.mjs) wrap the maintained shared core/tool; the CLI accepts the new configuration-based commands. Free-text legacy evidence is not automatically promoted. Keep additional task-specific requirements in the task contract and cover them explicitly in the corresponding canonical checks.
+
+Only the applicable final outcomes start the 24-hour clock. Ordinary reads/reload retain it; reopening or a new build resets it. A focused/open panel remains available until closed. Evidence remains after hiding. Wall-clock timing and local hashes are not a tamper-resistant authority, independent review or participant validation.
+
+Harbor resets its fictional workspace on reload. Its inapplicable durable-storage checks have explicit contract reasons; the separate persistent recovery fixture keeps those stronger regression checks. The illustrative inventory config covers two navigation controls, not complete Harbor capability coverage. Expand the declared inventory before claiming full preservation, then execute behavioral tests.
+
+
 ## Try the tasks
 
 1. Open **Calendar & rooms**. Compare meeting start times, durations and overlaps on the week calendar; use the month view to select a day or the agenda to read the same reservations as a list. Compare room schedules before creating a meeting. Test a conflicting room/time and use a suggested alternative; cancel a saved meeting and restore it only if its slot is still free.

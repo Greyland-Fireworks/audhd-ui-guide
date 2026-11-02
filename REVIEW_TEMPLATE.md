@@ -104,6 +104,24 @@ Record UI evidence (presentation, semantics and control operation) separately fr
 
 Before concluding, ask: “What must the user read, remember, navigate or dismiss before they can do useful work—and which of those demands can we remove without losing capability or understanding?” Record material findings and tradeoffs here; retain useful orientation, necessary help, accessible targets and complete capability rather than forcing all work into the first viewport. Treat context as useful when removing it would make location or purpose harder to understand.
 
+### Acceptance disposition
+
+For substantial implementations, summarize the existing evidence here or in the task's current record. Start each applicable gate as Pending. Reuse scope details and evidence links instead of copying observations into a second report. A gate advances only after its required checks are exercised and defects repaired; entering a later phase does not close earlier gates.
+
+| Gate | Status | Evidence and remaining requirement |
+|---|---|---|
+| A — Supported complete task paths | Pending | |
+| B — Rendered representative workflow before pattern reuse | Pending | |
+| C — Challenged state and recovery | Pending | |
+| D — Complete task coverage and individual explanations | Pending | |
+| E — Integrated rendered review and affected retests | Pending | |
+
+Use Pass, Fail, Pending or Not applicable with a reason. For E, identify independent rendered review or the permitted sequential self-review fallback; source-only inspection cannot close it. Cite the build and observation that allowed pattern reuse at B; a later retrospective inspection must be labeled as such. Assess practical explanations using the rendered field, not its metadata or the reviewer's knowledge of the implementation.
+
+**Disposition:** accepted within the recorded scope only when every required applicable outcome passes; otherwise unfinished, listing each failed/missing outcome, its dependency and next action. Separate optional participant feedback and unperformed platform checks from required checks; do not silently waive either or imply they passed. Report functional coverage, recovery, navigation, explanations and visual relationships separately when their results differ. A running server or passing suite does not close this record.
+
+For dashboard builds, expose this disposition through the [visible build-review example](examples/administration/README.md#visible-build-review). Advance lights only from recorded milestone evidence, including all required task-specific checks; never use test counts or a manual “complete” toggle. Reopen invalidated gates and reset the 24-hour completion clock on a changed build. Check hover, keyboard/touch disclosure, unavailable evidence, interrupted timing and reappearance separately. The lights identify the review method; they do not turn self-review into independent certification.
+
 ### User feedback
 
 #### Returning without memory
@@ -161,3 +179,20 @@ Use claims supported by this record. Passing these checks does not establish cli
 | Verify effective permissions | Check allowed and denied access for saved version 8. | No effective-access service is connected to the fixture. | Pending — outcome not exercised; AUDHD-12. Successful storage does not prove effective access. |
 
 **Result:** Fix the misleading acknowledgment and repeat that transition check. Verify effective permissions in a suitable environment before claiming the task outcome. Narrow layout, assistive technologies and participant understanding are outside the exercised evidence and remain Pending; the component has no single overall Pass score.
+
+## Executable evidence record
+
+- Stage: initial / repair (including repairs to newly generated work):
+- Mutation tasks and per-task recovery scenario results:
+- Coverage per task: control implemented / locally exercised / external integration verified; required level:
+- Visible verification scope and unverified areas:
+- Current build and acceptance-configuration fingerprints:
+- Schema-2 record and required check IDs:
+- Automated invocation/result artifacts versus rendered observation artifacts:
+- Reviewer identity and self-review/independent method:
+- Representative review timing: before reuse / reassessed with preserved milestone / retrospective / unknown:
+- Capability scope and before/after comparison, followed by behavioral retests:
+- Explicit task-contract applicability reasons (unperformed is Pending):
+- Remaining required checks, next action and optional evidence limits:
+
+Follow the [local review workflow](references/review-tooling.md). A historical acknowledgment is not current verification; a missing receipt does not authorize replay. Inspect the named return after reload, not just preserved draft contents. Inspect the lights after evidence becomes unavailable and while the page remains open.

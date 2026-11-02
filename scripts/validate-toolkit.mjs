@@ -77,12 +77,15 @@ try {
     server.listen(0, '127.0.0.1', done);
   });
   const base = `http://127.0.0.1:${server.address().port}`;
+  await npmRun('review:init');
   await npmRun('test');
+  await check('trial-report', process.execPath, ['--test', 'tests/trial-report.test.js']);
   await node('note-state', 'examples/administration/notes-state-check.mjs');
   await check('request-policy-unit', process.execPath, ['--test', 'examples/administration/request-policy.test.js']);
   await npmRun('build');
   await npmRun('test:browser');
-  for (const file of ['check', 'activity-check', 'notes-check', 'notes-tools-check', 'recovery-check', 'schedule-check', 'work-check', 'request-policy-check', 'scenario-check']) {
+  await node('capability-inventory', 'tests/review/inventory-check.mjs', base);
+  for (const file of ['check', 'activity-check', 'notes-check', 'notes-tools-check', 'recovery-check', 'schedule-check', 'work-check', 'request-policy-check', 'scenario-check', 'acceptance-check']) {
     await node(`administration-${file}`, `examples/administration/${file}.mjs`, `${base}/examples/administration/`);
   }
   await node('unlock', 'examples/unlock-to-edit/check.mjs', `${base}/examples/unlock-to-edit/`);

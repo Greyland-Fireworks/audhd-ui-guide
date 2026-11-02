@@ -1,0 +1,11 @@
+{
+  "build": "harbor-review-bar-1",
+  "gates": [
+    { "id": "A", "status": "Pending" },
+    { "id": "B", "status": "Pending" },
+    { "id": "C", "status": "Pending" },
+    { "id": "D", "status": "Pending" },
+    { "id": "E", "status": "Pending" }
+  ],
+  "allPassedAt": null
+}

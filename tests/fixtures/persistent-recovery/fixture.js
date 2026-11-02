@@ -35,12 +35,45 @@ try {
   service = JSON.parse(storage('getItem', serviceKey)) || initial();
   journal = JSON.parse(storage('getItem', journalKey)) || { baseline: clone(service.record), draft: service.record.text, pending: null };
 } catch (error) { reportStorage(error); }
+// Older fixture journals remain usable; return context is separate from the
+// submitted snapshot and both drafts. No production preference schema changes.
+journal = { notes: '', helpOpen: false, view: 'workspace', returnContext: null, colorScheme: 'light', ...journal };
+const returnTargets = { overview: 'workspace', 'record-heading': 'record editor', draft: 'proposed record' };
 function render() {
   if ($('draft').value !== journal.draft) $('draft').value = journal.draft;
   $('saved').textContent = `Known saved record: ${journal.baseline.text} (version ${journal.baseline.version})`;
   const ack = journal.pending?.acknowledgment;
   $('acknowledgment').textContent = ack ? `Accepted ${journal.pending.id}: ${ack.text} (version ${ack.version}). Historical acceptance; current verification pending.` : '';
+  $('notes').value = journal.notes;
+  $('help').open = journal.helpOpen;
+  $('workspace').hidden = journal.view === 'appearance';
+  $('appearance').hidden = journal.view !== 'appearance';
+  $('color-scheme').value = journal.colorScheme;
+  document.documentElement.style.colorScheme = journal.colorScheme;
+  $('return').textContent = `Return to ${returnTargets[journal.returnContext?.target] || 'workspace'}`;
 }
+// AUDHD-10 — ../../../GUIDE.md#audhd-10-support-interruptions-and-working-preferences
+// A durable detour must recover the task location, not just the data. Named
+// targets avoid persisting arbitrary selectors or sensitive record content.
+function openAppearance(target) {
+  journal.helpOpen = $('help').open;
+  journal.returnContext = { target, scrollY: window.scrollY };
+  journal.view = 'appearance'; persist(); render(); $('appearance-heading').focus();
+}
+$('overview-appearance').onclick = () => openAppearance('overview');
+$('section-appearance').onclick = () => openAppearance('record-heading');
+$('field-appearance').onclick = () => openAppearance('draft');
+$('notes').oninput = () => { journal.notes = $('notes').value; persist(); };
+$('help').ontoggle = () => {
+  if (journal.helpOpen !== $('help').open) { journal.helpOpen = $('help').open; persist(); }
+};
+$('color-scheme').onchange = () => { journal.colorScheme = $('color-scheme').value; persist(); render(); };
+$('return').onclick = () => {
+  const context = journal.returnContext;
+  const target = context && Object.hasOwn(returnTargets, context.target) ? context.target : 'overview';
+  journal.view = 'workspace'; journal.returnContext = null; persist(); render();
+  $(target).focus({ preventScroll: true }); window.scrollTo(0, context?.scrollY || 0);
+};
 function loadService() { return JSON.parse(localStorage.getItem(serviceKey)) || initial(); }
 function readService() {
   if (readFailure) throw new Error('Status read unavailable');

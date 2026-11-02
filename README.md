@@ -4,9 +4,9 @@
 
 Practical guidance for developers and AI agents building interfaces that are easier to understand, use, pause, resume and correct.
 
-**Toolkit version:** 1.1.2 · Updated November 1, 2026
+**Toolkit version:** 1.1.3 · Updated November 2, 2026
 
-Guide rules remain v1.01. Toolkit and plugin releases share version 1.1.2; preference schemas and the framework retain their own versions.
+Guide rules remain v1.01. Toolkit and plugin releases share version 1.1.3; preference schemas and the framework retain their own versions.
 
 [What is this?](#what-is-this) · [Use it](#how-do-i-use-it) · [Install it](#how-do-i-install-it) · [What else?](#what-else-should-i-know)
 
@@ -17,6 +17,8 @@ Guide rules remain v1.01. Toolkit and plugin releases share version 1.1.2; prefe
 - **[Examples](EXAMPLES.md):** An [annotated screenshot gallery](examples/GALLERY.md), worked patterns, [runnable React and Svelte interfaces](examples/recording-review/README.md), and [45 skins with chart palettes](examples/skins/README.md). Explore the choices, see the rules in action and adapt useful patterns to your own stack.
 
 ## How do I use it?
+
+For implementation, follow the [ordered review workflow](references/review-tooling.md#start-here-one-implementation-path): one representative task, recovery, expansion, then integrated review. The upcoming 1.1.3 release adds batch commands, preserved milestones and per-task evidence. The latest published release is 1.1.2; earlier local snapshots labeled 1.1.4 were development artifacts, not published releases. Frozen test evidence retains its original labels.
 
 For a bounded first pass, request **`audhd quick review`** and name the component or task. For the complete affected workflow, use **`audhd audit`**. Both are review-only unless you request changes. They report evidence and unknowns, not UX scores or automatic shipping approval. The [interface-pattern lookup](references/interface-patterns.md) helps select checks without reading every rule.
 
@@ -30,6 +32,8 @@ Select or name the `audhd-ui-guide` skill, then choose a prompt below. Paste pro
 - **Improve a specific difficulty:** “Use the audhd-ui-guide skill. Make the selected item and its detail panel clearly connected. Preserve drafts, navigation and keyboard focus, and explain what you verified.”
 
 Start with one task; you do not need to redesign everything. For a manual review, follow [Try one small review](#try-one-small-review). For agents without skill discovery, use [the attachment-based instructions](#use-without-skill-support).
+
+Dashboard builds include [five review lights](references/autonomous-implementation.md#dashboard-review-lights) as standard. They expose acceptance progress and missing checks, with correction guidance available by hover, keyboard or touch. Recorded milestone evidence controls advancement; the bar hides after 24 hours of all gates passing on the same build. A changed build or reopened gate requires renewed evidence. The lights identify self-review where used and are not independent certification.
 
 ## How do I install it?
 
@@ -226,7 +230,7 @@ AuDHD commonly refers to the co-occurrence of autism and ADHD. Some people want 
 
 This is a practitioner guide, not a clinical intervention or certification. Its specific patterns have not been established here through research with a representative group of AuDHD users. No skin, font or information density is claimed to suit every AuDHD person.
 
-Toolkit **1.1.2** is being prepared for publication. Its stronger acceptance requirements and recovery checks do not establish real-interface usability.
+Toolkit **1.1.3** is being prepared for publication. Its stronger acceptance requirements and recovery checks do not establish real-interface usability.
 
 The [historical supplied-review dataset](SKILL_EVALUATIONS.md#current-evidence) covers six of 35 authored cases, with 29 Pending. Four later design-default cases (E36–E39) bring the pack to 39; those four remain unrun. The separate [framework skill comparison](references/evaluations/2026-10-24-framework/README.md) preserves baseline/candidate trials, a failed first gate and a repaired candidate. New trials require an explicit request and are not required for ordinary use or feedback.
 
@@ -282,6 +286,8 @@ This repository includes the [license scope and attribution](LICENSE_SCOPE.md) a
 
 ### Version history
 
+- **1.1.3 — Unreleased:** Build-bound executable review evidence, capability preservation, explicit reviewer methods and acceptance dispositions, batch commands, preserved milestones and per-task evidence. Consumer recovery checks and durable fixture coverage preserve two drafts, local help, Appearance detours and named return context across reload. The schema-2 record strengthens evidence handling; generated-dashboard quality remains unproven.
+
 - **1.1.2 — November 1, 2026:** Strengthened acceptance gates, rendered-review evidence requirements and recovery regression checks, including thrown status-read failures, missing receipts, replay prevention and preservation of newer drafts across reload.
 
 - **v1.01 — October 19, 2026:** Accessible selectable appearance, connected context/navigation/help, portable v2 preferences, React/Svelte references, chart skins and explicit adapter/evidence boundaries. Profile schema version 2 is not a Guide release number.
@@ -293,3 +299,5 @@ This repository includes the [license scope and attribution](LICENSE_SCOPE.md) a
 </details>
 
 [Back to the start](#audhd-friendly-interface-guidance) · [Use it](#how-do-i-use-it) · [Install it](#how-do-i-install-it)
+
+The [local review workflow](references/review-tooling.md) explains schema-2 records, adapters, capability inventories and migration. Run `npm run review:init` before serving Harbor; `npm run build` also initializes its current build.

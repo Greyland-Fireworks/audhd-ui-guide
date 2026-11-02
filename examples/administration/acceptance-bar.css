@@ -1,0 +1,24 @@
+#acceptance-review { margin: .25rem 0; padding: .25rem .5rem; border: 1px solid currentColor; border-radius: .5rem; font-size: 1rem; }
+#acceptance-review[hidden] { display: none; }
+#acceptance-review summary { cursor: pointer; }
+.acceptance-lights { display: inline-flex; flex-wrap: wrap; gap: .25rem .5rem; }
+.acceptance-lights > span { white-space: nowrap; }
+.acceptance-lights [data-status="Pass"] { font-weight: 700; }
+#acceptance-review p, #acceptance-review li { overflow-wrap: anywhere; }
+#acceptance-review summary:focus-visible { outline: 3px solid currentColor; outline-offset: 4px; }
+#acceptance-review[open] { flex-basis: 100%; }
+@media (width < 64rem) {
+  #acceptance-review { margin: 0; padding: 0 .25rem; border: 0; }
+  #acceptance-review summary { padding: .25rem 0; }
+  .acceptance-label, .acceptance-letter { display: none; }
+  .acceptance-lights { gap: .25rem; }
+}
+
+.acceptance-qualifiers { display: block; font-size: .8em; line-height: 1.3; overflow-wrap: anywhere; font-weight: normal; }
+
+@media (width < 64rem) {
+  .workspace-header { row-gap: .25rem; padding-block: .125rem; }
+  #acceptance-review summary { font-size: .8rem; line-height: 1.3; min-block-size: 1.5rem; }
+  .acceptance-qualifiers { display: inline; font-size: inherit; margin-inline-start: .35em; }
+  .acceptance-lights { font-size: 1rem; line-height: 1; }
+}

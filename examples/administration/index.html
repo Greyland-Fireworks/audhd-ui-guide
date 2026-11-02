@@ -17,6 +17,8 @@
   <link rel="stylesheet" href="notes-tools.css">
   <link rel="stylesheet" href="schedule.css">
   <link rel="stylesheet" href="work.css">
+  <link rel="stylesheet" href="acceptance-bar.css">
+  <script type="module" src="acceptance-bar.js"></script>
   <script type="module" src="app.js"></script>
 </head>
 <body>
@@ -39,6 +41,7 @@
           <span class="guide-toggle-arrow" aria-hidden="true">→</span>
           <button id="guide-toggle" type="button" aria-pressed="false">Guide notes</button>
         </div>
+        <details id="acceptance-review" data-identity="../../output/review/harbor/build.json" data-record="../../output/review/harbor/review.json"></details>
       </header>
       <div id="navigation-teaching"></div>
       <details id="teaching-intro" class="guide-only" data-guide-key="teaching-introduction"><summary>Using Guide notes</summary><p>Guide notes explain the design and let you try failures safely. This fictional hub simulates accounts, bookings and requests; it sends no invitations or messages. Refreshing or closing this page resets the workspace; JSON notes files you choose to download remain on your device. <a href="#settings">Explore capability examples</a> or read the <a href="README.md#worked-design-decisions">worked design decisions</a>.</p></details>
