@@ -22,7 +22,7 @@ If the guide still cannot be read, report the attempted resource, access mechani
 
 ## Execution workflow
 
-For dashboard implementation, start with the [single ordered command path](references/review-tooling.md#start-here-one-implementation-path). It links the existing gates to executable checks, automatic milestone preservation and explicit review fallback; read deeper references when that stage needs them.
+For dashboard implementation, start with the [single ordered command path](references/review-tooling.md#start-here-one-implementation-path). It links the existing gates to executable checks, automatic milestone preservation and explicit review fallback; read deeper references when that stage needs them. Before expansion, confirm A/B and the preserved milestone; before repairs, capture a capability baseline, including for newly generated work.
 
 For substantial implementations, use the [autonomous implementation gates](references/autonomous-implementation.md) within these six steps. Continue when evidence satisfies each exit condition; do not require repeated “continue” prompts or ask the user to prove that they understand the interface. Use bounded specialists when available and useful, with the orchestrator retaining integration and acceptance responsibility. For focused changes, compress the sequence while preserving applicable checks. Reviews remain read-only.
 

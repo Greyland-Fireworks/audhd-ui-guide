@@ -82,9 +82,12 @@ try {
   assert.match(await page.locator('#operation-message').innerText(), /Confirmation is unavailable/);
   await problems(1);
   await count(1);
+  const returnPath = new URL(page.url()).hash;
   await navigate('Appearance');
   await page.locator('#palettes input[value="paperwhite"]').locator('..').click();
-  await page.goBack();
+  await page.goBack(); // Browser history; persistent fixture separately exercises a keyboard return control.
+  await page.waitForURL(url => url.hash === returnPath);
+  assert.equal(new URL(page.url()).hash, returnPath);
   assert.equal(await page.locator('#request-id').textContent(), submittedId);
   assert.equal(await page.locator('#export-name').inputValue(), 'Newer draft');
   assert.equal(await page.locator('#guide-toggle').getAttribute('aria-pressed'), 'false');

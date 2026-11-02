@@ -33,6 +33,9 @@ try {
   await page.goto(process.argv[2] || 'http://127.0.0.1:4189/examples/administration/');
   const bar = page.locator('#acceptance-review'), summary = bar.locator('summary');
   await summary.waitFor(); assert.equal(await summary.getAttribute('title'), guidance);
+  assert.equal(await bar.locator(':scope > summary').count(), 1, 'Empty-host mount creates one summary');
+  assert.equal(await bar.locator('.acceptance-lights').count(), 1, 'Mount creates one light group');
+  assert.equal(await bar.locator('#acceptance-guidance').count(), 1, 'Mount creates one guidance section');
   await summary.focus(); await page.keyboard.press('Enter');
   assert.equal(await bar.getAttribute('open'), '');
   assert.equal(await bar.locator('.acceptance-lights [data-status="Pending"]').count(), 5);

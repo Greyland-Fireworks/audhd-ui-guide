@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 
 const base = process.argv[2];
@@ -12,6 +12,8 @@ await context.tracing.start({ screenshots: true, snapshots: true });
 const url = `${base.replace(/\/$/, '')}/tests/fixtures/persistent-recovery/`;
 const status = () => page.locator('#status').textContent();
 const state = () => page.evaluate(() => fixture.state());
+const exactReturn = async target => assert.equal(await page.evaluate(() => document.activeElement.id), target);
+const singleMutation = async () => assert.equal((await state()).service.mutations, 1);
 async function reset() { await page.goto(url); await page.evaluate(() => localStorage.clear()); await page.reload(); }
 try {
   await reset();
@@ -26,9 +28,9 @@ try {
   await page.locator('#recover').click();
   assert.equal(await page.locator('#draft').inputValue(), 'Newer unfinished text');
   assert.equal((await state()).journal.baseline.text, 'Accepted proposal');
-  assert.equal((await state()).service.mutations, 1);
+  await singleMutation();
   await page.locator('#recover').click();
-  assert.equal((await state()).service.mutations, 1);
+  await singleMutation();
 
   // Receiving an acknowledgment before a failed status read is distinct from
   // losing the acknowledgment itself. Both evidence and later work survive.
@@ -53,13 +55,13 @@ try {
   await page.screenshot({ path: 'output/playwright/persistent-recovery/acknowledged-reload.png', fullPage: true });
   await page.locator('#save').click();
   assert.match(await status(), /Check the existing submitted change first/);
-  assert.equal((await state()).service.mutations, 1);
+  await singleMutation();
   await page.evaluate(() => fixture.faults(null));
   await page.locator('#recover').click();
   assert.equal((await state()).journal.baseline.text, 'Acknowledged proposal');
   assert.equal(await page.locator('#draft').inputValue(), 'Newer draft after acknowledgment');
   await page.locator('#recover').click();
-  assert.equal((await state()).service.mutations, 1);
+  await singleMutation();
 
   // Exercise an actual storage exception after acceptance, independently of
   // the fixture's fault flag. A shared save/verify catch used to erase identity.
@@ -84,10 +86,10 @@ try {
   assert.equal(await page.locator('#conflict').isVisible(), false);
   await page.locator('#save').click();
   assert.deepEqual((await state()).journal.pending, thrownReadPending);
-  assert.equal((await state()).service.mutations, 1);
+  await singleMutation();
   await page.locator('#recover').click();
   assert.equal((await state()).journal.pending, null);
-  assert.equal((await state()).service.mutations, 1);
+  await singleMutation();
 
   // An exception at submission can also hide an accepted effect. Only an
   // explicit revision rejection may clear the pending identity.
@@ -109,10 +111,10 @@ try {
   assert.match(await status(), /Submission outcome unavailable/);
   assert.equal(await page.locator('#conflict').isVisible(), false);
   await page.locator('#save').click();
-  assert.equal((await state()).service.mutations, 1);
+  await singleMutation();
   await page.locator('#recover').click();
   assert.equal((await state()).journal.pending, null);
-  assert.equal((await state()).service.mutations, 1);
+  await singleMutation();
 
   // Missing receipts must not downgrade historical acknowledgment to unknown,
   // or invent acceptance when no acknowledgment was received.
@@ -131,7 +133,7 @@ try {
       assert.equal(await page.locator('#conflict').isVisible(), false);
       assert.equal(await page.locator('#draft').inputValue(), 'Newer work while receipt is missing');
       assert.deepEqual((await state()).journal.pending, pending);
-      assert.equal((await state()).service.mutations, 1);
+      await singleMutation();
     }
     const acknowledgment = await page.locator('#acknowledgment').textContent();
     if (received) assert.match(acknowledgment, /Historical acceptance; current verification pending/);
@@ -139,12 +141,12 @@ try {
     await page.screenshot({ path: `output/playwright/persistent-recovery/missing-receipt-${received ? 'acknowledged' : 'unknown'}.png`, fullPage: true });
     await page.locator('#save').click();
     assert.match(await status(), /Check the existing submitted change first/);
-    assert.equal((await state()).service.mutations, 1);
+    await singleMutation();
   }
 
   // Persist useful task context independently of the immutable submission.
   // Exercise all supported return origins, not only the field-level shortcut.
-  for (const [origin, target, label] of [
+  for (const reload of [false, true]) for (const [origin, target, label] of [
     ['field', 'draft', 'proposed record'],
     ['section', 'record-heading', 'record editor'],
     ['overview', 'overview', 'workspace'],
@@ -159,24 +161,25 @@ try {
     await page.locator('#help summary').click();
     await page.locator(`#${origin}-appearance`).click();
     await page.locator('#color-scheme').selectOption('dark');
-    await page.reload();
+    if (reload) await page.reload();
     assert.equal(await page.locator('#appearance').isVisible(), true);
     assert.equal(await page.locator('#workspace').isVisible(), false);
     assert.equal(await page.locator('#color-scheme').inputValue(), 'dark');
     assert.deepEqual((await state()).journal.pending, submitted);
     await page.getByRole('button', { name: `Return to ${label}`, exact: true }).press('Enter');
-    assert.equal(await page.evaluate(() => document.activeElement.id), target);
+    await exactReturn(target);
     assert.equal(await page.locator('#help').evaluate(el => el.open), true);
     assert.equal(await page.locator('#draft').inputValue(), 'Newer record draft');
     assert.equal(await page.locator('#notes').inputValue(), 'Independent notes draft');
     assert.equal((await state()).journal.baseline.text, 'Original');
     assert.deepEqual((await state()).journal.pending, submitted);
-    await page.screenshot({ path: `output/playwright/persistent-recovery/return-${origin}.png`, fullPage: true });
+    await page.screenshot({ path: `output/playwright/persistent-recovery/return-${origin}-${reload ? 'reload' : 'direct'}.png`, fullPage: true });
+    await page.evaluate(() => fixture.faults(null)); // Direct detours retain the injected read failure.
     await page.locator('#recover').press('Enter');
     assert.equal((await state()).journal.baseline.text, 'Submitted before detour');
     assert.equal(await page.locator('#draft').inputValue(), 'Newer record draft');
     assert.equal(await page.locator('#notes').inputValue(), 'Independent notes draft');
-    assert.equal((await state()).service.mutations, 1);
+    await singleMutation();
     const retained = (await state()).journal;
     const freshness = await page.locator('#freshness').textContent();
     await page.evaluate(() => fixture.faults(null, true));
@@ -184,6 +187,34 @@ try {
     assert.match(await status(), /Previously loaded record retained/);
     assert.deepEqual((await state()).journal, retained);
     assert.equal(await page.locator('#freshness').textContent(), freshness);
+  }
+
+  // Negative controls modify only the served test-owned fixture. Prove the
+  // same assertions reject a generic return and a second accepted mutation.
+  const source = await readFile(new URL('./fixtures/persistent-recovery/fixture.js', import.meta.url), 'utf8');
+  for (const kind of ['return', 'replay']) {
+    const from = kind === 'return' ? "$(target).focus({ preventScroll: true })"
+      : "if (journal.pending) { $('status').textContent = 'Check the existing submitted change first.'; return; }";
+    const to = kind === 'return' ? "$('overview').focus({ preventScroll: true })"
+      : 'journal.baseline = clone(loadService().record);';
+    assert.ok(source.includes(from), 'Negative control must alter the intended branch');
+    const intercepted = '**/tests/fixtures/persistent-recovery/fixture.js';
+    await page.route(intercepted, route => route.fulfill({ body: source.replace(from, to), contentType: 'text/javascript' }));
+    await reset();
+    if (kind === 'return') {
+      await page.locator('#field-appearance').click();
+      await page.reload();
+      await page.getByRole('button', { name: 'Return to proposed record', exact: true }).press('Enter');
+      await assert.rejects(() => exactReturn('draft'), { code: 'ERR_ASSERTION' });
+    } else {
+      await page.locator('#draft').fill('First submission');
+      await page.evaluate(() => fixture.faults(null, true, true));
+      await page.locator('#save').click();
+      await singleMutation();
+      await page.locator('#save').click();
+      await assert.rejects(singleMutation, { code: 'ERR_ASSERTION' });
+    }
+    await page.unroute(intercepted);
   }
 
   await reset();
@@ -208,7 +239,7 @@ try {
   assert.equal((await state()).service.mutations, 0);
   await page.locator('#save').click();
   assert.equal((await state()).service.record.text, 'Local edit');
-  assert.equal((await state()).service.mutations, 1);
+  await singleMutation();
   await reset();
   await page.evaluate(() => fixture.otherWriter('New saved record'));
   await page.locator('#refresh').click();

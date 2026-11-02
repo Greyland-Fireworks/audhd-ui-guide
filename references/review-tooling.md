@@ -8,15 +8,21 @@ The [shared core](../scripts/review-core.js) owns stable checks and A–E member
 
 Use this sequence instead of reading every supporting document up front. Keep the [Guide](../GUIDE.md) authoritative; this page is the command path, not a second rulebook.
 
-| Stage | Do now | Continue when |
+| Stage / prerequisite | Existing command and evidence | Stop until |
 |---|---|---|
-| A — Task contract | Declare tasks, mutation types, source inputs and required verification levels; initialize and record rendered task paths. | Required task paths pass. |
-| B — One complete workflow | Build and operate one representative slice; run navigation and record its rendered review before reuse. | B passes; its original milestone is saved automatically. |
-| C — Recovery | Exercise the scenario matrix below for each mutation task; record rendered recovery observations. | Applicable recovery assertions and rendered outcomes pass. |
-| D — Expand | Extend the proven pattern; exercise consuming behavior and review individual explanations. | Each task reaches its declared verification level. |
-| E — Integrated review | Compare repair inventories, retest behavior, inspect the actual mounted review bar and complete rendered review. | Required outcomes pass, with method and unverified scope visible. |
+| A — Declare the task contract | `init`, then `record paths FILE`: actual rendered task paths, scope and verification levels. | A passes; raw screenshots alone are not a recorded review. |
+| B — Build one representative slice after A | `run navigation`, `record navigation FILE`, `record workflow FILE`, then `milestone`. Operate the real task and return path before reuse. | A and B pass and `milestone` returns the preserved original artifact. |
+| C — Exercise recovery after B | `run CHECK [CHECK...]` for applicable recovery IDs, then `record-batch MANIFEST` for checks requiring rendered observations. | Every declared mutation has its required cases; no generic suite-count substitution. |
+| D — Expand the proven pattern after C | `run coverage`, then record coverage and explanations. Explanations require rendered evidence only. | Each task reaches its declared verification level. |
+| E — Review the integrated interface after D | Run and record preservation (when applicable), review-lights and integrated checks; inspect `report`. | Required outcomes pass; evidence methods and limits are visible. |
 
-Start with `init`, use `report` to find the next missing outcome, and run only explicitly named adapters. A successful process exit is not overall acceptance. Freeze a before inventory before repairs, even for a dashboard created during this same task.
+All commands above use `node scripts/review.mjs --config review.config.json COMMAND`; run them from the consumer's configured toolkit location. `report` identifies missing outcomes without executing adapters. On an unchanged build, finish missing evidence; on a changed build, initialize again and reassess as described below.
+
+**Before expansion:** run `status` and `milestone`. Do not reuse the representative pattern until A/B pass and the original B artifact exists. If expansion already happened without that milestone, record the omission and keep workflow timing Pending. A useful retrospective functional review cannot recreate before-reuse evidence. Do not backdate observations or relabel a later check as the missing original milestone.
+
+**Before repairs:** capture `inventory capture OUTPUT` before changing existing output and declare `stage: "repair"` with `existingInterface.applicable: true`. This includes repairs during the first dashboard-building task. Compare the current after inventory and rerun behavior after the repair. A missing before baseline is incomplete evidence, not permission to mark preservation inapplicable.
+
+**Choose evidence honestly:** control implemented, locally exercised and external integration verified are different levels. Select the required level from the task contract; unavailable required services remain Pending. If independent rendered review is unavailable, perform and name sequential self-review, with its limits. On Windows, a restricted executor's `EPERM` is an access limitation, not a failed product assertion; use the permitted execution path and retain the actual result. See [fallback and reassessment](#reassessment-and-review-fallback) for details.
 
 ## Configure and initialize
 
@@ -93,6 +99,63 @@ Required checks include distinct acknowledged-read failure, missing receipt with
 
 Updates use atomic replacement, an exclusive writer lock and a record-content comparison; a concurrent update is rejected. An interrupted writer may leave a lock: inspect the owning process and last valid record before manually removing a stale lock. Earlier-gate reassessment/reopening invalidates dependents. Status and the display recheck referenced artifacts. Changed or missing artifacts make evidence unavailable; status persists invalidation so restoring an artifact cannot reuse an interrupted completion interval.
 
+### Worked adapter: one assertion, two evidence methods
+
+This example connects an existing consumer navigation assertion to `navigation`; it does not certify the other checks. Prerequisite: A already passes. Place the adapter and its local assertion helper inside selected source inputs. The helper must operate the actual interface and throw unless exact destination, help, focus and both drafts survive Appearance and keyboard return, with and without reload where persistence is promised. Test field and section origins; only a genuinely missing or invalid origin may use an explicitly named fallback, never a generic destination substituted for a valid field. A source-only inspection or fixture unrelated to the consumer is insufficient.
+
+```js
+// checks/navigation-adapter.mjs — adapt the import to your existing assertion.
+import { writeFile } from 'node:fs/promises';
+import { verifyNavigation } from './navigation-assertions.mjs';
+const [checkId, build, result] = process.argv.slice(2);
+if (checkId !== 'navigation') throw new Error('Unexpected check ID');
+const evidence = { checkId, build, status: 'Pending', task: 'Edit configuration',
+  route: '#configuration', observation: 'Assertion has not completed.' };
+try {
+  await verifyNavigation(); // Throws on a failed assertion; no aggregate-suite relabeling.
+  evidence.status = 'Pass';
+  evidence.observation = 'Exact return, help, focus and two drafts survived the tested detours.';
+} catch (error) {
+  evidence.status = 'Fail'; evidence.observation = String(error.message);
+  process.exitCode = 1;
+}
+await writeFile(result, JSON.stringify(evidence));
+```
+
+Configure that assertion explicitly (replace the executable with your installed Node path if needed):
+
+```json
+{
+  "navigation": {
+    "executable": "node",
+    "args": ["checks/navigation-adapter.mjs", "{checkId}", "{build}", "{result}"],
+    "cwd": ".",
+    "inputs": ["checks/navigation-adapter.mjs", "checks/navigation-assertions.mjs"],
+    "timeoutMs": 60000,
+    "result": "navigation.json",
+    "runner": "Consumer navigation assertion"
+  }
+}
+```
+
+Use this entry under `adapters`, then run `run navigation`. Separately operate the rendered task and write its observation:
+
+```json
+{
+  "checkId": "navigation", "build": "CURRENT_BUILD", "configHash": "CURRENT_CONFIG_HASH",
+  "status": "Pending", "observedAt": "ACTUAL_OBSERVATION_TIME",
+  "task": "Edit configuration", "route": "#configuration",
+  "sequence": "Field help → Appearance → reload → keyboard return",
+  "observation": "Replace with the observed destination, focus, help and draft results.",
+  "reviewer": "ACTUAL_REVIEWER", "method": "self-review",
+  "references": ["review/evidence/navigation-observation.png"]
+}
+```
+
+Read current identities from the initialized identity file. Replace placeholders with actual observations and existing artifacts; set Pass only if the rendered requirement passed, or Fail if it failed. Then `record navigation review/evidence/navigation-rendered.json`. The adapter and rendered record close only navigation, not workflow timing or overall acceptance. Evidence file arguments are relative to the configured project root, not the shell directory.
+
+For recovery, keep the existing consumer harness and parameterize it over the declared save/apply/publish/account/permission operations. Import `pendingDetails(checkId, contract)` to start every required task/scenario Pending. Set each scenario from its own executed assertion; record its actual route and observation. Assert submitted intent and surrounding work for actions without editable drafts. Unexecuted cases stay Pending and failures stay Fail. One shared handler or 20 passing tests cannot stand in for the complete per-task matrix. Use `record-batch` for the separate rendered records; it reduces commands, not evidence requirements.
+
 ## Reassessment and review fallback
 
 On an unchanged build, rerun affected assertions in gate order; reassessing an earlier milestone invalidates its dependents. On a changed source/configuration build, initialize again and rerun applicable automated checks. Reuse historical artifacts as context and the preserved workflow milestone as history, not as fresh execution. No automatic affected-file inference or unchanged-evidence waiver is implemented. Batch commands reduce command overhead without weakening build binding.
@@ -118,6 +181,26 @@ To configure the automated `preservation` adapter, invoke `inventory compare BEF
 ## Display and evidence limits
 
 Reuse `mountReviewBar(host, { resourceBase, projectRoot })` from [review-bar.js](../scripts/review-bar.js) instead of rewriting its retirement/fetch guards. The [Harbor entry point](../examples/administration/acceptance-bar.js) is a compatibility wrapper; copy its small mount call and stylesheet integration. Supply a `details#acceptance-review` host with `data-record` and `data-identity` URLs resolved against `resourceBase`; `projectRoot` resolves artifact paths. The returned cleanup function removes listeners and polling when an SPA unmounts it. These are read-only URLs serving initialized identities and records, not check-running endpoints.
+
+The host must be **empty**: the component creates its summary, lights, guidance and evidence rows. Do not prepopulate fallback text or a summary, or mount twice into the same host. Mount once per host; invoke cleanup before removing that host. A new SPA mount uses a fresh empty host.
+
+```html
+<link rel="stylesheet" href="./vendor/acceptance-bar.css">
+<details id="acceptance-review"
+  data-identity="review/build.json" data-record="review/review.json"></details>
+<script type="module">
+  import { mountReviewBar } from './vendor/review-bar.js';
+  const host = document.querySelector('#acceptance-review');
+  const projectRoot = new URL('./', location.href);
+  const cleanup = await mountReviewBar(host, {
+    resourceBase: projectRoot, projectRoot
+  });
+  // Wire this to the SPA/component unmount lifecycle, if one exists.
+  function unmountReview() { cleanup(); host.remove(); }
+</script>
+```
+
+This example assumes the document is served from the consumer project root. For nested routes, supply the actual served root URL explicitly. Record/identity URLs resolve against `resourceBase`; artifact paths resolve against `projectRoot`. Copy `review-bar.js` and `review-core.js` together into the same local vendor directory, plus the stylesheet, preserving licenses. Include all three in source fingerprint selection. Serve the intended public evidence files, not the installed `.agents` skill tree or secrets. Do not copy Harbor's root-relative URLs into a differently hosted consumer unchanged. A static page needs no special unload handler; avoid stopping polling on a back/forward-cache pagehide without remounting on restoration.
 
 Run consumer integration assertions against the actual mounted component: focused **closed** summary at retirement, open panel, blur/close, keyboard/touch disclosure, current-build change, unavailable/changed artifacts and periodic refresh. The [Harbor browser check](../examples/administration/acceptance-check.mjs) demonstrates test-owned synthetic records; adapt its routes to the consumer. Core unit tests alone cannot close the consumer `review-lights` check. Never inject faults into a live external service without authorization.
 

@@ -190,6 +190,8 @@ Use claims supported by this record. Passing these checks does not establish cli
 - Schema-2 record and required check IDs:
 - Automated invocation/result artifacts versus rendered observation artifacts:
 - Reviewer identity and self-review/independent method:
+- Before expansion: A/B disposition and preserved milestone artifact (missing history stays Pending):
+- Before repair: captured baseline and repair-stage applicability:
 - Representative review timing: before reuse / reassessed with preserved milestone / retrospective / unknown:
 - Capability scope and before/after comparison, followed by behavioral retests:
 - Explicit task-contract applicability reasons (unperformed is Pending):
