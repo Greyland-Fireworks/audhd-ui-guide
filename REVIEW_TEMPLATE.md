@@ -24,6 +24,9 @@ For `audhd quick review` and `audhd audit`, follow the [review modes](SKILL.md#r
 ### Scope
 
 - Task and intended users:
+- Deliverable contract: requested artifact, purpose, observable outcomes and original request reference:
+- Delivered entry point, documented prerequisites, exclusions and blocking dependencies:
+
 - UI and UX aspects in scope, and evidence needed for each:
 - Guide version and affected rule IDs:
 - Build or revision:
@@ -36,6 +39,16 @@ For `audhd quick review` and `audhd audit`, follow the [review modes](SKILL.md#r
 - Consequential behavior: established behavior and source; proposed choice and tradeoff; unresolved dependency and what it blocks. Omit empty categories.
 - Requested preferences, declared support, actually applied values and unsupported choices:
 - Agreed Guide emphasis/primary targets and their source, if supplied; distinguish them from application preferences:
+
+- Requested outcome → request reference → minimum consumer proof → observed result: use the existing coverage rows.
+- Applicable partial-apply boundaries and restoration evidence:
+- Exact delivered startup command/context, normal-path result and native-zoom evidence:
+- Unfinished authorized work or concrete blocker/next action:
+
+
+### Delivered experience and contradictions
+
+Follow the [delivered-experience procedure](references/autonomous-implementation.md#challenge-the-delivered-experience). Record the first attempt from the delivered entry, coaching/interventions, and separate functional and usability conclusions in the existing rows. Identify the actual recovery boundary tested. If evidence contradicts an earlier pass, link the historical observation, reopened gate/dependents and required retest; do not erase the earlier failure or retain a misleading current Pass.
 
 ### Procedure and results
 

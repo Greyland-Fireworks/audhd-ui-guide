@@ -1,6 +1,6 @@
 # Local executable review evidence
 
-Toolkit 1.1.3 uses schema-version 2 review records. Guide rules remain v1.01; framework and preference schemas retain their own versions. This is a local evidence workflow, not a certification or a claim that generated dashboards have improved.
+Toolkit 1.1.4 uses schema-version 2 review records. Guide rules are 1.1.4; framework and preference schemas retain their own versions. This is a local evidence workflow, not a certification or a claim that generated dashboards have improved.
 
 The [shared core](../scripts/review-core.js) owns stable checks and A–E membership. It links to AUDHD-12 rather than maintaining another rulebook. Required outcomes use automated assertions, rendered observations, or both. Advisory observations stay outside the blocking set. Optional participant feedback and untested platforms remain explicitly separate.
 
@@ -18,11 +18,39 @@ Use this sequence instead of reading every supporting document up front. Keep th
 
 All commands above use `node scripts/review.mjs --config review.config.json COMMAND`; run them from the consumer's configured toolkit location. `report` identifies missing outcomes without executing adapters. On an unchanged build, finish missing evidence; on a changed build, initialize again and reassess as described below.
 
+**Before choosing the slice:** preserve the [deliverable contract](../SKILL.md#establish-the-task-and-scope). A validates the requested artifact and task paths, not merely whatever screen was built. For integrated review, use the [delivered-experience procedure](autonomous-implementation.md#challenge-the-delivered-experience); functional assertions and rendered usability remain separate requirements.
+
+**When a pass is contradicted:** use `reopen GATE REASON` for the earliest affected gate, then record the new evidence and retest through the same commands. This applies without a source change. Preserve historical observations; reopening invalidates dependent acceptance and the completion clock.
+
 **Before expansion:** run `status` and `milestone`. Do not reuse the representative pattern until A/B pass and the original B artifact exists. If expansion already happened without that milestone, record the omission and keep workflow timing Pending. A useful retrospective functional review cannot recreate before-reuse evidence. Do not backdate observations or relabel a later check as the missing original milestone.
 
 **Before repairs:** capture `inventory capture OUTPUT` before changing existing output and declare `stage: "repair"` with `existingInterface.applicable: true`. This includes repairs during the first dashboard-building task. Compare the current after inventory and rerun behavior after the repair. A missing before baseline is incomplete evidence, not permission to mark preservation inapplicable.
 
 **Choose evidence honestly:** control implemented, locally exercised and external integration verified are different levels. Select the required level from the task contract; unavailable required services remain Pending. If independent rendered review is unavailable, perform and name sequential self-review, with its limits. On Windows, a restricted executor's `EPERM` is an access limitation, not a failed product assertion; use the permitted execution path and retain the actual result. See [fallback and reassessment](#reassessment-and-review-fallback) for details.
+
+## Finish the mission and hand it off
+
+Keep the original request → outcome → minimum proof mapping in the existing coverage declaration. Use the [completion requirements](../GUIDE.md#completion-follows-the-requested-outcome) at every phase exit. Required Pending work remains actionable: continue feasible authorized tasks; otherwise name the concrete blocker and next action. Goals are optional execution support, not a prerequisite for completing the task.
+
+At E, operate the exact startup command from the delivered working-directory context, then the normal supported task path. A static example may use its documented preview command and served entry; it does not acquire a production backend requirement. Challenge a consequential claim before reading the implementer's success narrative. Record actual native 200% zoom separately from CSS/text enlargement. For partial Apply, select faults at the real file/service boundaries and verify restoration rather than inferring it from a receipt.
+
+Generate the handoff status with the existing `report` command after the last source/evidence change. Its output is a dated snapshot, never a live authority. Identify the build and canonical record in narrative notes and mark earlier all-pass summaries historical when reopening or changing builds. A stale-build report refuses current acceptance until initialization; old reviewer prose cannot override it.
+
+## Upgrading review records to toolkit 1.1.4
+
+Guide, toolkit and plugin are 1.1.4. Evidence remains schema 2, but the acceptance configuration is stricter. Add the fields below, reinitialize and provide fresh evidence; historical passes are not promoted. Existing consumer adapters need corresponding structured outcomes. An unavailable required check stays Pending.
+
+Each `contract.coverage` entry now declares `outcome`, `requestReference` and `proof`, in addition to its existing `id` and `required` control/local/external level. `proof` is one of `control`, `saved`, `loaded`, `effect`, `task` in increasing order. Automated coverage results provide the achieved `proof` and a concrete `observation` per entry. A lower proof cannot close a higher requirement. The declaration itself still needs review against the original request; the tool cannot infer omitted intent.
+
+```json
+{"id":"capacity","required":"local","outcome":"Make requested game capacity available","requestReference":"Original operator request","proof":"effect"}
+```
+
+Declare `contract.partialApply` as `{ "applicable": true, "reason": "Apply writes multiple files and restarts consumers" }`, or `{ "applicable": false, "reason": "Memory-only edits; no files or services are changed" }` when that is the actual task boundary. This makes partial-apply rendered review blocking when applicable; memory-only examples do not acquire deployment requirements.
+
+Rendered `integrated` evidence includes `requiredChecks`, with `delivered-startup`, `normal-path` and `native-zoom` entries, plus `partial-apply-recovery` when applicable. Each entry has `status` (Pass/Fail/Pending) and `observation` describing the exercised sequence and result. Include the corresponding local references using the existing evidence mechanism. Source inspection or an unavailable tool cannot substitute for these rendered checks.
+
+New B milestones preserve the original record and A/B artifact bytes in content-addressed storage beneath the evidence directory. Changing working screenshots cannot erase those preserved bytes; missing or changed preserved artifacts block reuse. Old milestones without this bundle remain historical but cannot close current before-reuse verification through automatic reassessment. Preserve any historical timing omission; do not fabricate earlier review or copy current images as old evidence.
 
 ## Configure and initialize
 
@@ -36,9 +64,10 @@ The current working toolkit requires these additional contract declarations. Exi
   "mutationTasks": ["configuration-save", "apply", "publish", "account-change"],
   "verificationScope": "Local test instance",
   "unverified": ["External delivery integrations", "Screen-reader inspection"],
+  "partialApply": {"applicable": true, "reason": "Configuration apply restarts consumers"},
   "coverage": [
-    {"id": "configuration", "required": "local"},
-    {"id": "notification-delivery", "required": "external"}
+    {"id": "configuration", "required": "local", "outcome": "Change the running configuration", "requestReference": "Operator request", "proof": "effect"},
+    {"id": "notification-delivery", "required": "external", "outcome": "Deliver the requested notification", "requestReference": "Operator request", "proof": "task"}
   ]
 }
 ```

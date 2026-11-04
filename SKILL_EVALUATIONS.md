@@ -16,6 +16,25 @@ E36–E39 add four authored cases to the unchanged 35-case historical dataset: f
 
 For these cases, supply only the skill, Guide and the individual input. Use the case-specific design/review request rather than converting E36 into a review-only task. Keep the rubric out of evaluated contexts and record fresh first responses and settings as described below. Do not use this conversation's coached examples as independent evaluation evidence.
 
+## Provisioning fidelity and procedural desk checks
+
+Before provisioning an implementation trial, compare the original user objective with the exact proposed prompt: artifact, purpose, required tasks, exclusions and entry/runtime assumptions. Preserve these when switching projects. In the current configuration-dashboard trial series, changing the target project does not authorize changing the objective to gameplay. That series-specific objective is not a universal skill default. Show the exact prompt with provisioning; provisioning does not authorize running a model. Resolve a material task substitution rather than silently narrowing it. Record the request reference and any authorized scope change with the existing setup record.
+
+Use the following synthetic desk checks to review instruction changes. They are repository-only editorial scenarios, separate from the historical 39-case dataset and from executed model trials. Record the reviewer, disposition and reasoning locally; a prose or keyword check cannot prove semantic compliance.
+
+| Synthetic situation | Required procedural disposition |
+|---|---|
+| User requests a backend configuration dashboard; proposed prompt edits a city production panel | Stop dependent provisioning at scope reconciliation; restore the requested artifact or obtain an explicit change. |
+| User explicitly requests a city production interaction fix | Keep that gameplay scope; do not impose an administration dashboard. |
+| Required runtime is unavailable | Continue supported preparation; integration stays Pending, without substituting a demonstration as completion. |
+| Actions work, but detached feedback and unreadable decoration impede the task | Preserve functional results; required rendered usability remains Fail. |
+| Reviewer needs an undocumented setup command to reach the handed-off task | Record the intervention and entry gap; coached success cannot pass unaided entry. |
+| A focused edit invokes the no-unrelated-reskin rule to exclude readability of its own controls | Review and correct the affected surface; do not expand to unrelated restyling. |
+| Reconnect retains state, but restart restores a fixed save | Report each boundary separately; reconnect cannot certify restart persistence. |
+| Later evidence contradicts an all-Pass record on the same build | Preserve history, reopen the earliest affected gate and dependents, reset completion and require retest. |
+
+Reviewers should first attempt the objective from the delivered entry before reading the implementer's success narrative. Keep first completed output, repairs and later contradictions distinct. A missed objective introduced by the provisioning prompt is an orchestration failure; the guide cannot recover intent omitted from its inputs.
+
 ## Explicitly requested model testing
 
 For implementation comparisons, preserve the first completed output and its evidence before coaching or repair. Record subsequent audit/fix/retest stages separately; compare equivalent stages and retain failures. Record functional coverage, recovery, navigation, explanation quality and rendered organization separately rather than ranking by option counts, test totals or test number. Keep the exact prompt, environment assistance, toolkit content hashes and reviewer input boundaries with each run. An uncommitted toolkit snapshot needs its patch and packaged-file hashes as well as its base commit. Provisioning a new folder does not authorize launching its model trial.

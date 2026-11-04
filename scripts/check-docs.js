@@ -50,6 +50,9 @@ function checkNumberedIds(file, pattern, prefix, count) {
   const expected=Array.from({length:count},(_,i)=>`${prefix}${String(i+1).padStart(2,'0')}`);
   assert.deepEqual(actual,expected,`${file}: expected ${prefix}01 through ${expected.at(-1)} in order, without duplicates`);
 }
+const guideVersion = content.get(resolve(root, 'GUIDE.md')).match(/\*\*Version:\*\* ([0-9.]+)/)?.[1];
+const toolkitVersion = content.get(resolve(root, 'README.md')).match(/\*\*Toolkit version:\*\* ([0-9.]+)/)?.[1];
+assert.ok(guideVersion && guideVersion === toolkitVersion, 'Current Guide and toolkit versions must match');
 checkNumberedIds('GUIDE.md',/^### (AUDHD-\d{2}) /gm,'AUDHD-',13);
 const evaluationFiles=['EVALUATION_INPUTS.md','EVALUATION_RUBRIC.md'];
 const evaluationCount=evaluationFiles.filter(file=>content.has(resolve(file))).length;

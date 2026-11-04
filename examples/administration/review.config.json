@@ -55,9 +55,16 @@
     "coverage": [
       {
         "id": "harbor-workflows",
-        "required": "local"
+        "required": "local",
+        "outcome": "Complete the fictional Harbor administration tasks with observable simulated effects",
+        "requestReference": "examples/administration/README.md",
+        "proof": "effect"
       }
-    ]
+    ],
+    "partialApply": {
+      "applicable": false,
+      "reason": "Harbor mutates a simulated in-memory service; no multi-file deployment or service restart is promised."
+    }
   },
   "adapters": {
     "review-lights": {

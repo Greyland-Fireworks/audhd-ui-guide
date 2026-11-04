@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, writeFile, readFile, mkdir, rm, copyFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { loadConfig, initialize, readRecord, saveRecord, current, recordRendered, runCheck, checkedPath, latestMilestone } from '../../scripts/review-io.mjs';
+import { hash, loadConfig, initialize, readRecord, saveRecord, current, recordRendered, runCheck, checkedPath, latestMilestone } from '../../scripts/review-io.mjs';
 import { main } from '../../scripts/review.mjs';
 import { contract } from './fixtures.js';
 
@@ -72,7 +72,7 @@ test('new builds require reassessment while preserving genuine earlier phase tim
   const c = await fixture(t); await rendered(c, 'paths'); await rendered(c, 'workflow');
   await runCheck(c, 'navigation'); await rendered(c, 'navigation');
   const old = (await readRecord(c)).record;
-  const priorPath = 'output/prior-milestone.json'; await writeFile(join(c.root, priorPath), JSON.stringify(old));
+  const priorPath = (await latestMilestone(c)).artifactPath;
   await writeFile(join(c.root, 'source.txt'), 'new implementation');
   const next = await loadConfig(c.filename); await initialize(next); await rendered(next, 'paths');
   const prior = old.checks.find(check => check.id === 'workflow').evidence.rendered;
@@ -82,7 +82,7 @@ test('new builds require reassessment while preserving genuine earlier phase tim
   assert.equal((await current(next)).record.checks.find(c => c.id === 'workflow').status, 'Pass');
   old.checks.find(c => c.id === 'workflow').evidence.rendered.timing = 'retrospective';
   await writeFile(join(c.root, priorPath), JSON.stringify(old));
-  await assert.rejects(recordRendered(next, 'workflow', path), /Historical artifact/);
+  await assert.rejects(recordRendered(next, 'workflow', path), /artifact changed/);
 });
 
 test('milestones are automatic, immutable, and reusable only with fresh rendered observations', async t => {
@@ -92,13 +92,28 @@ test('milestones are automatic, immutable, and reusable only with fresh rendered
   await runCheck(c, 'navigation'); await rendered(c, 'navigation');
   const prior = await latestMilestone(c);
   const original = await readFile(join(c.root, prior.artifactPath), 'utf8');
+  const legacy = JSON.parse(original); delete legacy.milestoneArtifacts;
+  const legacyBytes = JSON.stringify(legacy);
+  await writeFile(join(c.root, 'output/evidence/milestones/' + hash(legacyBytes) + '.json'), legacyBytes);
+  assert.deepEqual(await latestMilestone(c), prior, 'Legacy history must not prevent selecting a complete preserved bundle');
+  const bundle = JSON.parse(original).milestoneArtifacts;
+  assert.ok(bundle.length);
   await writeFile(join(c.root, 'source.txt'), 'changed');
+  assert.deepEqual(await latestMilestone(c), prior, 'Original evidence remains available after its working path changes');
   const next = await loadConfig(c.filename); await initialize(next); await rendered(next, 'paths');
   await writeFile(join(c.root, 'output/reassessment.json'), JSON.stringify({ checkId: 'workflow', ...next.identity, status: 'Pass', observedAt: new Date().toISOString(), method: 'self-review', reviewer: 'Fixture', task: 'Fixture', route: '#fixture', sequence: 'Re-operated current build', observation: 'Fresh observation', references: ['source.txt'] }));
   const result = await main(['--config', c.filename, 'record', 'workflow', 'output/reassessment.json', '--milestone', prior.artifactPath]);
   assert.equal(result.checks.find(c => c.id === 'workflow').status, 'Pass');
   assert.equal(result.checks.find(c => c.id === 'navigation').status, 'Pending');
   assert.equal(await readFile(join(c.root, prior.artifactPath), 'utf8'), original);
+  const preserved = await readFile(join(c.root, bundle[0].storedPath));
+  await writeFile(join(c.root, bundle[0].storedPath), 'corrupted');
+  await assert.rejects(latestMilestone(next), /evidence changed/);
+  await writeFile(join(c.root, bundle[0].storedPath), preserved);
+  await assert.rejects(main(['--config', c.filename, 'report']).then(async () => {
+    await writeFile(join(c.root, 'source.txt'), 'newer');
+    return main(['--config', c.filename, 'report']);
+  }), /init for this build/);
   await writeFile(join(c.root, prior.artifactPath), '{}');
   await assert.rejects(latestMilestone(next), /changed/);
 });

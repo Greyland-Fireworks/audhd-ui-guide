@@ -14,6 +14,28 @@ Make material coverage limits visible before users depend on unsupported workflo
 
 For each requested task, trace discovery of the current object or state, the intended action, its effect and recovery. Where management is in scope, implement the needed inspection and management operations through supported application interfaces; a database-path field, raw declaration editor or instruction to use a CLI does not complete the web workflow. Avoid requiring users to manufacture machine-formatted values when a supported task-level operation can produce them. If a dependency prevents that workflow, name it as unfinished support rather than treating disclosure of the gap as completion. This does not expand the task into unrelated administration.
 
+## Prove one configuration decision before expansion
+
+When the request includes explaining how the program works, the representative slice must connect a user goal to a program component, its inputs/outputs, the setting's owner and consumer, a supported change, its apply boundary and an observable result. Link source evidence in optional detail; keep the explanation needed to decide beside the control. A field catalog or a gameplay improvement does not deliver this configuration workflow.
+
+For example, adapting the fictional Harbor administration pattern: “Keep activity available for investigation” leads to the activity store and its retention setting. Explain that incoming activity is stored, the retention worker removes expired entries, and the activity view reads retained entries. Show the setting's source and override precedence, draft versus saved value, when the worker uses a changed value, and what observation would verify the effect. A successful save proves persistence only; it does not prove expiration ran. If the simulated example cannot exercise that worker, label the mechanism illustrative and operational verification Pending. Do not invent a backend for the example.
+
+Use an overview for component relationships and local disclosure for technical paths. Trace existing startup loaders, storage, services and consumers only as relevant to the user's request. Explain unavailable controls and their dependencies. Complete the slice through its actual entry and recovery before reusing its layout; retain the existing A/B milestone evidence.
+
+### Select sufficient consumer proof
+
+Use the requested outcome to select proof, then preserve that requirement through implementation and repairs:
+
+| Proof | Establishes | Still needs separate evidence |
+|---|---|---|
+| control | Intended interface interaction works | Persistence and consumption |
+| saved | Desired values persisted and read back | Consumer loading |
+| loaded | Intended consumer recognizes values | Their observable effect |
+| effect | Relevant behavior changes as promised | Unrelated integrations |
+| task | Normal supported path reaches the requested result | Other environments and tasks |
+
+Record the outcome, original request reference and minimum proof in the existing coverage declaration. A timeout setting need not acquire a production benchmark; an availability task must demonstrate availability or remain unfinished. Unavailable credentials can block external verification without excluding unrelated local controls. Follow the [completion and partial-application requirements](../../GUIDE.md#completion-follows-the-requested-outcome).
+
 ## Discover configuration sources automatically
 
 Discover all configuration sources for the target application within the authorized repository and available runtime context; do not require a configuration-file path from the user. Treat a supplied file as a discovery seed unless the user explicitly limits the scope to it. Follow application entry points, startup commands, configuration loaders, include/import chains, environment selection and deployment definitions. Search supported formats and code-defined defaults rather than assuming configuration is JSON or that every matching file is loaded.

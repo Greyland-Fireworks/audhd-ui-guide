@@ -49,7 +49,7 @@ export async function main(args = process.argv.slice(2)) {
       await saveRecord(context, result, saved.token);
       result = (await current(context)).record;
     }
-    if (command === 'report') return `Build ${result.build}\nScope: ${result.contract.verificationScope}\nUnverified: ${result.contract.unverified.join('; ') || 'no additional areas declared'}\n${result.gates.map(g => `${g.id} ${g.status}: ${g.checks.filter(c => !['Pass', 'Not applicable'].includes(c.status)).map(c => `${c.id} (${c.issue || c.status})`).join('; ')}`).join('\n')}\nLocal evidence validation; reviewer independence and output quality are not established by this tool.`;
+    if (command === 'report') return `Acceptance snapshot generated ${new Date().toISOString()}; rerun report before handoff or after changes.\nBuild ${result.build}\nScope: ${result.contract.verificationScope}\nUnverified: ${result.contract.unverified.join('; ') || 'no additional areas declared'}\n${result.gates.map(g => `${g.id} ${g.status}: ${g.checks.filter(c => !['Pass', 'Not applicable'].includes(c.status)).map(c => `${c.id} (${c.issue || c.status})`).join('; ')}`).join('\n')}\nRequested outcomes: ${result.contract.coverage.map(c => `${c.id}: ${c.outcome} (request: ${c.requestReference}; minimum proof: ${c.proof})`).join('; ')}\nRequired gaps mean unfinished work; continue authorized feasible tasks or name a concrete blocker.\nLocal evidence validation; reviewer independence and output quality are not established by this tool.`;
   } else if (command === 'inventory') {
     const { captureInventory, compareInventories } = await import('./review-inventory.mjs');
     if (id === 'capture') {

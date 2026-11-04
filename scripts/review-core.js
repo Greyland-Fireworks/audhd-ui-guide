@@ -30,10 +30,13 @@ export const recoveryScenarios = {
   'missing-receipt': ['acknowledged-unverified', 'unacknowledged-unknown', 'blocked-replay', 'read-only-recovery'],
   reload: ['reload-identity-snapshot-acknowledgment', 'failed-read-after-reload', 'newer-draft', 'single-mutation'],
 };
+export const proofLevels = ['control', 'saved', 'loaded', 'effect', 'task'];
+export const integratedChecks = ['delivered-startup', 'normal-path', 'native-zoom'];
 export const resultFields = ['checkId', 'build', 'status', 'observation', 'task', 'route', 'taskResults', 'coverage'];
 export function pendingDetails(id, contract) {
   if (recoveryScenarios[id]) return { taskResults: contract.mutationTasks.map(taskId => ({ id: taskId, route: '(not exercised)', observation: 'Not exercised', scenarios: Object.fromEntries(recoveryScenarios[id].map(s => [s, 'Pending'])) })) };
-  if (id === 'coverage') return { coverage: contract.coverage.map(({ id }) => ({ id, control: 'Pending', local: 'Pending', external: 'Pending' })) };
+  if (id === 'coverage') return { coverage: contract.coverage.map(({ id }) => ({ id, control: 'Pending', local: 'Pending', external: 'Pending', proof: 'control', observation: 'Not exercised' })) };
+  if (id === 'integrated') return { requiredChecks: Object.fromEntries([...integratedChecks, ...(contract.partialApply.applicable ? ['partial-apply-recovery'] : [])].map(id => [id, { status: 'Pending', observation: 'Not exercised' }])) };
   return {};
 }
 export function outcomeError(e, contract) {
@@ -44,6 +47,7 @@ export function outcomeError(e, contract) {
   if (!Array.isArray(entries) || entries.length !== declared.length || new Set(entries.map(c => c.id)).size !== declared.length || declared.some(id => !entries.some(c => c.id === id))) return 'Every declared task needs its own structured outcome.';
   for (const entry of entries) {
     if (!scenarios && ['control', 'local', 'external'].some(key => !['Pass', 'Fail', 'Pending'].includes(entry[key]))) return 'Report control, local and external verification separately.';
+    if (!scenarios && (!proofLevels.includes(entry.proof) || !nonempty(entry.observation) || (e.status === 'Pass' && proofLevels.indexOf(entry.proof) < proofLevels.indexOf(contract.coverage.find(c => c.id === entry.id).proof)))) return 'Minimum requested consumer proof remains unverified.';
     const required = scenarios || ['control', 'local', 'external'].slice(0, ['control', 'local', 'external'].indexOf(contract.coverage.find(c => c.id === entry.id).required) + 1);
     const values = scenarios ? entry.scenarios : entry;
     if (scenarios && (!nonempty(entry.route) || !nonempty(entry.observation))) return 'Recovery outcomes require their task route and observation.';
@@ -58,6 +62,8 @@ export function catalog(contract) {
   if (!Array.isArray(contract.mutationTasks) || contract.mutationTasks.some(id => !nonempty(id)) || new Set(contract.mutationTasks).size !== contract.mutationTasks.length || (contract.mode === 'read-only' ? contract.mutationTasks.length !== 0 : !contract.mutationTasks.length)) throw new Error('Declare each mutation task, or an empty list for read-only work.');
   if (!nonempty(contract.verificationScope) || !Array.isArray(contract.unverified) || contract.unverified.some(item => !nonempty(item))) throw new Error('Declare visible verification scope and unverified areas.');
   if (!Array.isArray(contract.coverage) || !contract.coverage.length || new Set(contract.coverage.map(c => c.id)).size !== contract.coverage.length || contract.coverage.some(c => !nonempty(c.id) || !['control', 'local', 'external'].includes(c.required))) throw new Error('Declare coverage tasks and required control/local/external verification levels.');
+  if (contract.coverage.some(c => !nonempty(c.outcome) || !nonempty(c.requestReference) || !proofLevels.includes(c.proof))) throw new Error('Bind every coverage outcome to the request and minimum consumer proof.');
+  if (typeof contract.partialApply?.applicable !== 'boolean' || !nonempty(contract.partialApply.reason)) throw new Error('Declare partial-apply applicability and its operation boundary.');
   for (const [key, expected] of Object.entries({ mutations: contract.mode !== 'read-only', durableRecovery: contract.mode === 'persistent', concurrentWrites: contract.mode === 'persistent' })) {
     if (contract[key]?.applicable !== expected) throw new Error(`Applicable ${key} checks cannot be omitted.`);
   }
@@ -86,6 +92,10 @@ function evidenceError(e, d, kind, record, now) {
     if (e.status === 'Pass' && (e.exitCode !== 0 || e.timedOut || e.runStatus !== 'completed')) return 'The check did not complete successfully.';
   } else {
     if (!['self-review', 'independent review'].includes(e.method) || !nonempty(e.reviewer) || !nonempty(e.sequence)) return 'Named rendered review and an exercised sequence are required.';
+    if (d.id === 'integrated') {
+      const required = [...integratedChecks, ...(record.contract.partialApply.applicable ? ['partial-apply-recovery'] : [])];
+      if (required.some(id => !['Pass', 'Fail', 'Pending'].includes(e.requiredChecks?.[id]?.status) || !nonempty(e.requiredChecks[id].observation) || (e.status === 'Pass' && e.requiredChecks[id].status !== 'Pass'))) return 'Required startup, normal-path, native-zoom or partial-apply review remains unfinished.';
+    }
     if (d.id === 'workflow' && !['before-reuse', 'reassessed', 'retrospective'].includes(e.timing)) return 'Identify whether representative review preceded reuse.';
     if (d.id === 'workflow' && e.timing === 'retrospective') return 'Retrospective review does not prove the required phase ordering.';
     if (d.id === 'workflow' && e.timing === 'reassessed') {
@@ -94,6 +104,12 @@ function evidenceError(e, d, kind, record, now) {
     }
   }
   return e.invalidReason || null;
+}
+export function preservedArtifacts(historical) {
+  const expected = historical?.checks?.filter(c => ['paths', 'workflow', 'navigation'].includes(c.id)).flatMap(c => Object.values(c.evidence || {}).flatMap(e => e.artifacts || [])) || [];
+  const bundle = historical?.milestoneArtifacts;
+  if (!expected.length || !Array.isArray(bundle) || bundle.some(a => !nonempty(a.storedPath) || !/^[a-f0-9]{64}$/.test(a.sha256)) || expected.some(a => !bundle.some(b => b.path === a.path && b.sha256 === a.sha256))) throw new Error('Historical milestone lacks its preserved artifact bundle; retain it as incomplete historical evidence.');
+  return bundle.map(a => ({ path: a.storedPath, sha256: a.sha256 }));
 }
 export function verifyPriorMilestone(evidence, historical) {
   if (evidence.checkId !== 'workflow' || evidence.timing !== 'reassessed') return;

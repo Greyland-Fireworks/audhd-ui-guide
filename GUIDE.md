@@ -1,6 +1,6 @@
 # AuDHD friendly interface rulebook and visual standard
 
-**Version:** v1.01 · Updated October 19, 2026
+**Version:** 1.1.4 · Updated November 4, 2026
 
 Make tasks easier to understand, resume, inspect and correct. Accessible behavior is mandatory. Appearance is adaptable. Personalization must preserve work, context and operability. This guide combines framework-neutral interaction requirements with selectable light and dark appearances. The rules do not assume a single personality or preferred information density. Apply them alongside your platform's accessibility requirements. See the [overview](README.md) for scope and evidence limits.
 
@@ -393,6 +393,20 @@ Simplify implementation only while preserving the complete task, usable explanat
 
 **Check:** Use the [review template](REVIEW_TEMPLATE.md). Record expected and observed behavior, build, environment and gaps. Do not claim clinical effectiveness, universal suitability or “AuDHD compliance.”
 
+#### Completion follows the requested outcome
+
+Bind each required outcome to the original request, an observable completion condition and minimum consumer evidence. A working representative slice is a checkpoint for expansion. Continue authorized feasible work while required outcomes remain unfinished; if blocked, name the affected outcome, concrete dependency and next action. An execution budget ending is an interrupted implementation, not acceptance. Keep unsupported external integrations separate from unfinished local functionality.
+
+Distinguish control interaction, saved/read-back values, consumer-loaded values, observed effects and completion through the normal supported path. Choose the minimum sufficient level from the requested outcome; a health check or parser result establishes only its exercised boundary. A narrower verification declaration cannot silently reduce the user's mission.
+
+Integrated review starts from the exact delivered startup command, prerequisites and entry URL, and follows the normal supported path to its promised result. Record interventions and alternate diagnostic paths separately. Required keyboard, narrow-layout and actual 200% browser-zoom checks remain unfinished when tools cannot perform them; optional participant evidence remains separate.
+
+For multi-file or service-changing Apply operations, challenge applicable partial-write, stop, restart and restoration failures. Retain submitted intent and newer drafts. Describe partial effects until reconciled; claim restoration only after verifying the relevant prior files and consumers. Receipt/replay tests establish transport recovery, not service restoration.
+
+Acceptance summaries identify the build and canonical evidence source. Reopen contradicted outcomes and dependents; mark superseded summaries historical before handoff. Preserve original milestone artifacts as well as their hashes so before-expansion evidence remains inspectable. Local validation establishes record consistency, not reviewer independence or user comprehension.
+
+For isolated launchers or workers that can repeatedly create processes or work, set a proportional resource bound and a stop condition for repeated startup failure. Preserve diagnostics and verify containment; separate ports and containers alone do not bound shared-host impact.
+
 ### AUDHD-13 Protect consequential edits with scoped safeguards
 
 **Requirement:** Where accidental edits have meaningful consequences, consider a readable locked state with an explicit “Unlock to edit” action for a named field or group. Do not lock every ordinary field by default; extra steps can themselves be a barrier. An editing lock is not an authorization boundary.
@@ -616,6 +630,8 @@ Record results with the [review template](REVIEW_TEMPLATE.md). Record appearance
 Keep IDs stable. Record requirement changes in a version history. Use product-specific appendices for domain rules, density choices and exceptions rather than embedding them in this shared guide. An exception records its scope, reason, alternative, observed impact and review condition. Existing gaps do not authorize unrelated rewrites.
 
 ### Version history
+
+- **1.1.4 — November 4, 2026:** Bind completion to requested outcomes and consumer proof, normal-path handoff, required rendered checks, partial-apply recovery, preserved milestones and honest current acceptance. Existing 13 rule IDs remain stable.
 
 - **v1.01 draft update — October 20, 2026:** Expanded AUDHD-03 with recognition-based discovery, visible retained filters and reset continuity. Added a recording example, skill routing and evaluation case E35 under the existing 13 rule IDs. Discovery patterns remain optional; all 35 model outcomes remain pending.
 

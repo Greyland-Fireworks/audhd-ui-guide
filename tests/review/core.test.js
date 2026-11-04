@@ -62,3 +62,45 @@ test('recovery task omissions, incomplete scenarios and control-only coverage ca
   assert.equal(assess(external, {...identity, contract: external.contract}, now).gates[3].status, 'Pending');
   assert.throws(() => initial({...identity, contract: {...contract, existingInterface: {applicable: false, reason: 'Started from scratch'}}}, now), /Repair stages/);
 });
+
+test('functional success cannot substitute for missing or failed rendered navigation', () => {
+  for (const status of [null, 'Fail']) {
+    const record = complete();
+    const check = record.checks.find(c => c.id === 'navigation');
+    assert.equal(check.evidence.automated.status, 'Pass');
+    if (status) check.evidence.rendered.status = status;
+    else delete check.evidence.rendered;
+    const result = assess(record, identity, now);
+    assert.equal(result.checks.find(c => c.id === 'navigation').status, status || 'Pending');
+    assert.notEqual(result.gates[1].status, 'Pass');
+    assert.notEqual(result.gates[4].status, 'Pass');
+    assert.equal(result.allPassedAt, null);
+    assert.equal(canHide(record, identity, now + day), false);
+  }
+});
+
+test('contradictory same-build review reopens acceptance without erasing historical evidence', () => {
+  const original = complete();
+  const result = reopen(original, 'B', 'Delivered entry requires an undocumented command', now + 1);
+  assert.equal(result.build, original.build);
+  assert.deepEqual(assess(result, identity, now + 1).gates.map(g => g.status), ['Pass', 'Pending', 'Pending', 'Pending', 'Pending']);
+  assert.equal(result.allPassedAt, null);
+  assert.deepEqual(result.history.at(-1).checks, original.checks.filter(c => definitions.find(d => d.id === c.id).gate >= 'B'));
+  assert.equal(original.checks.find(c => c.id === 'navigation').evidence.rendered.status, 'Pass');
+  assert.ok(original.allPassedAt);
+});
+
+
+test('mission proof and required rendered outcomes cannot be replaced by narrow local passes', () => {
+  const good = complete();
+  const coverage = evidence(definitions.find(d => d.id === 'coverage'), 'automated');
+  coverage.coverage[0].proof = 'saved';
+  assert.throws(() => attach(good, 'coverage', 'automated', coverage, now), /consumer proof/);
+  const contractWithoutOutcome = structuredClone(contract); delete contractWithoutOutcome.coverage[0].outcome;
+  assert.throws(() => initial({...identity, contract: contractWithoutOutcome}, now), /Bind every coverage/);
+  for (const id of ['normal-path', 'native-zoom', 'delivered-startup', 'partial-apply-recovery']) {
+    const rendered = evidence(definitions.find(d => d.id === 'integrated'), 'rendered');
+    rendered.requiredChecks[id].status = 'Pending';
+    assert.throws(() => attach(good, 'integrated', 'rendered', rendered, now), /remains unfinished/);
+  }
+});

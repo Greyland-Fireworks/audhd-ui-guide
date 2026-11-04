@@ -1,6 +1,6 @@
 # Worked interface examples
 
-**Version:** v1.01. These fictional examples illustrate the [guide](GUIDE.md); they are not tested product findings or additional rules. They support accessible selectable appearance; exact colors and layouts are techniques, not universal requirements. Adapt the wording to verified product behavior.
+**Version:** 1.1.4. These fictional examples illustrate the [guide](GUIDE.md); they are not tested product findings or additional rules. They support accessible selectable appearance; exact colors and layouts are techniques, not universal requirements. Adapt the wording to verified product behavior.
 
 Use the guide's [UI and UX definitions](GUIDE.md#ui-and-ux-in-this-project). The examples identify both aspects: UI covers presentation, semantics and control operation; UX covers task understanding, effort, predictability, recovery and return. These aspects overlap, but require distinct evidence. The checks below are proposals, not performed tests. Identify the implementation layer separately; a UI label change does not establish correct persistence or recovery.
 

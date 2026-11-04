@@ -2,7 +2,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { readFile, writeFile, mkdir, readdir, lstat, realpath, rename, open, rm } from 'node:fs/promises';
 import { resolve, relative, isAbsolute, dirname, sep } from 'node:path';
 import { spawn } from 'node:child_process';
-import { initial, assess, attach, verifyPriorMilestone, definitions, resultFields, outcomeError, pendingDetails } from './review-core.js';
+import { initial, assess, attach, verifyPriorMilestone, preservedArtifacts, definitions, resultFields, outcomeError, pendingDetails } from './review-core.js';
 
 export const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const excluded = /(^|\/)(node_modules|output|dist|build|coverage|\.git|\.cache|test-results|playwright-report|\.agents)(\/|$)|(^|\/)\.env(?:\.|$)|\.(pem|key)$/i;
@@ -86,7 +86,20 @@ export async function saveRecord(context, record, expectedToken) {
     const workflow = record.checks.find(c => c.id === 'workflow')?.evidence?.rendered;
     if (workflow?.timing === 'before-reuse' && disposition.gates[1].status === 'Pass' && previous.record?.gates?.[1]?.status !== 'Pass') {
       const checked = await verified(context, record);
-      if (checked.gates[1].status === 'Pass') await atomic(await checkedPath(context.root, `${context.config.evidenceDir}/milestones/${hash(bytes)}.json`), bytes);
+      if (checked.gates[1].status === 'Pass') {
+        const milestone = structuredClone(record);
+        milestone.milestoneArtifacts = [];
+        const artifacts = record.checks.filter(c => ['paths', 'workflow', 'navigation'].includes(c.id)).flatMap(c => Object.values(c.evidence || {}).flatMap(e => e.artifacts || []));
+        for (const entry of artifacts) {
+          const data = await readFile(await checkedPath(context.root, entry.path));
+          if (hash(data) !== entry.sha256) throw new Error('Milestone source artifact changed during preservation.');
+          const storedPath = `${context.config.evidenceDir}/milestones/artifacts/${entry.sha256}`;
+          await atomic(await checkedPath(context.root, storedPath), data);
+          milestone.milestoneArtifacts.push({ ...entry, storedPath });
+        }
+        const preserved = JSON.stringify(milestone, null, 2) + '\n';
+        await atomic(await checkedPath(context.root, `${context.config.evidenceDir}/milestones/${hash(preserved)}.json`), preserved);
+      }
     }
     await atomic(path, bytes);
   } finally { await lock.close(); await rm(path + '.lock', { force: true }); }
@@ -117,7 +130,10 @@ export async function verified(context, record) {
     delete evidence.invalidReason;
     try {
       for (const a of evidence.artifacts || []) if ((await artifact(context, a.path)).sha256 !== a.sha256) throw new Error(`Changed artifact: ${a.path}`);
-      if (evidence.timing === 'reassessed') verifyPriorMilestone(evidence, JSON.parse(await readFile(await checkedPath(context.root, evidence.priorMilestone.artifactPath), 'utf8')));
+      if (evidence.timing === 'reassessed') {
+        const old = await readMilestone(context, evidence.priorMilestone.artifactPath);
+        verifyPriorMilestone(evidence, old);
+      }
       if (kind === 'automated') {
         const result = JSON.parse(await readFile(await checkedPath(context.root, evidence.resultPath), 'utf8'));
         for (const key of resultFields) if (JSON.stringify(result[key]) !== JSON.stringify(evidence[key])) throw new Error(`Structured result mismatch: ${key}`);
@@ -138,13 +154,16 @@ export async function recordRendered(context, id, filename, milestone) {
   if (!Array.isArray(evidence.references) || !evidence.references.length) throw new Error('Rendered review requires local evidence references.');
   if (milestone) {
     if (id !== 'workflow') throw new Error('A prior milestone applies only to workflow reassessment.');
-    const old = JSON.parse(await readFile(await checkedPath(context.root, milestone), 'utf8'));
+    const old = await readMilestone(context, milestone);
     evidence.timing = 'reassessed';
     evidence.priorMilestone = { build: old.build, observedAt: old.checks?.find(c => c.id === 'workflow')?.evidence?.rendered?.observedAt, artifactPath: milestone };
     evidence.references.push(milestone);
   }
   evidence.artifacts = await Promise.all([...new Set([relative(context.root, inputPath), ...evidence.references])].map(p => artifact(context, p)));
-  if (evidence.timing === 'reassessed') verifyPriorMilestone(evidence, JSON.parse(await readFile(await checkedPath(context.root, evidence.priorMilestone.artifactPath), 'utf8')));
+  if (evidence.timing === 'reassessed') {
+    const old = await readMilestone(context, evidence.priorMilestone.artifactPath);
+    verifyPriorMilestone(evidence, old);
+  }
   const next = attach(saved.record, id, 'rendered', evidence);
   await saveRecord(context, next, saved.token);
   return next;
@@ -202,6 +221,13 @@ export async function runCheck(context, id) {
   return next;
 }
 
+async function readMilestone(context, filename) {
+  const bytes = await readFile(await checkedPath(context.root, filename));
+  if (!filename.replaceAll('\\', '/').endsWith('/' + hash(bytes) + '.json')) throw new Error('Preserved milestone artifact changed.');
+  const old = JSON.parse(bytes);
+  for (const a of preservedArtifacts(old)) if ((await artifact(context, a.path)).sha256 !== a.sha256) throw new Error('Preserved milestone evidence changed.');
+  return old;
+}
 export async function latestMilestone(context) {
   const directory = await checkedPath(context.root, `${context.config.evidenceDir}/milestones`);
   const files = await readdir(directory).catch(e => { if (e.code === 'ENOENT') return []; throw e; });
@@ -210,7 +236,8 @@ export async function latestMilestone(context) {
     const path = await checkedPath(context.root, relative(context.root, resolve(directory, filename)));
     const bytes = await readFile(path);
     if (hash(bytes) + '.json' !== filename) throw new Error('Preserved milestone artifact changed.');
-    const old = JSON.parse(bytes), observed = old.checks?.find(c => c.id === 'workflow')?.evidence?.rendered;
+    if (!JSON.parse(bytes).milestoneArtifacts) continue; // Legacy records stay historical; a later complete bundle may be used.
+    const old = await readMilestone(context, relative(context.root, path)), observed = old.checks?.find(c => c.id === 'workflow')?.evidence?.rendered;
     const prior = { build: old.build, observedAt: observed?.observedAt, artifactPath: relative(context.root, path).split(sep).join('/') };
     verifyPriorMilestone({ checkId: 'workflow', timing: 'reassessed', priorMilestone: prior }, old);
     milestones.push(prior);

@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { writeFile, mkdir } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import { initial, day, guidance } from './acceptance-state.js';
+import { assess } from '../../scripts/review-core.js';
 import { identity, complete } from '../../tests/review/fixtures.js';
 
 const browser = await chromium.launch({ headless: true });
@@ -78,6 +79,31 @@ try {
   // A separate pristine-session scenario verifies initial aged completion.
   await page.evaluate(() => sessionStorage.clear()); await page.reload();
   await page.waitForFunction(() => document.querySelector('#acceptance-review').hidden);
+  // A reassessed workflow must retain its original artifact bytes in the browser too.
+  record = completed(now);
+  const old = structuredClone(record);
+  old.gates = assess(record, identity, now).gates;
+  old.build = 'd'.repeat(64);
+  const previousWorkflow = old.checks.find(c => c.id === 'workflow').evidence.rendered;
+  previousWorkflow.build = old.build;
+  previousWorkflow.observedAt = new Date(now - 1000).toISOString();
+  old.milestoneArtifacts = old.checks.filter(c => ['paths', 'workflow', 'navigation'].includes(c.id)).flatMap(c => Object.values(c.evidence).flatMap(e => e.artifacts.map(a => {
+    const storedPath = `output/review/synthetic/preserved-${a.sha256}`;
+    artifacts.set(storedPath, artifacts.get(a.path));
+    return {...a, storedPath};
+  })));
+  const milestoneBytes = JSON.stringify(old), milestonePath = 'output/review/synthetic/milestone.json';
+  artifacts.set(milestonePath, milestoneBytes);
+  const reassessed = record.checks.find(c => c.id === 'workflow').evidence.rendered;
+  reassessed.timing = 'reassessed';
+  reassessed.priorMilestone = {build: old.build, observedAt: previousWorkflow.observedAt, artifactPath: milestonePath};
+  reassessed.artifacts.push({path: milestonePath, sha256: createHash('sha256').update(milestoneBytes).digest('hex')});
+  await page.reload();
+  await page.waitForFunction(() => document.querySelectorAll('[data-status="Pass"]').length === 5);
+  artifacts.set(old.milestoneArtifacts[0].storedPath, '{}');
+  await page.reload();
+  await page.waitForFunction(() => document.querySelector('#acceptance-review').textContent.includes('Artifact changed'));
+  assert.equal(await bar.locator('[data-status="Pass"]').count(), 1, 'Missing original evidence leaves only A passed; B and dependents reopen');
   record = initial(identity, now);
   await page.goto(new URL('#request/harbor-request-chair/draft', process.argv[2] || 'http://127.0.0.1:4189/examples/administration/').href);
   await tick();

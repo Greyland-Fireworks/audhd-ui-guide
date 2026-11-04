@@ -53,6 +53,24 @@ Where available, a reviewer who did not implement the relevant change inspects t
 
 Give the reviewer access to the rendered build and controlled fixtures. Require evidence for task discovery, explanations, coupled-control relationships and visible completion/recovery as well as source findings. Exercise consequential forms through their browser controls; API success cannot close their interaction checks. Record source-only review as source-only, leaving rendered acceptance Pending. Keep functional coverage, recovery, navigation, explanations and visual organization as separate results; a later test number, more options or a larger test suite establishes no overall improvement.
 
+## Challenge the delivered experience
+
+At A, compare the deliverable contract with the original request, including the requested artifact and purpose. Before B pattern reuse, follow the actual delivered entry point with only documented prerequisites. At E, give the reviewer that same objective and entry point before the implementer's success narrative. Record first attempts, hidden setup commands, coaching and interventions; then inspect implementation evidence. This is an agent walkthrough, not participant research. An authenticated task may have legitimate prerequisites, but bypassing them in a test cannot establish their discoverability.
+
+Record functional and usability conclusions separately in the existing review rows. For each changed workflow ask:
+
+- Can the intended user locate the task and identify the next action?
+- Are essential explanations and feedback beside the decision or result?
+- Are relationships, priority and current state understandable in the rendered view?
+- Does texture or decoration interfere with reading or finding controls?
+- Do empty regions, disabled controls or secondary content displace useful work?
+
+Use observed consequences and applicable Guide rules, not numerical grades. A working action does not offset a required navigation, explanation or readability failure. A focused change need not reskin an unrelated application, but its scope cannot exclude reaching or reading the changed surface.
+
+Challenge recovery at the boundary actually promised: reconnect, page reload, process restart and restoration of a fixed fixture are distinct. A deliberate reset to baseline must be disclosed and cannot prove persistence of unsaved work. Retain the existing recovery assertions and exercise each claimed boundary.
+
+When later observations contradict a pass, preserve the earlier observation as history and reopen the earliest affected A–E gate and its dependents, even on an unchanged build. Use the existing `reopen GATE REASON` operation for executable records; update prose dispositions too. Record the defect, evidence and required retest. Do not leave an all-Pass summary beside an unresolved required failure. Historical timely milestones remain historical; a retrospective repair cannot manufacture missing before-reuse evidence. Independent source review does not close rendered checks; label sequential rendered self-review when independent operation is unavailable.
+
 ## Dashboard review lights
 
 Include the five A–E review lights in dashboard builds by default, starting with the first runnable shell. Reuse the shared display through the [small Harbor implementation and update tool](../examples/administration/README.md#visible-build-review), or adapt it to the consumer's existing stack without adding a framework. The lights expose the existing acceptance disposition; they are not an optional teaching overlay and must remain available with Guide notes off. Reviews and unrelated focused edits do not acquire this implementation requirement. Record an explicit user exclusion when applicable.

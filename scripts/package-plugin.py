@@ -15,6 +15,9 @@ manifest = json.loads((ROOT / 'plugin/plugin.json').read_text(encoding='utf-8'))
 assert re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', manifest['name'])
 assert re.fullmatch(r'\d+\.\d+\.\d+', manifest['version'])
 assert manifest['$schema'] == 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json'
+for filename, label in [('GUIDE.md', 'Version'), ('README.md', 'Toolkit version')]:
+    current = re.search(r'\*\*' + label + r':\*\* ([0-9.]+)', (ROOT / filename).read_text(encoding='utf-8'))
+    assert current and current.group(1) == manifest['version'], 'Guide/toolkit/plugin version mismatch'
 interface = manifest['extensions']['com.openai']['interface']
 for field, limit in [('displayName', 30), ('shortDescription', 30),
                      ('developerName', 80), ('longDescription', 4000)]:

@@ -1,4 +1,4 @@
-import { gates, guidance, assess, canHide, verifyPriorMilestone, resultFields } from './review-core.js';
+import { gates, guidance, assess, canHide, verifyPriorMilestone, preservedArtifacts, resultFields } from './review-core.js';
 
 export async function mountReviewBar(host, { resourceBase = import.meta.url, projectRoot = new URL('../', import.meta.url) } = {}) {
   let identity, unavailableSince = 0;
@@ -40,7 +40,7 @@ export async function mountReviewBar(host, { resourceBase = import.meta.url, pro
       const artifacts = new Map();
       for (const check of record.checks || []) for (const [kind, evidence] of Object.entries(check.evidence || {})) {
         try {
-          for (const artifact of evidence.artifacts || []) {
+          const checkArtifact = async artifact => {
             if (/^(?:[a-z]+:|[\\/])|(?:^|[\\/])\.\.(?:[\\/]|$)/i.test(artifact.path)) throw new Error('Unsafe artifact path.');
             if (!artifacts.has(artifact.path)) {
               const bytes = await (await get(new URL(artifact.path, projectRoot))).arrayBuffer();
@@ -49,12 +49,17 @@ export async function mountReviewBar(host, { resourceBase = import.meta.url, pro
               artifacts.set(artifact.path, { hash, bytes });
             }
             if (artifacts.get(artifact.path).hash !== artifact.sha256) throw new Error('Artifact changed.');
-          }
+          };
+          for (const artifact of evidence.artifacts || []) await checkArtifact(artifact);
           if (kind === 'automated') {
             const result = JSON.parse(new TextDecoder().decode(artifacts.get(evidence.resultPath)?.bytes));
             for (const key of resultFields) if (JSON.stringify(result[key]) !== JSON.stringify(evidence[key])) throw new Error('Structured result mismatch.');
           }
-          if (evidence.timing === 'reassessed') verifyPriorMilestone(evidence, JSON.parse(new TextDecoder().decode(artifacts.get(evidence.priorMilestone.artifactPath)?.bytes)));
+          if (evidence.timing === 'reassessed') {
+            const old = JSON.parse(new TextDecoder().decode(artifacts.get(evidence.priorMilestone.artifactPath)?.bytes));
+            verifyPriorMilestone(evidence, old);
+            for (const artifact of preservedArtifacts(old)) await checkArtifact(artifact);
+          }
         } catch (error) { evidence.invalidReason = error.message; interruptedRead = true; }
       }
       record = assess(record, nextIdentity);

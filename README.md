@@ -4,9 +4,9 @@
 
 Practical guidance for developers and AI agents building interfaces that are easier to understand, use, pause, resume and correct.
 
-**Toolkit version:** 1.1.3 · Updated November 2, 2026
+**Toolkit version:** 1.1.4 · Updated November 4, 2026
 
-Guide rules remain v1.01. Toolkit and plugin releases share version 1.1.3; preference schemas and the framework retain their own versions.
+Guide rules, toolkit and plugin share version 1.1.4; preference schemas and the framework retain their own versions.
 
 [What is this?](#what-is-this) · [Use it](#how-do-i-use-it) · [Install it](#how-do-i-install-it) · [What else?](#what-else-should-i-know)
 
@@ -18,7 +18,7 @@ Guide rules remain v1.01. Toolkit and plugin releases share version 1.1.3; prefe
 
 ## How do I use it?
 
-For implementation, follow the [ordered review workflow](references/review-tooling.md#start-here-one-implementation-path): one representative task, recovery, expansion, then integrated review. The upcoming 1.1.3 release adds batch commands, preserved milestones and per-task evidence. The latest published release is 1.1.2; earlier local snapshots labeled 1.1.4 were development artifacts, not published releases. Frozen test evidence retains its original labels.
+For implementation, follow the [ordered review workflow](references/review-tooling.md#start-here-one-implementation-path): one representative task, recovery, expansion, then integrated review. For work spanning several implementation and repair cycles, see [using `/goal`](#use-goal-for-sustained-implementation).
 
 For a bounded first pass, request **`audhd quick review`** and name the component or task. For the complete affected workflow, use **`audhd audit`**. Both are review-only unless you request changes. They report evidence and unknowns, not UX scores or automatic shipping approval. The [interface-pattern lookup](references/interface-patterns.md) helps select checks without reading every rule.
 
@@ -34,6 +34,46 @@ Select or name the `audhd-ui-guide` skill, then choose a prompt below. Paste pro
 Start with one task; you do not need to redesign everything. For a manual review, follow [Try one small review](#try-one-small-review). For agents without skill discovery, use [the attachment-based instructions](#use-without-skill-support).
 
 Dashboard builds include [five review lights](references/autonomous-implementation.md#dashboard-review-lights) as standard. They expose acceptance progress and missing checks, with correction guidance available by hover, keyboard or touch. Recorded milestone evidence controls advancement; the bar hides after 24 hours of all gates passing on the same build. A changed build or reopened gate requires renewed evidence. The lights identify self-review where used and are not independent certification.
+
+### Use `/goal` for sustained implementation
+
+In Codex versions that support Goals, use `/goal` followed by the outcome when implementation needs several rounds of building, checking and repair. A normal prompt is sufficient for a small edit or bounded review. Goals keep an objective active across turns; they do not guarantee correctness or replace acceptance evidence. See [OpenAI's Goals documentation](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex) for availability and lifecycle controls.
+
+Adapt the scope, supported tasks and resource limits below to your project, then submit it in Codex chat:
+
+```text
+/goal Use the audhd-ui-guide skill to build a backend configuration dashboard for this
+project. Explain the program's components, responsibilities and data flows beside the
+relevant configuration controls. Inspect the source to establish supported settings and
+how changes reach the running program.
+
+Complete the requested operator workflows from the delivered entry point, with task
+navigation, contextual explanations and applicable recovery. Preserve existing
+capabilities and distinguish draft, saved, running and verified state. Follow the
+Guide's ordered A–E acceptance workflow, including the representative-workflow
+checkpoint before expansion. Record current-build automated and rendered evidence with
+honest review attribution.
+
+Continue implementation and repair while feasible required work remains. Do not narrow
+the requested outcome merely to finish. If blocked, report the unmet outcome, attempted
+checks, concrete blocker and input needed; keep unverified gates Pending. Deliver the
+dashboard URL, startup instructions and an evidence-backed account of implemented,
+verified and unverified behavior.
+
+Work only in this project's isolated local instance, with bounded resources. Leave other
+checkouts and running instances unchanged. Do not commit, push or publish.
+```
+
+Use `/goal` alone to inspect the current Goal, `/goal pause` to pause it, `/goal resume` to resume it, and `/goal clear` to remove it. Choose the model and effort setting yourself. The review bar recommends higher effort for corrective reruns; effort selection does not change the required evidence. Goal Forge is an optional, separately installed planning helper, not a requirement or part of this kit.
+
+Completion still requires the [maintained review workflow](references/review-tooling.md#start-here-one-implementation-path) and proof of the requested outcome. Goal status alone does not establish acceptance.
+
+<details>
+<summary>What the exploratory Goal comparison tells us</summary>
+
+Tests 19 and 20 both used Astra Light at lower effort; Test 20 also used Goal Forge and a Goal. This comparison does not isolate the effect of `/goal` or establish improved dashboard quality.
+
+</details>
 
 ## How do I install it?
 
@@ -230,7 +270,7 @@ AuDHD commonly refers to the co-occurrence of autism and ADHD. Some people want 
 
 This is a practitioner guide, not a clinical intervention or certification. Its specific patterns have not been established here through research with a representative group of AuDHD users. No skin, font or information density is claimed to suit every AuDHD person.
 
-Toolkit **1.1.3** is being prepared for publication. Its stronger acceptance requirements and recovery checks do not establish real-interface usability.
+Toolkit **1.1.4** is being prepared for publication. Its stronger acceptance requirements and recovery checks do not establish real-interface usability.
 
 The [historical supplied-review dataset](SKILL_EVALUATIONS.md#current-evidence) covers six of 35 authored cases, with 29 Pending. Four later design-default cases (E36–E39) bring the pack to 39; those four remain unrun. The separate [framework skill comparison](references/evaluations/2026-10-24-framework/README.md) preserves baseline/candidate trials, a failed first gate and a repaired candidate. New trials require an explicit request and are not required for ordinary use or feedback.
 
@@ -286,7 +326,11 @@ This repository includes the [license scope and attribution](LICENSE_SCOPE.md) a
 
 ### Version history
 
-- **1.1.3 — Unreleased:** Build-bound executable review evidence, capability preservation, explicit reviewer methods and acceptance dispositions, batch commands, preserved milestones and per-task evidence. Consumer recovery checks and durable fixture coverage preserve two drafts, local help, Appearance detours and named return context across reload. The schema-2 record strengthens evidence handling; generated-dashboard quality remains unproven.
+Version 1.1.4 is prepared locally for release. Earlier local snapshots labeled 1.1.4 were development artifacts; frozen test evidence retains its original labels.
+
+- **1.1.4 — Release candidate:** Guide rules, toolkit and plugin aligned. Requested-outcome completion, consumer-proof thresholds, required startup/normal-path/native-zoom review, conditional partial-apply review, preserved, hash-checked milestone artifacts and dated canonical reports. See [migration guidance](references/review-tooling.md#upgrading-review-records-to-toolkit-114). No claim of improved generated-dashboard quality.
+
+- **1.1.3 — Unpublished development work:** Build-bound executable review evidence, capability preservation, explicit reviewer methods and acceptance dispositions, batch commands, preserved milestones and per-task evidence. Consumer recovery checks and durable fixture coverage preserve two drafts, local help, Appearance detours and named return context across reload. The schema-2 record strengthens evidence handling; generated-dashboard quality remains unproven.
 
 - **1.1.2 — November 1, 2026:** Strengthened acceptance gates, rendered-review evidence requirements and recovery regression checks, including thrown status-read failures, missing receipts, replay prevention and preservation of newer drafts across reload.
 
